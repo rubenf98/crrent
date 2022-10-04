@@ -161,7 +161,7 @@ function Header({ theme }) {
                 <Contact>
                     <ContactItem>
                         <img src="/icon/phone.svg" alt="phone" />
-                        <p>291 597 264</p>
+                        <p>+351 934 953 682</p>
                     </ContactItem>
                     <ContactItem>
                         <img src="/icon/mail.svg" alt="mail" />
