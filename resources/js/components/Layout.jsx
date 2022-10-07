@@ -12,7 +12,6 @@ const Container = styled.div`
     position: relative;
     box-sizing: border-box;
     overflow-x: hidden;
-    background-color: #7B2CBF;
 `;
 
 class Layout extends Component {
@@ -20,7 +19,7 @@ class Layout extends Component {
         return (
             <ThemeContainer>
                 <Container>
-                    {/* <Navbar /> */}
+                    <Navbar />
                     <div> {this.props.children} </div>
                 </Container>
             </ThemeContainer>

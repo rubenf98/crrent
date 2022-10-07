@@ -2,6 +2,7 @@ export const light = {
     text: '#000000',
     background: '#ffffff',
     primary: "#7B2CBF",
+    secundary: "#FFC103",
 }
 
 export const dark = {

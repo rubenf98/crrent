@@ -14,7 +14,7 @@ const Content = styled.section`
     width: 100%;
     height: 120px;
     position: fixed;
-    padding: 0px 35px;
+    padding: 0px 60px;
     box-sizing: border-box;
     top: 0;
     left: 0;
@@ -29,21 +29,6 @@ const Content = styled.section`
     }
 `;
 
-const Accent = styled.div`
-    width: 100px;
-    height: 200px;
-    background-color: ${props => props.background};
-    position: absolute;
-    top: 0;
-    left: 10px;
-    z-index: -1;
-
-    @media (max-width: ${dimensions.md}) {
-        width: 100px;
-        height: 150px;
-    }
-`;
-
 const Phone = styled.div`
     background-color: ${props => props.background};
     padding: 14px 33px;
@@ -54,8 +39,6 @@ const Phone = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-
-  
 
     p {
         margin: 0px;
@@ -80,7 +63,7 @@ const Phone = styled.div`
 `;
 
 const Logo = styled.img`
-    width: 150px;
+    width: 140px;
     height: auto;
 
     @media (max-width: ${dimensions.md}) {
@@ -91,7 +74,6 @@ const Logo = styled.img`
 function Navbar({ theme }) {
     return (
         <Container>
-            {/* <Accent background={theme.primary} /> */}
             <Content>
                 <Logo src="/image/logo.png" alt="logo" />
                 <Phone background={theme.primary}>

@@ -1,10 +1,59 @@
+import { DatePicker } from 'antd';
 import React from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
+import moment from 'moment';
+import { InstagramIcon, MailIcon, WhatsappIcon } from '../../../icons';
+
+const RangePickerContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 120px;
+`;
+
+
+const RangePicker = styled(DatePicker.RangePicker)`
+    width: 50%;
+    margin: 0px;
+    padding: 25px;
+    box-sizing: border-box;
+    -webkit-box-shadow: -8px 0px 30px 0px #00000040; 
+    box-shadow: -8px 0px 30px 0px #00000040;
+
+    .ant-picker-input {
+        background-image: url("/icon/calendar.svg");
+        background-repeat: no-repeat;
+        background-size: 23px 25px;
+        text-indent: 20px;
+        padding-left: 50px;
+        box-sizing: border-box;
+    }
+    .ant-picker-input > input::placeholder {
+        color: black;
+        opacity: .8;
+        font-weight: 400;
+        text-transform: uppercase;
+        font-size: 20px;
+    }
+`;
+
+const Search = styled.button`
+    padding: 25px;
+    box-sizing: border-box;
+    background-color: ${props => props.background};
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+    border: 0px;
+    cursor: pointer;
+    text-transform: uppercase;
+    -webkit-box-shadow: 8px 0px 30px 0px #00000040; 
+    box-shadow: 8px 0px 30px 0px #00000040;
+`;
 
 const Container = styled.section`
     width: 100%;
-    max-width: ${maxWidth};
     min-height: 100vh;
     position: relative;
     display: flex;
@@ -12,6 +61,7 @@ const Container = styled.section`
     justify-content: center;
     flex-wrap: wrap;
     margin: auto;
+    padding-top: 120px;
 
     @media (max-width: ${maxWidth}) {
         box-sizing: border-box;
@@ -26,26 +76,17 @@ const TitleContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     margin: 10vh 0px 5vh 0px;
+    position: relative;
+    max-width: ${maxWidth};
+    margin: auto;
 
     h1 {
-        font-size: 6.6vw;
-        font-size: 38px;
+        font-size: 128px;
         font-weight: 700;
         line-height: 94%;
-    }
-
-    h2 {
-        font-size: 3vw;
-        font-size: 22px;
-        opacity: .7;
-        font-weight: 700;
-        line-height: 94%;
-    }
-
-    h1, h2 {
         color: ${props => props.color};
-        color: #fff;
-        text-align: center;
+        text-align: left;
+        text-transform: uppercase;
     }
 
 
@@ -55,15 +96,11 @@ const TitleContainer = styled.div`
             width: 100%;
             font-size: 42px;
         }
-
-        h2 {
-            font-size: 24px;
-        }
     }
 `;
 
 const Image = styled.img`
-    width: 70%;
+    width: 50%;
     height: 100vh;
     position: absolute;
     right: 0;
@@ -74,102 +111,59 @@ const Image = styled.img`
     @media (max-width: ${dimensions.md}) {
         height: 60vh;
     }
-
-`;
-
-const Logo = styled.img`
-    width: 300px;
-    margin: auto;
-    display: block;
-
-    @media (max-width: ${dimensions.md}) {
-        width: 200px;
-    }
-`;
-
-const Contact = styled.div`
-    width: 60%;
-    margin: auto;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-
-    @media (max-width: ${dimensions.lg}) {
-        width: 80%;
-    }
-
-    @media (max-width: ${dimensions.md}) {
-        width: 100%;
-    }
-`;
-
-
-const ContactItem = styled.div`
-    color: white;
-    width: 40%;
-    padding: 14px 33px;
-    box-sizing: border-box;
-    border:1px solid white;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    p {
-        margin: 0px;
-    }
-
-    a {
-        cursor: pointer;
-        color: white;
-    }
-
-    img {
-        margin-right: 15px;
-        width: 20px;
-    }
-
-    @media (max-width: ${dimensions.md}) {
-        font-size: 16px;
-        padding: 10px 16px;
-        width: 100%;
-        margin: 10px 0px;
-
-        img {
-            margin-right: 10px;
-            width: 15px;
-        }
-    }
 `;
 
 const Content = styled.div`
     width: 100%;
 `;
 
+const LinksContainer = styled.div`
+    bottom: 150px;
+    left: 60px;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 100px;
+    opacity: .7;
+`;
+
+const Accent = styled.div`
+    width: 100px;
+    height: 270px;
+    top: -50px;
+    left: -50px;
+    position: absolute;
+    z-index: -1;
+    background-color: ${props => props.background};
+`;
+
 function Header({ theme }) {
     return (
         <Container>
             <Content>
-                <Logo src="/image/logo_branco.png" alt="logo" />
 
                 <TitleContainer color={theme.primary}>
-                    <h2>brevemente</h2>
-                    <h1>Rent o seu carro com razão</h1>
+                    <Accent background={theme.secundary} />
+                    <h1>Rent o <br /> seu carro <br />com razão</h1>
+                    <RangePickerContainer>
+                        <RangePicker showTime={{
+                            format: "HH:mm"
+                        }}
+                            format="YYYY-MM-DD HH:mm"
+                            placeholder={["data levantamento", "data devolução"]}
+                            suffixIcon={(<></>)}
+                        />
+                        <Search background={theme.primary} type='submit'>pesquisar</Search>
+                    </RangePickerContainer>
                 </TitleContainer>
-
-                <Contact>
-                    <ContactItem>
-                        <img src="/icon/phone.svg" alt="phone" />
-                        <p>+351 934 953 682</p>
-                    </ContactItem>
-                    <ContactItem>
-                        <img src="/icon/mail.svg" alt="mail" />
-                        <p><a href="mailto:info@cr-rent.com">info@cr-rent.com</a></p>
-                    </ContactItem>
-                </Contact>
+                <LinksContainer>
+                    <WhatsappIcon />
+                    <MailIcon />
+                    <InstagramIcon />
+                </LinksContainer>
             </Content>
-            {/* <Image src="/image/homepage/header_1920.jpg" /> */}
+            <Image src="/image/homepage/header_1920.jpg" />
         </Container>
     )
 }
