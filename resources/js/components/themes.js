@@ -3,6 +3,7 @@ export const light = {
     background: '#ffffff',
     primary: "#7B2CBF",
     secundary: "#FFC103",
+    levels: { A: "#BFC5C5", B: "#A8D6E3", C: "#FCAD5E", E: "#951D26" },
 }
 
 export const dark = {
