@@ -9,7 +9,8 @@ const RangePickerContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 120px;
+    margin-top: 0px;
+    position: relative;
 `;
 
 
@@ -62,7 +63,7 @@ const Container = styled.section`
     flex-wrap: wrap;
     margin: auto;
     padding-top: 120px;
-
+    
     @media (max-width: ${maxWidth}) {
         box-sizing: border-box;
         padding: 0px 20px;
@@ -71,14 +72,12 @@ const Container = styled.section`
 `;
 
 const TitleContainer = styled.div`
-    margin: auto;
     display: block;
     width: 100%;
     box-sizing: border-box;
-    margin: 10vh 0px 5vh 0px;
     position: relative;
     max-width: ${maxWidth};
-    margin: auto;
+    margin: 120px auto;
 
     h1 {
         font-size: 128px;
@@ -118,7 +117,7 @@ const Content = styled.div`
 `;
 
 const LinksContainer = styled.div`
-    bottom: 150px;
+    bottom: 0px;
     left: 60px;
     position: absolute;
     display: flex;
@@ -140,29 +139,30 @@ const Accent = styled.div`
 
 function Header({ theme }) {
     return (
-        <Container>
+        <Container id="header">
             <Content>
-
                 <TitleContainer color={theme.primary}>
                     <Accent background={theme.secundary} />
                     <h1>Rent o <br /> seu carro <br />com razão</h1>
-                    <RangePickerContainer>
-                        <RangePicker showTime={{
-                            format: "HH:mm"
-                        }}
-                            format="YYYY-MM-DD HH:mm"
-                            placeholder={["data levantamento", "data devolução"]}
-                            suffixIcon={(<></>)}
-                        />
-                        <Search background={theme.primary} type='submit'>pesquisar</Search>
-                    </RangePickerContainer>
+
                 </TitleContainer>
-                <LinksContainer>
-                    <WhatsappIcon />
-                    <MailIcon />
-                    <InstagramIcon />
-                </LinksContainer>
+                <RangePickerContainer>
+                    <LinksContainer>
+                        <WhatsappIcon />
+                        <MailIcon />
+                        <InstagramIcon />
+                    </LinksContainer>
+                    <RangePicker showTime={{
+                        format: "HH:mm"
+                    }}
+                        format="YYYY-MM-DD HH:mm"
+                        placeholder={["data levantamento", "data devolução"]}
+                        suffixIcon={(<></>)}
+                    />
+                    <Search background={theme.primary} type='submit'>pesquisar</Search>
+                </RangePickerContainer>
             </Content>
+
             <Image src="/image/homepage/header_1920.jpg" />
         </Container>
     )

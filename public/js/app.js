@@ -9517,6 +9517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../helper */ "./resources/js/components/helper.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 var _templateObject, _templateObject2, _templateObject3, _templateObject4;
 
@@ -9527,20 +9528,58 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
+
 var Container = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].section(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    width: 100vw;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 2;\n"])));
 var Content = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].section(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    width: 100%;\n    height: 120px;\n    position: fixed;\n    padding: 0px 60px;\n    box-sizing: border-box;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: flex-end;\n    justify-content: space-between;\n    flex-wrap: wrap;\n\n    @media (max-width: ", ") {\n        height: 100px;\n        padding: 0px 35px;\n    }\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
-var Phone = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].div(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    background-color: ", ";\n    padding: 14px 33px;\n    box-sizing: border-box;\n    color: white;\n    font-size: 20px;\n    font-weight: bold;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n\n    p {\n        margin: 0px;\n    }\n\n    img {\n        margin-right: 15px;\n        width: 20px;\n        height: 20px;\n    }\n\n    @media (max-width: ", ") {\n        font-size: 16px;\n        padding: 8px 16px;\n\n        img {\n            margin-right: 10px;\n            width: 15px;\n            height: 15px;\n        }\n    }\n"])), function (props) {
+var Phone = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].div(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    background-color: ", ";\n    padding: 12px 33px;\n    box-sizing: border-box;\n    color: white;\n    font-size: 20px;\n    font-weight: bold;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n\n    p {\n        margin: 0px;\n    }\n\n    img {\n        margin-right: 15px;\n        width: 20px;\n        height: 20px;\n    }\n\n    @media (max-width: ", ") {\n        font-size: 16px;\n        padding: 8px 16px;\n\n        img {\n            margin-right: 10px;\n            width: 15px;\n            height: 15px;\n        }\n    }\n"])), function (props) {
   return props.background;
 }, _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
-var Logo = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].img(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    width: 140px;\n    height: auto;\n\n    @media (max-width: ", ") {\n        width: 120px;\n    }\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
+var LinksContainer = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].div(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    display: flex;\n    align-items: center;\n    width: 50%;\n\n    img {\n        width: 140px;\n        height: auto;\n        margin-right: 70px;\n\n        @media (max-width: ", ") {\n            width: 120px;\n        }\n    }\n\n    span {\n        padding: 0px 35px;\n        box-sizing: border-box;\n        text-transform: uppercase;\n        color: black;\n        cursor: pointer;\n    }\n    \n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
 
 function Navbar(_ref) {
   var theme = _ref.theme;
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useNavigate)();
+
+  var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useLocation)(),
+      pathname = _useLocation.pathname;
+
+  var handleClick = function handleClick(filter) {
+    if (pathname == "/") {
+      var element = document.getElementById(filter);
+      window.scrollTo({
+        top: element.offsetTop,
+        behavior: 'smooth'
+      });
+    } else return navigate("/#" + filter);
+  };
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Container, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(Content, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Logo, {
-        src: "/image/logo.png",
-        alt: "logo"
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(LinksContainer, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+          src: "/image/logo.png",
+          alt: "logo"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          onClick: function onClick() {
+            return handleClick('header');
+          },
+          children: "home"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          onClick: function onClick() {
+            return handleClick('garage');
+          },
+          children: "garagem"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          onClick: function onClick() {
+            return handleClick('about');
+          },
+          children: "sobre n\xF3s"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+          onClick: function onClick() {
+            return handleClick('contact');
+          },
+          children: "contactos"
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(Phone, {
         background: theme.primary,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
@@ -9696,6 +9735,34 @@ function getCarouselBreakpoints(aItems) {
 
 /***/ }),
 
+/***/ "./resources/js/components/pages/Homepage/Garage.jsx":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/pages/Homepage/Garage.jsx ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+function Garage() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    id: "garage",
+    children: "Garage"
+  });
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Garage);
+
+/***/ }),
+
 /***/ "./resources/js/components/pages/Homepage/Header.jsx":
 /*!***********************************************************!*\
   !*** ./resources/js/components/pages/Homepage/Header.jsx ***!
@@ -9729,18 +9796,18 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var RangePickerContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    margin-top: 120px;\n"])));
+var RangePickerContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    width: 100%;\n    display: flex;\n    justify-content: center;\n    margin-top: 0px;\n    position: relative;\n"])));
 var RangePicker = (0,styled_components__WEBPACK_IMPORTED_MODULE_5__["default"])(antd__WEBPACK_IMPORTED_MODULE_6__["default"].RangePicker)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    width: 50%;\n    margin: 0px;\n    padding: 25px;\n    box-sizing: border-box;\n    -webkit-box-shadow: -8px 0px 30px 0px #00000040; \n    box-shadow: -8px 0px 30px 0px #00000040;\n\n    .ant-picker-input {\n        background-image: url(\"/icon/calendar.svg\");\n        background-repeat: no-repeat;\n        background-size: 23px 25px;\n        text-indent: 20px;\n        padding-left: 50px;\n        box-sizing: border-box;\n    }\n    .ant-picker-input > input::placeholder {\n        color: black;\n        opacity: .8;\n        font-weight: 400;\n        text-transform: uppercase;\n        font-size: 20px;\n    }\n"])));
 var Search = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].button(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    padding: 25px;\n    box-sizing: border-box;\n    background-color: ", ";\n    color: white;\n    font-weight: 700;\n    font-size: 20px;\n    border: 0px;\n    cursor: pointer;\n    text-transform: uppercase;\n    -webkit-box-shadow: 8px 0px 30px 0px #00000040; \n    box-shadow: 8px 0px 30px 0px #00000040;\n"])), function (props) {
   return props.background;
 });
-var Container = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].section(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    width: 100%;\n    min-height: 100vh;\n    position: relative;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-wrap: wrap;\n    margin: auto;\n    padding-top: 120px;\n\n    @media (max-width: ", ") {\n        box-sizing: border-box;\n        padding: 0px 20px;\n    }\n\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.maxWidth);
-var TitleContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n    margin: auto;\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    margin: 10vh 0px 5vh 0px;\n    position: relative;\n    max-width: ", ";\n    margin: auto;\n\n    h1 {\n        font-size: 128px;\n        font-weight: 700;\n        line-height: 94%;\n        color: ", ";\n        text-align: left;\n        text-transform: uppercase;\n    }\n\n\n    @media (max-width: ", ") {\n\n        h1 {\n            width: 100%;\n            font-size: 42px;\n        }\n    }\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.maxWidth, function (props) {
+var Container = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].section(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    width: 100%;\n    min-height: 100vh;\n    position: relative;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-wrap: wrap;\n    margin: auto;\n    padding-top: 120px;\n    \n    @media (max-width: ", ") {\n        box-sizing: border-box;\n        padding: 0px 20px;\n    }\n\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.maxWidth);
+var TitleContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n    display: block;\n    width: 100%;\n    box-sizing: border-box;\n    position: relative;\n    max-width: ", ";\n    margin: 120px auto;\n\n    h1 {\n        font-size: 128px;\n        font-weight: 700;\n        line-height: 94%;\n        color: ", ";\n        text-align: left;\n        text-transform: uppercase;\n    }\n\n\n    @media (max-width: ", ") {\n\n        h1 {\n            width: 100%;\n            font-size: 42px;\n        }\n    }\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.maxWidth, function (props) {
   return props.color;
 }, _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
 var Image = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].img(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n    width: 50%;\n    height: 100vh;\n    position: absolute;\n    right: 0;\n    bottom: 0;\n    object-fit: cover;\n    z-index: -1;\n\n    @media (max-width: ", ") {\n        height: 60vh;\n    }\n"])), _helper__WEBPACK_IMPORTED_MODULE_1__.dimensions.md);
 var Content = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n    width: 100%;\n"])));
-var LinksContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n    bottom: 150px;\n    left: 60px;\n    position: absolute;\n    display: flex;\n    flex-direction: column;\n    justify-content: flex-end;\n    gap: 100px;\n    opacity: .7;\n"])));
+var LinksContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n    bottom: 0px;\n    left: 60px;\n    position: absolute;\n    display: flex;\n    flex-direction: column;\n    justify-content: flex-end;\n    gap: 100px;\n    opacity: .7;\n"])));
 var Accent = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n    width: 100px;\n    height: 270px;\n    top: -50px;\n    left: -50px;\n    position: absolute;\n    z-index: -1;\n    background-color: ", ";\n"])), function (props) {
   return props.background;
 });
@@ -9748,6 +9815,7 @@ var Accent = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_temp
 function Header(_ref) {
   var theme = _ref.theme;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(Container, {
+    id: "header",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(Content, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(TitleContainer, {
         color: theme.primary,
@@ -9755,22 +9823,22 @@ function Header(_ref) {
           background: theme.secundary
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h1", {
           children: ["Rent o ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {}), " seu carro ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("br", {}), "com raz\xE3o"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(RangePickerContainer, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(RangePicker, {
-            showTime: {
-              format: "HH:mm"
-            },
-            format: "YYYY-MM-DD HH:mm",
-            placeholder: ["data levantamento", "data devolução"],
-            suffixIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {})
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Search, {
-            background: theme.primary,
-            type: "submit",
-            children: "pesquisar"
-          })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(LinksContainer, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.WhatsappIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.MailIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.InstagramIcon, {})]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(RangePickerContainer, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(LinksContainer, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.WhatsappIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.MailIcon, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_3__.InstagramIcon, {})]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(RangePicker, {
+          showTime: {
+            format: "HH:mm"
+          },
+          format: "YYYY-MM-DD HH:mm",
+          placeholder: ["data levantamento", "data devolução"],
+          suffixIcon: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {})
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Search, {
+          background: theme.primary,
+          type: "submit",
+          children: "pesquisar"
+        })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Image, {
       src: "/image/homepage/header_1920.jpg"
@@ -9795,15 +9863,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Header */ "./resources/js/components/pages/Homepage/Header.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _Garage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Garage */ "./resources/js/components/pages/Homepage/Garage.jsx");
+/* harmony import */ var _Header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Header */ "./resources/js/components/pages/Homepage/Header.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
 
 
 
 
 function Homepage() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Header__WEBPACK_IMPORTED_MODULE_2__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Garage__WEBPACK_IMPORTED_MODULE_1__["default"], {})]
   });
 }
 

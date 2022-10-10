@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions } from '../helper';
+import { useNavigate, useLocation } from 'react-router-dom'
 
 const Container = styled.section`
     width: 100vw;
@@ -31,7 +32,7 @@ const Content = styled.section`
 
 const Phone = styled.div`
     background-color: ${props => props.background};
-    padding: 14px 33px;
+    padding: 12px 33px;
     box-sizing: border-box;
     color: white;
     font-size: 20px;
@@ -62,27 +63,57 @@ const Phone = styled.div`
     }
 `;
 
-const Logo = styled.img`
-    width: 140px;
-    height: auto;
+const LinksContainer = styled.div`
+    display: flex;
+    align-items: center;
+    width: 50%;
 
-    @media (max-width: ${dimensions.md}) {
-        width: 120px;
+    img {
+        width: 140px;
+        height: auto;
+        margin-right: 70px;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 120px;
+        }
     }
+
+    span {
+        padding: 0px 35px;
+        box-sizing: border-box;
+        text-transform: uppercase;
+        color: black;
+        cursor: pointer;
+    }
+    
 `;
 
 function Navbar({ theme }) {
+    let navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    const handleClick = (filter) => {
+        if (pathname == "/") {
+            var element = document.getElementById(filter);
+            window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
+        } else return navigate("/#" + filter);
+    }
     return (
         <Container>
             <Content>
-                <Logo src="/image/logo.png" alt="logo" />
+                <LinksContainer>
+                    <img src="/image/logo.png" alt="logo" />
+                    <span onClick={() => handleClick('header')}>home</span>
+                    <span onClick={() => handleClick('garage')}>garagem</span>
+                    <span onClick={() => handleClick('about')}>sobre nós</span>
+                    <span onClick={() => handleClick('contact')}>contactos</span>
+                </LinksContainer>
+
                 <Phone background={theme.primary}>
                     <img src="/icon/phone.svg" alt="phone" />
                     <p>291 597 264</p>
-
                 </Phone>
             </Content>
-
         </Container>
     )
 }
