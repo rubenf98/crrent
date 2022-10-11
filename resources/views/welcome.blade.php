@@ -34,6 +34,14 @@
         margin: 0;
         position: relative;
     }
+
+    body h1,
+    body h2,
+    body h3,
+    body h4,
+    body h5 {
+        color: rgba(0, 0, 0, 1);
+    }
 </style>
 
 
