@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Footer from "./common/Footer";
 import Navbar from "./common/Navbar";
 import ThemeContainer from "./ThemeContainer";
 
@@ -21,6 +22,7 @@ class Layout extends Component {
                 <Container>
                     <Navbar />
                     <div> {this.props.children} </div>
+                    <Footer />
                 </Container>
             </ThemeContainer>
         );

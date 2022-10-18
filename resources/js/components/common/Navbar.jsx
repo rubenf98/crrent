@@ -111,7 +111,7 @@ function Navbar({ theme }) {
 
                 <Phone background={theme.primary}>
                     <img src="/icon/phone.svg" alt="phone" />
-                    <p>291 597 264</p>
+                    <p>+351 934 953 682</p>
                 </Phone>
             </Content>
         </Container>

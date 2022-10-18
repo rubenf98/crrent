@@ -86,7 +86,7 @@ const AboutContainer = styled.div`
 
 function About({ theme }) {
     return (
-        <Container>
+        <Container id="about">
             <TitleContainer background={theme.secundary}>
                 <img src="/image/homepage/about1.jpg" alt="" />
                 <div className='info-container'>
