@@ -37,9 +37,9 @@ const Price = styled.div`
     position: fixed;
     right: 0px;
     top: 300px;
-    padding: 20px 30px;
+    padding: 10px 20px;
     box-sizing: border-box;
-    max-width: 300px;
+    max-width: 200px;
     color: white;
     z-index: 2;
     background-color: ${props => props.background};
@@ -60,7 +60,7 @@ const Price = styled.div`
     .price {
         text-transform: uppercase;
         font-weight: 700;
-        font-size: 60px;
+        font-size: 40px;
         margin-bottom: 0px;
     }
 `;

@@ -10,6 +10,7 @@ import 'react-multi-carousel/lib/styles.css';
 const Container = styled.section`
     ${maxWidthStyle}
     margin: 200px auto 100px auto;
+    
 `;
 
 const TitleContainer = styled.div`
@@ -84,6 +85,8 @@ const Car = styled.div`
     padding: 30px;
     box-sizing: border-box;
     cursor: pointer;
+
+    
     
     .image-container {
         width: 100%;
@@ -105,6 +108,13 @@ const Car = styled.div`
             transform: translate(-50%, 0%);
             bottom: 0;
             left: 50%;
+            transition: width .3s ease-in-out;
+        }
+    }
+
+    &:hover {
+        .car-background {
+            width: 70%;
         }
     }
 

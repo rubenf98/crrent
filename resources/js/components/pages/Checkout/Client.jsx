@@ -1,8 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from "styled-components";
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
-import { Button, maxWidthStyle } from '../../styles';
-import { Col, DatePicker, Form, Input, Row } from 'antd';
+import { maxWidthStyle } from '../../styles';
+import { Col, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 
 const Container = styled.section`

@@ -1,14 +1,26 @@
 import React from 'react'
-import styled, { withTheme } from "styled-components";
+import styled, { withTheme, keyframes } from "styled-components";
 import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon } from '../../../icons';
 import { Button, maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Form, Input, Row } from 'antd';
+
+const stretch = keyframes`
+  from {
+    width: 40%;
+    right: 40%;
+  }
+
+  to {
+    width: 140%;
+    right: 40%;
+  }
+`;
 
 const Container = styled.section`
     position: relative;
     padding: 0px 0px;
     box-sizing: border-box;
-    margin: 120px auto;
+    
 
     input::placeholder, .ant-picker-input > input::placeholder {
         color: black;
@@ -29,11 +41,14 @@ const Content = styled.div`
     ${maxWidthStyle}
     display: flex;
     justify-content: space-between;
-    align-items: center;
 `;
 
 const Car = styled.div`
     width: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     img {
         width: 90%;
@@ -42,13 +57,12 @@ const Car = styled.div`
 `;
 
 const Background = styled.div`
-    position: absolute;
-    background: ${props => props.background}; 
     top: 0;
-    left: -20px;
-    width: 35%;
+    animation: ${stretch} 1s ease-in-out forwards;
+    position: absolute;
     height: 100%;
     z-index: -1;
+    background-color: ${props => props.background};
 `;
 
 const Info = styled.div`
@@ -171,10 +185,12 @@ function GeneralInfo({ theme }) {
 
     return (
         <Container>
-            <Background background={theme.levels[current.level]} />
+
             <Content>
                 <Car>
-                    <img src={current.image} alt="" /></Car>
+                    <Background background={theme.levels[current.level]} />
+                    <img src={current.image} alt="" />
+                </Car>
                 <Info>
                     <h2>{current.title}</h2>
                     <h3>{current.subtitle}</h3>
@@ -184,30 +200,38 @@ function GeneralInfo({ theme }) {
                         <Icon><div className='border'><PeopleIcon /></div> <p>5</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>5</p></Icon>
                     </IconContainer>
-                    <Form.Item name="date" rules={rules.name}>
-                        <RangePicker showTime={{
-                            format: "HH:mm"
-                        }}
-                            format="YYYY-MM-DD HH:mm"
-                            placeholder={["data levantamento", "data devolução"]}
-                            suffixIcon={(<></>)}
-                        />
-                    </Form.Item>
-                    <Form.Item name="pickup" rules={rules.name}>
-                        <StyledInputGroup size="large">
-                            <Row>
-                                <Col span={12}>
-                                    <Input prefix={<PlaceIcon />} placeholder='Local Levantamento' />
-                                </Col>
-                                <Col span={12}>
-                                    <Input prefix={<PlaceIcon />} placeholder='Local Devolução' />
-                                </Col>
-                            </Row>
-                        </StyledInputGroup>
-                    </Form.Item>
-                    <Form.Item name="flight" rules={rules.name}>
-                        <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
-                    </Form.Item>
+                    <Row>
+                        <Col xs={24} md={24}>
+                            <Form.Item name="date" rules={rules.name}>
+                                <RangePicker showTime={{
+                                    format: "HH:mm"
+                                }}
+                                    format="YYYY-MM-DD HH:mm"
+                                    placeholder={["data levantamento", "data devolução"]}
+                                    suffixIcon={(<></>)}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} md={24}>
+                            <Form.Item name="pickup" rules={rules.name}>
+                                <StyledInputGroup size="large">
+                                    <Row>
+                                        <Col span={12}>
+                                            <Input prefix={<PlaceIcon />} placeholder='Local Levantamento' />
+                                        </Col>
+                                        <Col span={12}>
+                                            <Input prefix={<PlaceIcon />} placeholder='Local Devolução' />
+                                        </Col>
+                                    </Row>
+                                </StyledInputGroup>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} md={24}>
+                            <Form.Item name="flight" rules={rules.name}>
+                                <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
+                            </Form.Item>
+                        </Col>
+                    </Row>
                 </Info>
             </Content>
         </Container>

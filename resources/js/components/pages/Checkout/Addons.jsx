@@ -7,7 +7,6 @@ import TitleContainer from './Common/TitleContainer';
 
 const Container = styled.section`
     box-sizing: border-box;
-    
     ${maxWidthStyle}
     display: flex;
     justify-content: space-between;
