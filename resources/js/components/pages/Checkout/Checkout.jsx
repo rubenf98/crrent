@@ -33,7 +33,37 @@ const ButtonContainer = styled.div`
     ${maxWidthStyle}
 `;
 
+const Price = styled.div`
+    position: fixed;
+    right: 0px;
+    top: 300px;
+    padding: 20px 30px;
+    box-sizing: border-box;
+    max-width: 300px;
+    color: white;
+    z-index: 2;
+    background-color: ${props => props.background};
 
+    h3 {
+        color: inherit;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 0px;
+    }
+    p {
+        margin-top: 0px;
+        font-weight: 400;
+        font-size: 16px;
+        opacity: .8;
+    }
+    .price {
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 60px;
+        margin-bottom: 0px;
+    }
+`;
 
 function Checkout({ theme }) {
     const [form] = Form.useForm();
@@ -49,6 +79,13 @@ function Checkout({ theme }) {
     return (
         <Container>
             <Title>Dados da sua reserva</Title>
+            <Price background={theme.primary}>
+                <h3>total</h3>
+                <p>Inclui taxa de 22%</p>
+                <div className='price'>
+                    240€
+                </div>
+            </Price>
             <Form
                 form={form}
                 name="reservation"
