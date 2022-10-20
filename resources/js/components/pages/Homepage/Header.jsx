@@ -19,8 +19,8 @@ const RangePicker = styled(DatePicker.RangePicker)`
     margin: 0px;
     padding: 25px;
     box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 30px 0px #00000040; 
-    box-shadow: -8px 0px 30px 0px #00000040;
+    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
+    box-shadow: -8px 0px 30px 0px #0000002f;
 
     .ant-picker-input {
         background-image: url("/icon/calendar.svg");
@@ -49,8 +49,8 @@ const Search = styled.button`
     border: 0px;
     cursor: pointer;
     text-transform: uppercase;
-    -webkit-box-shadow: 8px 0px 30px 0px #00000040; 
-    box-shadow: 8px 0px 30px 0px #00000040;
+    -webkit-box-shadow: 8px 0px 30px 0px #0000002f; 
+    box-shadow: 8px 0px 30px 0px #0000002f;
 `;
 
 const Container = styled.section`

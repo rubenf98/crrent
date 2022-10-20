@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import styled, { withTheme } from "styled-components";
+import { useNavigate } from 'react-router-dom';
 import { getCarouselBreakpoints } from '../../helper';
 import { maxWidthStyle } from '../../styles';
 import { PreviousIcon, NextIcon } from '../../../icons';
@@ -82,6 +83,7 @@ const Car = styled.div`
     width: 100%;
     padding: 30px;
     box-sizing: border-box;
+    cursor: pointer;
     
     .image-container {
         width: 100%;
@@ -162,6 +164,7 @@ const cars = [
 
 function Garage({ theme }) {
     const carouselRef = useRef(null);
+    var navigate = useNavigate();
 
     function handleClick(action) {
         if (action == "next") {
@@ -172,7 +175,7 @@ function Garage({ theme }) {
     }
 
     const CarSection = ({ info }) => (
-        <Car primary={theme.primary} background={theme.levels[info.level]}>
+        <Car onClick={() => handleCarSelection(info.id)} primary={theme.primary} background={theme.levels[info.level]}>
             <div className='image-container'>
                 <div className='car-background' />
                 <img src={info.image} alt={info.title} />
@@ -189,6 +192,10 @@ function Garage({ theme }) {
             </div>
         </Car>
     )
+
+    function handleCarSelection(car) {
+        navigate("/checkout?car=" + car);
+    }
 
     return (
         <Container id="garage">

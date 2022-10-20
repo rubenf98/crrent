@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
+Route::get('{slug}', function () {
     return view('welcome');
-});
+})->where('slug', '(?!api)([A-z\d\/_.]+)?');

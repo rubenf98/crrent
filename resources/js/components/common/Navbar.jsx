@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions } from '../helper';
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -72,6 +72,7 @@ const LinksContainer = styled.div`
         width: 140px;
         height: auto;
         margin-right: 70px;
+        cursor: pointer;
 
         @media (max-width: ${dimensions.md}) {
             width: 120px;
@@ -89,8 +90,19 @@ const LinksContainer = styled.div`
 `;
 
 function Navbar({ theme }) {
+    const [visibleLinks, setVisibleLinks] = useState(true)
     let navigate = useNavigate();
     const { pathname } = useLocation();
+
+    useEffect(() => {
+        if (pathname == "/") {
+            setVisibleLinks(true)
+        }
+        else {
+            setVisibleLinks(false)
+        }
+    }, [pathname])
+
 
     const handleClick = (filter) => {
         if (pathname == "/") {
@@ -102,11 +114,16 @@ function Navbar({ theme }) {
         <Container>
             <Content>
                 <LinksContainer>
-                    <img src="/image/logo.png" alt="logo" />
-                    <span onClick={() => handleClick('header')}>home</span>
-                    <span onClick={() => handleClick('garage')}>garagem</span>
-                    <span onClick={() => handleClick('about')}>sobre nós</span>
-                    <span onClick={() => handleClick('contact')}>contactos</span>
+                    <img onClick={() => handleClick('')} src="/image/logo.png" alt="logo" />
+                    {visibleLinks &&
+                        <>
+                            <span onClick={() => handleClick('header')}>home</span>
+                            <span onClick={() => handleClick('garage')}>garagem</span>
+                            <span onClick={() => handleClick('about')}>sobre nós</span>
+                            <span onClick={() => handleClick('contact')}>contactos</span>
+                        </>
+                    }
+
                 </LinksContainer>
 
                 <Phone background={theme.primary}>
