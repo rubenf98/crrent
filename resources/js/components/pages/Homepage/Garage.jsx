@@ -188,7 +188,7 @@ function Garage({ theme }) {
         <Car onClick={() => handleCarSelection(info.id)} primary={theme.primary} background={theme.levels[info.level]}>
             <div className='image-container'>
                 <div className='car-background' />
-                <img src={info.image} alt={info.title} />
+                <img loading='lazy' src={info.image} alt={info.title} />
             </div>
 
             <div className='info-container'>

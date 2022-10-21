@@ -12,7 +12,7 @@ const Container = styled.section`
     width: 100%;
     position: relative;
     margin: auto;
-    padding: 120px 0px;
+    padding: 180px 0px;
     
     @media (max-width: ${maxWidth}) {
         box-sizing: border-box;

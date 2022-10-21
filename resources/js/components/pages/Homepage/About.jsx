@@ -100,7 +100,7 @@ function About({ theme }) {
                     <h3>Rent na ilha da Madeira</h3>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. </p>
                 </div>
-                <img src="/image/homepage/about2.jpg" alt="" />
+                <img  loading='lazy' src="/image/homepage/about2.jpg" alt="" />
             </AboutContainer>
         </Container>
     )

@@ -1,9 +1,11 @@
-import { DatePicker } from 'antd';
-import React from 'react'
+
+import React, { useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import { InstagramIcon, MailIcon, WhatsappIcon } from '../../../icons';
+import DateFormItem from '../../common/DateFormItem';
 
 const RangePickerContainer = styled.div`
     width: 100%;
@@ -11,32 +13,6 @@ const RangePickerContainer = styled.div`
     justify-content: center;
     margin-top: 0px;
     position: relative;
-`;
-
-
-const RangePicker = styled(DatePicker.RangePicker)`
-    width: 50%;
-    margin: 0px;
-    padding: 25px;
-    box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
-    box-shadow: -8px 0px 30px 0px #0000002f;
-
-    .ant-picker-input {
-        background-image: url("/icon/calendar.svg");
-        background-repeat: no-repeat;
-        background-size: 23px 25px;
-        text-indent: 20px;
-        padding-left: 50px;
-        box-sizing: border-box;
-    }
-    .ant-picker-input > input::placeholder {
-        color: black;
-        opacity: .8;
-        font-weight: 400;
-        text-transform: uppercase;
-        font-size: 20px;
-    }
 `;
 
 const Search = styled.button`
@@ -138,6 +114,14 @@ const Accent = styled.div`
 `;
 
 function Header({ theme }) {
+    const [dates, setDates] = useState([undefined, undefined]);
+    var navigate = useNavigate();
+
+    const handleSearch = () => {
+        const dateFormat = "YYYY-MM-DD HH:mm";
+        navigate("/garage?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat))
+    };
+
     return (
         <Container id="header">
             <Content>
@@ -152,14 +136,8 @@ function Header({ theme }) {
                         <MailIcon />
                         <InstagramIcon />
                     </LinksContainer>
-                    <RangePicker showTime={{
-                        format: "HH:mm"
-                    }}
-                        format="YYYY-MM-DD HH:mm"
-                        placeholder={["data levantamento", "data devolução"]}
-                        suffixIcon={(<></>)}
-                    />
-                    <Search background={theme.primary} type='submit'>pesquisar</Search>
+                    <DateFormItem dates={dates} setDates={setDates} />
+                    <Search onClick={handleSearch} background={theme.primary} type='submit'>pesquisar</Search>
                 </RangePickerContainer>
             </Content>
 
