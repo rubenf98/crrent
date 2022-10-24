@@ -3,6 +3,8 @@ import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../helper';
 import { useNavigate, useLocation } from 'react-router-dom'
 import { MenuIcon } from '../../icons';
+import { connect } from "react-redux";
+import { handleMenu } from "../../redux/application/actions";
 
 const Container = styled.section`
     width: 100vw;
@@ -114,6 +116,8 @@ const MobileMenu = styled.div`
     svg {
         cursor: pointer;
         width: 30px;
+        margin: auto;
+        display: block;
         height: auto;
     }
 
@@ -133,7 +137,7 @@ const MobileMenu = styled.div`
     }    
 `;
 
-function Navbar({ theme }) {
+function Navbar({ theme, handleMenu }) {
     const [visibleLinks, setVisibleLinks] = useState(true)
     const [opacityLinks, setOpacityLinks] = useState(1)
     let navigate = useNavigate();
@@ -194,7 +198,10 @@ function Navbar({ theme }) {
                     <div className='language'>
                         PT
                     </div>
-                    <MenuIcon />
+                    <div onClick={() => handleMenu(true)}>
+                        <MenuIcon />
+                    </div>
+
                 </MobileMenu>
 
                 <Phone background={theme.primary}>
@@ -206,4 +213,11 @@ function Navbar({ theme }) {
     )
 }
 
-export default withTheme(Navbar)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        handleMenu: (state) => dispatch(handleMenu(state)),
+    };
+};
+
+
+export default connect(null, mapDispatchToProps)(withTheme(Navbar));

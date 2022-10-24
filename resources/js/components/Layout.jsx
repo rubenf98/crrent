@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Footer from "./common/Footer";
 import Navbar from "./common/Navbar";
+import NavbarMenu from "./common/NavbarMenu";
 import ThemeContainer from "./ThemeContainer";
 
 
@@ -21,6 +22,7 @@ class Layout extends Component {
             <ThemeContainer>
                 <Container>
                     <Navbar />
+                    <NavbarMenu />
                     <div> {this.props.children} </div>
                     <Footer />
                 </Container>
