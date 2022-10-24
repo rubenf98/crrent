@@ -26,8 +26,8 @@ const Content = styled.section`
     flex-wrap: wrap;
 
     @media (max-width: ${dimensions.md}) {
-        height: 80px;
-        padding: 0px 35px;
+        max-height: 60px;
+        padding: 0px 20px;
         position: static;
     }
 `;
@@ -81,13 +81,13 @@ const LinksContainer = styled.div`
         cursor: pointer;
 
         @media (max-width: ${dimensions.md}) {
-            width: 100px;
+            width: 90px;
             margin-right: 0px;
         }
     }
 
     span {
-        padding: 0px 35px;
+        padding: 0px 20px;
         box-sizing: border-box;
         text-transform: uppercase;
         color: black;
@@ -108,18 +108,21 @@ const LinksContainer = styled.div`
 
 const MobileMenu = styled.div`
     display: flex;
+    align-items: center;
     gap: 20px;
 
     svg {
         cursor: pointer;
+        width: 30px;
+        height: auto;
     }
 
     .language {
         background: ${props => props.background};
-        padding: 10px;
+        padding: 8px;
         box-sizing: border-box;
         color: white;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 700;
         opacity: .5;
         cursor: pointer;

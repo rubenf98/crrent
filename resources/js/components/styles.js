@@ -12,6 +12,21 @@ export const maxWidthStyle = css`
     }
 `;
 
+export const titleStyle = css`
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 94%;
+    text-transform: uppercase;
+
+    @media (max-width: ${dimensions.lg}) {
+        font-size: 50px;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        font-size: 40px;
+    }
+`;
+
 export const Button = styled.button`
     background-color: ${props => props.background};
     padding: 12px 33px;

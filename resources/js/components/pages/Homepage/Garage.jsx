@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import styled, { withTheme } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { dimensions, getCarouselBreakpoints } from '../../helper';
-import { maxWidthStyle, SecundaryButton } from '../../styles';
+import { maxWidthStyle, titleStyle, SecundaryButton } from '../../styles';
 import { PreviousIcon, NextIcon } from '../../../icons';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -11,6 +11,9 @@ const Container = styled.section`
     ${maxWidthStyle}
     margin: 200px auto 100px auto;
     
+    @media (max-width: ${dimensions.md}) {
+        margin: 100px auto;
+    }
 `;
 
 const TitleContainer = styled.div`
@@ -21,9 +24,7 @@ const TitleContainer = styled.div`
     gap: 20px;
 
     h2 {
-        font-size: 64px;
-        text-transform: uppercase;
-        font-weight: 700;
+        ${titleStyle}
         margin: 0px;
     }
 `;
@@ -37,6 +38,7 @@ const FilterContainer = styled.div`
 
     @media (max-width: ${dimensions.md}) {
         gap: 20px;
+        margin-bottom: 30px;
     }
 
     @media (max-width: ${dimensions.sm}) {
@@ -51,12 +53,18 @@ const FilterContainer = styled.div`
 `;
 
 const Filter = styled.span`
+    font-size: 18px;
+
     .rectangle{
         display: inline-block;
         margin-right: 15px;
         width: 20px;
         height: 20px;
         background-color: ${props => props.background};
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        font-size: 16px;
     }
 `;
 

@@ -15,7 +15,7 @@ const RangePickerContainer = styled.div`
     position: relative;
 
     @media (max-width: ${dimensions.md}) {
-        margin-top: 50px;
+        margin-top: 100px;
     }
 `;
 
@@ -52,7 +52,7 @@ const Container = styled.section`
     
     @media (max-width: ${maxWidth}) {
         box-sizing: border-box;
-        padding: 0px 35px;
+        padding: 0px 20px;
     }
 
     @media (max-width: ${dimensions.md}) {
@@ -67,7 +67,7 @@ const TitleContainer = styled.div`
     box-sizing: border-box;
     position: relative;
     max-width: ${maxWidth};
-    margin: 120px auto;
+    margin: auto;
 
     h1 {
         font-size: 128px;
@@ -101,7 +101,7 @@ const TitleContainer = styled.div`
     @media (max-width: ${dimensions.md}) {
         padding: 100px 0px 0px 30px;
         margin: 100px auto 0px auto;
-        height: 50%;
+        min-height: 50%;
     }
 `;
 
@@ -125,7 +125,7 @@ const Content = styled.div`
 
     @media (max-width: ${maxWidth}) {
         box-sizing: border-box;
-        padding: 0px 35px;
+        padding: 0px 20px;
     }
 
 

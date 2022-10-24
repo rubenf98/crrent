@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Collapse } from 'antd';
 import styled, { withTheme } from "styled-components";
-import { maxWidthStyle } from '../../styles';
+import { maxWidthStyle, titleStyle } from '../../styles';
 import { dimensions } from '../../helper';
 
 const { Panel } = Collapse;
@@ -11,10 +11,12 @@ const Container = styled.section`
     ${maxWidthStyle}
     margin: 200px auto;
 
+    @media (max-width: ${dimensions.md}) {
+        margin: 100px auto;
+    }
+
     h2 {
-        font-size: 64px;
-        font-weight: 700;
-        text-transform: uppercase;
+        ${titleStyle}
     }
 `;
 
@@ -43,7 +45,7 @@ const Accordion = styled(Collapse)`
         text-transform: uppercase;
 
         @media (max-width: ${dimensions.md}) {
-            font-size: 18px;
+            font-size: 16px;
         }
     }
 
@@ -53,7 +55,7 @@ const Accordion = styled(Collapse)`
             font-weight: 400;
 
             @media (max-width: ${dimensions.md}) {
-                font-size: 18px;
+                font-size: 16px;
             }
         }
     }
@@ -94,7 +96,7 @@ function Faq({ theme }) {
                         showArrow={false}
                         header={(<div onClick={() => setActiveKey(index)} className='hover-container'>{item.question}</div>)}
                         key={index}
-                        
+
                     >
                         <p>{item.answer}</p>
                     </Panel>
