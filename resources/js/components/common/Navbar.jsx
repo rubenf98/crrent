@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
-import { dimensions } from '../helper';
+import { dimensions, maxWidth } from '../helper';
 import { useNavigate, useLocation } from 'react-router-dom'
+import { MenuIcon } from '../../icons';
 
 const Container = styled.section`
     width: 100vw;
@@ -25,8 +26,9 @@ const Content = styled.section`
     flex-wrap: wrap;
 
     @media (max-width: ${dimensions.md}) {
-        height: 100px;
+        height: 80px;
         padding: 0px 35px;
+        position: static;
     }
 `;
 
@@ -40,6 +42,10 @@ const Phone = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: ${dimensions.md}) {
+        display: none;
+    }
 
     p {
         margin: 0px;
@@ -75,7 +81,8 @@ const LinksContainer = styled.div`
         cursor: pointer;
 
         @media (max-width: ${dimensions.md}) {
-            width: 120px;
+            width: 100px;
+            margin-right: 0px;
         }
     }
 
@@ -89,8 +96,38 @@ const LinksContainer = styled.div`
         opacity: ${props => props.opacity};
         pointer-events: ${props => props.opacity ? "auto" : "none"};
         z-index: -5;
+
+
+
+        @media (max-width: ${maxWidth}) {
+            display: none;
+        }
     }
     
+`;
+
+const MobileMenu = styled.div`
+    display: flex;
+    gap: 20px;
+
+    svg {
+        cursor: pointer;
+    }
+
+    .language {
+        background: ${props => props.background};
+        padding: 10px;
+        box-sizing: border-box;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        opacity: .5;
+        cursor: pointer;
+    }
+
+    @media (min-width: ${dimensions.md}) {
+        display: none;
+    }    
 `;
 
 function Navbar({ theme }) {
@@ -150,6 +187,12 @@ function Navbar({ theme }) {
                     }
 
                 </LinksContainer>
+                <MobileMenu background={theme.primary}>
+                    <div className='language'>
+                        PT
+                    </div>
+                    <MenuIcon />
+                </MobileMenu>
 
                 <Phone background={theme.primary}>
                     <img src="/icon/phone.svg" alt="phone" />

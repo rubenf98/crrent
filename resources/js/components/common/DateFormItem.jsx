@@ -1,6 +1,7 @@
 import React from 'react'
 import { DatePicker } from 'antd';
 import styled from "styled-components";
+import { dimensions } from '../helper';
 
 const RangePicker = styled(DatePicker.RangePicker)`
     width: 50%;
@@ -24,6 +25,27 @@ const RangePicker = styled(DatePicker.RangePicker)`
         font-weight: 400;
         text-transform: uppercase;
         font-size: 20px;
+    }
+
+    @media (max-width: ${dimensions.lg}) {
+        padding: 10px;
+        flex: 1;
+
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 10px;
+        flex: 1;
+
+        .ant-picker-input {
+            background-image: none;
+            text-indent: 0px;
+            padding-left: 0px;
+        }
+
+        .ant-picker-input > input::placeholder {
+            font-size: 14px;
+        }
     }
 `;
 
