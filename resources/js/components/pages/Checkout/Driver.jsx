@@ -14,7 +14,7 @@ const Section = styled.div`
 
 const rules = {
     name: [{
-        required: true,
+        required: false,
         message: 'Please input your fullname!',
     }],
 };

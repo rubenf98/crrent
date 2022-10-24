@@ -85,23 +85,47 @@ const LinksContainer = styled.div`
         text-transform: uppercase;
         color: black;
         cursor: pointer;
+        transition: opacity .3s ease;
+        opacity: ${props => props.opacity};
+        pointer-events: ${props => props.opacity ? "auto" : "none"};
+        z-index: -5;
     }
     
 `;
 
 function Navbar({ theme }) {
     const [visibleLinks, setVisibleLinks] = useState(true)
+    const [opacityLinks, setOpacityLinks] = useState(1)
     let navigate = useNavigate();
     const { pathname } = useLocation();
 
     useEffect(() => {
-        if (pathname == "/") {
+        if (pathname == "/" && !visibleLinks) {
             setVisibleLinks(true)
         }
-        else {
+        else if (pathname != "/" && visibleLinks) {
             setVisibleLinks(false)
         }
     }, [pathname])
+
+    useEffect(() => {
+
+        const setFromEvent = (e) => {
+            if (window.scrollY == 0) {
+                setOpacityLinks(1);
+            } else if (window.scrollY) {
+                setOpacityLinks(0);
+            }
+        };
+
+        window.addEventListener("scroll", setFromEvent);
+
+        return () => {
+            window.removeEventListener("scroll", setFromEvent);
+        };
+
+    }, []);
+
 
 
     const handleClick = (filter) => {
@@ -110,11 +134,12 @@ function Navbar({ theme }) {
             window.scrollTo({ top: element.offsetTop, behavior: 'smooth' });
         } else return navigate("/#" + filter);
     }
+
     return (
         <Container>
             <Content>
-                <LinksContainer>
-                    <img onClick={() => handleClick('')} src="/image/logo.png" alt="logo" />
+                <LinksContainer opacity={opacityLinks}>
+                    <img onClick={() => handleClick("/#")} src="/image/logo.png" alt="logo" />
                     {visibleLinks &&
                         <>
                             <span onClick={() => handleClick('header')}>home</span>

@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import ScrollToTop from "./components/common/ScrollToTop";
 import Garage from "./components/pages/Garage/Garage";
 import Checkout from "./components/pages/Checkout/Checkout";
+import Summary from "./components/pages/Checkout/Summary";
 export const history = createBrowserHistory();
 
 function Router() {
@@ -15,7 +16,7 @@ function Router() {
         <BrowserRouter history={history}>
             <ScrollToTop>
                 <Routes>
-                    
+                    <Route exact path="/summary" element={<Layout><Summary /></Layout>} />
                     <Route exact path="/garage" element={<Layout><Garage /></Layout>} />
                     <Route exact path="/checkout" element={<Layout><Checkout /></Layout>} />
                     <Route exact path="/" element={<Layout><Homepage /></Layout>} />

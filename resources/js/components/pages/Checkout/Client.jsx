@@ -13,7 +13,7 @@ const Container = styled.section`
 
 const rules = {
     name: [{
-        required: true,
+        required: false,
         message: 'Please input your fullname!',
     }],
 };

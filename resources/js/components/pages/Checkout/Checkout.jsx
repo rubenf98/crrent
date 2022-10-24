@@ -6,6 +6,7 @@ import { Button, maxWidthStyle } from '../../styles';
 import Addons from './Addons';
 import Client from './Client';
 import Driver from './Driver';
+import { useNavigate } from 'react-router-dom'
 import GeneralInfo from './GeneralInfo';
 
 const Container = styled.section`
@@ -67,9 +68,11 @@ const Price = styled.div`
 
 function Checkout({ theme }) {
     const [form] = Form.useForm();
+    let navigate = useNavigate();
 
     const onFinish = (values) => {
         console.log('Success:', values);
+        navigate("/summary");
     };
 
     const onFinishFailed = (errorInfo) => {
