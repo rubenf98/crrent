@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
 import styled, { withTheme } from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { getCarouselBreakpoints } from '../../helper';
-import { maxWidthStyle } from '../../styles';
+import { dimensions, getCarouselBreakpoints } from '../../helper';
+import { maxWidthStyle, SecundaryButton } from '../../styles';
 import { PreviousIcon, NextIcon } from '../../../icons';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -17,6 +17,8 @@ const TitleContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
 
     h2 {
         font-size: 64px;
@@ -30,20 +32,21 @@ const FilterContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     gap: 40px;
 
-    span, button {
+    @media (max-width: ${dimensions.md}) {
+        gap: 20px;
+    }
+
+    @media (max-width: ${dimensions.sm}) {
+        gap: 10px;
+    }
+
+    span {
         font-size: 24px;
         text-transform: uppercase;
         font-weight: 400;
-    }
-
-    button {
-        background-color: white;
-        padding: 20px 60px;
-        border: 2px solid;
-        border-color: ${props => props.borderColor};
-        cursor: pointer;
     }
 `;
 
@@ -57,6 +60,25 @@ const Filter = styled.span`
     }
 `;
 
+const DesktopButtonContainer = styled.div`
+    display: inline-block;
+
+    @media (max-width: ${dimensions.xl}) {
+        display: none;
+    }
+`;
+
+const MobileButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+
+    @media (min-width: ${dimensions.md}) {
+        display: none;
+    }
+`;
+
 const ArrowContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -65,6 +87,7 @@ const ArrowContainer = styled.div`
     font-size: 24px;
     font-weight: 700;
     margin: 50px auto;
+    width: 40%;
 
     svg {
         width: 10px;
@@ -73,10 +96,23 @@ const ArrowContainer = styled.div`
     }
 
     .separator {
-        width: 180px;
         opacity: .3;
         height: 2px;
         background-color: ${props => props.background};
+        flex: 1;
+    }
+    @media (max-width: ${dimensions.lg}) {
+        width: 60%;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        gap: 20px;
+        font-size: 20px;
+        width: 80%;
+    }
+
+    @media (max-width: ${dimensions.sm}) {
+        width: 100%;
     }
 `;
 
@@ -216,7 +252,12 @@ function Garage({ theme }) {
                     <Filter background={theme.levels.B}><div className="rectangle" />GAMA B</Filter>
                     <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
                     <Filter background={theme.levels.E}><div className="rectangle" />GAMA E</Filter>
-                    <button type='search'>ver mais</button>
+                    <DesktopButtonContainer>
+                        <SecundaryButton type='search' primary={theme.primary}>
+                            ver mais
+                        </SecundaryButton>
+                    </DesktopButtonContainer>
+
 
                 </FilterContainer>
             </TitleContainer>
@@ -232,6 +273,13 @@ function Garage({ theme }) {
                 <div className='separator' />
                 <div onClick={() => handleClick("next")}> 3 <NextIcon /></div>
             </ArrowContainer>
+
+            <MobileButtonContainer>
+                <SecundaryButton type='search' primary={theme.primary}>
+                    ver mais
+                </SecundaryButton>
+            </MobileButtonContainer>
+
 
 
         </Container>

@@ -48,3 +48,18 @@ export const Button = styled.button`
         }
     }
 `;
+
+
+export const SecundaryButton = styled.button`
+    background-color: white;
+    border: 2px solid;
+    border-color: ${props => props.primary};
+    cursor: pointer;
+    color: ${props => props.primary};
+    padding: 12px 33px;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+`;
