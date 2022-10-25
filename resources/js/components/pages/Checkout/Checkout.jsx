@@ -1,7 +1,7 @@
 import { Form } from 'antd';
 import React from 'react'
 import styled, { withTheme } from "styled-components";
-import { maxWidth } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 import { Button, maxWidthStyle } from '../../styles';
 import Addons from './Addons';
 import Client from './Client';
@@ -20,6 +20,10 @@ const Container = styled.section`
         padding: 0px 20px;
     }
 
+    @media (max-width: ${dimensions.md}) {
+        margin: 100px 0px;
+    }
+
 `;
 
 const Title = styled.h1`
@@ -28,6 +32,10 @@ const Title = styled.h1`
     font-weight: 700;
     text-align: center;
     margin: 10px auto 60px auto;
+
+    @media (max-width: ${dimensions.md}) {
+        font-size: 40px;
+    }
 `;
 
 const ButtonContainer = styled.div`
@@ -63,6 +71,19 @@ const Price = styled.div`
         font-weight: 700;
         font-size: 40px;
         margin-bottom: 0px;
+    }
+
+    @media (max-width: ${dimensions.lg}) {
+        top: auto;
+        bottom: 0;
+
+        h3 {
+            font-size: 18px;
+        }
+
+        .price {
+            font-size: 36px;
+        }
     }
 `;
 

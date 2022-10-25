@@ -3,6 +3,7 @@ import styled, { withTheme, keyframes } from "styled-components";
 import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon } from '../../../icons';
 import { Button, maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Form, Input, Row } from 'antd';
+import { dimensions } from '../../helper';
 
 const stretch = keyframes`
   from {
@@ -53,6 +54,10 @@ const Car = styled.div`
     img {
         width: 90%;
         height: auto;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+        }
     }
 `;
 
@@ -68,6 +73,11 @@ const Background = styled.div`
 const Info = styled.div`
     width: 50%;
 
+    @media (max-width: ${dimensions.md}) {
+        padding-left: 20px;
+        box-sizing: border-box;
+    }
+
     h2 {
         font-size: 40px;
         font-weight: 700;
@@ -81,12 +91,23 @@ const Info = styled.div`
         opacity: .5;
         
     }
+
+    @media (max-width: ${dimensions.lg}) {
+        h2 {
+            font-size: 18px;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+    }
 `;
 
 const IconContainer = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
     gap: 35px;
     margin: 60px 0px;
 
@@ -94,14 +115,16 @@ const IconContainer = styled.div`
         border: 2px solid;
         border-color: ${props => props.border}; 
     }
+
+    @media (max-width: ${dimensions.md}) {
+        margin: 20px 0px 0px 0px;
+    }
 `;
 
 
 const Icon = styled.div`
     width: 65px;
     height: 65px;
-    
-    
 
     div {
         padding: 10px;
@@ -116,7 +139,21 @@ const Icon = styled.div`
         font-size: 14px;
         text-align: center;
         margin: auto;
-        margin-top: 15px;
+        margin: 15px 0px;
+    }
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        width: 50px;
+        height: 50px;
+
+        p {
+            margin: 5px 0px 10px 0px;
+        }
     }
 `;
 
@@ -135,6 +172,10 @@ const StyledInputGroup = styled(Input.Group)`
     input {
         padding-left: 25px !important;
     }
+
+    @media (max-width: ${dimensions.md}) {
+        margin: 10px 0px;
+    }
 `;
 
 
@@ -148,6 +189,10 @@ const StyledInput = styled(Input)`
 
     input {
         padding-left: 25px !important;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        margin: 10px 0px;
     }
 `;
 
@@ -169,6 +214,24 @@ const RangePicker = styled(DatePicker.RangePicker)`
         box-sizing: border-box;
     }
 
+    @media (max-width: ${dimensions.md}) {
+        margin: 10px 0px;
+    }
+`;
+
+const DesktopContainer = styled(Row)`
+
+    @media (max-width: ${dimensions.md}) {
+        display: none;
+    }
+`;
+
+const MobileContainer = styled.div`
+    margin-top: 50px;
+
+    @media (min-width: ${dimensions.md}) {
+        display: none;
+    }
 `;
 
 const rules = {
@@ -200,7 +263,7 @@ function GeneralInfo({ theme }) {
                         <Icon><div className='border'><PeopleIcon /></div> <p>5</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>5</p></Icon>
                     </IconContainer>
-                    <Row>
+                    <DesktopContainer>
                         <Col xs={24} md={24}>
                             <Form.Item name="date" rules={rules.name}>
                                 <RangePicker showTime={{
@@ -231,9 +294,43 @@ function GeneralInfo({ theme }) {
                                 <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
                             </Form.Item>
                         </Col>
-                    </Row>
+                    </DesktopContainer>
                 </Info>
+
+
             </Content>
+            <MobileContainer>
+                <Col xs={24} md={24}>
+                    <Form.Item name="date" rules={rules.name}>
+                        <RangePicker showTime={{
+                            format: "HH:mm"
+                        }}
+                            format="YYYY-MM-DD HH:mm"
+                            placeholder={["data levantamento", "data devolução"]}
+                            suffixIcon={(<></>)}
+                        />
+                    </Form.Item>
+                </Col>
+                <Col xs={24} md={24}>
+                    <Form.Item name="pickup" rules={rules.name}>
+                        <StyledInputGroup size="large">
+                            <Row>
+                                <Col span={12}>
+                                    <Input prefix={<PlaceIcon />} placeholder='Local Levantamento' />
+                                </Col>
+                                <Col span={12}>
+                                    <Input prefix={<PlaceIcon />} placeholder='Local Devolução' />
+                                </Col>
+                            </Row>
+                        </StyledInputGroup>
+                    </Form.Item>
+                </Col>
+                <Col xs={24} md={24}>
+                    <Form.Item name="flight" rules={rules.name}>
+                        <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
+                    </Form.Item>
+                </Col>
+            </MobileContainer>
         </Container>
     )
 }

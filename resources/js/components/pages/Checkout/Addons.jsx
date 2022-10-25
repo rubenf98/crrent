@@ -4,6 +4,7 @@ import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
 import { Button, maxWidthStyle } from '../../styles';
 import { Checkbox, DatePicker } from 'antd';
 import TitleContainer from './Common/TitleContainer';
+import { dimensions } from '../../helper';
 
 const Container = styled.section`
     box-sizing: border-box;
@@ -11,15 +12,25 @@ const Container = styled.section`
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-wrap: wrap;
     margin: 120px auto;
 `;
 
 const Insurance = styled.div`
     width: 50%;
+
+    @media (max-width: ${dimensions.lg}) {
+        width: 100%;
+        margin-bottom: 100px;
+    }
 `;
 
 const Extra = styled.div`
     width: 50%;
+
+    @media (max-width: ${dimensions.lg}) {
+        width: 100%;
+    }
 
     h2 {
         font-size: 40px;
@@ -60,7 +71,12 @@ const PackageContainer = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
     gap: 35px;
+
+    @media (max-width: ${dimensions.lg}) {
+        justify-content: space-between;
+    }
 
     .border {
         border: 2px solid;
@@ -77,6 +93,14 @@ const Package = styled.div`
     border-color: ${props => props.border};
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
     width: 40%;
+
+    @media (max-width: ${dimensions.lg}) {
+        width: 45%;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        width: 100%;
+    }
 
     h3 {
         font-size: 20px;
