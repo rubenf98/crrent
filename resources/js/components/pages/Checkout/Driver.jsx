@@ -3,9 +3,14 @@ import styled, { withTheme } from "styled-components";
 import { maxWidthStyle } from '../../styles';
 import { Col, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
+import { dimensions } from '../../helper';
 
 const Container = styled.section`
     ${maxWidthStyle};
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 0px;
+    }
 `;
 
 const Section = styled.div`

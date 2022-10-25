@@ -41,9 +41,9 @@ const LogoContainer = styled.div`
 const LinksContainer = styled.div`
     flex: 1;
     display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     
     p {
         color: white;
@@ -82,7 +82,7 @@ const Phone = styled.div`
     box-sizing: border-box;
     background-color: white;
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;

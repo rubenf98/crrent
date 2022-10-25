@@ -14,10 +14,18 @@ const Container = styled.section`
     align-items: flex-start;
     flex-wrap: wrap;
     margin: 120px auto;
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 0px;
+    }
 `;
 
 const Insurance = styled.div`
     width: 50%;
+
+    @media (max-width: ${dimensions.xl}) {
+        width: 60%;
+    }
 
     @media (max-width: ${dimensions.lg}) {
         width: 100%;
@@ -27,6 +35,10 @@ const Insurance = styled.div`
 
 const Extra = styled.div`
     width: 50%;
+
+    @media (max-width: ${dimensions.xl}) {
+        width: 40%;
+    }
 
     @media (max-width: ${dimensions.lg}) {
         width: 100%;
@@ -57,10 +69,20 @@ const Extra = styled.div`
             font-size: 20px;
             font-weight: 700;
 
-            span {
+            @media (max-width: ${dimensions.md}) {
+                font-size: 18px;
+            }
+
+            .opacity {
                 opacity: .5;
                 font-weight: 400;
 
+            }
+
+            .hide {
+                @media (max-width: ${dimensions.sm}) {
+                    display: none;
+                }
             }
         }
     }
@@ -171,9 +193,9 @@ function Addons({ theme }) {
             <Extra>
                 <TitleContainer title="Extras" />
 
-                <div className='checkbox-container'><Checkbox>Condutor Adicional</Checkbox> <p>30€ <span>/ por Dia</span></p></div>
-                <div className='checkbox-container'><Checkbox>GPS</Checkbox> <p>30€ <span>/ por Dia</span></p></div>
-                <div className='checkbox-container'><Checkbox>Cadeira de Bebé</Checkbox> <p>30€ <span>/ por Dia</span></p></div>
+                <div className='checkbox-container'><Checkbox>Condutor Adicional</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
+                <div className='checkbox-container'><Checkbox>GPS</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
+                <div className='checkbox-container'><Checkbox>Cadeira de Bebé</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
             </Extra>
 
         </Container>

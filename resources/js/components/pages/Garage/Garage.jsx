@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
-import { maxWidth } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 import styled, { withTheme } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,10 @@ const Container = styled.section`
         padding: 0px 20px;
     }
 
+    @media (max-width: ${dimensions.md}) {
+        margin: 100px 0px;
+    }
+
 `;
 
 const Title = styled.h1`
@@ -26,6 +30,10 @@ const Title = styled.h1`
     font-weight: 700;
     text-align: center;
     margin: 10px auto 60px auto;
+
+    @media (max-width: ${dimensions.md}) {
+        font-size: 40px;
+    }
 `;
 
 const RangePickerContainer = styled.div`
@@ -47,12 +55,19 @@ const Search = styled.button`
     text-transform: uppercase;
     -webkit-box-shadow: 8px 0px 30px 0px #0000002f; 
     box-shadow: 8px 0px 30px 0px #0000002f;
+
+    @media (max-width: ${dimensions.md}) {
+        font-size: 14px;
+        padding: 15px;
+        font-weight: 40;
+    }
 `;
 
 const FilterContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     margin: 50px 0px;
     gap: 40px;
 `;
@@ -77,7 +92,13 @@ const Car = styled.div`
     box-sizing: border-box;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     margin: 150px 0px;
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 0px;
+        margin: 100px 0px;
+    }
     
     
     .image-container {
@@ -88,6 +109,10 @@ const Car = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+        }
 
         img {
             width: 90%;
@@ -111,6 +136,11 @@ const Car = styled.div`
         width: 50%;
         padding: 0px 50px;
         box-sizing: border-box;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+            padding: 0px;
+        }
 
         .title { 
             display: flex;
@@ -136,6 +166,15 @@ const Car = styled.div`
                 }
 
             }
+
+            @media (max-width: ${dimensions.md}) {
+                margin-top: 10px;
+                
+                h3, p {
+                    font-size: 16px;
+                    margin: 0px;
+                }
+            }
         } 
 
         h4 {
@@ -143,6 +182,10 @@ const Car = styled.div`
             font-size: 20px;
             opacity: .5;
             margin: 0px;
+
+            @media (max-width: ${dimensions.md}) {
+                font-size: 16px;
+            }
         }
 
         .price { 
@@ -169,6 +212,10 @@ const Car = styled.div`
                 color: ${props => props.primary};
                 font-size: 60px;
                 font-weight: 700;
+
+                @media (max-width: ${dimensions.md}) {
+                    font-size: 40px;
+                }
             }
         } 
 

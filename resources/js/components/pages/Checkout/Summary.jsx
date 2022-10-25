@@ -5,6 +5,7 @@ import { Button, maxWidthStyle } from '../../styles';
 import { Form, Checkbox, Input, Row, Col, DatePicker, InputNumber } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { Link } from 'react-router-dom';
+import { dimensions } from '../../helper';
 
 const stretch = keyframes`
   from {
@@ -39,6 +40,10 @@ const Container = styled.section`
     padding: 0px 0px;
     box-sizing: border-box;
     padding: 180px 0px;
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 150px 0px;
+    }
     
 
     input::placeholder, .ant-picker-input > input::placeholder {
@@ -67,6 +72,12 @@ const Car = styled.div`
     justify-content: center;
     align-items: center;
 
+    @media (max-width: ${dimensions.lg}) {
+        width: 100%;
+        padding: 30px 0px;
+        margin-bottom: 80px;
+    }
+
     img {
         width: 90%;
         height: auto;
@@ -85,6 +96,10 @@ const Background = styled.div`
 const Info = styled.div`
     width: 50%;
 
+    @media (max-width: ${dimensions.lg}) {
+        width: 100%;
+    }
+
     h2 {
         font-size: 40px;
         font-weight: 700;
@@ -98,6 +113,8 @@ const Info = styled.div`
         opacity: .5;
         
     }
+
+    
 `;
 
 
@@ -111,7 +128,11 @@ const Section = styled.div`
     margin: 50px 0px 20px 0px;
 
     p, div {
-        width: 33%;
+        width: 30%;
+    }
+
+    .large {
+        width: 39%;
     }
 
     .title {
@@ -131,6 +152,14 @@ const Section = styled.div`
 
     .opacity {
         opacity: .5;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        margin: 20px 0px 10px 0px;
+
+        .title, p {
+            font-size: 16px;
+        }
     }
 `;
 
@@ -162,12 +191,17 @@ const Price = styled.div`
 const SummaryContainer = styled.section`
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 `;
 
 const PolicyContainer = styled.section`
     font-weight: 400;
     font-size: 20px;
     margin: 100px 0px;
+
+    @media (max-width: ${dimensions.md}) {
+        margin: 80px 0px;
+    }
 
     a {
         font-weight: 700;
@@ -183,16 +217,27 @@ const PaymentContainer = styled.section`
     box-shadow: 0px 4px 31px rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     .column {
         width: 50%;
         padding: 20px;
         box-sizing: border-box;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+            padding: 0px;
+        }
     }
 
     label {
         font-size: 20px;
         font-weight: 700;
+
+        @media (max-width: ${dimensions.md}) {
+            font-size: 16px;
+        }
+
     }
 
     p {
@@ -200,6 +245,28 @@ const PaymentContainer = styled.section`
         text-align: right;
         width: 80%;
         margin-left: auto;
+
+        @media (max-width: ${dimensions.lg}) {
+            width: 100%;
+        }
+
+        @media (max-width: ${dimensions.md}) {
+            text-align: left;
+            margin: 5px 0px;
+        }
+    }
+
+    button {
+        margin: 10px 0px;
+    }
+
+    .info {
+        margin: 20px 0px 80px 0px;
+
+        @media (max-width: ${dimensions.md}) {
+            margin: 20px 0px 40px 0px;
+
+        }
     }
 `;
 
@@ -262,13 +329,13 @@ function Summary({ theme }) {
 
                         {content.map((section) => (
                             <Section>
-                                <div className='title'>{section.title}</div>
+                                <div className='title large'>{section.title}</div>
                                 <div className='title opacity'>€/DIA</div>
                                 <div className='title'>SUBTOTAL</div>
 
                                 {section.items.map((row) => (
                                     <>
-                                        <p>
+                                        <p className='large'>
                                             {row[0]}
                                         </p>
                                         <p className='opacity'>
@@ -317,13 +384,13 @@ function Summary({ theme }) {
                             </Row>
 
                             <Row type="flex" gutter={16}>
-                                <Col xs={12} md={10}>
+                                <Col xs={24} md={10}>
                                     <Form.Item name="card_validity" label="Data de Validade" rules={rules.name}>
                                         <MonthPicker placeholder='MM/AA' />
                                     </Form.Item>
                                 </Col>
 
-                                <Col xs={12} md={10}>
+                                <Col xs={24} md={10}>
                                     <Form.Item name="card_cvv" label="CVV" rules={rules.name}>
                                         <StyledInputNumber placeholder='XXX' />
                                     </Form.Item>
@@ -332,7 +399,7 @@ function Summary({ theme }) {
                         </Form>
                     </div>
                     <div className='column'>
-                        <p>Para sua segurança, a verificação da sua identidade pode ser solicitada. Contacte o seu banco para mais informações.</p>
+                        <p className='info'>Para sua segurança, a verificação da sua identidade pode ser solicitada. Contacte o seu banco para mais informações.</p>
                         <Button background={theme.primary}>
                             pagar já
                         </Button>

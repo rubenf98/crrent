@@ -42,6 +42,10 @@ const Content = styled.div`
     ${maxWidthStyle}
     display: flex;
     justify-content: space-between;
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 0px;
+    }
 `;
 
 const Car = styled.div`
