@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
 import { dimensions, maxWidth } from '../../helper';
 import styled, { withTheme } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
-import { Link } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import DateFormItem from '../../common/DateFormItem';
+import { connect } from "react-redux";
+import { fetchCars, setCurrent } from "../../../redux/car/actions";
+import moment from "moment";
 
 const Container = styled.section`
     width: 100%;
@@ -270,65 +273,95 @@ const Icon = styled.div`
     }
 `;
 
-const cars = [
-    { id: 1, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 },
-    { id: 2, level: "B", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 },
-    { id: 3, level: "C", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 },
-    { id: 4, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 },
-    { id: 5, level: "B", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 },
-    { id: 6, level: "C", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 240 }
-]
+function Garage({ theme, data, fetchCars, setCurrent }) {
+    const [dates, setDates] = useState([undefined, undefined]);
+    const [days, setDays] = useState(1)
+    var navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
+    useEffect(() => {
+        var from = searchParams.get("from");
+        var to = searchParams.get("to");
 
-function Garage({ theme }) {
-    const [dates, setDates] = useState(undefined);
+        fetchCars({ from: from, to: to });
+
+        from = moment(from);
+        to = moment(to);
+
+        var difference = to.diff(from, 'days');
+        setDays(difference);
+        setDates([from, to]);
+    }, [])
 
     const handleSearch = () => {
         const dateFormat = "YYYY-MM-DD HH:mm";
-        //navigate("/garage?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat))
+        fetchCars({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat) });
+
+        var difference = dates[1].diff(dates[0], 'days');
+        setDays(difference);
+        setDates([dates[0], dates[1]]);
     };
 
-    const CarSection = ({ info }) => (
-        <Car onClick={() => handleCarSelection(info.id)} primary={theme.primary} background={theme.levels[info.level]}>
-            <div className='image-container'>
-                <div className='car-background' />
-                <img src={info.image} alt={info.title} />
-            </div>
 
-            <div className='info-container'>
-                <div className='title'>
-                    <div>
-                        <h3>{info.title}</h3>
-                    </div>
-                    <p>{info.price}€ <span>/ por Dia</span></p>
-                </div>
-                <h4>{info.subtitle}</h4>
-                <IconContainer border={theme.primary}>
-                    <Icon><div className='border'><ShiftIcon /></div> <p>Manual</p></Icon>
-                    <Icon><div className='border'><GasIcon /></div> <p>Gasolina</p></Icon>
-                    <Icon><div className='border'><PeopleIcon /></div> <p>5</p></Icon>
-                    <Icon><div className='border'><DoorsIcon /></div> <p>5</p></Icon>
-                </IconContainer>
+    function handleCarSelection(car) {
+        setCurrent(car);
+        navigate("/checkout");
+    }
 
-                <div className='price'>
-                    <div>
-                        <p className='total'>total</p>
-                        <p className='warning'>Inclui taxa de 22%</p>
-                    </div>
-                    <div className='value'>{info.price}€</div>
+    function retrievePrice(prices) {
+        var value = prices[2].price;
+        prices.map((price) => {
+            if (days >= price.min && days <= price.max) {
+                value = price.price;
+            }
+        })
+
+        return [value, value * days];
+    }
+
+    const CarSection = ({ info }) => {
+        var pricing = retrievePrice(info.level.prices);
+        return (
+            <Car primary={theme.primary} background={theme.levels[info.level.code]}>
+                <div className='image-container'>
+                    <div className='car-background' />
+                    <img src={info.image} alt={info.title} />
                 </div>
 
-                <Button background={theme.primary}>
-                    <Link to="/checkout?car=1">reservar</Link>
+                <div className='info-container'>
+                    <div className='title'>
+                        <div>
+                            <h3>{info.title}</h3>
+                        </div>
+                        <p>{pricing[0]}€ <span>/ por Dia</span></p>
+                    </div>
+                    <h4>{info.subtitle}</h4>
+                    <IconContainer border={theme.primary}>
+                        <Icon><div className='border'><ShiftIcon /></div> <p>{info.shift_mode}</p></Icon>
+                        <Icon><div className='border'><GasIcon /></div> <p>{info.gas}</p></Icon>
+                        <Icon><div className='border'><PeopleIcon /></div> <p>{info.people}</p></Icon>
+                        <Icon><div className='border'><DoorsIcon /></div> <p>{info.doors}</p></Icon>
+                    </IconContainer>
 
-                </Button>
-                <p className='disclaimer'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <div className='price'>
+                        <div>
+                            <p className='total'>total</p>
+                            <p className='warning'>Inclui taxa de 22%</p>
+                        </div>
+                        <div className='value'>{pricing[1]}€</div>
+                    </div>
 
-                <p className='phone'>( +351 ) 934 953 682</p>
+                    <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
+                        reservar
+                    </Button>
+                    <p className='disclaimer'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 
-            </div>
-        </Car>
-    )
+                    <p className='phone'>( +351 ) 934 953 682</p>
+
+                </div>
+            </Car>
+        )
+    }
 
     return (
         <Container>
@@ -342,15 +375,29 @@ function Garage({ theme }) {
                 <Filter background={theme.levels.A}><div className="rectangle" />GAMA A</Filter>
                 <Filter background={theme.levels.B}><div className="rectangle" />GAMA B</Filter>
                 <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
-                <Filter background={theme.levels.E}><div className="rectangle" />GAMA E</Filter>
+                <Filter background={theme.levels.D}><div className="rectangle" />GAMA D</Filter>
 
             </FilterContainer>
 
-            {cars.map((car) => (
-                <CarSection index={car.id} info={car} />
+            {data.map((car) => (
+                <CarSection key={car.id} info={car} />
             ))}
         </Container>
     )
 }
 
-export default withTheme(Garage)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCars: () => dispatch(fetchCars()),
+        setCurrent: (car) => dispatch(setCurrent(car)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        data: state.car.data,
+        loading: state.car.loading,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Garage));

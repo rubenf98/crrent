@@ -89,18 +89,18 @@ const Item = styled.div`
     margin-left: auto;
     font-size: 20px;
 
-    p {
-        width: 50%;
-    }
-
     .field {
         opacity: .5;
+        width: 50%;
+        margin: 5px 0px;
        
     }
 
     .value {
         font-weight: bold;
         white-space: nowrap;
+        width: 50%;
+        margin: 5px 0px;
     }
 
     @media (max-width: ${dimensions.lg}) {
@@ -114,7 +114,7 @@ const Item = styled.div`
             display: none;
         }
 
-        p {
+        .field, .value {
             margin: 0px;
             width: 100%;
         }
@@ -150,7 +150,7 @@ function Footer({ theme }) {
 
     const ItemContainer = ({ field, value }) => (
         <Item>
-            <p className='field'>{field}</p> <p className='value'>{value}</p>
+            <div className='field'>{field}</div> <div className='value'>{value}</div>
         </Item>
     )
     return (

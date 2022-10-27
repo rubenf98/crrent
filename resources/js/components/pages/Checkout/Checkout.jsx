@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
 import { Button, maxWidthStyle } from '../../styles';
@@ -8,6 +8,7 @@ import Client from './Client';
 import Driver from './Driver';
 import { useNavigate } from 'react-router-dom'
 import GeneralInfo from './GeneralInfo';
+import { connect } from "react-redux";
 
 const Container = styled.section`
     width: 100%;
@@ -87,9 +88,16 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ theme }) {
+function Checkout({ theme, current }) {
     const [form] = Form.useForm();
     let navigate = useNavigate();
+    
+    useEffect(() => {
+        if (!Object.values(current).length) {
+            navigate("/");
+        }
+    }, [])
+
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -121,10 +129,15 @@ function Checkout({ theme }) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >
-                <GeneralInfo />
-                <Addons />
-                <Client />
-                <Driver />
+                {Object.values(current).length &&
+                    <>
+                        <GeneralInfo car={current} />
+                        <Addons />
+                        <Client />
+                        <Driver />
+                    </>
+                }
+
 
                 <ButtonContainer>
                     <Button background={theme.primary} type="primary"> reservar </Button>
@@ -134,4 +147,17 @@ function Checkout({ theme }) {
     )
 }
 
-export default withTheme(Checkout)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCars: () => dispatch(fetchCars()),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        current: state.car.current,
+        loading: state.car.loading,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Checkout));

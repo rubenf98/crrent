@@ -183,7 +183,7 @@ function Navbar({ theme, handleMenu }) {
         <Container>
             <Content>
                 <LinksContainer opacity={opacityLinks}>
-                    <img onClick={() => handleClick("/#")} src="/image/logo.png" alt="logo" />
+                    <img onClick={() => handleClick("/")} src="/image/logo.png" alt="logo" />
                     {visibleLinks &&
                         <>
                             <span onClick={() => handleClick('header')}>home</span>

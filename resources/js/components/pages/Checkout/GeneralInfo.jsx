@@ -246,26 +246,23 @@ const rules = {
 };
 
 
-function GeneralInfo({ theme }) {
-    const current = { id: 1, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 };
-
-
+function GeneralInfo({ theme, car }) {
     return (
         <Container>
 
             <Content>
                 <Car>
-                    <Background background={theme.levels[current.level]} />
-                    <img src={current.image} alt="" />
+                    <Background background={theme.levels[car.level.code]} />
+                    <img src={car.image} alt="" />
                 </Car>
                 <Info>
-                    <h2>{current.title}</h2>
-                    <h3>{current.subtitle}</h3>
+                    <h2>{car.title}</h2>
+                    <h3>{car.subtitle}</h3>
                     <IconContainer border={theme.primary}>
-                        <Icon><div className='border'><ShiftIcon /></div> <p>Manual</p></Icon>
-                        <Icon><div className='border'><GasIcon /></div> <p>Gasolina</p></Icon>
-                        <Icon><div className='border'><PeopleIcon /></div> <p>5</p></Icon>
-                        <Icon><div className='border'><DoorsIcon /></div> <p>5</p></Icon>
+                        <Icon><div className='border'><ShiftIcon /></div> <p>{car.shift_mode}</p></Icon>
+                        <Icon><div className='border'><GasIcon /></div> <p>{car.gas}</p></Icon>
+                        <Icon><div className='border'><PeopleIcon /></div> <p>{car.people}</p></Icon>
+                        <Icon><div className='border'><DoorsIcon /></div> <p>{car.doors}</p></Icon>
                     </IconContainer>
                     <DesktopContainer>
                         <Col xs={24} md={24}>

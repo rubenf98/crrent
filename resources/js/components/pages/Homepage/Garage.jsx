@@ -1,11 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { dimensions, getCarouselBreakpoints } from '../../helper';
 import { maxWidthStyle, titleStyle, SecundaryButton } from '../../styles';
+import { fetchCars, setCurrent } from "../../../redux/car/actions";
 import { PreviousIcon, NextIcon } from '../../../icons';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { connect } from "react-redux";
 
 const Container = styled.section`
     ${maxWidthStyle}
@@ -207,18 +209,14 @@ const Car = styled.div`
     }
 `;
 
-const cars = [
-    { id: 1, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 },
-    { id: 2, level: "B", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 },
-    { id: 3, level: "C", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 },
-    { id: 4, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 },
-    { id: 5, level: "B", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 },
-    { id: 6, level: "C", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 }
-]
-
-function Garage({ theme }) {
+function Garage({ theme, fetchCars, setCurrent, data }) {
     const carouselRef = useRef(null);
     var navigate = useNavigate();
+
+    useEffect(() => {
+        fetchCars();
+    }, [])
+
 
     function handleClick(action) {
         if (action == "next") {
@@ -229,7 +227,7 @@ function Garage({ theme }) {
     }
 
     const CarSection = ({ info }) => (
-        <Car onClick={() => handleCarSelection(info.id)} primary={theme.primary} background={theme.levels[info.level]}>
+        <Car onClick={() => handleCarSelection(info)} primary={theme.primary} background={theme.levels[info.level.code]}>
             <div className='image-container'>
                 <div className='car-background' />
                 <img loading='lazy' src={info.image} alt={info.title} />
@@ -240,7 +238,7 @@ function Garage({ theme }) {
                 <h4>{info.subtitle}</h4>
 
                 <div className='price-container'>
-                    <p>{info.price}€ <span>/ por Dia</span></p>
+                    <p>{info.level.prices[2].price}€ <span>/ por Dia</span></p>
                     <button>Reservar</button>
                 </div>
             </div>
@@ -248,7 +246,10 @@ function Garage({ theme }) {
     )
 
     function handleCarSelection(car) {
-        navigate("/checkout?car=" + car);
+        setCurrent(car);
+        navigate("/checkout");
+        
+
     }
 
     return (
@@ -271,8 +272,8 @@ function Garage({ theme }) {
             </TitleContainer>
 
             <Carousel arrows={false} responsive={getCarouselBreakpoints([1, 1, 3, 3, 3])} draggable={false} autoPlay={false} ref={carouselRef} >
-                {cars.map((car) => (
-                    <CarSection index={car.id} info={car} />
+                {data.map((car) => (
+                    <CarSection key={car.id} info={car} />
                 ))}
             </Carousel>
 
@@ -294,4 +295,18 @@ function Garage({ theme }) {
     )
 }
 
-export default withTheme(Garage)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCars: () => dispatch(fetchCars()),
+        setCurrent: (car) => dispatch(setCurrent(car)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        data: state.car.data,
+        loading: state.car.loading,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Garage));

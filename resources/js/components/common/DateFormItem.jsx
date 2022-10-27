@@ -2,6 +2,7 @@ import React from 'react'
 import { DatePicker } from 'antd';
 import styled from "styled-components";
 import { dimensions } from '../helper';
+import moment from "moment";
 
 const RangePicker = styled(DatePicker.RangePicker)`
     width: 50%;
@@ -56,10 +57,10 @@ function DateFormItem({ setDates, dates }) {
         if (e.target.placeholder && e.target.value) {
             var dateCopy = [...dates];
             if (e.target.placeholder == "data levantamento" || e.target.placeholder == "lifting date") {
-                setDates([e.target.value, dateCopy[1]]);
+                setDates([moment(e.target.value), dateCopy[1]]);
             }
             else if (e.target.placeholder == "data devolução" || e.target.placeholder == "return date") {
-                setDates([dateCopy[0], e.target.value]);
+                setDates([dateCopy[0], moment(e.target.value)]);
             }
         }
     };
@@ -73,6 +74,7 @@ function DateFormItem({ setDates, dates }) {
             format="YYYY-MM-DD HH:mm"
             placeholder={["data levantamento", "data devolução"]}
             suffixIcon={(<></>)}
+            value={dates}
         />
     )
 }
