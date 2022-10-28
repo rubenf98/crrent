@@ -20,10 +20,10 @@ class ExtraSeeder extends Seeder
             ['name' => 'Condutor adicional', 'price' => 15, 'type' => 'uni'],
             ['name' => 'Cadeira de bébé', 'price' => 15, 'type' => 'day'],
             ['name' => 'Assento de criança', 'price' => 15, 'type' => 'day'],
-            ['name' => 'Taxa de entrega', 'price' => 20, 'type' => 'uni'],
-            ['name' => 'Entrega fora do horário de expediente', 'price' => 15, 'type' => 'uni'],
-            ['name' => 'Taxa de devolução', 'price' => 20, 'type' => 'uni'],
-            ['name' => 'Levantamento fora do horário de expediente', 'price' => 15, 'type' => 'uni'],
+            ['name' => 'Taxa de entrega', 'price' => 20, 'type' => 'uni', "visible" => false],
+            ['name' => 'Entrega fora do horário de expediente', 'price' => 15, 'type' => 'uni', "visible" => false],
+            ['name' => 'Taxa de devolução', 'price' => 20, 'type' => 'uni', "visible" => false],
+            ['name' => 'Levantamento fora do horário de expediente', 'price' => 15, 'type' => 'uni', "visible" => false],
         ];
 
         foreach ($extras as $item) {

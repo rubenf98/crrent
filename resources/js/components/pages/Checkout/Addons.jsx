@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
 import { Button, maxWidthStyle } from '../../styles';
-import { Checkbox, DatePicker } from 'antd';
+import { Checkbox } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions } from '../../helper';
+import { fetchExtras } from "../../../redux/extra/actions";
+import { connect } from "react-redux";
 
 const Container = styled.section`
     box-sizing: border-box;
@@ -149,7 +150,26 @@ const Package = styled.div`
 
 
 
-function Addons({ theme }) {
+function Addons({ theme, fetchExtras, data, extras, setExtras, setPrice, price }) {
+
+    useEffect(() => {
+        fetchExtras();
+    }, [])
+
+    function handleClick(value, id, aPrice) {
+        const index = extras.indexOf(id);
+
+        var extrasCopy = [...extras];
+        if (index >= 0 && !value) {
+            extrasCopy.splice(index, 1);
+            setPrice(price - aPrice);
+        } else if (index < 0 && value) {
+            extrasCopy.push(id);
+            setPrice(price + aPrice);
+        }
+        setExtras(extrasCopy);
+    }
+
 
     return (
         <Container underline={theme.secundary}>
@@ -170,7 +190,7 @@ function Addons({ theme }) {
                             Selecionar
                         </Button>
                         <p>
-                            TOTAL 0.00€
+                            TOTAL 12.00€
                         </p>
                     </Package>
 
@@ -185,7 +205,7 @@ function Addons({ theme }) {
                             Selecionar
                         </Button>
                         <p>
-                            TOTAL 21.00€
+                            TOTAL 0.00€
                         </p>
                     </Package>
                 </PackageContainer>
@@ -193,13 +213,36 @@ function Addons({ theme }) {
             <Extra>
                 <TitleContainer title="Extras" />
 
-                <div className='checkbox-container'><Checkbox>Condutor Adicional</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
-                <div className='checkbox-container'><Checkbox>GPS</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
-                <div className='checkbox-container'><Checkbox>Cadeira de Bebé</Checkbox> <p>30€ <span className='opacity'>/ <span className='hide'>por</span> Dia</span></p></div>
+                {data.map((extra) => (
+                    <>
+                        {extra.visible ?
+                            <div key={extra.id} className='checkbox-container'>
+                                <Checkbox onChange={(e) => handleClick(e.target.checked, extra.id, extra.price)}>
+                                    {extra.name}
+                                </Checkbox>
+                                <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>por</span> {extra.type}</span></p>
+                            </div>
+                            : <></>}
+                    </>
+
+                ))}
             </Extra>
 
         </Container>
     )
 }
 
-export default withTheme(Addons)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchExtras: () => dispatch(fetchExtras()),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        data: state.extra.data,
+        loading: state.extra.loading,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Addons));

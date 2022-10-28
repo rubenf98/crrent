@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ExtraResource;
 use App\Models\Extra;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class ExtraController extends Controller
      */
     public function index()
     {
-        //
+        return ExtraResource::collection(Extra::all());
     }
 
     /**

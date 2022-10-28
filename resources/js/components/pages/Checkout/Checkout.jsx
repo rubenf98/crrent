@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
 import { Button, maxWidthStyle } from '../../styles';
@@ -9,6 +9,7 @@ import Driver from './Driver';
 import { useNavigate } from 'react-router-dom'
 import GeneralInfo from './GeneralInfo';
 import { connect } from "react-redux";
+import { setCurrentReservation } from "../../../redux/reservation/actions";
 
 const Container = styled.section`
     width: 100%;
@@ -88,18 +89,21 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ theme, current }) {
+function Checkout({ theme, currentCar, setCurrentReservation }) {
     const [form] = Form.useForm();
+    const [extras, setExtras] = useState([])
+    const [price, setPrice] = useState(140)
     let navigate = useNavigate();
-    
+
     useEffect(() => {
-        if (!Object.values(current).length) {
+        if (!Object.values(currentCar).length) {
             navigate("/");
         }
     }, [])
 
 
     const onFinish = (values) => {
+        setCurrentReservation(values);
         console.log('Success:', values);
         navigate("/summary");
     };
@@ -115,7 +119,7 @@ function Checkout({ theme, current }) {
                 <h3>total</h3>
                 <p>Inclui taxa de 22%</p>
                 <div className='price'>
-                    240€
+                    {price}€
                 </div>
             </Price>
             <Form
@@ -129,15 +133,14 @@ function Checkout({ theme, current }) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >
-                {Object.values(current).length &&
+                {Object.values(currentCar).length &&
                     <>
-                        <GeneralInfo car={current} />
-                        <Addons />
+                        <GeneralInfo car={currentCar} />
+                        <Addons extras={extras} setExtras={setExtras} price={price} setPrice={setPrice} />
                         <Client />
-                        <Driver />
+                        <Driver initialValue={[{}, {}]} />
                     </>
                 }
-
 
                 <ButtonContainer>
                     <Button background={theme.primary} type="primary"> reservar </Button>
@@ -149,13 +152,13 @@ function Checkout({ theme, current }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: () => dispatch(fetchCars()),
+        setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        current: state.car.current,
+        currentCar: state.car.current,
         loading: state.car.loading,
     };
 };

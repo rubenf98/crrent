@@ -25,11 +25,11 @@ const rules = {
 };
 
 
-function Driver({ theme }) {
+function Driver({ theme, initialValue }) {
 
     return (
         <Container>
-            <Form.List name="drivers" initialValue={[{}, {}]}>
+            <Form.List name="drivers" initialValue={initialValue}>
                 {(fields, { add }) => (
                     <>
                         {fields.map(({ key }) => (
