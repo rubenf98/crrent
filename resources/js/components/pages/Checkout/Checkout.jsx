@@ -6,10 +6,12 @@ import { Button, maxWidthStyle } from '../../styles';
 import Addons from './Addons';
 import Client from './Client';
 import Driver from './Driver';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import GeneralInfo from './GeneralInfo';
 import { connect } from "react-redux";
-import { setCurrentReservation } from "../../../redux/reservation/actions";
+import moment from "moment";
+import { setCurrentReservation, setCurrentReservationValues } from "../../../redux/reservation/actions";
+import { map } from 'lodash';
 
 const Container = styled.section`
     width: 100%;
@@ -89,21 +91,122 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ theme, currentCar, setCurrentReservation }) {
+function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservationValues, extrasData }) {
     const [form] = Form.useForm();
     const [extras, setExtras] = useState([])
-    const [price, setPrice] = useState(140)
+    const [extraPrice, setExtraPrice] = useState(0)
+    const [tax, setTax] = useState([])
+    const [taxPrice, setTaxPrice] = useState(0)
+    const [price, setPrice] = useState(0)
+    const [pricePerDay, setPricePerDay] = useState(0)
+    const [days, setDays] = useState(1)
     let navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         if (!Object.values(currentCar).length) {
             navigate("/");
+        } else {
+            var from = searchParams.get("from");
+            var to = searchParams.get("to");
+
+            if (from && to) {
+                from = moment(from);
+                to = moment(to);
+
+                var difference = moment(to).startOf('day').diff(moment(from).startOf('day'), 'days') + 1;
+                var value = currentCar.level.prices[2].price;
+                form.setFieldValue('date', [from, to])
+                setDays(difference);
+
+                var value = retrievePrice(currentCar.level.prices, difference);
+                setPrice(value)
+
+                var response = handleTimeTax([[...tax], taxPrice], from.hour(), 9, 15);
+                var data = handleTimeTax(response, to.hour(), 7, 15);
+
+                setTax(data[0]);
+                setTaxPrice(data[1]);
+            }
         }
     }, [])
 
 
+    const handleDateChange = (e) => {
+        var difference = moment(e[1]).startOf('day').diff(moment(e[0]).startOf('day'), 'days') + 1;
+
+        var value = retrievePrice(currentCar.level.prices, difference);
+
+        var response = handleTimeTax([[...tax], taxPrice], e[0].hour(), 9, 15);
+
+        var data = handleTimeTax(response, e[1].hour(), 7, 15);
+
+        setTax(data[0]);
+        setTaxPrice(data[1]);
+
+        setPrice(value);
+        setDays(difference);
+    };
+
+    const handleTimeTax = (initData, time, id, value) => {
+        var taxCopy = initData[0];
+        var taxPriceCopy = 0;
+
+        if (time >= 9 && time <= 19) {
+            if (taxCopy.includes(id)) {
+                const index = taxCopy.indexOf(id);
+                taxCopy.splice(index, 1);
+                taxPriceCopy = initData[1] - value;
+            }
+        } else {
+            if (!taxCopy.includes(id)) {
+
+                taxCopy.push(id)
+                taxPriceCopy = initData[1] + value;
+            }
+        }
+
+        return [taxCopy, taxPriceCopy]
+    }
+
+    function retrievePrice(prices, difference) {
+        var value = prices[2].price;
+        prices.map((price) => {
+            if (difference >= price.min && difference <= price.max) {
+                value = price.price;
+            }
+        })
+
+        setPricePerDay(value);
+
+        return value * difference + extraPrice;
+    }
+
+
     const onFinish = (values) => {
         setCurrentReservation(values);
+
+        var extraArray = [], taxArray = [];
+        console.log(extras);
+        console.log(tax);
+
+        extrasData.map((extra) => {
+            if (extras.includes(extra.id)) {
+                extraArray.push([extra.name, extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
+            }
+
+            if (tax.includes(extra.id)) {
+                taxArray.push([extra.name, extra.price + "€", extra.price])
+            }
+        })
+        setCurrentReservationValues({
+            car: [
+                [currentCar.title, pricePerDay + "€", price]
+            ],
+            extras: extraArray,
+            tax: taxArray,
+        });
+
         console.log('Success:', values);
         navigate("/summary");
     };
@@ -119,7 +222,7 @@ function Checkout({ theme, currentCar, setCurrentReservation }) {
                 <h3>total</h3>
                 <p>Inclui taxa de 22%</p>
                 <div className='price'>
-                    {price}€
+                    {price + extraPrice + taxPrice}€
                 </div>
             </Price>
             <Form
@@ -135,10 +238,10 @@ function Checkout({ theme, currentCar, setCurrentReservation }) {
             >
                 {Object.values(currentCar).length &&
                     <>
-                        <GeneralInfo car={currentCar} />
-                        <Addons extras={extras} setExtras={setExtras} price={price} setPrice={setPrice} />
+                        <GeneralInfo handleDateChange={handleDateChange} car={currentCar} />
+                        <Addons days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
                         <Client />
-                        <Driver initialValue={[{}, {}]} />
+                        <Driver drivers={extras.includes(3) ? 2 : 1} />
                     </>
                 }
 
@@ -153,6 +256,7 @@ function Checkout({ theme, currentCar, setCurrentReservation }) {
 const mapDispatchToProps = (dispatch) => {
     return {
         setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
+        setCurrentReservationValues: (data) => dispatch(setCurrentReservationValues(data)),
     };
 };
 
@@ -160,6 +264,7 @@ const mapStateToProps = (state) => {
     return {
         currentCar: state.car.current,
         loading: state.car.loading,
+        extrasData: state.extra.data,
     };
 };
 

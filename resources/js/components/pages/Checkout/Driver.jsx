@@ -25,53 +25,58 @@ const rules = {
 };
 
 
-function Driver({ theme, initialValue }) {
+function Driver({ theme, drivers }) {
 
     return (
         <Container>
-            <Form.List name="drivers" initialValue={initialValue}>
-                {(fields, { add }) => (
+            <Form.List name="drivers">
+                {() => (
                     <>
-                        {fields.map(({ key }) => (
-                            <Section>
-                                <TitleContainer title={key == 0 ? "Condutor Principal" : "Condutor Adicional"} />
-                                <Row type="flex" gutter={64}>
-                                    <Col xs={24} md={12}>
-                                        <Form.Item label="Nome*" name="name" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} md={6}>
-                                        <Form.Item label="Data de nascimento*" name="birthday" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
-                                </Row>
-                                <Row type="flex" gutter={64}>
-                                    <Col xs={24} md={6}>
-                                        <Form.Item label="Número Carta Condução*" name="address" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} md={6}>
-                                        <Form.Item label="Data de Emissão*" name="country" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col xs={24} md={6}>
-                                        <Form.Item label="Data de validade*" name="postal_code" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
+                        {[...Array(drivers)].map((p, key) =>
+                            <Form.List key={key} name={key}>
+                                {() => (
+                                    <Section>
+                                        <TitleContainer title={key == 0 ? "Condutor Principal" : "Condutor Adicional"} />
+                                        <Row type="flex" gutter={64}>
+                                            <Col xs={24} md={12}>
+                                                <Form.Item label="Nome*" name="name" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col xs={24} md={6}>
+                                                <Form.Item label="Data de nascimento*" name="birthday" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                        <Row type="flex" gutter={64}>
+                                            <Col xs={24} md={6}>
+                                                <Form.Item label="Número Carta Condução*" name="address" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col xs={24} md={6}>
+                                                <Form.Item label="Data de Emissão*" name="country" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
+                                            <Col xs={24} md={6}>
+                                                <Form.Item label="Data de validade*" name="postal_code" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
 
-                                    <Col xs={24} md={6}>
-                                        <Form.Item label="Local de Emissão" name="email" rules={rules.name}>
-                                            <Input size="large" />
-                                        </Form.Item>
-                                    </Col>
-                                </Row>
-                            </ Section>
-                        ))}
+                                            <Col xs={24} md={6}>
+                                                <Form.Item label="Local de Emissão" name="email" rules={rules.name}>
+                                                    <Input size="large" />
+                                                </Form.Item>
+                                            </Col>
+                                        </Row>
+                                    </ Section>
+                                )}
+                            </Form.List>
+
+                        )}
                     </>
                 )}
             </Form.List>

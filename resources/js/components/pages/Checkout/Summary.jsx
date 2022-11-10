@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon } from '../../../icons';
 import { Button, maxWidthStyle } from '../../styles';
 import { Form, Checkbox, Input, Row, Col, DatePicker, InputNumber } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { Link } from 'react-router-dom';
 import { dimensions } from '../../helper';
+import { connect } from "react-redux";
+import { useNavigate } from 'react-router-dom'
 
 const stretch = keyframes`
   from {
@@ -292,71 +293,86 @@ const rules = {
 };
 
 
-function Summary({ theme }) {
-    const current = { id: 1, level: "A", image: "/image/garage/template.png", title: "Peugeot 308", subtitle: "Allure", price: 30 };
+function Summary({ theme, currentCar, values }) {
+    let navigate = useNavigate();
+    const [price, setPrice] = useState(0)
 
     const content = [
-        {
-            title: "CARRO", items: [
-                ["Peugeout Allure", "57.50€", "115€"]
-            ],
-        },
-        {
-            title: "EXTRAS", items: [
-                ["Seguro contra todos os danos", "57.50€", "115€"]
-            ],
-        },
-        {
-            title: "TAXAS", items: [
-                ["Levantamento fora de área", "57.50€", "115€"],
-                ["Devolução fora de área", "57.50€", "115€"]
-            ],
-        }
+        { title: "CARRO", items: values.car },
+        { title: "EXTRAS", items: values.extras },
+        { title: "TAXAS", items: values.tax },
     ];
+
+
+    useEffect(() => {
+        if (!Object.values(currentCar).length) {
+            navigate("/");
+        } else {
+            var aPrice = 0;
+            content.map((section => {
+
+                section.items.map((row) => {
+                    aPrice += row[2];
+                })
+            }))
+
+            setPrice(aPrice);
+        }
+    }, [])
+
 
 
     return (
         <Container>
 
             <Content>
-                <SummaryContainer>
-                    <Car>
-                        <Background background={theme.levels[current.level]} />
-                        <img src={current.image} alt="" />
-                    </Car>
-                    <Info>
-                        <TitleContainer title="Resumo" />
+                {Object.values(currentCar).length &&
+                    <SummaryContainer>
+                        <Car>
+                            <Background background={theme.levels[currentCar.level.code]} />
+                            <img src={currentCar.image} alt="" />
+                        </Car>
+                        <Info>
+                            <TitleContainer title="Resumo" />
 
-                        {content.map((section) => (
-                            <Section>
-                                <div className='title large'>{section.title}</div>
-                                <div className='title opacity'>€/DIA</div>
-                                <div className='title'>SUBTOTAL</div>
+                            {content.map((section, key) => (
+                                <>
+                                    {section.items.length ?
+                                        <Section>
 
-                                {section.items.map((row) => (
-                                    <>
-                                        <p className='large'>
-                                            {row[0]}
-                                        </p>
-                                        <p className='opacity'>
-                                            {row[1]}
-                                        </p>
-                                        <p>
-                                            {row[2]}
-                                        </p>
-                                    </>
-                                ))}
-                            </Section>
-                        ))}
+                                            <div className='title large'>{section.title}</div>
+                                            <div className='title opacity'>€/{key == 2 ? "UNI" : "DIA"}</div>
+                                            <div className='title'>SUBTOTAL</div>
 
-                        <Price color={theme.primary}>
-                            <h3>TOTAL</h3>
-                            <div className='price'>
-                                240€
-                            </div>
-                        </Price>
-                    </Info>
-                </SummaryContainer>
+
+
+                                            {section.items.map((row) => (
+                                                <>
+                                                    <p className='large'>
+                                                        {row[0]}
+                                                    </p>
+                                                    <p className='opacity'>
+                                                        {row[1]}
+                                                    </p>
+                                                    <p>
+                                                        {row[2]}€
+                                                    </p>
+                                                </>
+                                            ))}
+                                        </Section> : <></>
+                                    }
+                                </>
+                            ))}
+
+                            <Price color={theme.primary}>
+                                <h3>TOTAL</h3>
+                                <div className='price'>
+                                    {price}€
+                                </div>
+                            </Price>
+                        </Info>
+                    </SummaryContainer>
+                }
                 <PolicyContainer>
                     <Form.Item name="privacy" rules={rules.name}>
                         <Checkbox>Li, compreendi e concordo com os <Link to="/privacy">Política de Privacidade</Link></Checkbox>
@@ -413,4 +429,18 @@ function Summary({ theme }) {
     )
 }
 
-export default withTheme(Summary)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        currentCar: state.car.current,
+        loading: state.car.loading,
+        values: state.reservation.values
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Summary));

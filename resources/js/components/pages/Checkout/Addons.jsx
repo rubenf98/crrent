@@ -150,23 +150,27 @@ const Package = styled.div`
 
 
 
-function Addons({ theme, fetchExtras, data, extras, setExtras, setPrice, price }) {
+function Addons({ theme, fetchExtras, data, extras, setExtras, extraPrice,
+    setExtraPrice, days }) {
 
     useEffect(() => {
         fetchExtras();
     }, [])
 
-    function handleClick(value, id, aPrice) {
-        const index = extras.indexOf(id);
+    function handleClick(value, extra) {
+        const index = extras.indexOf(extra.id);
 
         var extrasCopy = [...extras];
+        var aPrice = extra.type == "uni" ? extra.price : (extra.price * days);
+
         if (index >= 0 && !value) {
             extrasCopy.splice(index, 1);
-            setPrice(price - aPrice);
+            setExtraPrice(extraPrice - aPrice);
         } else if (index < 0 && value) {
-            extrasCopy.push(id);
-            setPrice(price + aPrice);
+            extrasCopy.push(extra.id);
+            setExtraPrice(extraPrice + aPrice);
         }
+
         setExtras(extrasCopy);
     }
 
@@ -201,8 +205,8 @@ function Addons({ theme, fetchExtras, data, extras, setExtras, setPrice, price }
                             <li>Thelf Protection</li>
                             <li>Windscreen, Glass</li>
                         </ul>
-                        <Button style={{ margin: "auto" }} background={theme.primary}>
-                            Selecionar
+                        <Button disabled type='default' style={{ margin: "auto" }} background={theme.primary}>
+                            Selecionado
                         </Button>
                         <p>
                             TOTAL 0.00€
@@ -217,7 +221,7 @@ function Addons({ theme, fetchExtras, data, extras, setExtras, setPrice, price }
                     <>
                         {extra.visible ?
                             <div key={extra.id} className='checkbox-container'>
-                                <Checkbox onChange={(e) => handleClick(e.target.checked, extra.id, extra.price)}>
+                                <Checkbox onChange={(e) => handleClick(e.target.checked, extra)}>
                                     {extra.name}
                                 </Checkbox>
                                 <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>por</span> {extra.type}</span></p>

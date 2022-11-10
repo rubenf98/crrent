@@ -32,3 +32,8 @@ export const setCurrentReservation = (data) => ({
     type: types.SET_CURRENT_RESERVATION,
     payload: data,
 });
+
+export const setCurrentReservationValues = (data) => ({
+    type: types.SET_CURRENT_RESERVATION_VALUES,
+    payload: data,
+});

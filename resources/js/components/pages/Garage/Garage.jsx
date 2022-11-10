@@ -272,7 +272,7 @@ const Icon = styled.div`
         margin-top: 15px;
     }
 `;
-
+const dateFormat = "YYYY-MM-DD HH:mm";
 function Garage({ theme, data, fetchCars, setCurrent }) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(1)
@@ -288,24 +288,28 @@ function Garage({ theme, data, fetchCars, setCurrent }) {
         from = moment(from);
         to = moment(to);
 
-        var difference = to.diff(from, 'days');
+        var difference = moment(to).startOf('day').diff(moment(from).startOf('day'), 'days') + 1;
+
         setDays(difference);
         setDates([from, to]);
+
     }, [])
 
     const handleSearch = () => {
-        const dateFormat = "YYYY-MM-DD HH:mm";
+
         fetchCars({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat) });
 
-        var difference = dates[1].diff(dates[0], 'days');
+        var difference = moment(dates[1]).startOf('day').diff(moment(dates[0]).startOf('day'), 'days') + 1;
+
         setDays(difference);
         setDates([dates[0], dates[1]]);
+
     };
 
 
     function handleCarSelection(car) {
         setCurrent(car);
-        navigate("/checkout");
+        navigate("/checkout?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat));
     }
 
     function retrievePrice(prices) {

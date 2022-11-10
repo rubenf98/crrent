@@ -74,6 +74,10 @@ function DateFormItem({ setDates, dates }) {
             format="YYYY-MM-DD HH:mm"
             placeholder={["data levantamento", "data devolução"]}
             suffixIcon={(<></>)}
+            disabledDate={(current) => {
+                let customDate = moment().add(1, 'days').format("YYYY-MM-DD");
+                return current && current < moment(customDate, "YYYY-MM-DD");
+            }}
             value={dates}
         />
     )

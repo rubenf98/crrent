@@ -4,6 +4,7 @@ export const initialState = {
     data: [],
     loading: false,
     current: {},
+    values: {},
 }
 
 export default (state = initialState, action = {}) => {
@@ -77,6 +78,13 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 current: action.payload,
+            };
+
+        case `${types.SET_CURRENT_RESERVATION_VALUES}`:
+            return {
+                ...state,
+                loading: false,
+                values: action.payload,
             };
 
         default:

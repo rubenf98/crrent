@@ -246,7 +246,7 @@ const rules = {
 };
 
 
-function GeneralInfo({ theme, car }) {
+function GeneralInfo({ theme, car, handleDateChange }) {
     return (
         <Container>
 
@@ -267,9 +267,10 @@ function GeneralInfo({ theme, car }) {
                     <DesktopContainer>
                         <Col xs={24} md={24}>
                             <Form.Item name="date" rules={rules.name}>
-                                <RangePicker showTime={{
-                                    format: "HH:mm"
-                                }}
+                                <RangePicker
+                                    onChange={handleDateChange}
+                                    showTime={{ format: "HH:mm" }}
+                                    minuteStep={30}
                                     format="YYYY-MM-DD HH:mm"
                                     placeholder={["data levantamento", "data devolução"]}
                                     suffixIcon={(<></>)}
