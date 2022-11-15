@@ -239,10 +239,9 @@ const MobileContainer = styled.div`
 `;
 
 const rules = {
-    name: [{
-        required: false,
-        message: 'Please input your fullname!',
-    }],
+    date: [{ required: false, message: 'Please input the reservation date!' }],
+    place: [{ required: false, message: 'Please input the pickup and return place!' }],
+    flight: [{ required: false }],
 };
 
 
@@ -266,7 +265,7 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                     </IconContainer>
                     <DesktopContainer>
                         <Col xs={24} md={24}>
-                            <Form.Item name="date" rules={rules.name}>
+                            <Form.Item name="date" rules={rules.date}>
                                 <RangePicker
                                     onChange={handleDateChange}
                                     showTime={{ format: "HH:mm" }}
@@ -278,7 +277,7 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24}>
-                            <Form.Item name="pickup" rules={rules.name}>
+                            <Form.Item name="pickup" rules={rules.place}>
                                 <StyledInputGroup size="large">
                                     <Row>
                                         <Col span={12}>
@@ -292,7 +291,7 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24}>
-                            <Form.Item name="flight" rules={rules.name}>
+                            <Form.Item name="flight" rules={rules.flight}>
                                 <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
                             </Form.Item>
                         </Col>

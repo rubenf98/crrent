@@ -48,7 +48,8 @@ const ButtonContainer = styled.div`
 
 const Price = styled.div`
     position: fixed;
-    right: 0px;
+    right: ${props => props.visible ? "0px" : "-200px"};
+    transition: right .3s ease-in-out;
     top: 300px;
     padding: 10px 20px;
     box-sizing: border-box;
@@ -114,7 +115,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
                 from = moment(from);
                 to = moment(to);
 
-                var difference = moment(to).startOf('day').diff(moment(from).startOf('day'), 'days') + 1;
+                var difference = to.diff(from, 'days') + 1;
                 var value = currentCar.level.prices[2].price;
                 form.setFieldValue('date', [from, to])
                 setDays(difference);
@@ -133,7 +134,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
 
 
     const handleDateChange = (e) => {
-        var difference = moment(e[1]).startOf('day').diff(moment(e[0]).startOf('day'), 'days') + 1;
+        var difference = moment(e[1]).diff(moment(e[0]), 'days') + 1;
 
         var value = retrievePrice(currentCar.level.prices, difference);
 
@@ -183,32 +184,35 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
     }
 
 
-    const onFinish = (values) => {
-        setCurrentReservation(values);
+    const onFinish = () => {
+        form.validateFields().then((values) => {
+            setCurrentReservation(values);
 
-        var extraArray = [], taxArray = [];
-        console.log(extras);
-        console.log(tax);
+            var extraArray = [], taxArray = [];
 
-        extrasData.map((extra) => {
-            if (extras.includes(extra.id)) {
-                extraArray.push([extra.name, extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
-            }
+            extrasData.map((extra) => {
+                if (extras.includes(extra.id)) {
+                    extraArray.push([extra.name, extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
+                }
 
-            if (tax.includes(extra.id)) {
-                taxArray.push([extra.name, extra.price + "€", extra.price])
-            }
+                if (tax.includes(extra.id)) {
+                    taxArray.push([extra.name, extra.price + "€", extra.price])
+                }
+            })
+            setCurrentReservationValues({
+                car: [
+                    [currentCar.title, pricePerDay + "€", price]
+                ],
+                extras: extraArray,
+                tax: taxArray,
+            });
+
+            console.log('Success:', values);
+            navigate("/summary");
         })
-        setCurrentReservationValues({
-            car: [
-                [currentCar.title, pricePerDay + "€", price]
-            ],
-            extras: extraArray,
-            tax: taxArray,
-        });
 
-        console.log('Success:', values);
-        navigate("/summary");
+
+
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -218,7 +222,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
     return (
         <Container>
             <Title>Dados da sua reserva</Title>
-            <Price background={theme.primary}>
+            <Price visible={price} background={theme.primary}>
                 <h3>total</h3>
                 <p>Inclui taxa de 22%</p>
                 <div className='price'>
@@ -227,6 +231,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
             </Price>
             <Form
                 form={form}
+                scrollToFirstError
                 name="reservation"
                 layout="vertical"
                 requiredMark={false}

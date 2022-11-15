@@ -260,7 +260,7 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
                     <Filter background={theme.levels.A}><div className="rectangle" />GAMA A</Filter>
                     <Filter background={theme.levels.B}><div className="rectangle" />GAMA B</Filter>
                     <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
-                    <Filter background={theme.levels.E}><div className="rectangle" />GAMA E</Filter>
+                    <Filter background={theme.levels.D}><div className="rectangle" />GAMA D</Filter>
                     <DesktopButtonContainer>
                         <SecundaryButton type='search' primary={theme.primary}>
                             ver mais

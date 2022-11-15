@@ -3,27 +3,10 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { history } from "../../router";
 
-export const login = data => {
-    return (dispatch) => {
-        const response = dispatch({
-            type: types.LOGIN,
-            payload: axios.post(`${window.location.origin}/api/login`, data)
-        })
-
-        response.then(
-            res => {
-                const token = res.value.data.access_token;
-                localStorage.setItem("token", token);
-                setAuthorizationToken(token);
-                history.push("/painel");
-                location.reload();
-            },
-            err => {
-
-            }
-        );
-    }
-};
+export const login = (data) => ({
+    type: types.LOGIN,
+    payload: axios.post(`${window.location.origin}/api/login`, data)
+});
 
 
 

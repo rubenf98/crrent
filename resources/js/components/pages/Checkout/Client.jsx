@@ -14,13 +14,16 @@ const Container = styled.section`
     }
 `;
 
-
-
 const rules = {
-    name: [{
-        required: false,
-        message: 'Please input your fullname!',
-    }],
+    name: [{ required: false, message: 'Please input your fullname!' }],
+    cc: [{ required: false, message: 'Please input your ID or passport!' }],
+    nif: [{ required: false, message: 'Please input your Tax Identification Number!' }],
+    address: [{ required: true, message: 'Please input your Address!' }],
+    country: [{ required: false, message: 'Please input your origin Country!' }],
+    postal_code: [{ required: false, message: 'Please input your Postal Code!' }],
+    email: [{ required: false, message: 'Please input your Email!' }],
+    local_address: [{ required: false, message: 'Please input your Local Address!' }],
+    company: [{ required: false }],
 };
 
 
@@ -36,34 +39,34 @@ function Client({ theme }) {
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="ID/Passaporte*" name="cc" rules={rules.name}>
+                    <Form.Item label="ID/Passaporte*" name="cc" rules={rules.cc}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="NIF*" name="nif" rules={rules.name}>
+                    <Form.Item label="NIF*" name="nif" rules={rules.nif}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Morada*" name="address" rules={rules.name}>
+                    <Form.Item label="Morada*" name="address" rules={rules.address}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="País*" name="country" rules={rules.name}>
+                    <Form.Item label="País*" name="country" rules={rules.country}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="Código Postal*" name="postal_code" rules={rules.name}>
+                    <Form.Item label="Código Postal*" name="postal_code" rules={rules.postal_code}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Email*" name="email" rules={rules.name}>
+                    <Form.Item label="Email*" name="email" rules={rules.email}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
@@ -74,12 +77,12 @@ function Client({ theme }) {
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Endereço local*" name="local_address" rules={rules.name}>
+                    <Form.Item label="Endereço local*" name="local_address" rules={rules.local_address}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="Companhia" name="company" rules={rules.name}>
+                    <Form.Item label="Companhia" name="company" rules={rules.company}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>

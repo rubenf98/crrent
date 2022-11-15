@@ -8,6 +8,7 @@ import promise from 'redux-promise-middleware'
 import { Provider } from 'react-redux'
 import jwtDecode from "jwt-decode";
 import 'antd/dist/antd.css';
+import { loginSuccess, refreshAuthorizationToken, setAuthorizationToken } from './redux/auth/actions';
 const container = document.getElementById('index');
 const root = createRoot(container);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -21,21 +22,21 @@ const store = createStore(
         )
     )
 )
-// if (!localStorage.language) {
-//     localStorage.setItem("language", "en")
-// }
+if (!localStorage.language) {
+    localStorage.setItem("language", "en")
+}
 
-// if (localStorage.token) {
-//     const token = jwtDecode(localStorage.token);
-//     const tokenExp = token.exp < Date.now() / 1000;
+if (localStorage.token) {
+    const token = jwtDecode(localStorage.token);
+    const tokenExp = token.exp < Date.now() / 1000;
 
-//     if (tokenExp) {
-//         store.dispatch(refreshAuthorizationToken(localStorage.token));
-//     } else {
-//         store.dispatch(loginSuccess());
-//         setAuthorizationToken(localStorage.token);
-//     }
-// }
+    if (tokenExp) {
+        store.dispatch(refreshAuthorizationToken(localStorage.token));
+    } else {
+        store.dispatch(loginSuccess());
+        setAuthorizationToken(localStorage.token);
+    }
+}
 
 root.render(
     <Provider store={store}>

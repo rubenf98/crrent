@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { withTheme } from "styled-components";
 import { maxWidthStyle } from '../../styles';
-import { Col, Form, Input, Row } from 'antd';
+import { Col, DatePicker, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions } from '../../helper';
 
@@ -18,10 +18,10 @@ const Section = styled.div`
 `;
 
 const rules = {
-    name: [{
-        required: false,
-        message: 'Please input your fullname!',
-    }],
+    name: [{ required: false, message: 'Please input your fullname!' }],
+    date: [{ required: false, message: 'Please input the reservation date!' }],
+    place: [{ required: false, message: 'Please input the pickup and return place!' }],
+    flight: [{ required: false }],
 };
 
 
@@ -45,7 +45,7 @@ function Driver({ theme, drivers }) {
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label="Data de nascimento*" name="birthday" rules={rules.name}>
-                                                    <Input size="large" />
+                                                    <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -57,12 +57,12 @@ function Driver({ theme, drivers }) {
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label="Data de Emissão*" name="country" rules={rules.name}>
-                                                    <Input size="large" />
+                                                    <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label="Data de validade*" name="postal_code" rules={rules.name}>
-                                                    <Input size="large" />
+                                                    <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
 
