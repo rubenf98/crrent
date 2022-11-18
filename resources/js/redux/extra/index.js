@@ -3,6 +3,7 @@ import { types } from "./types";
 export const initialState = {
     data: [],
     loading: false,
+    current: [],
 }
 
 export default (state = initialState, action = {}) => {
@@ -69,6 +70,13 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 data: action.payload.data.data,
+            };
+
+        case `${types.SET_CURRENT_EXTRA}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                current: action.payload,
             };
 
         default:

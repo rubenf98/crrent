@@ -26,3 +26,9 @@ export const createExtra = (id, data) => ({
     type: types.CREATE_EXTRA,
     payload: axios.post(`${window.location.origin}/api/extras/${id}`, data),
 });
+
+
+export const setCurrentExtra = (data = []) => ({
+    type: types.SET_CURRENT_EXTRA,
+    payload: data,
+});

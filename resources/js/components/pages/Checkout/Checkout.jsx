@@ -186,7 +186,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            setCurrentReservation(values);
+            setCurrentReservation({ ...values, extras: [...extras, ...tax] });
 
             var extraArray = [], taxArray = [];
 
@@ -207,7 +207,6 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
                 tax: taxArray,
             });
 
-            console.log('Success:', values);
             navigate("/summary");
         })
 

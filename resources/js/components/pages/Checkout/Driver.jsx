@@ -18,12 +18,13 @@ const Section = styled.div`
 `;
 
 const rules = {
-    name: [{ required: false, message: 'Please input your fullname!' }],
-    date: [{ required: false, message: 'Please input the reservation date!' }],
-    place: [{ required: false, message: 'Please input the pickup and return place!' }],
-    flight: [{ required: false }],
+    name: [{ required: true, message: 'Please input your fullname!' }],
+    birthday: [{ required: true, message: 'Please input your birthday!' }],
+    license_id: [{ required: true, message: 'Please input your driver license id!' }],
+    emission_date: [{ required: true, message: 'Please input your driver license emission date!' }],
+    validity_date: [{ required: true, message: 'Please input your driver license validity date!' }],
+    emission_place: [{ required: true, message: 'Please input your driver license emission place!' }],
 };
-
 
 function Driver({ theme, drivers }) {
 
@@ -44,30 +45,30 @@ function Driver({ theme, drivers }) {
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de nascimento*" name="birthday" rules={rules.name}>
+                                                <Form.Item label="Data de nascimento*" name="birthday" rules={rules.birthday}>
                                                     <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
                                         <Row type="flex" gutter={64}>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Número Carta Condução*" name="address" rules={rules.name}>
+                                                <Form.Item label="Número Carta Condução*" name="license" rules={rules.license_id}>
                                                     <Input size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de Emissão*" name="country" rules={rules.name}>
+                                                <Form.Item label="Data de Emissão*" name="emission" rules={rules.emission_date}>
                                                     <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de validade*" name="postal_code" rules={rules.name}>
+                                                <Form.Item label="Data de validade*" name="validity" rules={rules.validity_date}>
                                                     <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
 
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Local de Emissão" name="email" rules={rules.name}>
+                                                <Form.Item label="Local de Emissão" name="emission_place" rules={rules.emission_place}>
                                                     <Input size="large" />
                                                 </Form.Item>
                                             </Col>

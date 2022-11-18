@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { dimensions } from '../../helper';
 import { connect } from "react-redux";
 import { useNavigate } from 'react-router-dom'
+import { createReservation } from '../../../redux/reservation/actions';
+import moment from "moment";
 
 const stretch = keyframes`
   from {
@@ -293,7 +295,7 @@ const rules = {
 };
 
 
-function Summary({ theme, currentCar, values }) {
+function Summary({ theme, currentCar, values, currentReservation }) {
     let navigate = useNavigate();
     const [price, setPrice] = useState(0)
 
@@ -319,6 +321,17 @@ function Summary({ theme, currentCar, values }) {
             setPrice(aPrice);
         }
     }, [])
+
+    const handleSubmit = () => {
+        var data = { ...currentReservation };
+        const dateFormat = "YYYY-MM-DD HH:mm";
+
+        data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
+
+        createReservation({ ...data, car_id: currentCar.id }).then((response) => {
+            console.log(response);
+        })
+    }
 
 
 
@@ -382,7 +395,11 @@ function Summary({ theme, currentCar, values }) {
                     </Form.Item>
                 </PolicyContainer>
 
-                <TitleContainer title="Detalhes de pagamento" />
+                <Button onClick={handleSubmit} background={theme.primary}>
+                    pagar já
+                </Button>
+
+                {/* <TitleContainer title="Detalhes de pagamento" />
                 <PaymentContainer primary={theme.primary}>
                     <div className='column'>
 
@@ -422,7 +439,7 @@ function Summary({ theme, currentCar, values }) {
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <p>( +351 ) 964 546 324</p>
                     </div>
-                </PaymentContainer>
+                </PaymentContainer> */}
 
             </Content>
         </Container>
@@ -431,15 +448,16 @@ function Summary({ theme, currentCar, values }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
+        createReservation: (data) => dispatch(createReservation(data)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
         currentCar: state.car.current,
-        loading: state.car.loading,
-        values: state.reservation.values
+        loading: state.reservation.loading,
+        values: state.reservation.values,
+        currentReservation: state.reservation.current,
     };
 };
 

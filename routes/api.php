@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,4 @@ Route::get('me', 'App\Http\Controllers\AuthController@me');
 
 Route::apiResource('cars', CarController::class);
 Route::apiResource('extras', ExtraController::class);
+Route::apiResource('reservations', ReservationController::class);

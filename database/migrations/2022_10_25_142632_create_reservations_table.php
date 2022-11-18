@@ -15,9 +15,9 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->date('pick_date');
-            $table->date('return_date');
-            $table->string('pick_place');
+            $table->datetime('pickup_date');
+            $table->datetime('return_date');
+            $table->string('pickup_place');
             $table->string('return_place');
             $table->string('flight');
             $table->double('price', 5, 2);

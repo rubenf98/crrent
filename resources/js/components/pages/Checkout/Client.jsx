@@ -15,15 +15,15 @@ const Container = styled.section`
 `;
 
 const rules = {
-    name: [{ required: false, message: 'Please input your fullname!' }],
-    cc: [{ required: false, message: 'Please input your ID or passport!' }],
-    nif: [{ required: false, message: 'Please input your Tax Identification Number!' }],
+    name: [{ required: true, message: 'Please input your fullname!' }],
+    cc: [{ required: true, message: 'Please input your ID or passport!' }],
+    nif: [{ required: true, message: 'Please input your Tax Identification Number!' }],
     address: [{ required: true, message: 'Please input your Address!' }],
-    country: [{ required: false, message: 'Please input your origin Country!' }],
-    postal_code: [{ required: false, message: 'Please input your Postal Code!' }],
-    email: [{ required: false, message: 'Please input your Email!' }],
-    local_address: [{ required: false, message: 'Please input your Local Address!' }],
-    company: [{ required: false }],
+    country: [{ required: true, message: 'Please input your origin Country!' }],
+    postal_code: [{ required: true, message: 'Please input your Postal Code!' }],
+    email: [{ required: true, message: 'Please input your Email!' }, { type: "email" }],
+    local_address: [{ required: true, message: 'Please input your Local Address!' }],
+    company: [{ required: true }],
 };
 
 

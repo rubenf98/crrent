@@ -260,9 +260,9 @@ const AddButton = styled.button`
 `;
 
 const rules = {
-    date: [{ required: false, message: 'Please input the reservation date!' }],
-    place: [{ required: false, message: 'Please input the pickup and return place!' }],
-    flight: [{ required: false }],
+    date: [{ required: true, message: 'Please input the reservation date!' }],
+    place: [{ required: true, message: 'Please input the pickup and return place!' }],
+    flight: [{ required: true }],
 };
 
 

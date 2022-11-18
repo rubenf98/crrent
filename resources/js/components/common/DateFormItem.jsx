@@ -7,10 +7,10 @@ import moment from "moment";
 const RangePicker = styled(DatePicker.RangePicker)`
     width: 50%;
     margin: 0px;
-    padding: 25px;
+    padding: 20px;
     box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
-    box-shadow: -8px 0px 30px 0px #0000002f;
+    -webkit-box-shadow: -8px 0px 20px 0px #0000002f; 
+    box-shadow: -8px 0px 20px 0px #0000002f;
 
     .ant-picker-input {
         background-image: url("/icon/calendar.svg");
@@ -25,7 +25,7 @@ const RangePicker = styled(DatePicker.RangePicker)`
         opacity: .8;
         font-weight: 400;
         text-transform: uppercase;
-        font-size: 20px;
+        font-size: 18px;
     }
 
     @media (max-width: ${dimensions.lg}) {
