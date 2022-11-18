@@ -55,73 +55,58 @@ class CarSeeder extends Seeder
                 'subtitle' => 'City Life',
                 'level_id' => 1,
                 'gas' => 'gasoline', 'people' => 3, 'doors' => 3, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/fiat_panda.png'
             ],
             [
-                'title' => 'Toyota iQ',
+                'title' => 'Toyota Yaris',
                 'subtitle' => 'iQ',
                 'level_id' => 1,
                 'gas' => 'gasoline', 'people' => 3, 'doors' => 3, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/yaris.png'
             ],
 
 
 
             [
-                'title' => 'Opel Corsa',
-                'subtitle' => 'Opel Corsa',
+                'title' => 'Toyota Aygo',
+                'subtitle' => 'X',
                 'level_id' => 2,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/aygo.png'
             ],
             [
-                'title' => 'Nissan Micra',
-                'subtitle' => 'iQ',
+                'title' => 'Dacia Sandero',
+                'subtitle' => 'Basic',
                 'level_id' => 2,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
-            ],
-            [
-                'title' => 'Toyota Aygo X',
-                'subtitle' => 'iQ',
-                'level_id' => 2,
-                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/sandero.png'
             ],
 
 
-
             [
-                'title' => 'VW Polo',
-                'subtitle' => 'City Life',
+                'title' => 'Renault Clio',
+                'subtitle' => 'v5',
                 'level_id' => 3,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/clio.png'
             ],
             [
-                'title' => 'Renault Clio 5P',
-                'subtitle' => 'iQ',
+                'title' => 'Peugeot 208',
+                'subtitle' => 'Active',
                 'level_id' => 3,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/208.png'
             ],
 
 
 
 
             [
-                'title' => 'Renault Captur',
-                'subtitle' => 'City Life',
+                'title' => 'Dacia Sandero',
+                'subtitle' => 'Stepway',
                 'level_id' => 4,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
-            ],
-            [
-                'title' => 'Peugeot 2008',
-                'subtitle' => 'iQ',
-                'level_id' => 4,
-                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
-                'image' => '/image/garage/template.png'
+                'image' => '/image/garage/daciastep.png'
             ],
 
         ];

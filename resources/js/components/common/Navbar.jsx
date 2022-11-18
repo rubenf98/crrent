@@ -8,7 +8,7 @@ import { handleMenu } from "../../redux/application/actions";
 
 const Container = styled.section`
     width: 100vw;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 2;
@@ -17,11 +17,8 @@ const Container = styled.section`
 const Content = styled.section`
     width: 100%;
     height: 120px;
-    position: fixed;
     padding: 0px 60px;
     box-sizing: border-box;
-    top: 0;
-    left: 0;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -30,7 +27,6 @@ const Content = styled.section`
     @media (max-width: ${dimensions.md}) {
         max-height: 60px;
         padding: 0px 20px;
-        position: static;
     }
 `;
 
@@ -44,6 +40,10 @@ const Phone = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: ${props => props.opacity};
+    pointer-events: ${props => props.opacity ? "auto" : "none"};
+    z-index: ${props => props.opacity ? 10 : -5};
+    transition: all .3s ease;
 
     @media (max-width: ${dimensions.md}) {
         display: none;
@@ -81,6 +81,7 @@ const LinksContainer = styled.div`
         height: auto;
         margin-right: 70px;
         cursor: pointer;
+        z-index: 2;
 
         @media (max-width: ${dimensions.md}) {
             width: 90px;
@@ -97,9 +98,7 @@ const LinksContainer = styled.div`
         transition: opacity .3s ease;
         opacity: ${props => props.opacity};
         pointer-events: ${props => props.opacity ? "auto" : "none"};
-        z-index: -5;
-
-
+        z-index: ${props => props.opacity ? 10 : -5};
 
         @media (max-width: ${maxWidth}) {
             display: none;
@@ -146,6 +145,7 @@ function Navbar({ theme, handleMenu }) {
     useEffect(() => {
         if (pathname == "/" && !visibleLinks) {
             setVisibleLinks(true)
+
         }
         else if (pathname != "/" && visibleLinks) {
             setVisibleLinks(false)
@@ -204,7 +204,7 @@ function Navbar({ theme, handleMenu }) {
 
                 </MobileMenu>
 
-                <Phone background={theme.primary}>
+                <Phone background={theme.primary} opacity={opacityLinks}>
                     <img src="/icon/phone.svg" alt="phone" />
                     <p>+351 934 953 682</p>
                 </Phone>

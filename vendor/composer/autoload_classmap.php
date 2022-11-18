@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Http\\Controllers\\AuthController' => $baseDir . '/app/Http/Controllers/AuthController.php',
     'App\\Http\\Controllers\\CarController' => $baseDir . '/app/Http/Controllers/CarController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\ExtraController' => $baseDir . '/app/Http/Controllers/ExtraController.php',
@@ -30,6 +31,7 @@ return array(
     'App\\Models\\Extra' => $baseDir . '/app/Models/Extra.php',
     'App\\Models\\Level' => $baseDir . '/app/Models/Level.php',
     'App\\Models\\Price' => $baseDir . '/app/Models/Price.php',
+    'App\\Models\\Promotion' => $baseDir . '/app/Models/Promotion.php',
     'App\\Models\\Reservation' => $baseDir . '/app/Models/Reservation.php',
     'App\\Models\\ReservationHasDriver' => $baseDir . '/app/Models/ReservationHasDriver.php',
     'App\\Models\\ReservationHasExtra' => $baseDir . '/app/Models/ReservationHasExtra.php',

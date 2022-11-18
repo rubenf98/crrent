@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react'
-import styled, { withTheme } from "styled-components";
+import React, { useRef, useEffect, useState } from 'react'
+import styled, { withTheme, keyframes } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { dimensions, getCarouselBreakpoints } from '../../helper';
 import { maxWidthStyle, titleStyle, SecundaryButton } from '../../styles';
@@ -9,9 +9,21 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { connect } from "react-redux";
 
+const stretch = keyframes`
+  from {
+    max-height: 0px;
+  }
+
+  to {
+    max-height: 10000px;
+  }
+`;
+
 const Container = styled.section`
     ${maxWidthStyle}
     margin: 200px auto 100px auto;
+    position: relative;
+    z-index: 3;
     
     @media (max-width: ${dimensions.md}) {
         margin: 100px auto;
@@ -24,6 +36,7 @@ const TitleContainer = styled.div`
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+    margin-bottom: 50px;
 
     h2 {
         ${titleStyle}
@@ -46,22 +59,18 @@ const FilterContainer = styled.div`
     @media (max-width: ${dimensions.sm}) {
         gap: 10px;
     }
-
-    span {
-        font-size: 24px;
-        text-transform: uppercase;
-        font-weight: 400;
-    }
 `;
 
 const Filter = styled.span`
-    font-size: 18px;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 400;
 
     .rectangle{
         display: inline-block;
         margin-right: 15px;
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         background-color: ${props => props.background};
     }
 
@@ -99,6 +108,10 @@ const ArrowContainer = styled.div`
     margin: 50px auto;
     width: 40%;
 
+    div {
+        cursor: pointer;
+    }
+
     svg {
         width: 10px;
         height: 20px;
@@ -110,6 +123,7 @@ const ArrowContainer = styled.div`
         height: 2px;
         background-color: ${props => props.background};
         flex: 1;
+        cursor: default;
     }
     @media (max-width: ${dimensions.lg}) {
         width: 60%;
@@ -209,25 +223,56 @@ const Car = styled.div`
     }
 `;
 
+
+const CarContainer = styled.div`
+
+    .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    overflow: hidden;
+    animation: ${stretch} 3s ease-in-out forwards;
+
+    .car-section {
+        width: 33%;
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+        }
+    }
+`;
+
 function Garage({ theme, fetchCars, setCurrent, data }) {
     const carouselRef = useRef(null);
+    const [currentSlides, setCurrentSlides] = useState([1, 3])
+    const [seeMore, setSeeMore] = useState(false)
     var navigate = useNavigate();
 
     useEffect(() => {
         fetchCars();
-    }, [])
+    }, []);
 
 
     function handleClick(action) {
         if (action == "next") {
             carouselRef.current.next();
+            if (currentSlides[1] < carouselRef.current.state.totalItems) {
+                setCurrentSlides([currentSlides[0] + 1, currentSlides[1] + 1])
+            }
+
         } else {
             carouselRef.current.previous();
+            if (currentSlides[0] > 1) {
+                setCurrentSlides([currentSlides[0] - 1, currentSlides[1] - 1])
+            }
         }
     }
 
     const CarSection = ({ info }) => (
-        <Car onClick={() => handleCarSelection(info)} primary={theme.primary} background={theme.levels[info.level.code]}>
+        <Car className='car-section' onClick={() => handleCarSelection(info)} primary={theme.primary} background={theme.levels[info.level.code]}>
             <div className='image-container'>
                 <div className='car-background' />
                 <img loading='lazy' src={info.image} alt={info.title} />
@@ -238,17 +283,19 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
                 <h4>{info.subtitle}</h4>
 
                 <div className='price-container'>
-                    <p>{info.level.prices[2].price}€ <span>/ por Dia</span></p>
+                    <p><span>Desde</span>  {info.level.prices[2].price}€ <span>/ dia</span></p>
                     <button>Reservar</button>
                 </div>
             </div>
         </Car>
     )
 
+
+
     function handleCarSelection(car) {
         setCurrent(car);
         navigate("/checkout");
-        
+
 
     }
 
@@ -262,30 +309,48 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
                     <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
                     <Filter background={theme.levels.D}><div className="rectangle" />GAMA D</Filter>
                     <DesktopButtonContainer>
-                        <SecundaryButton type='search' primary={theme.primary}>
-                            ver mais
+                        <SecundaryButton type='search' primary={theme.primary} onClick={() => setSeeMore(!seeMore)}>
+                            {seeMore ? "ver menos" : "ver mais"}
                         </SecundaryButton>
                     </DesktopButtonContainer>
-
-
                 </FilterContainer>
             </TitleContainer>
 
-            <Carousel arrows={false} responsive={getCarouselBreakpoints([1, 1, 3, 3, 3])} draggable={false} autoPlay={false} ref={carouselRef} >
-                {data.map((car) => (
-                    <CarSection key={car.id} info={car} />
-                ))}
-            </Carousel>
+            {
+                seeMore ?
+                    <CarContainer>
+                        <div className='content'>
+                            {data.map((car) => (
+                                <CarSection key={car.id} info={car} />
+                            ))}
+                        </div>
+                    </CarContainer>
+                    : <>
+                        <Carousel
+                            arrows={false}
+                            responsive={getCarouselBreakpoints([1, 1, 3, 3, 3])}
+                            draggable={false} autoPlay={false} ref={carouselRef}
+                        >
+                            {data.map((car) => (
+                                <CarSection key={car.id} info={car} />
+                            ))}
+                        </Carousel>
 
-            <ArrowContainer background={theme.primary}>
-                <div onClick={() => handleClick("previous")}><PreviousIcon /> 1</div>
-                <div className='separator' />
-                <div onClick={() => handleClick("next")}> 3 <NextIcon /></div>
-            </ArrowContainer>
+                        <ArrowContainer background={theme.primary}>
+                            <div onClick={() => handleClick("previous")}><PreviousIcon /> {currentSlides[0]}</div>
+                            <div className='separator' />
+                            <div onClick={() => handleClick("next")}> {window.innerWidth < dimensions.md ? 7 : currentSlides[1]} <NextIcon /></div>
+                        </ArrowContainer>
+
+                    </>
+            }
+
+
+
 
             <MobileButtonContainer>
-                <SecundaryButton type='search' primary={theme.primary}>
-                    ver mais
+                <SecundaryButton type='search' primary={theme.primary} onClick={() => setSeeMore(!seeMore)}>
+                    {seeMore ? "ver menos" : "ver mais"}
                 </SecundaryButton>
             </MobileButtonContainer>
 

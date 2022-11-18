@@ -518,6 +518,7 @@ class ComposerStaticInit5ed6317408bfea97500d7fa017973660
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\AuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AuthController.php',
         'App\\Http\\Controllers\\CarController' => __DIR__ . '/../..' . '/app/Http/Controllers/CarController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\ExtraController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExtraController.php',
@@ -540,6 +541,7 @@ class ComposerStaticInit5ed6317408bfea97500d7fa017973660
         'App\\Models\\Extra' => __DIR__ . '/../..' . '/app/Models/Extra.php',
         'App\\Models\\Level' => __DIR__ . '/../..' . '/app/Models/Level.php',
         'App\\Models\\Price' => __DIR__ . '/../..' . '/app/Models/Price.php',
+        'App\\Models\\Promotion' => __DIR__ . '/../..' . '/app/Models/Promotion.php',
         'App\\Models\\Reservation' => __DIR__ . '/../..' . '/app/Models/Reservation.php',
         'App\\Models\\ReservationHasDriver' => __DIR__ . '/../..' . '/app/Models/ReservationHasDriver.php',
         'App\\Models\\ReservationHasExtra' => __DIR__ . '/../..' . '/app/Models/ReservationHasExtra.php',

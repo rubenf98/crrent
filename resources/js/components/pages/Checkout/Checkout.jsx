@@ -11,7 +11,6 @@ import GeneralInfo from './GeneralInfo';
 import { connect } from "react-redux";
 import moment from "moment";
 import { setCurrentReservation, setCurrentReservationValues } from "../../../redux/reservation/actions";
-import { map } from 'lodash';
 
 const Container = styled.section`
     width: 100%;
@@ -101,6 +100,7 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
     const [price, setPrice] = useState(0)
     const [pricePerDay, setPricePerDay] = useState(0)
     const [days, setDays] = useState(1)
+
     let navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
@@ -243,7 +243,11 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
             >
                 {Object.values(currentCar).length &&
                     <>
-                        <GeneralInfo handleDateChange={handleDateChange} car={currentCar} />
+                        <GeneralInfo form={form} handleDateChange={handleDateChange} car={currentCar}
+                            tax={tax}
+                            setTax={setTax}
+                            taxPrice={taxPrice}
+                            setTaxPrice={setTaxPrice} />
                         <Addons days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
                         <Client />
                         <Driver drivers={extras.includes(3) ? 2 : 1} />

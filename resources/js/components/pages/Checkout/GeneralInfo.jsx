@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled, { withTheme, keyframes } from "styled-components";
 import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon } from '../../../icons';
-import { Button, maxWidthStyle } from '../../styles';
-import { Col, DatePicker, Form, Input, Row } from 'antd';
+import { maxWidthStyle } from '../../styles';
+import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from 'antd';
 import { dimensions } from '../../helper';
+import { connect } from 'react-redux';
 
 const stretch = keyframes`
   from {
@@ -113,7 +114,7 @@ const IconContainer = styled.div`
     align-items: center;
     flex-wrap: wrap;
     gap: 35px;
-    margin: 60px 0px;
+    margin: 20px 0px 60px 0px;
 
     .border {
         border: 2px solid;
@@ -161,17 +162,11 @@ const Icon = styled.div`
     }
 `;
 
-const StyledInputGroup = styled(Input.Group)`
+const StyledInput = styled(Input)`
     width: 100%;
-    margin: 20px 0px;
-    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
-    box-shadow: -8px 0px 30px 0px #0000002f;
-
-    .ant-input-affix-wrapper {
-        border: 0px;
-        padding: 20px;
-        box-sizing: border-box;
-    }
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0,0,0,.4);
 
     input {
         padding-left: 25px !important;
@@ -182,32 +177,41 @@ const StyledInputGroup = styled(Input.Group)`
     }
 `;
 
-
-const StyledInput = styled(Input)`
-    width: 100%;
-    margin: 20px 0px;
-    padding: 20px;
+const StyledSelect = styled(Select)`
+    width: 50%;
+    padding: 15px;
     box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
-    box-shadow: -8px 0px 30px 0px #0000002f;
+    border: 1px solid rgba(0,0,0,.4);
+    font-size: 16px;
 
-    input {
-        padding-left: 25px !important;
+    .ant-select-selector {
+        padding: 0px !important;
     }
 
-    @media (max-width: ${dimensions.md}) {
-        margin: 10px 0px;
+    .ant-select-selection-placeholder, .ant-select-selection-item {
+        background-image: url("/icon/place.svg");
+        background-repeat: no-repeat;
+        background-size: 23px 25px;
+        text-indent: 50px;
+        padding-left: 30px;
+        box-sizing: border-box;
+    }
+
+    .ant-select-selection-placeholder {
+        color: black;
+        opacity: .6;
+        font-weight: 400;
+        text-transform: uppercase;
+        font-size: 16px;
     }
 `;
 
 
 const RangePicker = styled(DatePicker.RangePicker)`
     width: 100%;
-    margin: 20px 0px;
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 30px 0px #0000002f; 
-    box-shadow: -8px 0px 30px 0px #0000002f;
+    border: 1px solid rgba(0,0,0,.4);
 
     .ant-picker-input {
         background-image: url("/icon/calendar.svg");
@@ -217,6 +221,8 @@ const RangePicker = styled(DatePicker.RangePicker)`
         padding-left: 50px;
         box-sizing: border-box;
     }
+
+
 
     @media (max-width: ${dimensions.md}) {
         margin: 10px 0px;
@@ -238,6 +244,21 @@ const MobileContainer = styled.div`
     }
 `;
 
+const AddButton = styled.button`
+    background-color: transparent;
+    border: 0px;
+    margin-left: auto;
+
+    img {
+        width: 20px;
+        margin: auto;
+        display: block;
+        cursor: ${props => props.active ? "pointer" : "default"};
+        opacity: ${props => props.active ? "1" : ".3"};
+    }
+    
+`;
+
 const rules = {
     date: [{ required: false, message: 'Please input the reservation date!' }],
     place: [{ required: false, message: 'Please input the pickup and return place!' }],
@@ -245,7 +266,73 @@ const rules = {
 };
 
 
-function GeneralInfo({ theme, car, handleDateChange }) {
+function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
+    taxPrice,
+    setTaxPrice, }) {
+    const [customPickup, setCustomPickup] = useState(undefined);
+    const [customPickupTax, setCustomPickupTax] = useState(undefined);
+    const [customReturn, setCustomReturn] = useState(undefined);
+    const [customReturnTax, setCustomReturnTax] = useState(undefined);
+
+    var pickupCondition = customPickup != undefined && customPickup != "" && customPickupTax;
+    var returnCondition = customReturn != undefined && customReturn != "" && customReturnTax;
+
+    function returnID(itemName) {
+        var id = undefined;
+
+        if (itemName == "pickup_place")
+            id = 6;
+        else
+            id = 8;
+
+        return id;
+    }
+
+    const handleCustomPlace = (itemName, value, condition) => {
+        if (condition) {
+            var newEntry = {};
+            newEntry[itemName] = value;
+            form.setFieldsValue(newEntry);
+
+            var id = returnID(itemName);
+
+            if (condition == 2) {
+                if (!tax.includes(id)) {
+                    var price = extras.find(e => e.id === id).price;
+
+                    setTax([...tax, id]);
+                    setTaxPrice(taxPrice + price);
+                }
+            } else {
+                if (tax.includes(id)) {
+                    var price = extras.find(e => e.id === id).price;
+                    const index = tax.indexOf(id);
+
+                    var taxCopy = [...tax];
+                    taxCopy.splice(index, 1);
+
+                    setTax(taxCopy);
+                    setTaxPrice(taxPrice - price);
+                }
+            }
+        }
+    }
+
+    const handlePlaceSelection = (itemName) => {
+        var id = returnID(itemName);
+
+        if (tax.includes(id)) {
+            var price = extras.find(e => e.id === id).price;
+            const index = tax.indexOf(id);
+
+            var taxCopy = [...tax];
+            taxCopy.splice(index, 1);
+
+            setTax(taxCopy);
+            setTaxPrice(taxPrice - price);
+        }
+    }
+
     return (
         <Container>
 
@@ -276,18 +363,63 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                                 />
                             </Form.Item>
                         </Col>
+
                         <Col xs={24} md={24}>
-                            <Form.Item name="pickup" rules={rules.place}>
-                                <StyledInputGroup size="large">
-                                    <Row>
-                                        <Col span={12}>
-                                            <Input prefix={<PlaceIcon />} placeholder='Local Levantamento' />
-                                        </Col>
-                                        <Col span={12}>
-                                            <Input prefix={<PlaceIcon />} placeholder='Local Devolução' />
-                                        </Col>
-                                    </Row>
-                                </StyledInputGroup>
+                            <Form.Item name="pickup_place" rules={rules.place}>
+                                <StyledSelect onChange={() => handlePlaceSelection("pickup_place")} bordered={false} dropdownRender={(menu) => (
+                                    <>
+                                        {menu}
+                                        <Divider style={{ margin: '12px 0' }} />
+                                        <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
+                                            <Col span={12}>
+                                                <Input onChange={(e) => setCustomPickup(e.target.value)} value={customPickup} size="large" placeholder="Please enter an address or hotel name" />
+                                            </Col>
+                                            <Col span={10}>
+                                                <Radio.Group onChange={(e) => setCustomPickupTax(e.target.value)} value={customPickupTax}>
+                                                    <Radio value={1}>Funchal</Radio>
+                                                    <Radio value={2}>Not Funchal</Radio>
+                                                </Radio.Group>
+                                            </Col>
+                                            <Col span={2}>
+                                                <AddButton active={pickupCondition} type="text" onClick={(e) => handleCustomPlace("pickup_place", customPickup, pickupCondition)}>
+                                                    <img alt="add" src="/icon/add_black.svg" />
+                                                </AddButton>
+                                            </Col>
+                                        </Row>
+                                    </>
+                                )} placeholder='Local Levantamento'>
+                                    <Select.Option value="aeroporto">Aeroporto</Select.Option>
+                                    <Select.Option value="loja">Loja</Select.Option>
+                                </StyledSelect>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} md={24}>
+                            <Form.Item name="return_place" rules={rules.place}>
+                                <StyledSelect onChange={() => handlePlaceSelection("return_place")} bordered={false} dropdownRender={(menu) => (
+                                    <>
+                                        {menu}
+                                        <Divider style={{ margin: '12px 0' }} />
+                                        <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
+                                            <Col span={12}>
+                                                <Input onChange={(e) => setCustomReturn(e.target.value)} value={customReturn} size="large" placeholder="Please enter an address or hotel name" />
+                                            </Col>
+                                            <Col span={10}>
+                                                <Radio.Group onChange={(e) => setCustomReturnTax(e.target.value)} value={customReturnTax}>
+                                                    <Radio value={1}>Funchal</Radio>
+                                                    <Radio value={2}>Not Funchal</Radio>
+                                                </Radio.Group>
+                                            </Col>
+                                            <Col span={2}>
+                                                <AddButton active={returnCondition} type="text" onClick={(e) => handleCustomPlace("return_place", customReturn, returnCondition)}>
+                                                    <img alt="add" src="/icon/add_black.svg" />
+                                                </AddButton>
+                                            </Col>
+                                        </Row>
+                                    </>
+                                )} placeholder='Local Devolução'>
+                                    <Select.Option value="aeroporto">Aeroporto</Select.Option>
+                                    <Select.Option value="loja">Loja</Select.Option>
+                                </StyledSelect>
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={24}>
@@ -299,7 +431,7 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                 </Info>
 
 
-            </Content>
+            </Content >
             <MobileContainer>
                 <Col xs={24} md={24}>
                     <Form.Item name="date" rules={rules.name}>
@@ -313,17 +445,55 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
-                    <Form.Item name="pickup" rules={rules.name}>
-                        <StyledInputGroup size="large">
-                            <Row>
-                                <Col span={12}>
-                                    <Input prefix={<PlaceIcon />} placeholder='Local Levantamento' />
-                                </Col>
-                                <Col span={12}>
-                                    <Input prefix={<PlaceIcon />} placeholder='Local Devolução' />
-                                </Col>
-                            </Row>
-                        </StyledInputGroup>
+                    <Form.Item name="pickup_place" rules={rules.place}>
+                        <StyledSelect bordered={false} dropdownRender={(menu) => (
+                            <>
+                                {menu}
+                                <Divider style={{ margin: '12px 0' }} />
+                                <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
+                                    <Col span={12}>
+                                        <Input size="large" placeholder="Please enter an address or hotel name" />
+                                    </Col>
+                                    <Col span={10}>
+                                        <Radio.Group >
+                                            <Radio value={1}>Funchal</Radio>
+                                            <Radio value={2}>Not Funchal</Radio>
+                                        </Radio.Group>
+                                    </Col>
+                                    <Col span={2}>
+                                        <AddButton type="text" onClick={(e) => handleCustomPlace("pickup_place", e)}>
+                                            <img alt="add" src="/icon/add_black.svg" />
+                                        </AddButton>
+                                    </Col>
+                                </Row>
+                            </>
+                        )} placeholder='Local Levantamento'>
+                            <Select.Option value="aeroporto">Aeroporto</Select.Option>
+                            <Select.Option value="loja">Loja</Select.Option>
+                        </StyledSelect>
+                    </Form.Item>
+                </Col>
+                <Col xs={24} md={24}>
+                    <Form.Item name="pickup_place" rules={rules.place}>
+                        <StyledSelect bordered={false} dropdownRender={(menu) => (
+                            <>
+                                {menu}
+                                <Divider style={{ margin: '12px 0' }} />
+                                <Space style={{ padding: '0 10px 6px' }}>
+                                    <StyledInput placeholder="Please enter an address or hotel name" />
+                                    <Radio.Group >
+                                        <Radio value={1}>Funchal</Radio>
+                                        <Radio value={2}>Not Funchal</Radio>
+                                    </Radio.Group>
+                                    <AddButton type="text" onClick={() => setSelected(true)}>
+                                        <img alt="add" src="/icon/add_black.svg" />
+                                    </AddButton>
+                                </Space>
+                            </>
+                        )} placeholder='Local Devolução'>
+                            <Select.Option value="aeroporto">Aeroporto</Select.Option>
+                            <Select.Option value="loja">Loja</Select.Option>
+                        </StyledSelect>
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
@@ -332,8 +502,14 @@ function GeneralInfo({ theme, car, handleDateChange }) {
                     </Form.Item>
                 </Col>
             </MobileContainer>
-        </Container>
+        </Container >
     )
 }
 
-export default withTheme(GeneralInfo)
+const mapStateToProps = (state) => {
+    return {
+        extras: state.extra.data,
+    };
+};
+
+export default connect(mapStateToProps, null)(withTheme(GeneralInfo));

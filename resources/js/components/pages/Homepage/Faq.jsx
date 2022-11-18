@@ -7,7 +7,8 @@ import { dimensions } from '../../helper';
 const { Panel } = Collapse;
 
 const Container = styled.section`
-    
+    position: relative;
+    z-index: 3;
     ${maxWidthStyle}
     margin: 200px auto;
 

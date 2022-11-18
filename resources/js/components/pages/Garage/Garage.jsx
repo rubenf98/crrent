@@ -350,7 +350,7 @@ function Garage({ theme, data, fetchCars, setCurrent }) {
                     <div className='price'>
                         <div>
                             <p className='total'>total</p>
-                            <p className='warning'>Inclui taxa de 22%</p>
+                            <p className='warning'>Inclui taxa de 22% para {days} dias</p>
                         </div>
                         <div className='value'>{pricing[1]}€</div>
                     </div>
