@@ -6,13 +6,17 @@ import application from './redux/application'
 import reservation from './redux/reservation'
 import car from './redux/car'
 import extra from './redux/extra'
+import promotion from './redux/promotion'
+import block from './redux/block'
 
 const reducer = combineReducers({
     auth,
     application,
     car,
     reservation,
-    extra
+    extra,
+    promotion,
+    block
 })
 
 export default reducer

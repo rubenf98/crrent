@@ -38,8 +38,11 @@ export const Button = styled.button`
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    border: 0px;
+    border-color: ${props => props.background};
     cursor: pointer;
+    transition: all .3s ease;
+
+    
 
     p, a {
         margin: 0px;
@@ -50,6 +53,17 @@ export const Button = styled.button`
         margin-right: 15px;
         width: 20px;
         height: 20px;
+    }
+
+    &:hover {
+        color: ${props => props.background};
+        background-color: white;
+        border: 2px solid;
+
+        p, a {
+            margin: 0px;
+            color: ${props => props.background};
+        }
     }
 
     @media (max-width: ${dimensions.md}) {

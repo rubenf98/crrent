@@ -5,6 +5,7 @@ import { maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from 'antd';
 import { dimensions } from '../../helper';
 import { connect } from 'react-redux';
+import moment from "moment";
 
 const stretch = keyframes`
   from {
@@ -268,11 +269,13 @@ const rules = {
 
 function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
     taxPrice,
-    setTaxPrice, }) {
+    setTaxPrice, blockedDates }) {
     const [customPickup, setCustomPickup] = useState(undefined);
     const [customPickupTax, setCustomPickupTax] = useState(undefined);
     const [customReturn, setCustomReturn] = useState(undefined);
     const [customReturnTax, setCustomReturnTax] = useState(undefined);
+
+    const [dates, setDates] = useState(null);
 
     var pickupCondition = customPickup != undefined && customPickup != "" && customPickupTax;
     var returnCondition = customReturn != undefined && customReturn != "" && customReturnTax;
@@ -339,7 +342,7 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
             <Content>
                 <Car>
                     <Background background={theme.levels[car.level.code]} />
-                    <img src={car.image} alt="" />
+                    <img src={car.image} alt={car.title} />
                 </Car>
                 <Info>
                     <h2>{car.title}</h2>
@@ -360,6 +363,21 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                     format="YYYY-MM-DD HH:mm"
                                     placeholder={["data levantamento", "data devolução"]}
                                     suffixIcon={(<></>)}
+                                    onCalendarChange={(val) => setDates(val)}
+                                    disabledDate={(current) => {
+                                        let customDate = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");
+                                        let tooEarly = false;
+                                        let tooLate = false
+                                        if (dates) {
+                                            tooLate = dates[0] && current.diff(dates[0], 'days') > 365;
+                                            tooEarly = dates[0] && current.diff(dates[0], 'days') < 2;
+                                        }
+                                        let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"))
+                                        return current && (current < moment(customDate, "YYYY-MM-DD HH:mm")) || (!!tooEarly || !!tooLate) || isBlocked;
+                                    }}
+                                    disabledTime={() => ({
+                                        disabledHours: () => [0, 1, 2, 3, 4, 5, 6, 23],
+                                    })}
                                 />
                             </Form.Item>
                         </Col>
@@ -509,6 +527,7 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
 const mapStateToProps = (state) => {
     return {
         extras: state.extra.data,
+        blockedDates: state.block.data
     };
 };
 

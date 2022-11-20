@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CarResource;
+use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Level;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class CarController extends Controller
 {
@@ -14,9 +19,33 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return CarResource::collection(Car::all());
+        $blockedLevels = [];
+
+        if ($request->from && $request->to) {
+            $begin = new DateTime($request->from);
+            $end = new DateTime($request->to);
+
+            $interval = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod($begin, $interval, $end);
+
+            foreach ($period as $dt) {
+                $levels = Level::all();
+
+                foreach ($levels as $level) {
+                    $n = BlockDate::where('date', $dt->format("Y-m-d"))->where('level_id', $level->id)->count();
+                    $cars = $level->cars()->count();
+                    if ($n >= $cars) {
+                        array_push($blockedLevels, $level->id);
+                    }
+                }
+            }
+        }
+
+        return CarResource::collection(Car::with('level')->whereHas('level', function ($query) use ($blockedLevels) {
+            $query->whereNotIn('id', $blockedLevels);
+        })->get());
     }
 
     /**

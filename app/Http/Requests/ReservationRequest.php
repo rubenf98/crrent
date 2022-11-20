@@ -35,7 +35,7 @@ class ReservationRequest extends FormRequest
         $out->writeln($days);
 
 
-        $out->writeln($level);
+        // $out->writeln($level);
         $prices = $level->prices;
 
         foreach ($prices as $price) {
@@ -85,8 +85,8 @@ class ReservationRequest extends FormRequest
             'local_address' => 'required|string',
             'company' => 'required|string',
 
-            'pickup_date' => 'required|date',
-            'return_date' => 'required|date',
+            'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day'),
+            'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
             'pickup_place' => 'required|string',
             'return_place' => 'required|string',
             'flight' => 'required|string',
@@ -98,11 +98,20 @@ class ReservationRequest extends FormRequest
 
             'drivers' => 'required|array|min:1',
             'drivers.*.name' => 'required|string',
-            'drivers.*.birthday' => 'required|date',
+            'drivers.*.birthday' => 'required|date|before:-21 years',
             'drivers.*.license' => 'required|string',
-            'drivers.*.emission' => 'required|date',
-            'drivers.*.validity' => 'required|date',
+            'drivers.*.emission' => 'required|date|before:' . $this->pickup_date,
+            'drivers.*.validity' => 'required|date|after:' . $this->return_date,
             'drivers.*.emission_place' => 'required|string',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'drivers.*.validity.after' => 'The drivers\' license validity should be after the rental date',
+            'drivers.*.emission.before' => 'The drivers\' license emission should be before the rental date',
+            'drivers.*.birthday.before' => 'Driver\'s should be at least 21 years old',
         ];
     }
 

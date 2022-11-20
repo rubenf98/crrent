@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Models\BlockDate;
+use App\Models\Car;
 use App\Models\Client;
 use App\Models\Driver;
 use App\Models\Reservation;
 use Carbon\Carbon;
+use DateInterval;
+use DatePeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,9 +43,12 @@ class ReservationController extends Controller
             $client = Client::store($validator);
             $drivers = Driver::store($validator);
 
+            $initDate =  Carbon::parse($validator['pickup_date']);
+            $endDate =  Carbon::parse($validator['return_date']);
+
             $reservation = Reservation::create([
-                'pickup_date' => Carbon::parse($validator['pickup_date']),
-                'return_date' => Carbon::parse($validator['return_date']),
+                'pickup_date' => $initDate,
+                'return_date' =>  $endDate,
                 'pickup_place' => $validator['pickup_place'],
                 'return_place' => $validator['return_place'],
                 'flight' => $validator['flight'],
@@ -49,6 +56,17 @@ class ReservationController extends Controller
                 'car_id' => $validator['car_id'],
                 'client_id' => $client->id,
             ]);
+
+            $car = Car::find($validator['car_id']);
+            $interval = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod($initDate, $interval, $endDate);
+
+            foreach ($period as $dt) {
+                BlockDate::create([
+                    "date" => $dt,
+                    "level_id" => $car->level->id
+                ]);
+            }
 
             $reservation->extras()->attach($validator["extras"]);
             $reservation->drivers()->attach($drivers);

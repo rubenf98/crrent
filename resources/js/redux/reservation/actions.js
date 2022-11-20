@@ -1,9 +1,12 @@
 import { types } from "./types";
 import axios from "axios";
+import { stringify } from "query-string";
 
-export const fetchReservations = () => ({
+export const fetchReservations = (filters = {}) => ({
     type: types.FETCH_RESERVATIONS,
-    payload: axios.get(`${window.location.origin}/api/reservations`)
+    payload: axios.get(`${window.location.origin}/api/reservations${stringify(filters, {
+        arrayFormat: "index"
+    })}`)
 })
 
 export const fetchReservation = (id) => ({

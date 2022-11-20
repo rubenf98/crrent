@@ -218,16 +218,16 @@ function Addons({ theme, fetchExtras, data, extras, setExtras, extraPrice,
                 <TitleContainer title="Extras" />
 
                 {data.map((extra) => (
-                    <>
+                    <div key={extra.id}>
                         {extra.visible ?
-                            <div key={extra.id} className='checkbox-container'>
+                            <div className='checkbox-container'>
                                 <Checkbox onChange={(e) => handleClick(e.target.checked, extra)}>
                                     {extra.name}
                                 </Checkbox>
                                 <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>por</span> {extra.type}</span></p>
                             </div>
                             : <></>}
-                    </>
+                    </div>
 
                 ))}
             </Extra>

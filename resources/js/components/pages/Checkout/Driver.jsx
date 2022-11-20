@@ -4,7 +4,7 @@ import { maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions } from '../../helper';
-
+import moment from "moment";
 const Container = styled.section`
     ${maxWidthStyle};
 
@@ -46,7 +46,7 @@ function Driver({ theme, drivers }) {
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label="Data de nascimento*" name="birthday" rules={rules.birthday}>
-                                                    <DatePicker size="large" />
+                                                    <DatePicker size="large" maxDate={moment().subtract(21, "years")} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>

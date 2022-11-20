@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
-import { Form, Checkbox, Input, Row, Col, DatePicker, InputNumber } from 'antd';
+import { Form, Checkbox, Input, DatePicker, InputNumber } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { Link } from 'react-router-dom';
 import { dimensions } from '../../helper';
@@ -20,6 +20,12 @@ const stretch = keyframes`
     width: 140%;
     right: 40%;
   }
+`;
+
+
+const Submit = styled(Button)`
+    cursor: ${props => props.active ? "pointer" : "default"};
+    opacity: ${props => props.active ? "1" : ".3"};
 `;
 
 export const inputStyle = css`
@@ -201,6 +207,12 @@ const PolicyContainer = styled.section`
     font-weight: 400;
     font-size: 20px;
     margin: 100px 0px;
+    display: flex;
+    flex-direction: column;
+
+    label {
+        margin: 10px 0px !important;
+    }
 
     @media (max-width: ${dimensions.md}) {
         margin: 80px 0px;
@@ -297,7 +309,9 @@ const rules = {
 
 function Summary({ theme, currentCar, values, currentReservation }) {
     let navigate = useNavigate();
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState(0);
+    const [privacy, setPrivacy] = useState(false);
+    const [conditions, setConditions] = useState(false);
 
     const content = [
         { title: "CARRO", items: values.car },
@@ -387,17 +401,16 @@ function Summary({ theme, currentCar, values, currentReservation }) {
                     </SummaryContainer>
                 }
                 <PolicyContainer>
-                    <Form.Item name="privacy" rules={rules.name}>
-                        <Checkbox>Li, compreendi e concordo com os <Link to="/privacy">Política de Privacidade</Link></Checkbox>
-                    </Form.Item>
-                    <Form.Item name="conditions" rules={rules.name}>
-                        <Checkbox>Confirmo que li, compreendi e concordo com os <Link to="/conditions">Termos e Condições da CR Rent</Link></Checkbox>
-                    </Form.Item>
+
+                    <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>Li, compreendi e concordo com os <Link to="/privacy">Política de Privacidade</Link></Checkbox>
+
+                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>Confirmo que li, compreendi e concordo com os <Link to="/conditions">Termos e Condições da CR Rent</Link></Checkbox>
+
                 </PolicyContainer>
 
-                <Button onClick={handleSubmit} background={theme.primary}>
-                    pagar já
-                </Button>
+                <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                    reservar
+                </Submit>
 
                 {/* <TitleContainer title="Detalhes de pagamento" />
                 <PaymentContainer primary={theme.primary}>

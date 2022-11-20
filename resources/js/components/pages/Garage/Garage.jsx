@@ -8,6 +8,7 @@ import DateFormItem from '../../common/DateFormItem';
 import { connect } from "react-redux";
 import { fetchCars, setCurrent } from "../../../redux/car/actions";
 import moment from "moment";
+import { fetchPromotions } from '../../../redux/promotion/actions';
 
 const Container = styled.section`
     width: 100%;
@@ -273,13 +274,15 @@ const Icon = styled.div`
     }
 `;
 const dateFormat = "YYYY-MM-DD HH:mm";
-function Garage({ theme, data, fetchCars, setCurrent }) {
+function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(1)
     var navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
+
+
         var from = searchParams.get("from");
         var to = searchParams.get("to");
 
@@ -288,18 +291,19 @@ function Garage({ theme, data, fetchCars, setCurrent }) {
         from = moment(from);
         to = moment(to);
 
-        var difference = to.diff(from, 'days') + 1;
+        var difference = to.diff(from, 'days');
 
         setDays(difference);
         setDates([from, to]);
 
+        fetchPromotions();
     }, [])
 
     const handleSearch = () => {
 
         fetchCars({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat) });
 
-        var difference = dates[1].diff(dates[0], 'days') + 1;
+        var difference = dates[1].diff(dates[0], 'days');
 
         setDays(difference);
         setDates([dates[0], dates[1]]);
@@ -349,14 +353,14 @@ function Garage({ theme, data, fetchCars, setCurrent }) {
 
                     <div className='price'>
                         <div>
-                            <p className='total'>total</p>
+                            <p className='total'>desde</p>
                             <p className='warning'>Inclui taxa de 22% para {days} dias</p>
                         </div>
                         <div className='value'>{pricing[1]}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
-                        reservar
+                        continuar
                     </Button>
                     <p className='disclaimer'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 
@@ -392,8 +396,9 @@ function Garage({ theme, data, fetchCars, setCurrent }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: () => dispatch(fetchCars()),
+        fetchCars: (filters) => dispatch(fetchCars(filters)),
         setCurrent: (car) => dispatch(setCurrent(car)),
+        fetchPromotions: (car) => dispatch(fetchPromotions(car)),
     };
 };
 
