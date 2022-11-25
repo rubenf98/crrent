@@ -327,7 +327,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
             content.map((section => {
 
                 section.items.map((row) => {
-                    aPrice += row[2];
+                    aPrice += row[row.length - 1];
                 })
             }))
 
@@ -370,10 +370,8 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                                         <Section>
 
                                             <div className='title large'>{section.title}</div>
-                                            <div className='title opacity'>€/{key == 2 ? "UNI" : "DIA"}</div>
+                                            <div className='title opacity'>{key != 0 && ("€/" + (key == 2 ? "UNI" : "DIA"))}</div>
                                             <div className='title'>SUBTOTAL</div>
-
-
 
                                             {section.items.map((row) => (
                                                 <>
@@ -381,10 +379,10 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                                                         {row[0]}
                                                     </p>
                                                     <p className='opacity'>
-                                                        {row[1]}
+                                                        {key != 0 && row[1]}
                                                     </p>
                                                     <p>
-                                                        {row[2]}€
+                                                        {key == 0 ? row[1] : row[2]}€
                                                     </p>
                                                 </>
                                             ))}

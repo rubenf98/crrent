@@ -4,7 +4,7 @@ export const text = {
         button: "search"
     },
     title: "Nossa oferta",
-    level: "gama",
+    level: "grupo",
     descriptions: {
         manual: "manual",
         automatic: "automático",

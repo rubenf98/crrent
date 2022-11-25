@@ -6,6 +6,7 @@ import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from
 import { dimensions } from '../../helper';
 import { connect } from 'react-redux';
 import moment from "moment";
+import { isDateDisabled } from '../../functions';
 
 const stretch = keyframes`
   from {
@@ -342,51 +343,8 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                 setDates(null);
             }
         }
-    }
-
-    const isDateDisabled = (current) => {
-        if (!car.registration) {
-            return true
-        }
         else {
-            let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
-
-            if (isBlocked) {
-                return true
-            } else {
-                let tomorrow = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");
-
-                if (current && (current.isBefore(tomorrow))) {
-                    return true
-                } else {
-                    let tooEarly = false;
-                    let tooLate = false;
-
-                    if (dates) {
-                        tooLate = dates[0] && current.diff(dates[0], 'days') > 365;
-                        tooEarly = dates[0] && current.diff(dates[0], 'days') < 2;
-
-                        var currentBlockedDate = null;
-                        for (let index = 0; index < blockedDates.length; index++) {
-                            var blockedDate = moment(blockedDates[index]);
-
-                            if (blockedDate.isAfter(dates[0])) {
-                                currentBlockedDate = blockedDate;
-                                break;
-                            }
-                        }
-
-                        if (currentBlockedDate) {
-                            if (current.isAfter(currentBlockedDate)) {
-                                tooLate = true;
-                            }
-                        }
-
-                    }
-
-                    return !!tooEarly || !!tooLate;
-                }
-            }
+            setDates(null);
         }
     }
 
@@ -420,7 +378,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                                     suffixIcon={(<></>)}
                                     onOpenChange={handleDateReset}
                                     onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={isDateDisabled}
+                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates)}
                                     disabledTime={(endDate, type) => ({
                                         disabledHours: () => {
                                             if (type == "end" && dates && endDate) {

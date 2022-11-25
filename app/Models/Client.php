@@ -30,7 +30,6 @@ class Client extends Model
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
                 'local_address' => $validator['local_address'],
-                'company' => $validator['company'],
             ]);
         } else {
             $client = self::create([
@@ -43,7 +42,6 @@ class Client extends Model
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
                 'local_address' => $validator['local_address'],
-                'company' => $validator['company'],
             ]);
         }
 

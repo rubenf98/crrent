@@ -6,7 +6,7 @@ export const text = {
     },
     garage: {
         title: "garagem",
-        level: "gama",
+        level: "grupo",
         button: ["ver mais", "ver menos"],
         car: {
             price: ["desde", "dia"],

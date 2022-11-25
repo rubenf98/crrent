@@ -1,7 +1,7 @@
 export const text = {
     header: {
         title: (<h1>Rent your <br /> car with <br />reason</h1>),
-        placeholder: ["PICKUP date", "RETURN date"],
+        placeholder: ["pickup date", "return date"],
         button: "SEARCH"
     },
     garage: {

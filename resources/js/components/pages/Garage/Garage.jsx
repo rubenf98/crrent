@@ -10,6 +10,7 @@ import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
 import moment from "moment";
 import { fetchPromotions } from '../../../redux/promotion/actions';
 import { fetchExtras } from '../../../redux/extra/actions';
+import { getCarPrice, getPromotions } from '../../functions';
 
 const Container = styled.section`
     width: 100%;
@@ -265,7 +266,6 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
         var from = searchParams.get("from");
         var to = searchParams.get("to");
 
-
         fetchCarsSelector({ from: from, to: to, hasRegistration: 1 });
 
         from = moment(from);
@@ -278,7 +278,8 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
 
 
         fetchPromotions().then((response) => {
-            getPromotions(response.action.payload.data.data, from, difference);
+            var newFactors = getPromotions(response.action.payload.data.data, from, difference);
+            setFactors(newFactors);
         });
 
         fetchExtras();
@@ -293,37 +294,18 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
         setDays(difference);
         setDates([dates[0], dates[1]]);
 
-        getPromotions(promotions, dates[0], difference)
+        var newFactors = getPromotions(promotions, dates[0], difference);
+        setFactors(newFactors);
 
     };
-
 
     function handleCarSelection(car) {
         setCurrent(car);
         navigate("/checkout?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat));
     }
 
-    function retrievePrice(prices) {
-        var value = prices[2].price;
-        prices.map((price) => {
-            if (days >= price.min && days <= price.max) {
-                value = price.price;
-            }
-        })
-        // console.log(factors);
-        var array = Array(days).fill(value);
-        var carPrice = 0;
-
-        array.map((day, index) => {
-            carPrice += day * factors[index];
-        });
-        // console.log(carPrice);
-
-        return carPrice;
-    }
-
     const CarSection = ({ info }) => {
-        var pricing = retrievePrice(info.level.prices);
+        var pricing = getCarPrice(info.level.prices, days, factors);
         return (
             <Car primary={theme.primary} background={theme.levels[info.level.code]}>
                 <div className='image-container'>
@@ -347,7 +329,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                             <p className='total'>{text.from}</p>
                             <p className='warning'>{text.notice[0]} {days} {text.notice[1]}</p>
                         </div>
-                        <div className='value'>{pricing}€</div>
+                        <div className='value'>{pricing + 15}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
@@ -360,34 +342,6 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                 </div>
             </Car>
         )
-    }
-
-    function getPromotions(promo, start, difference) {
-        var init = moment(start);
-        var min = undefined;
-        var max = undefined;
-        var aFactors = Array(difference).fill(1);
-        var index = 0;
-
-        while (index < aFactors.length) {
-            promo.map((promotion) => {
-
-                min = moment(promotion.start).startOf('day');
-                max = moment(promotion.end).endOf('day');
-
-                if (init.isBetween(min, max)) {
-                    aFactors[index] = promotion.factor;
-                }
-            })
-
-            init.add(1, 'days');
-            index++;
-            if (index > 365) {
-                break;
-            }
-        }
-
-        setFactors(aFactors);
     }
 
     return (

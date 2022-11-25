@@ -14,6 +14,7 @@ import { setCurrentReservation, setCurrentReservationValues } from "../../../red
 import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
+import { getCarPrice, getPromotions } from '../../functions';
 
 const Container = styled.section`
     width: 100%;
@@ -94,7 +95,9 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, setCurrentReservation, setCurrentReservationValues, extrasData, fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
+function Checkout({ language, fetchExtras, theme,
+    currentCar, setCurrentReservation, setCurrentReservationValues, extrasData,
+    fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
     const { text } = require('../../../../assets/' + language + "/checkout");
 
     const [form] = Form.useForm();
@@ -106,8 +109,6 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
     const [taxPrice, setTaxPrice] = useState(0)
 
     const [price, setPrice] = useState(0)
-
-    const [pricePerDay, setPricePerDay] = useState(0)
 
     const [days, setDays] = useState(1)
 
@@ -140,7 +141,7 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
                 <span>{message}</span>
             )));
 
-            handleDate(moment(currentReservation.pickup_date), moment(currentReservation.return_date), true);
+            handleDate(moment(currentReservation.pickup_date), moment(currentReservation.return_date), false);
 
             currentReservation.extras.map((element) => {
                 console.log(element);
@@ -156,13 +157,14 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
 
     const handleDate = (from, to, initDate) => {
         var difference = moment(to).diff(moment(from), 'days');
-        var factors = getPromotions(from, difference);
+
+        var factors = getPromotions(promotions, from, difference);
 
         if (initDate) {
             form.setFieldValue('date', [from, to])
         }
         setDays(difference);
-        var value = retrievePrice(currentCar.level.prices, difference, factors);
+        var value = getCarPrice(currentCar.level.prices, difference, factors);
         setPrice(value);
 
         var extra = extrasData.find((element) => element.id == 8);
@@ -197,52 +199,6 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
         return [taxCopy, taxPriceCopy]
     }
 
-    function retrievePrice(prices, difference, factors) {
-        var value = prices[2].price;
-        prices.map((price) => {
-            if (difference >= price.min && difference <= price.max) {
-                value = price.price;
-            }
-        })
-
-        setPricePerDay(value);
-
-        var array = Array(difference).fill(value);
-        var carPrice = 0;
-
-        array.map((day, index) => {
-            carPrice += day * factors[index];
-        });
-
-        return carPrice;
-    }
-
-    function getPromotions(start, days) {
-        var init = moment(start);
-        var min = undefined;
-        var max = undefined;
-        var factors = Array(days).fill(1);
-        var index = 0;
-        while (index < factors.length) {
-
-            promotions.map((promotion) => {
-                min = moment(promotion.start).startOf('day');
-                max = moment(promotion.end).endOf('day');
-
-                if (init.isBetween(min, max)) {
-                    factors[index] = promotion.factor;
-                }
-            })
-
-            init.add(1, 'days');
-            index++;
-            if (index > 365) {
-                break;
-            }
-        }
-
-        return factors;
-    }
 
     const onFinish = () => {
         form.validateFields().then((values) => {
@@ -258,11 +214,10 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
                 if (tax.includes(extra.id)) {
                     taxArray.push([extra.name, extra.price + "€", extra.price])
                 }
-            })
+            });
+
             setCurrentReservationValues({
-                car: [
-                    [currentCar.title, pricePerDay + "€", price]
-                ],
+                car: [[currentCar.title, price + 15]],
                 extras: extraArray,
                 tax: taxArray,
             });
@@ -283,7 +238,7 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
                 <h3>total</h3>
                 <p>{text.notice}</p>
                 <div className='price'>
-                    {price + extraPrice + taxPrice}€
+                    {price + extraPrice + taxPrice + 15}€
                 </div>
             </Price>
             <Form
@@ -292,10 +247,7 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
                 name="reservation"
                 layout="vertical"
                 requiredMark={false}
-                initialValues={{
-                    remember: true,
-                    ...currentReservation
-                }}
+                initialValues={currentReservation}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >
@@ -308,7 +260,7 @@ function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, set
                             setTaxPrice={setTaxPrice} />
                         <Addons text={text} days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
                         <Client text={text} />
-                        <Driver text={text} drivers={extras.includes(3) ? 2 : 1} />
+                        <Driver text={text} drivers={extras.includes(2) ? 2 : 1} />
                     </>
                 }
 

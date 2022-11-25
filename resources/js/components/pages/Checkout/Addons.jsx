@@ -192,7 +192,6 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
                         <ul>
                             <li>{text.insurance.basic.items[0]}</li>
                             <li>{text.insurance.basic.items[1]}</li>
-                            <li>{text.insurance.basic.items[2]}</li>
                         </ul>
                         <Button disabled style={{ margin: "auto" }}>
                             {text.insurance.button}

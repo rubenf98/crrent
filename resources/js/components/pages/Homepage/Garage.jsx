@@ -314,7 +314,7 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
 
 
     }
-    console.log(currentFactor);
+
     return (
         <Container id="garage">
             <TitleContainer>
