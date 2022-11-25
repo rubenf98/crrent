@@ -17,6 +17,7 @@ class CreateBlockDatesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('level_id');
             $table->date('date');
+            $table->boolean('fill')->default(false);
             $table->timestamps();
 
             $table->foreign('level_id')->references('id')->on('levels');

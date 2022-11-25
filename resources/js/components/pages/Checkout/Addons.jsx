@@ -144,13 +144,17 @@ const Package = styled.div`
         text-align: center;
         margin: auto;
         margin-top: 5px;
+        
+    }
+
+    .discount {
         text-decoration: line-through;
     }
 `;
 
 
 
-function Addons({ theme, fetchExtras, data, extras, setExtras, extraPrice,
+function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
     setExtraPrice, days }) {
 
     useEffect(() => {
@@ -179,19 +183,19 @@ function Addons({ theme, fetchExtras, data, extras, setExtras, extraPrice,
         <Container underline={theme.secundary}>
 
             <Insurance>
-                <TitleContainer title="Seguro" />
+                <TitleContainer title={text.titles[1]} />
 
 
                 <PackageContainer>
                     <Package>
-                        <h3>Basico</h3>
+                        <h3>{text.insurance.basic.title}</h3>
                         <ul>
-                            <li>Collision Damage Protection</li>
-                            <li>Thelf Protection</li>
-                            <li>Windscreen, Glass</li>
+                            <li>{text.insurance.basic.items[0]}</li>
+                            <li>{text.insurance.basic.items[1]}</li>
+                            <li>{text.insurance.basic.items[2]}</li>
                         </ul>
                         <Button disabled style={{ margin: "auto" }}>
-                            Selecionar
+                            {text.insurance.button}
                         </Button>
                         <p>
                             TOTAL 12.00€
@@ -199,32 +203,32 @@ function Addons({ theme, fetchExtras, data, extras, setExtras, extraPrice,
                     </Package>
 
                     <Package border={theme.primary} active>
-                        <h3>Premium</h3>
+                        <h3>{text.insurance.premium.title}</h3>
                         <ul>
-                            <li>Collision Damage Protection</li>
-                            <li>Thelf Protection</li>
-                            <li>Windscreen, Glass</li>
+                            <li>{text.insurance.premium.items[0]}</li>
+                            <li>{text.insurance.premium.items[1]}</li>
+                            <li>{text.insurance.premium.items[2]}</li>
                         </ul>
                         <Button disabled type='default' style={{ margin: "auto" }} background={theme.primary}>
-                            Selecionado
+                            {text.insurance.button}
                         </Button>
-                        <p>
+                        <p className='discount'>
                             TOTAL 0.00€
                         </p>
                     </Package>
                 </PackageContainer>
             </Insurance>
             <Extra>
-                <TitleContainer title="Extras" />
+                <TitleContainer title={text.titles[2]} />
 
                 {data.map((extra) => (
                     <div key={extra.id}>
                         {extra.visible ?
                             <div className='checkbox-container'>
                                 <Checkbox onChange={(e) => handleClick(e.target.checked, extra)}>
-                                    {extra.name}
+                                    {text.extras[extra.name]}
                                 </Checkbox>
-                                <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>por</span> {extra.type}</span></p>
+                                <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>{text.prices.per}</span> {text.prices[extra.type]}</span></p>
                             </div>
                             : <></>}
                     </div>

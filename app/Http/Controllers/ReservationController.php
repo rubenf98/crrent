@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Jobs\HandleReservation;
 use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Client;
@@ -22,9 +23,9 @@ class ReservationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return ReservationResource::collection(Reservation::with("car")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 
     /**
@@ -38,7 +39,6 @@ class ReservationController extends Controller
         $validator = $request->validated();
 
         DB::beginTransaction();
-
         try {
             $client = Client::store($validator);
             $drivers = Driver::store($validator);
@@ -70,6 +70,8 @@ class ReservationController extends Controller
 
             $reservation->extras()->attach($validator["extras"]);
             $reservation->drivers()->attach($drivers);
+            HandleReservation::dispatch($reservation);
+
             DB::commit();
 
             return new ReservationResource($reservation);
@@ -113,6 +115,8 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
-        //
+        $reservation->delete();
+
+        return response()->json(null, 204);
     }
 }

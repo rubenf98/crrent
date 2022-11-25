@@ -2,11 +2,11 @@ import { types } from "./types";
 import axios from "axios";
 import { stringify } from "query-string";
 
-export const fetchReservations = (filters = {}) => ({
+export const fetchReservations = (page = 1, filters = {}) => ({
     type: types.FETCH_RESERVATIONS,
-    payload: axios.get(`${window.location.origin}/api/reservations${stringify(filters, {
+    payload: axios.get(`${window.location.origin}/api/reservations?${stringify(filters, {
         arrayFormat: "index"
-    })}`)
+    })}&page=${page}`)
 })
 
 export const fetchReservation = (id) => ({
@@ -38,5 +38,10 @@ export const setCurrentReservation = (data) => ({
 
 export const setCurrentReservationValues = (data) => ({
     type: types.SET_CURRENT_RESERVATION_VALUES,
+    payload: data,
+});
+
+export const setCurrentErrors = (data) => ({
+    type: types.SET_CURRENT_ERRORS,
     payload: data,
 });

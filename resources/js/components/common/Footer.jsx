@@ -147,6 +147,7 @@ const MobileButtonContainer = styled.div`
 `;
 
 function Footer({ theme }) {
+    const { text } = require('../../../assets/' + localStorage.language + "/footer");
 
     const ItemContainer = ({ field, value }) => (
         <Item>
@@ -157,18 +158,17 @@ function Footer({ theme }) {
         <Container id="contact">
             <Content>
                 <InfoContainer color={theme.primary}>
-                    <h2>Entre em contacto
-                        <br /> connosco</h2>
+                    {text.title}
 
-                    <ItemContainer field="Telemóvel:" value="+351 934 953 682" />
-                    <ItemContainer field="Endereço:" value="Av. do Infante 19B · 936 716 627" />
-                    <ItemContainer field="Email:" value="info@cr-rent.com" />
-                    <ItemContainer field="Horário de funcionamento:" value={(<span>Todos os dias <br /> 07h - 22h</span>)} />
+                    <ItemContainer field={text.items[0].name} value={text.items[0].value} />
+                    <ItemContainer field={text.items[1].name} value={text.items[1].value} />
+                    <ItemContainer field={text.items[2].name} value={text.items[2].value} />
+                    <ItemContainer field={text.items[3].name} value={text.items[3].value} />
                     <ItemContainer field="" value={(
                         <DesktopButtonContainer>
                             <Button background={theme.primary}>
                                 <a href="mailto:info@cr-rent.com" target="_blank" >
-                                    vamos falar
+                                    {text.button}
                                 </a>
                             </Button>
                         </DesktopButtonContainer>
@@ -180,7 +180,7 @@ function Footer({ theme }) {
                 <MobileButtonContainer>
                     <Button background={theme.primary}>
                         <a href="mailto:info@cr-rent.com" target="_blank" >
-                            vamos falar
+                            {text.button}
                         </a>
                     </Button>
                 </MobileButtonContainer>

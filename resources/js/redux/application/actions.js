@@ -18,6 +18,12 @@ export function handleMenu(state) {
     };
 }
 
+export function setLanguage(value) {
+    return {
+        type: types.SET_LANGUAGE, payload: value
+    };
+}
+
 export function handleForm(state, activity = []) {
     return {
         type: types.HANDLE_FORM, payload: [state, activity]

@@ -23,66 +23,60 @@ const rules = {
     postal_code: [{ required: true, message: 'Please input your Postal Code!' }],
     email: [{ required: true, message: 'Please input your Email!' }, { type: "email" }],
     local_address: [{ required: true, message: 'Please input your Local Address!' }],
-    company: [{ required: true }],
 };
 
 
-function Client({ theme }) {
-
+function Client({ text }) {
+    var placeholder = text.placeholder.client;
     return (
         <Container>
-            <TitleContainer title="Informação do Cliente" />
+            <TitleContainer title={text.titles[3]} />
             <Row type="flex" gutter={64}>
                 <Col xs={24} md={12}>
-                    <Form.Item label="Nome*" name="name" rules={rules.name}>
+                    <Form.Item label={placeholder.name} name="name" rules={rules.name}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="ID/Passaporte*" name="cc" rules={rules.cc}>
+                    <Form.Item label={placeholder.cc} name="cc" rules={rules.cc}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="NIF*" name="nif" rules={rules.nif}>
+                    <Form.Item label={placeholder.nif} name="nif" rules={rules.nif}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Morada*" name="address" rules={rules.address}>
+                    <Form.Item label={placeholder.address} name="address" rules={rules.address}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="País*" name="country" rules={rules.country}>
+                    <Form.Item label={placeholder.country} name="country" rules={rules.country}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="Código Postal*" name="postal_code" rules={rules.postal_code}>
+                    <Form.Item label={placeholder.postal_code} name="postal_code" rules={rules.postal_code}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Email*" name="email" rules={rules.email}>
+                    <Form.Item label={placeholder.email} name="email" rules={rules.email}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={6}>
-                    <Form.Item label="Número de telemóvel*" name="phone" rules={rules.name}>
+                    <Form.Item label={placeholder.phone} name="phone" rules={rules.name}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>
 
                 <Col xs={24} md={12}>
-                    <Form.Item label="Endereço local*" name="local_address" rules={rules.local_address}>
-                        <Input size="large" />
-                    </Form.Item>
-                </Col>
-                <Col xs={24} md={6}>
-                    <Form.Item label="Companhia" name="company" rules={rules.company}>
+                    <Form.Item label={placeholder.local_address} name="local_address" rules={rules.local_address}>
                         <Input size="large" />
                     </Form.Item>
                 </Col>

@@ -14,6 +14,10 @@ import DashboardLayout from "./components/pages/Dashboard/DashboardLayout";
 import Dashboard from "./components/pages/Dashboard/Dashboard";
 import Extra from "./components/pages/Dashboard/Extra/Extra";
 import Car from "./components/pages/Dashboard/Car/Car";
+import Reservation from "./components/pages/Dashboard/Reservation/Reservation";
+import Privacy from "./components/pages/Privacy";
+import Conditions from "./components/pages/Conditions";
+import Block from "./components/pages/Dashboard/Block/Block";
 export const history = createBrowserHistory();
 
 function Router() {
@@ -28,9 +32,13 @@ function Router() {
                             <DashboardLayout><Dashboard /></DashboardLayout>
                         }
                     />
+                    <Route path="/painel/datas" element={<DashboardLayout><Block /></DashboardLayout>} />
+                    <Route path="/painel/reservas" element={<DashboardLayout><Reservation /></DashboardLayout>} />
                     <Route path="/painel/extras" element={<DashboardLayout><Extra /></DashboardLayout>} />
                     <Route path="/painel/carros" element={<DashboardLayout><Car /></DashboardLayout>} />
                     <Route path="/login" element={<Login />} />
+                    <Route exact path="/privacy" element={<Layout><Privacy /></Layout>} />
+                    <Route exact path="/conditions" element={<Layout><Conditions /></Layout>} />
                     <Route exact path="/summary" element={<Layout><Summary /></Layout>} />
                     <Route exact path="/garage" element={<Layout><Garage /></Layout>} />
                     <Route exact path="/checkout" element={<Layout><Checkout /></Layout>} />

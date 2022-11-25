@@ -2,9 +2,16 @@ import { types } from "./types";
 import axios from "axios";
 import { stringify } from "query-string";
 
-export const fetchCars = (filters = {}) => ({
+export const fetchCars = (page = 1, filters = {}) => ({
     type: types.FETCH_CARS,
     payload: axios.get(`${window.location.origin}/api/cars?${stringify(filters, {
+        arrayFormat: "index"
+    })}&page=${page}`)
+})
+
+export const fetchCarsSelector = (filters = {}) => ({
+    type: types.FETCH_CARS_SELECTOR,
+    payload: axios.get(`${window.location.origin}/api/selector/cars?${stringify(filters, {
         arrayFormat: "index"
     })}`)
 })

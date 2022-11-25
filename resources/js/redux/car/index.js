@@ -2,14 +2,17 @@ import { types } from "./types";
 
 export const initialState = {
     data: [],
+    current: [],
     loading: false,
-    current: {},
+    selector: [],
+    meta: {}
 }
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.DELETE_CAR}_PENDING`:
         case `${types.UPDATE_CAR}_PENDING`:
+        case `${types.FETCH_CARS_SELECTOR}_PENDING`:
         case `${types.FETCH_CARS}_PENDING`:
         case `${types.FETCH_CAR}_PENDING`:
             return {
@@ -58,6 +61,14 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 data: []
             };
+
+        case `${types.FETCH_CARS_SELECTOR}_REJECTED`:
+            return {
+                ...state,
+                loading: false,
+                selector: []
+            };
+
         case `${types.FETCH_CAR}_FULFILLED`:
             return {
                 ...state,
@@ -65,11 +76,19 @@ export default (state = initialState, action = {}) => {
                 current: action.payload.data.data,
             };
 
+        case `${types.FETCH_CARS_SELECTOR}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                selector: action.payload.data.data,
+            };
+
         case `${types.FETCH_CARS}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
                 data: action.payload.data.data,
+                meta: action.payload.data.meta,
             };
 
         case `${types.SET_CURRENT}`:

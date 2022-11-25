@@ -15,7 +15,6 @@ class ExtraSeeder extends Seeder
     public function run()
     {
         $extras = [
-            ['name' => 'Cobertura SCDW', 'price' => 15, 'type' => 'day'],
             ['name' => 'Cobertura vidros e pneus', 'price' => 5, 'type' => 'day'],
             ['name' => 'Condutor adicional', 'price' => 10, 'type' => 'uni'],
             ['name' => 'Cadeira de bébé', 'price' => 4, 'type' => 'day'],

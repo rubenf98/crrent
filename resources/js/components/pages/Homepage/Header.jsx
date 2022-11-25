@@ -188,7 +188,7 @@ const Accent = styled.div`
     }
 `;
 
-function Header({ theme }) {
+function Header({ theme, text }) {
     const [dates, setDates] = useState([undefined, undefined]);
     var navigate = useNavigate();
 
@@ -202,7 +202,7 @@ function Header({ theme }) {
             <Content>
                 <TitleContainer color={theme.primary}>
                     <Accent background={theme.secundary} />
-                    <h1>Rent o <br /> seu carro <br />com razão</h1>
+                    {text.title}
 
                 </TitleContainer>
                 <RangePickerContainer>
@@ -211,8 +211,8 @@ function Header({ theme }) {
                         <MailIcon />
                         <InstagramIcon />
                     </LinksContainer>
-                    <DateFormItem dates={dates} setDates={setDates} />
-                    <Search onClick={handleSearch} background={theme.primary} type='submit'>pesquisar</Search>
+                    <DateFormItem text={text} dates={dates} setDates={setDates} />
+                    <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button}</Search>
                 </RangePickerContainer>
             </Content>
 

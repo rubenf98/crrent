@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PrivateRoute from '../../common/PrivateRoute';
 import moment from "moment";
 import Navbar from './Navbar';
+import ThemeContainer from '../../ThemeContainer';
 
 const Container = styled.div`
     width: 100%;
@@ -39,17 +40,19 @@ const Footer = styled.section`
 
 function DashboardLayout({ children }) {
     return (
-        <PrivateRoute >
-            <Container>
-                <Navbar />
-                <Content>{children}</Content>
-                <Footer>
-                    <img src="/image/logo.png" alt="logo" />
-                    <p>© {moment().year()} CR Rent. All Rights Reserved.</p>
-                </Footer>
-            </Container>
+        <ThemeContainer>
+            <PrivateRoute >
+                <Container>
+                    <Navbar />
+                    <Content>{children}</Content>
+                    <Footer>
+                        <img src="/image/logo.png" alt="logo" />
+                        <p>© {moment().year()} CR Rent. All Rights Reserved.</p>
+                    </Footer>
+                </Container>
 
-        </PrivateRoute>
+            </PrivateRoute>
+        </ThemeContainer>
     )
 }
 

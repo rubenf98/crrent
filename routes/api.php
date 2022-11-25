@@ -28,6 +28,9 @@ Route::post('logout', 'App\Http\Controllers\AuthController@logout');
 Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
 Route::get('me', 'App\Http\Controllers\AuthController@me');
 
+Route::get('/selector/cars', 'App\Http\Controllers\CarController@selector');
+Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@selector');
+
 Route::apiResource('cars', CarController::class);
 Route::apiResource('extras', ExtraController::class);
 Route::apiResource('reservations', ReservationController::class);

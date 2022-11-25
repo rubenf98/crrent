@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Car;
 use App\Models\Extra;
+use App\Models\Promotion;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -34,13 +35,35 @@ class ReservationRequest extends FormRequest
         $out = new ConsoleOutput();
         $out->writeln($days);
 
+        $promotions = Promotion::all();
+
 
         // $out->writeln($level);
         $prices = $level->prices;
+        $index = 0;
+        $init = Carbon::parse($this->date[0]);
+        $factors = [];
+        while ($index < $days) {
+            $factor = 1;
+            foreach ($promotions as $promotion) {
+                $min = Carbon::parse($promotion->start)->startOfDay();
+                $max = Carbon::parse($promotion->end)->endOfDay();
 
-        foreach ($prices as $price) {
+                if ($init->between($min, $max)) {
+                    $factor = $promotion->factor;
+                }
+            }
+
+            array_push($factors, $factor);
+            $init->addDay();
+            $index++;
+        }
+        $out->writeln($factors);
+        foreach ($prices as $index => $price) {
             if ($days >= $price->min && $days <= $price->max) {
-                $value = $days * $price->price;
+
+
+                $value = $days * $price->price * $factors[$index];
             }
         }
         $out->writeln($value);
@@ -83,7 +106,6 @@ class ReservationRequest extends FormRequest
             'email' => 'required|string',
             'phone' => 'required|string',
             'local_address' => 'required|string',
-            'company' => 'required|string',
 
             'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day'),
             'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
@@ -93,8 +115,8 @@ class ReservationRequest extends FormRequest
             'car_id' =>  'required|integer|exists:cars,id',
             'price' => 'required|numeric',
 
-            'extras' => 'required|array',
-            'extras.*' => 'required|integer|exists:extras,id',
+            'extras' => 'nullable|array',
+            'extras.*' => 'integer|exists:extras,id',
 
             'drivers' => 'required|array|min:1',
             'drivers.*.name' => 'required|string',

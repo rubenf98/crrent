@@ -5,6 +5,7 @@ export const initialState = {
     menuVisible: false,
     formVisible: false,
     activityInitialValue: [],
+    language: localStorage.language,
 }
 
 export default (state = initialState, action = {}) => {
@@ -20,6 +21,11 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 menuVisible: action.payload,
+            };
+        case `${types.SET_LANGUAGE}`:
+            return {
+                ...state,
+                language: action.payload,
             };
 
         case `${types.HANDLE_FORM}`:

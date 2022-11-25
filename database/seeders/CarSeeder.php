@@ -57,16 +57,16 @@ class CarSeeder extends Seeder
                 'gas' => 'gasoline', 'people' => 3, 'doors' => 3, 'shift_mode' => 'manual',
                 'image' => '/image/garage/fiat_panda.png'
             ],
+
+
             [
                 'title' => 'Toyota Yaris',
-                'subtitle' => 'iQ',
-                'level_id' => 1,
+                'registration' => 'AU-37-DF',
+                'subtitle' => 'Comfort Plus',
+                'level_id' => 2,
                 'gas' => 'gasoline', 'people' => 3, 'doors' => 3, 'shift_mode' => 'manual',
                 'image' => '/image/garage/yaris.png'
             ],
-
-
-
             [
                 'title' => 'Toyota Aygo',
                 'subtitle' => 'X',
@@ -74,18 +74,38 @@ class CarSeeder extends Seeder
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
                 'image' => '/image/garage/aygo.png'
             ],
+
+
+
+
             [
                 'title' => 'Dacia Sandero',
-                'subtitle' => 'Basic',
-                'level_id' => 2,
+                'registration' => 'AT-39-XU',
+                'subtitle' => 'Comfort',
+                'level_id' => 3,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
                 'image' => '/image/garage/sandero.png'
             ],
-
-
             [
-                'title' => 'Renault Clio',
-                'subtitle' => 'v5',
+                'title' => 'Renault Clio V',
+                'registration' => 'AO-73-DD',
+                'subtitle' => 'Intens',
+                'level_id' => 3,
+                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
+                'image' => '/image/garage/clio.png'
+            ],
+            [
+                'title' => 'Renault Clio V',
+                'registration' => 'AO-93-DC',
+                'subtitle' => 'Intens',
+                'level_id' => 3,
+                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
+                'image' => '/image/garage/clio.png'
+            ],
+            [
+                'title' => 'Renault Clio V',
+                'registration' => 'AO-51-DD',
+                'subtitle' => 'Intens',
                 'level_id' => 3,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
                 'image' => '/image/garage/clio.png'
@@ -102,8 +122,17 @@ class CarSeeder extends Seeder
 
 
             [
-                'title' => 'Dacia Sandero',
-                'subtitle' => 'Stepway',
+                'title' => 'Dacia Sandero III',
+                'subtitle' => 'Stepway Comfort',
+                'registration' => 'AT-60-IQ',
+                'level_id' => 4,
+                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
+                'image' => '/image/garage/daciastep.png'
+            ],
+            [
+                'title' => 'Dacia Sandero III',
+                'subtitle' => 'Stepway Comfort',
+                'registration' => 'AT-94-IQ',
                 'level_id' => 4,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
                 'image' => '/image/garage/daciastep.png'

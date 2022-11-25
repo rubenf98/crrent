@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Form, message } from 'antd';
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
@@ -12,7 +12,8 @@ import { connect } from "react-redux";
 import moment from "moment";
 import { setCurrentReservation, setCurrentReservationValues } from "../../../redux/reservation/actions";
 import { setCurrentPromotion } from "../../../redux/promotion/actions";
-import { fetchBlocks } from "../../../redux/block/actions";
+import { fetchBlocksSelector } from "../../../redux/block/actions";
+import { fetchExtras } from '../../../redux/extra/actions';
 
 const Container = styled.section`
     width: 100%;
@@ -93,7 +94,9 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservationValues, extrasData, fetchBlocks, promotions }) {
+function Checkout({ loadingExtras, language, fetchExtras, theme, currentCar, setCurrentReservation, setCurrentReservationValues, extrasData, fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
+    const { text } = require('../../../../assets/' + language + "/checkout");
+
     const [form] = Form.useForm();
 
     const [extras, setExtras] = useState([])
@@ -117,14 +120,34 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
         } else {
             var from = searchParams.get("from");
             var to = searchParams.get("to");
-
-            fetchBlocks(currentCar.level.id);
+            fetchExtras();
+            fetchBlocksSelector(currentCar.level.id);
 
             if (from && to) {
                 handleDate(moment(from), moment(to), true);
             }
         }
     }, [])
+
+    useEffect(() => {
+        if (Object.values(currentErrors).length) {
+            let messages = [];
+
+            Object.values(currentErrors).map(function (message) {
+                messages.push(message[0])
+            })
+            message.error(messages.map((message) => (
+                <span>{message}</span>
+            )));
+
+            handleDate(moment(currentReservation.pickup_date), moment(currentReservation.return_date), true);
+
+            currentReservation.extras.map((element) => {
+                console.log(element);
+            })
+        }
+    }, [currentErrors])
+
 
 
     const onDateChange = (e) => {
@@ -137,14 +160,15 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
 
         if (initDate) {
             form.setFieldValue('date', [from, to])
-            setDays(difference);
         }
-
+        setDays(difference);
         var value = retrievePrice(currentCar.level.prices, difference, factors);
         setPrice(value);
 
-        var response = handleTimeTax([[...tax], taxPrice], from.hour(), 9, 15);
-        var data = handleTimeTax(response, to.hour(), 7, 15);
+        var extra = extrasData.find((element) => element.id == 8);
+
+        var response = handleTimeTax([[...tax], taxPrice], from.hour(), 8, extra.price);
+        var data = handleTimeTax(response, to.hour(), 6, extra.price);
 
         setTax(data[0]);
         setTaxPrice(data[1]);
@@ -190,11 +214,10 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
             carPrice += day * factors[index];
         });
 
-        return carPrice + extraPrice;
+        return carPrice;
     }
 
     function getPromotions(start, days) {
-
         var init = moment(start);
         var min = undefined;
         var max = undefined;
@@ -254,10 +277,11 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
 
     return (
         <Container>
-            <Title>Dados da sua reserva</Title>
+
+            <Title>{text.titles[0]}</Title>
             <Price visible={price} background={theme.primary}>
                 <h3>total</h3>
-                <p>Inclui taxa de 22%</p>
+                <p>{text.notice}</p>
                 <div className='price'>
                     {price + extraPrice + taxPrice}€
                 </div>
@@ -270,27 +294,29 @@ function Checkout({ theme, currentCar, setCurrentReservation, setCurrentReservat
                 requiredMark={false}
                 initialValues={{
                     remember: true,
+                    ...currentReservation
                 }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >
                 {Object.values(currentCar).length &&
                     <>
-                        <GeneralInfo form={form} handleDateChange={onDateChange} car={currentCar}
+                        <GeneralInfo text={text} form={form} handleDateChange={onDateChange} car={currentCar}
                             tax={tax}
                             setTax={setTax}
                             taxPrice={taxPrice}
                             setTaxPrice={setTaxPrice} />
-                        <Addons days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
-                        <Client />
-                        <Driver drivers={extras.includes(3) ? 2 : 1} />
+                        <Addons text={text} days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
+                        <Client text={text} />
+                        <Driver text={text} drivers={extras.includes(3) ? 2 : 1} />
                     </>
                 }
 
                 <ButtonContainer>
-                    <Button background={theme.primary} type="primary"> reservar </Button>
+                    <Button background={theme.primary} type="primary"> {text.button} </Button>
                 </ButtonContainer>
             </Form>
+
         </Container>
     )
 }
@@ -300,16 +326,20 @@ const mapDispatchToProps = (dispatch) => {
         setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
         setCurrentReservationValues: (data) => dispatch(setCurrentReservationValues(data)),
         setCurrentPromotion: (data) => dispatch(setCurrentPromotion(data)),
-        fetchBlocks: (level) => dispatch(fetchBlocks(level)),
+        fetchBlocksSelector: (level) => dispatch(fetchBlocksSelector(level)),
+        fetchExtras: () => dispatch(fetchExtras()),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
         currentCar: state.car.current,
-        loading: state.car.loading,
         extrasData: state.extra.data,
-        promotions: state.promotion.data
+        loadingExtras: state.extra.loading,
+        promotions: state.promotion.data,
+        language: state.application.language,
+        currentReservation: state.reservation.current,
+        currentErrors: state.reservation.errors,
     };
 };
 

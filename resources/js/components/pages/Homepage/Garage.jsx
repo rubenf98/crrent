@@ -3,7 +3,7 @@ import styled, { withTheme, keyframes } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { dimensions, getCarouselBreakpoints } from '../../helper';
 import { maxWidthStyle, titleStyle, SecundaryButton } from '../../styles';
-import { fetchCars, setCurrent } from "../../../redux/car/actions";
+import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
 import { PreviousIcon, NextIcon } from '../../../icons';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -245,15 +245,31 @@ const CarContainer = styled.div`
     }
 `;
 
-function Garage({ theme, fetchCars, setCurrent, data }) {
+function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }) {
     const carouselRef = useRef(null);
     const [currentSlides, setCurrentSlides] = useState([1, 3])
+    const [currentFactor, setCurrentFactor] = useState(1)
     const [seeMore, setSeeMore] = useState(false)
     var navigate = useNavigate();
 
     useEffect(() => {
-        fetchCars();
+        fetchCarsSelector();
     }, []);
+
+    useEffect(() => {
+        if (promotions.length) {
+            var smallerFactor = 1;
+            promotions.map((promotion) => {
+                if (promotion.factor < smallerFactor) {
+                    smallerFactor = promotion.factor;
+                }
+            })
+            setCurrentFactor(smallerFactor);
+
+        }
+
+    }, [promotions]);
+
 
 
     function handleClick(action) {
@@ -283,8 +299,8 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
                 <h4>{info.subtitle}</h4>
 
                 <div className='price-container'>
-                    <p><span>Desde</span>  {info.level.prices[2].price}€ <span>/ dia</span></p>
-                    <button>Reservar</button>
+                    <p><span>{text.car.price[0]}</span>  {info.level.prices[2].price * currentFactor}€ <span>/ {text.car.price[1]}</span></p>
+                    <button>{text.car.button}</button>
                 </div>
             </div>
         </Car>
@@ -298,19 +314,19 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
 
 
     }
-
+    console.log(currentFactor);
     return (
         <Container id="garage">
             <TitleContainer>
-                <h2>Garagem</h2>
+                <h2>{text.title}</h2>
                 <FilterContainer borderColor={theme.primary}>
-                    <Filter background={theme.levels.A}><div className="rectangle" />GAMA A</Filter>
-                    <Filter background={theme.levels.B}><div className="rectangle" />GAMA B</Filter>
-                    <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
-                    <Filter background={theme.levels.D}><div className="rectangle" />GAMA D</Filter>
+                    <Filter background={theme.levels.A}><div className="rectangle" />{text.level} A</Filter>
+                    <Filter background={theme.levels.B}><div className="rectangle" />{text.level} B</Filter>
+                    <Filter background={theme.levels.C}><div className="rectangle" />{text.level} C</Filter>
+                    <Filter background={theme.levels.D}><div className="rectangle" />{text.level} D</Filter>
                     <DesktopButtonContainer>
                         <SecundaryButton type='search' primary={theme.primary} onClick={() => setSeeMore(!seeMore)}>
-                            {seeMore ? "ver menos" : "ver mais"}
+                            {seeMore ? text.button[1] : text.button[0]}
                         </SecundaryButton>
                     </DesktopButtonContainer>
                 </FilterContainer>
@@ -362,15 +378,16 @@ function Garage({ theme, fetchCars, setCurrent, data }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: () => dispatch(fetchCars()),
+        fetchCarsSelector: () => dispatch(fetchCarsSelector()),
         setCurrent: (car) => dispatch(setCurrent(car)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        data: state.car.data,
+        data: state.car.selector,
         loading: state.car.loading,
+        promotions: state.promotion.data,
     };
 };
 

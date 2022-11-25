@@ -57,7 +57,7 @@ const Card = styled.div`
     min-height: 500px;
     display: block;
     padding: 20px;
-    background: linear-gradient(90deg, #fdcf46, #FFC103);		
+    background: #FFC103;		
 	position: relative;	
     border-radius: 8px;
 	box-shadow: 0px 0px 24px #0000005a;
@@ -99,33 +99,6 @@ const Card = styled.div`
         right: 180px;	
         border-radius: 0 72px 0 0;
     }
-
-    .screen__background__shape2 {
-        height: 220px;
-        width: 220px;
-        background: #d4b800;	
-        top: -172px;
-        right: 0;	
-        border-radius: 32px;
-    }
-
-    .screen__background__shape3 {
-        height: 540px;
-        width: 190px;
-        background: linear-gradient(270deg, #fde532, #ffe203);
-        top: -24px;
-        right: 0;	
-        border-radius: 32px;
-    }
-
-    .screen__background__shape4 {
-        height: 400px;
-        width: 200px;
-        background: #c69400;	
-        top: 420px;
-        right: 50px;	
-        border-radius: 60px;
-    }
 `;
 
 
@@ -138,7 +111,7 @@ const Button = styled.button`
     color: white;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 0px;
 
     &:hover {
         background: rgb(22, 22, 173);

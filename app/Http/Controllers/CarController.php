@@ -6,6 +6,7 @@ use App\Http\Resources\CarResource;
 use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Level;
+use App\QueryFilters\CarFilters;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -20,6 +21,16 @@ class CarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
+    {
+        return CarResource::collection(Car::with('level')->paginate(5));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function selector(Request $request)
     {
         $blockedLevels = [];
 
@@ -42,10 +53,11 @@ class CarController extends Controller
                 }
             }
         }
+        $filters = CarFilters::hydrate($request->query());
 
-        return CarResource::collection(Car::with('level')->whereHas('level', function ($query) use ($blockedLevels) {
+        return CarResource::collection(Car::filterBy($filters)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
             $query->whereNotIn('id', $blockedLevels);
-        })->get());
+        })->groupBy('title')->get());
     }
 
     /**
@@ -111,6 +123,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return response()->json(null, 204);
     }
 }

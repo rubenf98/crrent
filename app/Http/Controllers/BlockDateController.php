@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BlockDateResource;
 use App\Models\BlockDate;
 use App\Models\Level;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class BlockDateController extends Controller
 {
@@ -15,6 +18,16 @@ class BlockDateController extends Controller
      */
     public function index(Request $request)
     {
+        return BlockDateResource::collection(BlockDate::where('fill', true)->with('level')->paginate(5));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function selector(Request $request)
+    {
         $level = Level::find($request->level_id);
         $treshold = $level->cars()->count();
         $counter = [];
@@ -22,15 +35,18 @@ class BlockDateController extends Controller
         $dates = BlockDate::where('level_id', $level->id)->get();
 
         foreach ($dates as $date) {
-
-            if (!array_key_exists($date->date, $counter)) {
-                $counter[$date->date] = 1;
-            } else {
-                $counter[$date->date] += 1;
-            }
-
-            if ($counter[$date->date] >= $treshold) {
+            if ($date->fill) {
                 array_push($blocked, $date->date);
+            } else {
+                if (!array_key_exists($date->date, $counter)) {
+                    $counter[$date->date] = 1;
+                } else {
+                    $counter[$date->date] += 1;
+                }
+
+                if ($counter[$date->date] >= $treshold) {
+                    array_push($blocked, $date->date);
+                }
             }
         }
 
@@ -55,7 +71,23 @@ class BlockDateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $period = CarbonPeriod::create($request->dates[0], $request->dates[1])->toArray();
+        $levels = $request->levels;
+        $data = [];
+        foreach ($levels as $id => $level) {
+            if ($level) {
+                foreach ($period as $date) {
+                    $blockedDate = BlockDate::create([
+                        'date' => $date->format('Y-m-d'),
+                        'level_id' => $id,
+                        'fill' => 1
+                    ]);
+                    array_push($data, $blockedDate);
+                }
+            }
+        }
+
+        return BlockDateResource::collection(collect($data));
     }
 
     /**
@@ -98,8 +130,10 @@ class BlockDateController extends Controller
      * @param  \App\Models\BlockDate  $blockDate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BlockDate $blockDate)
+    public function destroy(BlockDate $blockedDate)
     {
-        //
+        $blockedDate->delete();
+
+        return response()->json(null, 204);
     }
 }

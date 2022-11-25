@@ -20,12 +20,13 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
             fixed: 'left',
         },
         {
-            title: 'Marca',
-            dataIndex: 'title',
+            title: 'Matrícula',
+            dataIndex: 'registration',
         },
         {
-            title: 'Submarca',
-            dataIndex: 'subtitle',
+            title: 'Título',
+            dataIndex: 'title',
+            render: (title, row) => title + ", " + row.subtitle,
         },
         {
             title: 'Gama',
@@ -33,30 +34,11 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
             render: (level) => level.code,
         },
         {
-            title: 'Combustível',
-            dataIndex: 'gas',
-        },
-        {
-            title: 'Capacidade',
-            dataIndex: 'people',
-        },
-        {
-            title: 'Portas',
-            dataIndex: 'doors',
-        },
-        {
-            title: 'Mudanças',
-            dataIndex: 'shift_mode',
-        },
-        {
-            title: 'Tipo',
-            dataIndex: 'type',
-
-        },
-        {
             title: 'Valor',
-            dataIndex: 'price',
-            render: (price) => price + "€",
+            dataIndex: 'level',
+            render: (level) => <div> {level.prices.map((price) => (
+                <p style={{ margin: "0px" }}>{price.min}/{price.max == 10000 ? "--" : price.max} dias - {price.price}€</p>
+            ))} </div>,
         },
         {
             title: 'Ações',

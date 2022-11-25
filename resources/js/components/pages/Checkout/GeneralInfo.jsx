@@ -267,7 +267,7 @@ const rules = {
 };
 
 
-function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
+function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, setTax,
     taxPrice,
     setTaxPrice, blockedDates }) {
     const [customPickup, setCustomPickup] = useState(undefined);
@@ -284,9 +284,9 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
         var id = undefined;
 
         if (itemName == "pickup_place")
-            id = 6;
+            id = 5;
         else
-            id = 8;
+            id = 7;
 
         return id;
     }
@@ -336,6 +336,61 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
         }
     }
 
+    const handleDateReset = (isOpen) => {
+        if (isOpen) {
+            if (dates && (dates[0] && dates[1])) {
+                setDates(null);
+            }
+        }
+    }
+
+    const isDateDisabled = (current) => {
+        if (!car.registration) {
+            return true
+        }
+        else {
+            let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
+
+            if (isBlocked) {
+                return true
+            } else {
+                let tomorrow = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");
+
+                if (current && (current.isBefore(tomorrow))) {
+                    return true
+                } else {
+                    let tooEarly = false;
+                    let tooLate = false;
+
+                    if (dates) {
+                        tooLate = dates[0] && current.diff(dates[0], 'days') > 365;
+                        tooEarly = dates[0] && current.diff(dates[0], 'days') < 2;
+
+                        var currentBlockedDate = null;
+                        for (let index = 0; index < blockedDates.length; index++) {
+                            var blockedDate = moment(blockedDates[index]);
+
+                            if (blockedDate.isAfter(dates[0])) {
+                                currentBlockedDate = blockedDate;
+                                break;
+                            }
+                        }
+
+                        if (currentBlockedDate) {
+                            if (current.isAfter(currentBlockedDate)) {
+                                tooLate = true;
+                            }
+                        }
+
+                    }
+
+                    return !!tooEarly || !!tooLate;
+                }
+            }
+        }
+    }
+
+
     return (
         <Container>
 
@@ -348,8 +403,8 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                     <h2>{car.title}</h2>
                     <h3>{car.subtitle}</h3>
                     <IconContainer border={theme.primary}>
-                        <Icon><div className='border'><ShiftIcon /></div> <p>{car.shift_mode}</p></Icon>
-                        <Icon><div className='border'><GasIcon /></div> <p>{car.gas}</p></Icon>
+                        <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[car.shift_mode]}</p></Icon>
+                        <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[car.gas]}</p></Icon>
                         <Icon><div className='border'><PeopleIcon /></div> <p>{car.people}</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>{car.doors}</p></Icon>
                     </IconContainer>
@@ -358,25 +413,39 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                             <Form.Item name="date" rules={rules.date}>
                                 <RangePicker
                                     onChange={handleDateChange}
-                                    showTime={{ format: "HH:mm" }}
+                                    showTime={{ format: "HH:mm", hideDisabledOptions: true }}
                                     minuteStep={30}
                                     format="YYYY-MM-DD HH:mm"
-                                    placeholder={["data levantamento", "data devolução"]}
+                                    placeholder={text.placeholder.date}
                                     suffixIcon={(<></>)}
+                                    onOpenChange={handleDateReset}
                                     onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={(current) => {
-                                        let customDate = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");
-                                        let tooEarly = false;
-                                        let tooLate = false
-                                        if (dates) {
-                                            tooLate = dates[0] && current.diff(dates[0], 'days') > 365;
-                                            tooEarly = dates[0] && current.diff(dates[0], 'days') < 2;
-                                        }
-                                        let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"))
-                                        return current && (current < moment(customDate, "YYYY-MM-DD HH:mm")) || (!!tooEarly || !!tooLate) || isBlocked;
-                                    }}
-                                    disabledTime={() => ({
-                                        disabledHours: () => [0, 1, 2, 3, 4, 5, 6, 23],
+                                    disabledDate={isDateDisabled}
+                                    disabledTime={(endDate, type) => ({
+                                        disabledHours: () => {
+                                            if (type == "end" && dates && endDate) {
+                                                var tooEarly = dates[0] && moment(endDate).diff(dates[0], 'days') == 1;
+
+                                                var hour = 0;
+                                                var blocked = [];
+                                                var initHour = dates[0].hour();
+
+                                                if (tooEarly) {
+                                                    while (hour < 24) {
+                                                        if (hour < initHour) {
+                                                            blocked.push(hour);
+                                                        }
+                                                        hour++;
+                                                    }
+                                                }
+
+                                                return blocked.concat([0, 1, 2, 3, 4, 5, 6, 23])
+
+                                            }
+
+                                            return [0, 1, 2, 3, 4, 5, 6, 23];
+                                        },
+
                                     })}
                                 />
                             </Form.Item>
@@ -390,12 +459,12 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                         <Divider style={{ margin: '12px 0' }} />
                                         <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
                                             <Col span={12}>
-                                                <Input onChange={(e) => setCustomPickup(e.target.value)} value={customPickup} size="large" placeholder="Please enter an address or hotel name" />
+                                                <Input onChange={(e) => setCustomPickup(e.target.value)} value={customPickup} size="large" placeholder={text.placeholder.pickup_place.placeholder} />
                                             </Col>
                                             <Col span={10}>
                                                 <Radio.Group onChange={(e) => setCustomPickupTax(e.target.value)} value={customPickupTax}>
                                                     <Radio value={1}>Funchal</Radio>
-                                                    <Radio value={2}>Not Funchal</Radio>
+                                                    <Radio value={2}>{text.placeholder.pickup_place.tax} Funchal</Radio>
                                                 </Radio.Group>
                                             </Col>
                                             <Col span={2}>
@@ -405,9 +474,9 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                             </Col>
                                         </Row>
                                     </>
-                                )} placeholder='Local Levantamento'>
-                                    <Select.Option value="aeroporto">Aeroporto</Select.Option>
-                                    <Select.Option value="loja">Loja</Select.Option>
+                                )} placeholder={text.placeholder.pickup_place.label}>
+                                    <Select.Option value="aeroporto">{text.placeholder.pickup_place.options[0]}</Select.Option>
+                                    <Select.Option value="loja">{text.placeholder.pickup_place.options[1]}</Select.Option>
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -419,12 +488,12 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                         <Divider style={{ margin: '12px 0' }} />
                                         <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
                                             <Col span={12}>
-                                                <Input onChange={(e) => setCustomReturn(e.target.value)} value={customReturn} size="large" placeholder="Please enter an address or hotel name" />
+                                                <Input onChange={(e) => setCustomReturn(e.target.value)} value={customReturn} size="large" placeholder={text.placeholder.return_place.placeholder} />
                                             </Col>
                                             <Col span={10}>
                                                 <Radio.Group onChange={(e) => setCustomReturnTax(e.target.value)} value={customReturnTax}>
                                                     <Radio value={1}>Funchal</Radio>
-                                                    <Radio value={2}>Not Funchal</Radio>
+                                                    <Radio value={2}>{text.placeholder.return_place.tax} Funchal</Radio>
                                                 </Radio.Group>
                                             </Col>
                                             <Col span={2}>
@@ -434,9 +503,9 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                             </Col>
                                         </Row>
                                     </>
-                                )} placeholder='Local Devolução'>
-                                    <Select.Option value="aeroporto">Aeroporto</Select.Option>
-                                    <Select.Option value="loja">Loja</Select.Option>
+                                )} placeholder={text.placeholder.return_place.label}>
+                                    <Select.Option value="aeroporto">{text.placeholder.return_place.options[0]}</Select.Option>
+                                    <Select.Option value="loja">{text.placeholder.return_place.options[1]}</Select.Option>
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -457,7 +526,7 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                             format: "HH:mm"
                         }}
                             format="YYYY-MM-DD HH:mm"
-                            placeholder={["data levantamento", "data devolução"]}
+                            placeholder={text.placeholder.date}
                             suffixIcon={(<></>)}
                         />
                     </Form.Item>
@@ -470,12 +539,12 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                 <Divider style={{ margin: '12px 0' }} />
                                 <Row type="flex" align="middle" gutter={16} style={{ padding: '0 10px 6px' }}>
                                     <Col span={12}>
-                                        <Input size="large" placeholder="Please enter an address or hotel name" />
+                                        <Input size="large" placeholder={text.placeholder.pickup_place.placeholder} />
                                     </Col>
                                     <Col span={10}>
                                         <Radio.Group >
                                             <Radio value={1}>Funchal</Radio>
-                                            <Radio value={2}>Not Funchal</Radio>
+                                            <Radio value={2}>{text.placeholder.pickup_place.tax} Funchal</Radio>
                                         </Radio.Group>
                                     </Col>
                                     <Col span={2}>
@@ -485,9 +554,9 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                     </Col>
                                 </Row>
                             </>
-                        )} placeholder='Local Levantamento'>
-                            <Select.Option value="aeroporto">Aeroporto</Select.Option>
-                            <Select.Option value="loja">Loja</Select.Option>
+                        )} placeholder={text.placeholder.pickup_place.label}>
+                            <Select.Option value="aeroporto">{text.placeholder.pickup_place.options[0]}</Select.Option>
+                            <Select.Option value="loja">{text.placeholder.pickup_place.options[1]}</Select.Option>
                         </StyledSelect>
                     </Form.Item>
                 </Col>
@@ -498,25 +567,25 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
                                 {menu}
                                 <Divider style={{ margin: '12px 0' }} />
                                 <Space style={{ padding: '0 10px 6px' }}>
-                                    <StyledInput placeholder="Please enter an address or hotel name" />
+                                    <StyledInput placeholder={text.placeholder.return_place.placeholder} />
                                     <Radio.Group >
                                         <Radio value={1}>Funchal</Radio>
-                                        <Radio value={2}>Not Funchal</Radio>
+                                        <Radio value={2}>{text.placeholder.return_place.tax} Funchal</Radio>
                                     </Radio.Group>
                                     <AddButton type="text" onClick={() => setSelected(true)}>
                                         <img alt="add" src="/icon/add_black.svg" />
                                     </AddButton>
                                 </Space>
                             </>
-                        )} placeholder='Local Devolução'>
-                            <Select.Option value="aeroporto">Aeroporto</Select.Option>
-                            <Select.Option value="loja">Loja</Select.Option>
+                        )} placeholder={text.placeholder.return_place.label}>
+                            <Select.Option value="aeroporto">{text.placeholder.return_place.options[0]}</Select.Option>
+                            <Select.Option value="loja">{text.placeholder.return_place.options[1]}</Select.Option>
                         </StyledSelect>
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
                     <Form.Item name="flight" rules={rules.name}>
-                        <StyledInput prefix={<FlightIcon />} size="large" placeholder='Número de Voo' />
+                        <StyledInput prefix={<FlightIcon />} size="large" placeholder={text.placeholder.flight} />
                     </Form.Item>
                 </Col>
             </MobileContainer>
@@ -527,7 +596,7 @@ function GeneralInfo({ theme, car, handleDateChange, form, extras, tax, setTax,
 const mapStateToProps = (state) => {
     return {
         extras: state.extra.data,
-        blockedDates: state.block.data
+        blockedDates: state.block.selector
     };
 };
 

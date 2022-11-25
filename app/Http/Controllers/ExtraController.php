@@ -81,6 +81,8 @@ class ExtraController extends Controller
      */
     public function destroy(Extra $extra)
     {
-        //
+        $extra->delete();
+
+        return response()->json(null, 204);
     }
 }

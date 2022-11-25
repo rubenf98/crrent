@@ -77,22 +77,14 @@ const Accordion = styled(Collapse)`
     }
 `;
 
-const items = [
-    { question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus." },
-    { question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus." },
-    { question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus." },
-    { question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus." },
-    { question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", answer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus." },
-]
-
-function Faq({ theme }) {
+function Faq({ theme, text }) {
     const [activeKey, setActiveKey] = useState(0)
     return (
         <Container>
             <h2>Faq's</h2>
 
             <Accordion activeKey={activeKey} borderColor={theme.primary} ghost>
-                {items.map((item, index) => (
+                {text.map((item, index) => (
                     <Panel
                         showArrow={false}
                         header={(<div onClick={() => setActiveKey(index)} className='hover-container'>{item.question}</div>)}

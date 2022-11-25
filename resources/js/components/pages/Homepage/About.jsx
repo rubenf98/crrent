@@ -142,7 +142,7 @@ const AboutContainer = styled.div`
     
 `;
 
-function About({ theme }) {
+function About({ theme, text }) {
     return (
         <Container id="about">
             <TitleContainer background={theme.secundary}>
@@ -150,13 +150,13 @@ function About({ theme }) {
                 <div className='info-container'>
                     <div className='accent' />
                     <h2>CR Rent</h2>
-                    <h3>sobre nós</h3>
+                    <h3>{text.title}</h3>
                 </div>
             </TitleContainer>
             <AboutContainer>
                 <div className='info-container'>
-                    <h3>Rent na ilha da Madeira</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. </p>
+                    <h3>{text.subtitle}</h3>
+                    <p>{text.paragraph}</p>
                 </div>
                 <img loading='lazy' src="/image/homepage/about2.jpg" alt="" />
             </AboutContainer>

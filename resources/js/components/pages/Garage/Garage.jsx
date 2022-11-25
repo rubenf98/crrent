@@ -6,9 +6,10 @@ import { Button, maxWidthStyle } from '../../styles';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DateFormItem from '../../common/DateFormItem';
 import { connect } from "react-redux";
-import { fetchCars, setCurrent } from "../../../redux/car/actions";
+import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
 import moment from "moment";
 import { fetchPromotions } from '../../../redux/promotion/actions';
+import { fetchExtras } from '../../../redux/extra/actions';
 
 const Container = styled.section`
     width: 100%;
@@ -146,40 +147,18 @@ const Car = styled.div`
             padding: 0px;
         }
 
-        .title { 
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-
-            h3 {
-                font-weight: 700;
-                font-size: 40px;
-                margin: 0px;
-            }
-
-            
-
-            p {
-                font-size: 20px;
-                font-weight: 700;
-                margin: 10px;
-
-                span {
-                    opacity: .5;
-                    font-weight: 400;
-                }
-
-            }
+        h3 {
+            font-weight: 700;
+            font-size: 40px;
+            margin: 0px;
 
             @media (max-width: ${dimensions.md}) {
+                margin: 0px;
                 margin-top: 10px;
-                
-                h3, p {
-                    font-size: 16px;
-                    margin: 0px;
-                }
+                font-size: 16px;
+
             }
-        } 
+        }
 
         h4 {
             font-weight: 400;
@@ -274,19 +253,20 @@ const Icon = styled.div`
     }
 `;
 const dateFormat = "YYYY-MM-DD HH:mm";
-function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
+function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetchPromotions, language, promotions }) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(1)
+    const [factors, setFactors] = useState([])
     var navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
+    const { text } = require('../../../../assets/' + language + "/garage");
 
     useEffect(() => {
-
-
         var from = searchParams.get("from");
         var to = searchParams.get("to");
 
-        fetchCars({ from: from, to: to });
+
+        fetchCarsSelector({ from: from, to: to, hasRegistration: 1 });
 
         from = moment(from);
         to = moment(to);
@@ -296,17 +276,24 @@ function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
         setDays(difference);
         setDates([from, to]);
 
-        fetchPromotions();
+
+        fetchPromotions().then((response) => {
+            getPromotions(response.action.payload.data.data, from, difference);
+        });
+
+        fetchExtras();
+
     }, [])
 
     const handleSearch = () => {
-
-        fetchCars({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat) });
+        fetchCarsSelector({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat), hasRegistration: true });
 
         var difference = dates[1].diff(dates[0], 'days');
 
         setDays(difference);
         setDates([dates[0], dates[1]]);
+
+        getPromotions(promotions, dates[0], difference)
 
     };
 
@@ -323,8 +310,16 @@ function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
                 value = price.price;
             }
         })
+        // console.log(factors);
+        var array = Array(days).fill(value);
+        var carPrice = 0;
 
-        return [value, value * days];
+        array.map((day, index) => {
+            carPrice += day * factors[index];
+        });
+        // console.log(carPrice);
+
+        return carPrice;
     }
 
     const CarSection = ({ info }) => {
@@ -337,32 +332,28 @@ function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
                 </div>
 
                 <div className='info-container'>
-                    <div className='title'>
-                        <div>
-                            <h3>{info.title}</h3>
-                        </div>
-                        <p>{pricing[0]}€ <span>/ por Dia</span></p>
-                    </div>
+                    <h3>{info.title}</h3>
+
                     <h4>{info.subtitle}</h4>
                     <IconContainer border={theme.primary}>
-                        <Icon><div className='border'><ShiftIcon /></div> <p>{info.shift_mode}</p></Icon>
-                        <Icon><div className='border'><GasIcon /></div> <p>{info.gas}</p></Icon>
+                        <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[info.shift_mode]}</p></Icon>
+                        <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[info.gas]}</p></Icon>
                         <Icon><div className='border'><PeopleIcon /></div> <p>{info.people}</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>{info.doors}</p></Icon>
                     </IconContainer>
 
                     <div className='price'>
                         <div>
-                            <p className='total'>desde</p>
-                            <p className='warning'>Inclui taxa de 22% para {days} dias</p>
+                            <p className='total'>{text.from}</p>
+                            <p className='warning'>{text.notice[0]} {days} {text.notice[1]}</p>
                         </div>
-                        <div className='value'>{pricing[1]}€</div>
+                        <div className='value'>{pricing}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
-                        continuar
+                        {text.button}
                     </Button>
-                    <p className='disclaimer'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p className='disclaimer'>{text.disclaimer}</p>
 
                     <p className='phone'>( +351 ) 934 953 682</p>
 
@@ -371,19 +362,47 @@ function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
         )
     }
 
+    function getPromotions(promo, start, difference) {
+        var init = moment(start);
+        var min = undefined;
+        var max = undefined;
+        var aFactors = Array(difference).fill(1);
+        var index = 0;
+
+        while (index < aFactors.length) {
+            promo.map((promotion) => {
+
+                min = moment(promotion.start).startOf('day');
+                max = moment(promotion.end).endOf('day');
+
+                if (init.isBetween(min, max)) {
+                    aFactors[index] = promotion.factor;
+                }
+            })
+
+            init.add(1, 'days');
+            index++;
+            if (index > 365) {
+                break;
+            }
+        }
+
+        setFactors(aFactors);
+    }
+
     return (
         <Container>
-            <Title>Nossa oferta</Title>
+            <Title>{text.title}</Title>
             <RangePickerContainer>
-                <DateFormItem dates={dates} setDates={setDates} />
-                <Search onClick={handleSearch} background={theme.primary} type='submit'>pesquisar</Search>
+                <DateFormItem text={text.button} dates={dates} setDates={setDates} />
+                <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button.button}</Search>
             </RangePickerContainer>
 
             <FilterContainer borderColor={theme.primary}>
-                <Filter background={theme.levels.A}><div className="rectangle" />GAMA A</Filter>
-                <Filter background={theme.levels.B}><div className="rectangle" />GAMA B</Filter>
-                <Filter background={theme.levels.C}><div className="rectangle" />GAMA C</Filter>
-                <Filter background={theme.levels.D}><div className="rectangle" />GAMA D</Filter>
+                <Filter background={theme.levels.A}><div className="rectangle" />{text.level} A</Filter>
+                <Filter background={theme.levels.B}><div className="rectangle" />{text.level} B</Filter>
+                <Filter background={theme.levels.C}><div className="rectangle" />{text.level} C</Filter>
+                <Filter background={theme.levels.D}><div className="rectangle" />{text.level} D</Filter>
 
             </FilterContainer>
 
@@ -396,16 +415,19 @@ function Garage({ theme, data, fetchCars, setCurrent, fetchPromotions }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: (filters) => dispatch(fetchCars(filters)),
+        fetchCarsSelector: (filters) => dispatch(fetchCarsSelector(filters)),
         setCurrent: (car) => dispatch(setCurrent(car)),
         fetchPromotions: (car) => dispatch(fetchPromotions(car)),
+        fetchExtras: () => dispatch(fetchExtras()),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        data: state.car.data,
+        data: state.car.selector,
         loading: state.car.loading,
+        language: state.application.language,
+        promotions: state.promotion.data
     };
 };
 

@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { MenuIcon } from '../../icons';
 import { connect } from "react-redux";
 import { handleMenu } from "../../redux/application/actions";
+import { setLanguage } from '../../redux/application/actions';
 
 const Container = styled.section`
     width: 100vw;
@@ -27,47 +28,6 @@ const Content = styled.section`
     @media (max-width: ${dimensions.md}) {
         max-height: 60px;
         padding: 0px 20px;
-    }
-`;
-
-const Phone = styled.div`
-    background-color: ${props => props.background};
-    padding: 12px 33px;
-    box-sizing: border-box;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: ${props => props.opacity};
-    pointer-events: ${props => props.opacity ? "auto" : "none"};
-    z-index: ${props => props.opacity ? 10 : -5};
-    transition: all .3s ease;
-
-    @media (max-width: ${dimensions.md}) {
-        display: none;
-    }
-
-    p {
-        margin: 0px;
-    }
-
-    img {
-        margin-right: 15px;
-        width: 20px;
-        height: 20px;
-    }
-
-    @media (max-width: ${dimensions.md}) {
-        font-size: 16px;
-        padding: 8px 16px;
-
-        img {
-            margin-right: 10px;
-            width: 15px;
-            height: 15px;
-        }
     }
 `;
 
@@ -106,6 +66,64 @@ const LinksContainer = styled.div`
     }
     
 `;
+const ButtonContainer = styled.div`
+    opacity: ${props => props.opacity};
+    z-index: ${props => props.opacity ? 10 : -5};
+    transition: all .3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+
+    @media (max-width: ${dimensions.md}) {
+        display: none;
+    }
+
+    .language {
+        transition: all .3s ease;
+        background: ${props => props.background};
+        opacity: .7;
+        box-sizing: border-box;
+        padding: 12px 16px;
+        cursor: pointer;
+        pointer-events: ${props => props.opacity ? "auto" : "none"};
+        text-transform: uppercase;
+    }
+
+    .phone {
+        background-color: ${props => props.background};
+        padding: 12px 33px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: ${props => props.opacity ? "auto" : "none"};
+
+        p {
+            margin: 0px;
+        }
+
+        img {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+        }
+
+        
+    }
+    @media (max-width: ${dimensions.lg}) {
+        font-size: 16px;
+
+        img {
+            margin-right: 10px;
+            width: 15px;
+            height: 15px;
+        }
+    }
+ 
+`;
 
 const MobileMenu = styled.div`
     display: flex;
@@ -122,13 +140,14 @@ const MobileMenu = styled.div`
 
     .language {
         background: ${props => props.background};
-        padding: 8px;
+        padding: 8px 12px;
         box-sizing: border-box;
         color: white;
-        font-size: 13px;
+        font-size: 16px;
         font-weight: 700;
         opacity: .5;
         cursor: pointer;
+        text-transform: uppercase;
     }
 
     @media (min-width: ${dimensions.md}) {
@@ -136,11 +155,17 @@ const MobileMenu = styled.div`
     }    
 `;
 
-function Navbar({ theme, handleMenu }) {
+function Navbar({ theme, handleMenu, setLanguage,
+    language }) {
     const [visibleLinks, setVisibleLinks] = useState(true)
     const [opacityLinks, setOpacityLinks] = useState(1)
     let navigate = useNavigate();
     const { pathname } = useLocation();
+    const { text } = require('../../../assets/' + localStorage.language + "/navbar");
+
+    useEffect(() => {
+        localStorage.setItem("language", language);
+    }, [language])
 
     useEffect(() => {
         if (pathname == "/" && !visibleLinks) {
@@ -179,6 +204,16 @@ function Navbar({ theme, handleMenu }) {
         } else return navigate("/#" + filter);
     }
 
+    const handleLanguage = () => {
+        if (localStorage.language == "pt") {
+            localStorage.setItem("language", "en");
+            setLanguage("en");
+        } else {
+            localStorage.setItem("language", "pt");
+            setLanguage("pt");
+        }
+    }
+
     return (
         <Container>
             <Content>
@@ -186,28 +221,32 @@ function Navbar({ theme, handleMenu }) {
                     <img onClick={() => handleClick("/")} src="/image/logo.png" alt="logo" />
                     {visibleLinks &&
                         <>
-                            <span onClick={() => handleClick('header')}>home</span>
-                            <span onClick={() => handleClick('garage')}>garagem</span>
-                            <span onClick={() => handleClick('about')}>sobre nós</span>
-                            <span onClick={() => handleClick('contact')}>contactos</span>
+                            <span onClick={() => handleClick('header')}>{text.items[0]}</span>
+                            <span onClick={() => handleClick('garage')}>{text.items[1]}</span>
+                            <span onClick={() => handleClick('about')}>{text.items[2]}</span>
+                            <span onClick={() => handleClick('contact')}>{text.items[3]}</span>
                         </>
                     }
 
                 </LinksContainer>
                 <MobileMenu background={theme.primary}>
                     <div className='language'>
-                        PT
+                        {language}
                     </div>
                     <div onClick={() => handleMenu(true)}>
                         <MenuIcon />
                     </div>
 
                 </MobileMenu>
-
-                <Phone background={theme.primary} opacity={opacityLinks}>
-                    <img src="/icon/phone.svg" alt="phone" />
-                    <p>+351 934 953 682</p>
-                </Phone>
+                <ButtonContainer background={theme.primary} opacity={opacityLinks}>
+                    <div className='language' onClick={handleLanguage}>
+                        {language}
+                    </div>
+                    <div className='phone'>
+                        <img src="/icon/phone.svg" alt="phone" />
+                        <p>+351 934 953 682</p>
+                    </div>
+                </ButtonContainer>
             </Content>
         </Container>
     )
@@ -216,8 +255,13 @@ function Navbar({ theme, handleMenu }) {
 const mapDispatchToProps = (dispatch) => {
     return {
         handleMenu: (state) => dispatch(handleMenu(state)),
+        setLanguage: (state) => dispatch(setLanguage(state)),
+    };
+};
+const mapStateToProps = (state) => {
+    return {
+        language: state.application.language,
     };
 };
 
-
-export default connect(null, mapDispatchToProps)(withTheme(Navbar));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Navbar));

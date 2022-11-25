@@ -44,7 +44,7 @@ function Car({ data, loading, meta, fetchCars, deleteCar }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: (filters) => dispatch(fetchCars(filters)),
+        fetchCars: (page, filters) => dispatch(fetchCars(page, filters)),
         deleteCar: (id) => dispatch(deleteCar(id)),
     };
 };

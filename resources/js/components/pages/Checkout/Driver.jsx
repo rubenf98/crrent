@@ -26,8 +26,8 @@ const rules = {
     emission_place: [{ required: true, message: 'Please input your driver license emission place!' }],
 };
 
-function Driver({ theme, drivers }) {
-
+function Driver({ text, drivers }) {
+    var placeholder = text.placeholder.driver;
     return (
         <Container>
             <Form.List name="drivers">
@@ -37,38 +37,38 @@ function Driver({ theme, drivers }) {
                             <Form.List key={key} name={key}>
                                 {() => (
                                     <Section>
-                                        <TitleContainer title={key == 0 ? "Condutor Principal" : "Condutor Adicional"} />
+                                        <TitleContainer title={key == 0 ? text.titles[4] : text.titles[5]} />
                                         <Row type="flex" gutter={64}>
                                             <Col xs={24} md={12}>
-                                                <Form.Item label="Nome*" name="name" rules={rules.name}>
+                                                <Form.Item label={placeholder.name} name="name" rules={rules.name}>
                                                     <Input size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de nascimento*" name="birthday" rules={rules.birthday}>
+                                                <Form.Item label={placeholder.birthday} name="birthday" rules={rules.birthday}>
                                                     <DatePicker size="large" maxDate={moment().subtract(21, "years")} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
                                         <Row type="flex" gutter={64}>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Número Carta Condução*" name="license" rules={rules.license_id}>
+                                                <Form.Item label={placeholder.license} name="license" rules={rules.license_id}>
                                                     <Input size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de Emissão*" name="emission" rules={rules.emission_date}>
+                                                <Form.Item label={placeholder.emission} name="emission" rules={rules.emission_date}>
                                                     <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Data de validade*" name="validity" rules={rules.validity_date}>
+                                                <Form.Item label={placeholder.validity} name="validity" rules={rules.validity_date}>
                                                     <DatePicker size="large" />
                                                 </Form.Item>
                                             </Col>
 
                                             <Col xs={24} md={6}>
-                                                <Form.Item label="Local de Emissão" name="emission_place" rules={rules.emission_place}>
+                                                <Form.Item label={placeholder.emission_place} name="emission_place" rules={rules.emission_place}>
                                                     <Input size="large" />
                                                 </Form.Item>
                                             </Col>

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { dimensions } from '../../helper';
 import { connect } from "react-redux";
 import { useNavigate } from 'react-router-dom'
-import { createReservation } from '../../../redux/reservation/actions';
+import { createReservation, setCurrentErrors } from '../../../redux/reservation/actions';
 import moment from "moment";
 
 const stretch = keyframes`
@@ -307,7 +307,7 @@ const rules = {
 };
 
 
-function Summary({ theme, currentCar, values, currentReservation }) {
+function Summary({ language, theme, currentCar, values, currentReservation, createReservation, setCurrentErrors }) {
     let navigate = useNavigate();
     const [price, setPrice] = useState(0);
     const [privacy, setPrivacy] = useState(false);
@@ -318,7 +318,6 @@ function Summary({ theme, currentCar, values, currentReservation }) {
         { title: "EXTRAS", items: values.extras },
         { title: "TAXAS", items: values.tax },
     ];
-
 
     useEffect(() => {
         if (!Object.values(currentCar).length) {
@@ -343,8 +342,11 @@ function Summary({ theme, currentCar, values, currentReservation }) {
         data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
 
         createReservation({ ...data, car_id: currentCar.id }).then((response) => {
-            console.log(response);
-        })
+            // console.log(response);
+        }).catch((errors) => {
+            setCurrentErrors(errors.response.data.errors);
+            navigate("/checkout");
+        });
     }
 
 
@@ -402,9 +404,9 @@ function Summary({ theme, currentCar, values, currentReservation }) {
                 }
                 <PolicyContainer>
 
-                    <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>Li, compreendi e concordo com os <Link to="/privacy">Política de Privacidade</Link></Checkbox>
+                    <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>Li, compreendi e concordo com os <a href="/privacy" target="_blank">Política de Privacidade</a></Checkbox>
 
-                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>Confirmo que li, compreendi e concordo com os <Link to="/conditions">Termos e Condições da CR Rent</Link></Checkbox>
+                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>Confirmo que li, compreendi e concordo com os <a href="/conditions" target="_blank">Termos e Condições da CR Rent</a></Checkbox>
 
                 </PolicyContainer>
 
@@ -462,6 +464,7 @@ function Summary({ theme, currentCar, values, currentReservation }) {
 const mapDispatchToProps = (dispatch) => {
     return {
         createReservation: (data) => dispatch(createReservation(data)),
+        setCurrentErrors: (data) => dispatch(setCurrentErrors(data)),
     };
 };
 
@@ -471,6 +474,7 @@ const mapStateToProps = (state) => {
         loading: state.reservation.loading,
         values: state.reservation.values,
         currentReservation: state.reservation.current,
+        language: state.application.language,
     };
 };
 
