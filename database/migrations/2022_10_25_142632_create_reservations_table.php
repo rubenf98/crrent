@@ -15,6 +15,7 @@ class CreateReservationsTable extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
+            $table->string('token')->unique();
             $table->datetime('pickup_date');
             $table->datetime('return_date');
             $table->string('pickup_place');
@@ -23,6 +24,7 @@ class CreateReservationsTable extends Migration
             $table->double('price', 5, 2);
             $table->unsignedBigInteger("car_id")->nullable();
             $table->unsignedBigInteger("client_id")->nullable();
+            $table->datetime('confirmed_at')->nullable();
             $table->timestamps();
 
             $table->foreign("car_id")->references("id")->on("cars")->onDelete("set null");

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Jobs\HandleReservation;
+use App\Mail\ConfirmationEmail;
 use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Client;
@@ -15,6 +16,7 @@ use DateInterval;
 use DatePeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -45,8 +47,10 @@ class ReservationController extends Controller
 
             $initDate =  Carbon::parse($validator['pickup_date']);
             $endDate =  Carbon::parse($validator['return_date']);
+            $token = uniqid();
 
             $reservation = Reservation::create([
+                'token' => $token,
                 'pickup_date' => $initDate,
                 'return_date' =>  $endDate,
                 'pickup_place' => $validator['pickup_place'],
@@ -71,7 +75,7 @@ class ReservationController extends Controller
             $reservation->extras()->attach($validator["extras"]);
             $reservation->drivers()->attach($drivers);
             HandleReservation::dispatch($reservation);
-
+            Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
             DB::commit();
 
             return new ReservationResource($reservation);

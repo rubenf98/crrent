@@ -9,6 +9,7 @@ export const initialState = {
 export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.DELETE_PROMOTION}_PENDING`:
+        case `${types.CREATE_PROMOTION}_PENDING`:
         case `${types.UPDATE_PROMOTION}_PENDING`:
         case `${types.FETCH_PROMOTIONS}_PENDING`:
         case `${types.FETCH_PROMOTION}_PENDING`:
@@ -19,6 +20,7 @@ export default (state = initialState, action = {}) => {
 
         case `${types.UPDATE_PROMOTION}_REJECTED`:
         case `${types.DELETE_PROMOTION}_REJECTED`:
+        case `${types.CREATE_PROMOTION}_REJECTED`:
             return {
                 ...state,
                 loading: false,
@@ -33,6 +35,14 @@ export default (state = initialState, action = {}) => {
                     record => record.id !== action.meta.id
                 )
             };
+
+        case `${types.CREATE_PROMOTION}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [...action.payload.data.data, ...state.data]
+            };
+
 
         case `${types.UPDATE_PROMOTION}_FULFILLED`:
             return {

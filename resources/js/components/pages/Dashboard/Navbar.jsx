@@ -111,6 +111,7 @@ function Navbar() {
                         <NavBarItem item="datas" name="datas bloqueadas" />
                         <NavBarItem item="carros" name="carros" />
                         <NavBarItem item="extras" name="extras" />
+                        <NavBarItem item="precos" name="preços" />
                     </li>
                 </TabList>
 

@@ -15,9 +15,10 @@ const Container = styled.div`
 const Content = styled.div`
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap;
 
     @media (max-width: ${dimensions.md}){
         flex-wrap: wrap;
@@ -25,7 +26,7 @@ const Content = styled.div`
 `;
 
 const CardContent = styled.div`
-    width: 25%;
+    width: 30%;
     box-sizing: border-box;
     text-align: center;
     min-width: 200px;
@@ -98,6 +99,12 @@ class Dashboard extends Component {
                         img="/icon/dashboard/extra.svg"
                         text="Extras disponibilizados"
                         to="/painel/extras"
+                    />
+
+                    <CardContainer
+                        img="/icon/dashboard/promotion.svg"
+                        text="Preços e promoções"
+                        to="/painel/precos"
                     />
 
                 </Content>

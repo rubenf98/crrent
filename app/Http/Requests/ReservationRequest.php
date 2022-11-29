@@ -61,31 +61,38 @@ class ReservationRequest extends FormRequest
         $out->writeln($factors);
         foreach ($prices as $index => $price) {
             if ($days >= $price->min && $days <= $price->max) {
-
-
-                $value = $days * $price->price * $factors[$index];
+                $value = $price->price;
             }
         }
-        $out->writeln($value);
+
+        $prices = array_fill(0, $days, $value);
+        $out->writeln($prices);
+        $carPrice = 0;
+
+        foreach ($prices as $index => $price) {
+            $carPrice += $price * $factors[$index];
+        }
+
+        $out->writeln($carPrice);
 
         $extras = Extra::findMany($this->extras);
         $out->writeln($extras);
         foreach ($extras as $extra) {
             if ($extra->type == "day") {
-                $value += $days * $extra->price;
+                $carPrice += $days * $extra->price;
             } else {
-                $value += $extra->price;
+                $carPrice += $extra->price;
             }
         }
 
 
-        $out->writeln($value);
+        $out->writeln($carPrice);
 
 
         $this->merge([
             'pickup_date' => $this->date[0],
             'return_date' => $this->date[1],
-            'price' => $value
+            'price' => $carPrice + (15 * $days)
         ]);
     }
 

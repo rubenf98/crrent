@@ -148,6 +148,7 @@ const Section = styled.div`
         font-size: 20px;
         font-weight: 700;
         margin: 0px;
+        text-transform: uppercase;
     }
 
     p {
@@ -161,6 +162,7 @@ const Section = styled.div`
 
     .opacity {
         opacity: .5;
+        text-transform: uppercase;
     }
 
     @media (max-width: ${dimensions.md}) {
@@ -310,13 +312,16 @@ const rules = {
 function Summary({ language, theme, currentCar, values, currentReservation, createReservation, setCurrentErrors }) {
     let navigate = useNavigate();
     const [price, setPrice] = useState(0);
+    const [days, setDays] = useState(1);
     const [privacy, setPrivacy] = useState(false);
     const [conditions, setConditions] = useState(false);
+    const { text } = require('../../../../assets/' + language + "/summary");
 
     const content = [
-        { title: "CARRO", items: values.car },
-        { title: "EXTRAS", items: values.extras },
-        { title: "TAXAS", items: values.tax },
+        { title: text.sections[0], items: values.car },
+        { title: text.sections[1], items: values.insurance },
+        { title: text.sections[2], items: values.extras },
+        { title: text.sections[3], items: values.tax },
     ];
 
     useEffect(() => {
@@ -330,7 +335,8 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                     aPrice += row[row.length - 1];
                 })
             }))
-
+            var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
+            setDays(difference);
             setPrice(aPrice);
         }
     }, [])
@@ -342,10 +348,10 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
         data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
 
         createReservation({ ...data, car_id: currentCar.id }).then((response) => {
-            // console.log(response);
+            navigate("/success");
         }).catch((errors) => {
             setCurrentErrors(errors.response.data.errors);
-            navigate("/checkout");
+            navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
         });
     }
 
@@ -359,10 +365,11 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                     <SummaryContainer>
                         <Car>
                             <Background background={theme.levels[currentCar.level.code]} />
-                            <img src={currentCar.image} alt="" />
+                            <img src={currentCar.image} alt="car" />
                         </Car>
                         <Info>
-                            <TitleContainer title="Resumo" />
+                            <TitleContainer title={text.title} />
+                            <h3 style={{ marginTop: "-40px" }}>{text.notice[0]} {days} {text.notice[1]}</h3>
 
                             {content.map((section, key) => (
                                 <>
@@ -370,7 +377,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                                         <Section>
 
                                             <div className='title large'>{section.title}</div>
-                                            <div className='title opacity'>{key != 0 && ("€/" + (key == 2 ? "UNI" : "DIA"))}</div>
+                                            <div className='title opacity'>{key != 0 && ("€/" + (key == 2 ? "uni" : text.prices.day))}</div>
                                             <div className='title'>SUBTOTAL</div>
 
                                             {section.items.map((row) => (
@@ -402,14 +409,14 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                 }
                 <PolicyContainer>
 
-                    <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>Li, compreendi e concordo com os <a href="/privacy" target="_blank">Política de Privacidade</a></Checkbox>
+                    <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>{text.privacy[0]} <a href="/privacy" target="_blank">{text.privacy[1]}</a></Checkbox>
 
-                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>Confirmo que li, compreendi e concordo com os <a href="/conditions" target="_blank">Termos e Condições da CR Rent</a></Checkbox>
+                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>{text.conditions[0]} <a href="/conditions" target="_blank">{text.conditions[0]}</a></Checkbox>
 
                 </PolicyContainer>
 
                 <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                    reservar
+                    {text.button}
                 </Submit>
 
                 {/* <TitleContainer title="Detalhes de pagamento" />

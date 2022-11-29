@@ -25,6 +25,11 @@ export const updateReservation = (id, data) => ({
     payload: axios.put(`${window.location.origin}/api/reservations/${id}`, data),
 });
 
+export const confirmReservation = (data) => ({
+    type: types.CONFIRM_RESERVATION,
+    payload: axios.put(`${window.location.origin}/api/confirm/reservation`, data),
+});
+
 export const createReservation = (data) => ({
     type: types.CREATE_RESERVATION,
     payload: axios.post(`${window.location.origin}/api/reservations/`, data),

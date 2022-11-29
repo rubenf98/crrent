@@ -137,15 +137,30 @@ function Checkout({ language, fetchExtras, theme,
             Object.values(currentErrors).map(function (message) {
                 messages.push(message[0])
             })
+
             message.error(messages.map((message) => (
                 <span>{message}</span>
             )));
 
-            handleDate(moment(currentReservation.pickup_date), moment(currentReservation.return_date), false);
-
+            var newExtras = [], newTax = [], newExtraPrice = 0, newTaxPrice = 0;
             currentReservation.extras.map((element) => {
-                console.log(element);
+                var extra = extrasData.find((currentExtra) => currentExtra.id == element);
+                if (extra.visible) {
+                    newExtras.push(extra.id);
+                    newExtraPrice += extra.price;
+                } else {
+                    newTax.push(extra.id);
+                    newTaxPrice += extra.price;
+                }
             })
+
+            var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
+
+            setExtras(newExtras);
+            setExtraPrice(newExtraPrice * difference);
+
+            setTax(newTax);
+            setTaxPrice(newTaxPrice);
         }
     }, [currentErrors])
 
@@ -217,7 +232,8 @@ function Checkout({ language, fetchExtras, theme,
             });
 
             setCurrentReservationValues({
-                car: [[currentCar.title, price + 15]],
+                car: [[currentCar.title, price]],
+                insurance: [["Seguro", 15 + "€", 15 * days]],
                 extras: extraArray,
                 tax: taxArray,
             });
@@ -238,7 +254,7 @@ function Checkout({ language, fetchExtras, theme,
                 <h3>total</h3>
                 <p>{text.notice}</p>
                 <div className='price'>
-                    {price + extraPrice + taxPrice + 15}€
+                    {price + extraPrice + taxPrice + (15 * days)}€
                 </div>
             </Price>
             <Form

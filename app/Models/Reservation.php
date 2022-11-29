@@ -10,7 +10,7 @@ use setasign\Fpdi\Fpdi;
 
 class Reservation extends Model
 {
-    protected $fillable = ['pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
+    protected $fillable = ['token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
 
     use HasFactory;
 

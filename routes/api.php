@@ -31,6 +31,8 @@ Route::get('me', 'App\Http\Controllers\AuthController@me');
 Route::get('/selector/cars', 'App\Http\Controllers\CarController@selector');
 Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@selector');
 
+Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
+
 Route::apiResource('cars', CarController::class);
 Route::apiResource('extras', ExtraController::class);
 Route::apiResource('reservations', ReservationController::class);

@@ -45,8 +45,13 @@ export function getCarPrice(prices, days, factors) {
     return carPrice;
 }
 
-export function isDateDisabled(current, blockedDates, currentDates) {
+export function isDateDisabled(current, blockedDates, currentDates, registration = true) {
+    if (!registration) {
+        return true;
+    }
     let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
+
+
 
     if (isBlocked) {
         return true

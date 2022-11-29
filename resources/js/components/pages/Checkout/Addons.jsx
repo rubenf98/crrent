@@ -224,7 +224,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
                     <div key={extra.id}>
                         {extra.visible ?
                             <div className='checkbox-container'>
-                                <Checkbox onChange={(e) => handleClick(e.target.checked, extra)}>
+                                <Checkbox checked={extras.includes(extra.id)} onChange={(e) => handleClick(e.target.checked, extra)}>
                                     {text.extras[extra.name]}
                                 </Checkbox>
                                 <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>{text.prices.per}</span> {text.prices[extra.type]}</span></p>

@@ -91,4 +91,17 @@ export const SecundaryButton = styled.button`
     font-weight: bold;
     text-transform: uppercase;
     cursor: pointer;
+    transition: all .3s ease;
+
+    &:hover {
+        color: white;
+        background-color: ${props => props.primary};
+        border: 2px solid;
+
+        p, a {
+            margin: 0px;
+            color: white
+        }
+    }
+
 `;

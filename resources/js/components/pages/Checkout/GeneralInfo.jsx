@@ -378,7 +378,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                                     suffixIcon={(<></>)}
                                     onOpenChange={handleDateReset}
                                     onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates)}
+                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, car.registration)}
                                     disabledTime={(endDate, type) => ({
                                         disabledHours: () => {
                                             if (type == "end" && dates && endDate) {
