@@ -156,7 +156,8 @@ function About({ theme, text }) {
             <AboutContainer>
                 <div className='info-container'>
                     <h3>{text.subtitle}</h3>
-                    <p>{text.paragraph}</p>
+                    <p>{text.paragraph[0]}</p>
+                    <p>{text.paragraph[1]}</p>
                 </div>
                 <img loading='lazy' src="/image/homepage/about2.jpg" alt="" />
             </AboutContainer>

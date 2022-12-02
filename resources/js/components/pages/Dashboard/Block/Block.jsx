@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
-import { fetchBlocks, deleteBlock } from "../../../../redux/block/actions";
+import { fetchBlockPeriods, deleteBlockPeriod } from "../../../../redux/blockPeriod/actions";
 import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
 import FormContainer from './FormContainer';
@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 
 
-function Block({ theme, data, loading, fetchBlocks, deleteBlock, meta }) {
+function Block({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod, meta }) {
     const [filters, setFilters] = useState({});
     const [visible, setVisible] = useState(false)
 
@@ -25,12 +25,12 @@ function Block({ theme, data, loading, fetchBlocks, deleteBlock, meta }) {
     }
 
     useEffect(() => {
-        fetchBlocks(1, filters);
+        fetchBlockPeriods(1, filters);
     }, [filters])
 
     const handlePageChange = (pagination) => {
 
-        fetchBlocks(pagination.current, filters);
+        fetchBlockPeriods(pagination.current, filters);
     }
 
     return (
@@ -40,7 +40,7 @@ function Block({ theme, data, loading, fetchBlocks, deleteBlock, meta }) {
             <TableContainer
                 data={data}
                 loading={loading}
-                onDelete={deleteBlock}
+                onDelete={deleteBlockPeriod}
                 meta={meta}
                 setVisible={setVisible}
                 handlePageChange={handlePageChange}
@@ -57,16 +57,16 @@ function Block({ theme, data, loading, fetchBlocks, deleteBlock, meta }) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchBlocks: (page, filters) => dispatch(fetchBlocks(page, filters)),
-        deleteBlock: (id) => dispatch(deleteBlock(id)),
+        fetchBlockPeriods: (page, filters) => dispatch(fetchBlockPeriods(page, filters)),
+        deleteBlockPeriod: (id) => dispatch(deleteBlockPeriod(id)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.block.loading,
-        data: state.block.data,
-        meta: state.block.meta,
+        loading: state.blockPeriod.loading,
+        data: state.blockPeriod.data,
+        meta: state.blockPeriod.meta,
     };
 };
 

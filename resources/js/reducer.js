@@ -8,6 +8,7 @@ import car from './redux/car'
 import extra from './redux/extra'
 import promotion from './redux/promotion'
 import block from './redux/block'
+import blockPeriod from './redux/blockPeriod'
 
 const reducer = combineReducers({
     auth,
@@ -16,7 +17,8 @@ const reducer = combineReducers({
     reservation,
     extra,
     promotion,
-    block
+    block,
+    blockPeriod
 })
 
 export default reducer

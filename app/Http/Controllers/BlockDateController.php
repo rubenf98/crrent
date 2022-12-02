@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\BlockDateResource;
+use App\Http\Resources\BlockPeriodResource;
 use App\Models\BlockDate;
+use App\Models\BlockPeriod;
 use App\Models\Level;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -74,8 +76,10 @@ class BlockDateController extends Controller
         $period = CarbonPeriod::create($request->dates[0], $request->dates[1])->toArray();
         $levels = $request->levels;
         $data = [];
+        $levels_id = [];
         foreach ($levels as $id => $level) {
             if ($level) {
+                array_push($levels_id, $id);
                 foreach ($period as $date) {
                     $blockedDate = BlockDate::create([
                         'date' => $date->format('Y-m-d'),
@@ -87,7 +91,14 @@ class BlockDateController extends Controller
             }
         }
 
-        return BlockDateResource::collection(collect($data));
+        $blockPeriod = BlockPeriod::create([
+            'from' => $request->dates[0],
+            'to' => $request->dates[1],
+        ]);
+
+        $blockPeriod->levels()->attach($levels_id);
+
+        return new BlockPeriodResource($blockPeriod);
     }
 
     /**

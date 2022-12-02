@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Modal, Row, Form, DatePicker, Button, Input, Checkbox, Col } from 'antd';
 import moment from 'moment';
 import { connect } from "react-redux";
-import { createBlock } from "../../../../redux/block/actions"
+import { createBlock } from "../../../../redux/blockPeriod/actions"
 
 const { RangePicker } = DatePicker;
 
@@ -123,7 +123,7 @@ function FormContainer({ loading, handleClose, createBlock, visible }) {
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.block.loading,
+        loading: state.blockPeriod.loading,
     };
 };
 

@@ -41,13 +41,19 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
             fixed: 'left',
         },
         {
-            title: 'Data',
-            dataIndex: 'date',
+            title: 'Desde',
+            dataIndex: 'from',
         },
         {
-            title: 'Gama',
-            dataIndex: 'level',
-            render: (level) => level.code
+            title: 'Até',
+            dataIndex: 'to',
+        },
+        {
+            title: 'Gamas',
+            dataIndex: 'levels',
+            render: (levels) => levels.map((level) => (
+                <span>{level.code}, </span>
+            ))
         },
         {
             title: 'Ações',

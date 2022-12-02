@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PromotionRequest;
 use App\Http\Resources\PromotionResource;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
@@ -25,9 +26,17 @@ class PromotionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PromotionRequest $request)
     {
-        //
+        $validator = $request->validated();
+        $record = Promotion::create([
+            'start' => $validator['dates'][0],
+            'end' => $validator['dates'][1],
+            'value' => $validator['value'],
+            'factor' => $validator['factor']
+        ]);
+
+        return new PromotionResource($record);
     }
 
     /**
@@ -61,6 +70,8 @@ class PromotionController extends Controller
      */
     public function destroy(Promotion $promotion)
     {
-        //
+        $promotion->delete();
+
+        return response()->json(null, 204);
     }
 }

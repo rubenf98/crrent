@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from "styled-components";
 import { Col, Drawer, Row } from 'antd';
+import { DownloadIcon } from '../../../../icons';
+import { connect } from 'react-redux';
+import { downloadContract } from '../../../../redux/reservation/actions';
 
 const Section = styled.h3`
     margin-top: 30px;
@@ -36,6 +39,26 @@ const FieldsContainer = styled.div`
     }
 `;
 
+const Download = styled.div`
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 5px;
+    cursor: pointer;
+    align-items: center;
+    width: 100%;
+    font-size: 16px;
+
+    svg {
+        width: 16px;
+    }
+
+    p {
+        margin: 0px;
+    }
+`;
+
 const levelDecoder = {
     1: "A",
     2: "B",
@@ -43,7 +66,7 @@ const levelDecoder = {
     4: "D",
 }
 
-function DrawerContainer({ data, drawerState, setDrawerState }) {
+function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, loadingDownload }) {
 
     const FieldContainer = ({ name, value }) => (
         <Field className='field-width'>
@@ -55,6 +78,7 @@ function DrawerContainer({ data, drawerState, setDrawerState }) {
     function EmptyField(field) {
         return field ? field : "---"
     }
+
 
     return (
         <Drawer closable={false} width={"60%"} open={drawerState} onClose={() => setDrawerState(0)}>
@@ -118,9 +142,23 @@ function DrawerContainer({ data, drawerState, setDrawerState }) {
                         ))}
                     </ul>
                 </Col>
+                <Download onClick={() => downloadContract(data.token)}><p>Descarregar contrato</p><DownloadIcon /></Download>
+
             </Row>
         </Drawer>
     )
 }
 
-export default DrawerContainer
+const mapDispatchToProps = (dispatch) => {
+    return {
+        downloadContract: (token) => dispatch(downloadContract(token)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        loading: state.reservation.loadingDownload,
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContainer);

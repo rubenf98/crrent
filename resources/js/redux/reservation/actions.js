@@ -1,6 +1,7 @@
 import { types } from "./types";
 import axios from "axios";
 import { stringify } from "query-string";
+import { download } from "../../components/helper";
 
 export const fetchReservations = (page = 1, filters = {}) => ({
     type: types.FETCH_RESERVATIONS,
@@ -49,4 +50,21 @@ export const setCurrentReservationValues = (data) => ({
 export const setCurrentErrors = (data) => ({
     type: types.SET_CURRENT_ERRORS,
     payload: data,
+});
+
+export const downloadContract = (token, ext = "pdf") => ({
+    type: types.DOWNLOAD_CONTRACT,
+    payload: axios({
+        url: `${window.location.origin}/api/download/contract`,
+        data: { token: token },
+        method: "POST",
+        responseType: "blob",
+    }).then(
+        response => {
+            download(response, token + '.' + ext)
+        },
+        error => {
+            return error.data;
+        }
+    ),
 });

@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Promotion extends Model
 {
+    protected $fillable = ['start', 'end', 'value', 'factor'];
     use HasFactory;
 }

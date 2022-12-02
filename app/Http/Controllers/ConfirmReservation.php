@@ -19,7 +19,7 @@ class ConfirmReservation extends Controller
     public function __invoke(Request $request)
     {
         $reservation = Reservation::with('car')->where('token', $request->token)->firstOrFail();
-
+        // $reservation->generateDoc();
         if (!$reservation->confirmed_at) {
             $reservation->confirmed_at = Carbon::now();
             $reservation->save();

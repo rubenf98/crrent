@@ -329,7 +329,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                             <p className='total'>{text.from}</p>
                             <p className='warning'>{text.notice[0]} {days} {text.notice[1]}</p>
                         </div>
-                        <div className='value'>{pricing + 15}€</div>
+                        <div className='value'>{pricing + (15 * days)}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>

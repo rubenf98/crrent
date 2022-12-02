@@ -22,6 +22,9 @@ class CreateReservationsTable extends Migration
             $table->string('return_place');
             $table->string('flight');
             $table->double('price', 5, 2);
+            $table->double('car_price', 5, 2);
+            $table->double('car_price_per_day', 5, 2);
+            $table->integer('days');
             $table->unsignedBigInteger("car_id")->nullable();
             $table->unsignedBigInteger("client_id")->nullable();
             $table->datetime('confirmed_at')->nullable();

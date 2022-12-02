@@ -69,30 +69,34 @@ class ReservationRequest extends FormRequest
         $out->writeln($prices);
         $carPrice = 0;
 
+
         foreach ($prices as $index => $price) {
             $carPrice += $price * $factors[$index];
         }
 
         $out->writeln($carPrice);
-
+        $extraPrice = 0;
         $extras = Extra::findMany($this->extras);
         $out->writeln($extras);
         foreach ($extras as $extra) {
             if ($extra->type == "day") {
-                $carPrice += $days * $extra->price;
+                $extraPrice += $days * $extra->price;
             } else {
-                $carPrice += $extra->price;
+                $extraPrice += $extra->price;
             }
         }
 
 
-        $out->writeln($carPrice);
+        $out->writeln($extraPrice);
 
 
         $this->merge([
             'pickup_date' => $this->date[0],
             'return_date' => $this->date[1],
-            'price' => $carPrice + (15 * $days)
+            'price' => ($carPrice + $extraPrice) + (15 * $days),
+            'days' => $days,
+            'car_price' => $carPrice,
+            'car_price_per_day' => $value
         ]);
     }
 
@@ -121,6 +125,9 @@ class ReservationRequest extends FormRequest
             'flight' => 'required|string',
             'car_id' =>  'required|integer|exists:cars,id',
             'price' => 'required|numeric',
+            'days' => 'required|integer|min:1',
+            'car_price' => 'required|numeric',
+            'car_price_per_day' => 'required|numeric',
 
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',

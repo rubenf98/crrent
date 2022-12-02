@@ -3,6 +3,7 @@ import { types } from "./types";
 export const initialState = {
     data: [],
     loading: false,
+    loadingDownload: false,
     meta: {},
     current: {},
     values: {},
@@ -24,7 +25,6 @@ export default (state = initialState, action = {}) => {
 
         case `${types.UPDATE_RESERVATION}_REJECTED`:
         case `${types.DELETE_RESERVATION}_REJECTED`:
-        case `${types.CREATE_RESERVATION}_FULFILLED`:
         case `${types.CREATE_RESERVATION}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_FULFILLED`:
@@ -32,6 +32,16 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
             };
+
+        case `${types.CREATE_RESERVATION}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                current: {},
+                values: {},
+                errors: [],
+            };
+
 
 
         case `${types.DELETE_RESERVATION}_FULFILLED`:
@@ -102,6 +112,20 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 errors: action.payload,
             };
+
+        case `${types.DOWNLOAD_CONTRACT}_PENDING`:
+            return {
+                ...state,
+                loadingDownload: true,
+            };
+
+        case `${types.DOWNLOAD_CONTRACT}_REJECTED`:
+        case `${types.DOWNLOAD_CONTRACT}_FULFILLED`:
+            return {
+                ...state,
+                loadingDownload: false,
+            };
+
 
         default:
             return state

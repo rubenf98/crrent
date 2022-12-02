@@ -57,6 +57,9 @@ class ReservationController extends Controller
                 'return_place' => $validator['return_place'],
                 'flight' => $validator['flight'],
                 'price' => $validator['price'],
+                'car_price' => $validator['car_price'],
+                'car_price_per_day' => $validator['car_price_per_day'],
+                'days' => $validator['days'],
                 'car_id' => $validator['car_id'],
                 'client_id' => $client->id,
             ]);

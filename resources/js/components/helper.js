@@ -9,6 +9,16 @@ export const dimensions = {
     "xxl": "1600px",
 };
 
+export function download(response, filename) {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+};
+
+
 export function getCarouselBreakpoints(aItems, aBreakpoints = [[0, 600], [600, 1024], [1024, 1400], [1400, 1800], [1800, 100000]], aItemsToSlide = [1, 1, 3, 3, 3]) {
     return {
         desktop: {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlockDateController;
+use App\Http\Controllers\BlockPeriodController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\PromotionController;
@@ -33,8 +34,12 @@ Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@s
 
 Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
 
+
+Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
+
 Route::apiResource('cars', CarController::class);
 Route::apiResource('extras', ExtraController::class);
 Route::apiResource('reservations', ReservationController::class);
 Route::apiResource('promotions', PromotionController::class);
 Route::apiResource('blockedDates', BlockDateController::class);
+Route::apiResource('blockPeriods', BlockPeriodController::class);

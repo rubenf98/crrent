@@ -10,7 +10,7 @@ use setasign\Fpdi\Fpdi;
 
 class Reservation extends Model
 {
-    protected $fillable = ['token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
+    protected $fillable = ['car_price_per_day', 'days', 'car_price', 'token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
 
     use HasFactory;
 
@@ -18,7 +18,7 @@ class Reservation extends Model
 
     public function generateDoc()
     {
-        $outputFile = Storage::disk('local')->path("teste.pdf");
+        $outputFile = Storage::disk('local')->path($this->token . ".pdf");
         $file = Storage::disk('local')->path('template.pdf');
         $fpdi = new FPDI;
         // merger operations
@@ -29,7 +29,7 @@ class Reservation extends Model
             $fpdi->AddPage($size['orientation'], array($size['width'], $size['height']));
             $fpdi->useTemplate($template);
 
-            if ($i == 1) {
+            if ($i == 1 || $i == 2) {
                 $fpdi->SetFont("helvetica", "", 9);
                 $fpdi->SetTextColor(0, 10, 10);
 
@@ -42,9 +42,65 @@ class Reservation extends Model
 
                     $start += 26;
                 }
+
+                $extras = $this->extras;
+                $this->fillPriceInfo($fpdi, $extras);
             }
         }
         return $fpdi->Output($outputFile, 'F');
+    }
+
+    public function fillPriceInfo($fpdi, $extras)
+    {
+        $fpdi->Text(92, 195.5, $this->car_price . chr(128));
+
+        $fpdi->Text(92, 242, $this->price . chr(128));
+
+        $fpdi->Text(68, 206.5, $this->days);
+        $fpdi->Text(78, 206.5, 15 . chr(128));
+        $fpdi->Text(92, 206.5, ($this->days * 15) . chr(128));
+
+        $others = 0;
+        $tax_pickup = 0;
+        $tax_return = 0;
+
+        foreach ($extras as $extra) {
+            if ($extra->id == 2) {
+                $fpdi->Text(68, 199, 1);
+                $fpdi->Text(78, 199, $extra->price . chr(128));
+                $fpdi->Text(92, 199, $extra->price . chr(128));
+            }
+
+            if ($extra->id == 4 || $extra->id == 1) {
+                $others += $this->days * $extra->price;
+            }
+
+            if ($extra->id == 3) {
+                $fpdi->Text(68, 218, $this->days);
+                $fpdi->Text(78, 218, $extra->price . chr(128));
+                $fpdi->Text(92, 218, ($this->days * $extra->price) . chr(128));
+            }
+
+            if ($extra->id == 5 || $extra->id == 6) {
+                $tax_pickup += $extra->price;
+            }
+
+            if ($extra->id == 7 || $extra->id == 8) {
+                $tax_return += $extra->price;
+            }
+        }
+
+        if ($tax_pickup) {
+            $fpdi->Text(92, 221.5, $tax_pickup . chr(128));
+        }
+
+        if ($tax_return) {
+            $fpdi->Text(92, 225.5, $tax_return . chr(128));
+        }
+
+        if ($others) {
+            $fpdi->Text(92, 229.5, $others . chr(128));
+        }
     }
 
     public function fillDriverInfo($fpdi, $driver, $start)
@@ -105,12 +161,12 @@ class Reservation extends Model
 
         $fpdi->Text(126, 53, utf8_decode($this->return_place));
 
-        $returnDate = Carbon::parse($this->pickup_date);
-        $fpdi->Text(125, 58, str_pad($pickupDate->day, 2, '0', STR_PAD_LEFT));
-        $fpdi->Text(134, 58, str_pad($pickupDate->month, 2, '0', STR_PAD_LEFT));
-        $fpdi->Text(141.5, 58, str_pad($pickupDate->year, 2, '0', STR_PAD_LEFT));
-        $fpdi->Text(186, 58, str_pad($pickupDate->hour, 2, '0', STR_PAD_LEFT));
-        $fpdi->Text(196, 58, str_pad($pickupDate->minute, 2, '0', STR_PAD_LEFT));
+        $returnDate = Carbon::parse($this->return_date);
+        $fpdi->Text(125, 58, str_pad($returnDate->day, 2, '0', STR_PAD_LEFT));
+        $fpdi->Text(134, 58, str_pad($returnDate->month, 2, '0', STR_PAD_LEFT));
+        $fpdi->Text(141.5, 58, str_pad($returnDate->year, 2, '0', STR_PAD_LEFT));
+        $fpdi->Text(186, 58, str_pad($returnDate->hour, 2, '0', STR_PAD_LEFT));
+        $fpdi->Text(196, 58, str_pad($returnDate->minute, 2, '0', STR_PAD_LEFT));
     }
 
     public function extras()
