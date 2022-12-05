@@ -5,7 +5,7 @@ export const initialState = {
     menuVisible: false,
     formVisible: false,
     activityInitialValue: [],
-    language: localStorage.language,
+    language: localStorage.language ? localStorage.language : "en",
 }
 
 export default (state = initialState, action = {}) => {
