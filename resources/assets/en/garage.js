@@ -15,6 +15,6 @@ export const text = {
     },
     from: "from",
     notice: ["Include 22% VAT for", "days"],
-    button: "continue",
+    continue: "continue",
     disclaimer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 } 

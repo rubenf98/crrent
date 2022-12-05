@@ -37,13 +37,13 @@ export const text = {
             label: "pickup place",
             options: ["Airport", "Store"],
             tax: "Outside",
-            placeholder: "Please enter an address or hotel name"
+            placeholder: "Please enter other address or hotel name"
         },
         return_place: {
             label: "return place",
             options: ["Airport", "Store"],
             tax: "Outside",
-            placeholder: "Please enter an address or hotel name"
+            placeholder: "Please enter other address or hotel name"
         },
         flight: "flight number",
         client: {

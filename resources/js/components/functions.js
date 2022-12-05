@@ -1,5 +1,11 @@
 import moment from "moment";
 
+export function getPriceRounded(price) {
+
+    return Math.round((price + Number.EPSILON) * 100) / 100;
+}
+
+
 export function getPromotions(promotions, start, days) {
     var init = moment(start);
     var min = undefined;

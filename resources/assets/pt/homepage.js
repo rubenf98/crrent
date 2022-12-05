@@ -1,6 +1,6 @@
 export const text = {
     header: {
-        title: (<h1>Rent o <br /> seu carro <br />com razão</h1>),
+        title: (<h1>A razão da<br /> sua melhor <br />escolha</h1>),
         placeholder: ["data levantamento", "data devolução"],
         button: "pesquisar"
     },

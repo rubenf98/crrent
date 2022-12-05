@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Footer from "./common/Footer";
 import Navbar from "./common/Navbar";
 import NavbarMenu from "./common/NavbarMenu";
+import ScrollToTop from "./common/ScrollToTop";
 import ThemeContainer from "./ThemeContainer";
-
 
 const Container = styled.div`
     width: 100%;
@@ -20,12 +20,14 @@ class Layout extends Component {
     render() {
         return (
             <ThemeContainer>
-                <Container>
-                    <Navbar />
-                    <NavbarMenu />
-                    <div> {this.props.children} </div>
-                    <Footer />
-                </Container>
+                <ScrollToTop>
+                    <Container>
+                        <Navbar />
+                        <NavbarMenu />
+                        <div> {this.props.children} </div>
+                        <Footer />
+                    </Container>
+                </ScrollToTop>
             </ThemeContainer>
         );
     }

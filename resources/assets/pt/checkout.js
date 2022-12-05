@@ -36,12 +36,14 @@ export const text = {
         pickup_place: {
             label: "local levantamento",
             options: ["aeroporto", "loja"],
-            tax: "Fora"
+            tax: "Fora",
+            placeholder: "Indique outra morada ou hotel"
         },
         return_place: {
             label: "local devolução",
             options: ["aeroporto", "loja"],
-            tax: "Fora"
+            tax: "Fora",
+            placeholder: "Indique outra morada ou hotel"
         },
         flight: "número de voo",
         client: {

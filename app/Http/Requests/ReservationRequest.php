@@ -93,10 +93,10 @@ class ReservationRequest extends FormRequest
         $this->merge([
             'pickup_date' => $this->date[0],
             'return_date' => $this->date[1],
-            'price' => ($carPrice + $extraPrice) + (15 * $days),
+            'price' => round(($carPrice + $extraPrice) + (15 * $days), 2),
             'days' => $days,
-            'car_price' => $carPrice,
-            'car_price_per_day' => $value
+            'car_price' => round($carPrice, 2),
+            'car_price_per_day' => round($value, 2)
         ]);
     }
 

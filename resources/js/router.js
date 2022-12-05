@@ -26,7 +26,7 @@ export const history = createBrowserHistory();
 function Router() {
     return (
         <BrowserRouter history={history}>
-            <ScrollToTop>
+
                 <Routes>
                     <Route
                         exact
@@ -52,7 +52,7 @@ function Router() {
 
 
                 </Routes>
-            </ScrollToTop>
+
         </BrowserRouter>
     );
 };

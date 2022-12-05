@@ -14,7 +14,7 @@ import { setCurrentReservation, setCurrentReservationValues } from "../../../red
 import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
-import { getCarPrice, getPromotions } from '../../functions';
+import { getCarPrice, getPriceRounded, getPromotions } from '../../functions';
 
 const Container = styled.section`
     width: 100%;
@@ -126,6 +126,8 @@ function Checkout({ language, fetchExtras, theme,
 
             if (from && to) {
                 handleDate(moment(from), moment(to), true);
+            } else {
+                handleReturn();
             }
         }
     }, [])
@@ -142,29 +144,38 @@ function Checkout({ language, fetchExtras, theme,
                 <span>{message}</span>
             )));
 
-            var newExtras = [], newTax = [], newExtraPrice = 0, newTaxPrice = 0;
-            currentReservation.extras.map((element) => {
-                var extra = extrasData.find((currentExtra) => currentExtra.id == element);
-                if (extra.visible) {
-                    newExtras.push(extra.id);
-                    newExtraPrice += extra.price;
-                } else {
-                    newTax.push(extra.id);
-                    newTaxPrice += extra.price;
-                }
-            })
-
-            var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
-
-            setExtras(newExtras);
-            setExtraPrice(newExtraPrice * difference);
-
-            setTax(newTax);
-            setTaxPrice(newTaxPrice);
+            handleReturn();
         }
     }, [currentErrors])
 
+    const handleReturn = () => {
+        if (currentReservation.date) {
+            if (currentReservation.date.length == 2) {
+                var newExtras = [], newTax = [], newExtraPrice = 0, newTaxPrice = 0;
 
+                currentReservation.extras.map((element) => {
+                    var extra = extrasData.find((currentExtra) => currentExtra.id == element);
+                    if (extra.visible) {
+                        newExtras.push(extra.id);
+                        newExtraPrice += extra.price;
+                    } else {
+                        newTax.push(extra.id);
+                        newTaxPrice += extra.price;
+                    }
+                })
+
+                handleDate(moment(currentReservation.date[0]), moment(currentReservation.date[1]));
+
+                var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
+
+                setExtras(newExtras);
+                setExtraPrice(newExtraPrice * difference);
+
+                setTax(newTax);
+                setTaxPrice(newTaxPrice);
+            }
+        }
+    };
 
     const onDateChange = (e) => {
         handleDate(e[0], e[1], false);
@@ -248,13 +259,12 @@ function Checkout({ language, fetchExtras, theme,
 
     return (
         <Container>
-
             <Title>{text.titles[0]}</Title>
             <Price visible={price} background={theme.primary}>
                 <h3>total</h3>
                 <p>{text.notice}</p>
                 <div className='price'>
-                    {price + extraPrice + taxPrice + (15 * days)}€
+                    {getPriceRounded(price + extraPrice + taxPrice + (15 * days))}€
                 </div>
             </Price>
             <Form

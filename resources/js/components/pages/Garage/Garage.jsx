@@ -10,7 +10,7 @@ import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
 import moment from "moment";
 import { fetchPromotions } from '../../../redux/promotion/actions';
 import { fetchExtras } from '../../../redux/extra/actions';
-import { getCarPrice, getPromotions } from '../../functions';
+import { getCarPrice, getPriceRounded, getPromotions } from '../../functions';
 
 const Container = styled.section`
     width: 100%;
@@ -329,11 +329,11 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                             <p className='total'>{text.from}</p>
                             <p className='warning'>{text.notice[0]} {days} {text.notice[1]}</p>
                         </div>
-                        <div className='value'>{pricing + (15 * days)}€</div>
+                        <div className='value'>{getPriceRounded(pricing + (15 * days))}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
-                        {text.button}
+                        {text.continue}
                     </Button>
                     <p className='disclaimer'>{text.disclaimer}</p>
 

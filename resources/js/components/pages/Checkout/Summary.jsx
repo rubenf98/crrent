@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
-import { Form, Checkbox, Input, DatePicker, InputNumber } from 'antd';
+import { Checkbox, Input, DatePicker, InputNumber } from 'antd';
 import TitleContainer from './Common/TitleContainer';
-import { Link } from 'react-router-dom';
 import { dimensions } from '../../helper';
 import { connect } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import { createReservation, setCurrentErrors } from '../../../redux/reservation/actions';
 import moment from "moment";
+import { getPriceRounded } from '../../functions';
 
 const stretch = keyframes`
   from {
@@ -328,9 +328,9 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
         if (!Object.values(currentCar).length) {
             navigate("/");
         } else {
+
             var aPrice = 0;
             content.map((section => {
-
                 section.items.map((row) => {
                     aPrice += row[row.length - 1];
                 })
@@ -338,6 +338,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
             var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
             setDays(difference);
             setPrice(aPrice);
+            window.scrollTo(0, 0);
         }
     }, [])
 
@@ -355,8 +356,6 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
         });
     }
 
-
-
     return (
         <Container>
 
@@ -373,7 +372,8 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
 
                             {content.map((section, key) => (
                                 <>
-                                    {section.items.length ?
+                                    {section.items &&
+                                        section.items.length ?
                                         <Section>
 
                                             <div className='title large'>{section.title}</div>
@@ -389,7 +389,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                                                         {key != 0 && row[1]}
                                                     </p>
                                                     <p>
-                                                        {key == 0 ? row[1] : row[2]}€
+                                                        {key == 0 ? getPriceRounded(row[1]) : getPriceRounded(row[2])}€
                                                     </p>
                                                 </>
                                             ))}
@@ -401,7 +401,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                             <Price color={theme.primary}>
                                 <h3>TOTAL</h3>
                                 <div className='price'>
-                                    {price}€
+                                    {getPriceRounded(price)}€
                                 </div>
                             </Price>
                         </Info>
@@ -411,7 +411,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
 
                     <Checkbox checked={privacy} onChange={(e) => setPrivacy(e.target.checked)}>{text.privacy[0]} <a href="/privacy" target="_blank">{text.privacy[1]}</a></Checkbox>
 
-                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>{text.conditions[0]} <a href="/conditions" target="_blank">{text.conditions[0]}</a></Checkbox>
+                    <Checkbox checked={conditions} onChange={(e) => setConditions(e.target.checked)}>{text.conditions[0]} <a href="/conditions" target="_blank">{text.conditions[1]}</a></Checkbox>
 
                 </PolicyContainer>
 

@@ -15,6 +15,6 @@ export const text = {
     },
     from: "desde",
     notice: ["Inclui IVA a 22% para", "dias"],
-    button: "continuar",
+    continue: "continuar",
     disclaimer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 } 
