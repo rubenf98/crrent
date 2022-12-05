@@ -222,7 +222,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
 
                 {data.map((extra) => (
                     <div key={extra.id}>
-                        {extra.visible ?
+                        {parseInt(extra.visible) ?
                             <div className='checkbox-container'>
                                 <Checkbox checked={extras.includes(extra.id)} onChange={(e) => handleClick(e.target.checked, extra)}>
                                     {text.extras[extra.name]}

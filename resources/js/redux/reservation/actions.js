@@ -33,7 +33,7 @@ export const confirmReservation = (data) => ({
 
 export const createReservation = (data) => ({
     type: types.CREATE_RESERVATION,
-    payload: axios.post(`${window.location.origin}/api/reservations/`, data),
+    payload: axios.post(`${window.location.origin}/api/reservations`, data),
 });
 
 
