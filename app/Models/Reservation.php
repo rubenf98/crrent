@@ -14,6 +14,12 @@ class Reservation extends Model
 
     use HasFactory;
 
+    protected $casts = [
+        'car_price' => 'decimal:2',
+        'car_price_per_day' => 'decimal:2',
+        'price' => 'decimal:2',
+    ];
+
 
 
     public function generateDoc()

@@ -9,6 +9,12 @@ class Price extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'max' => 'integer',
+        'min' => 'integer',
+        'price' => 'decimal:2',
+    ];
+
     public function level()
     {
         return $this->belongsTo(Level::class);

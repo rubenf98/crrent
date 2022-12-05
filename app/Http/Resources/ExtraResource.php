@@ -19,7 +19,7 @@ class ExtraResource extends JsonResource
             'name' => $this->name,
             'visible' => (int) $this->visible,
             'type' => $this->type,
-            'price' => $this->price,
+            'price' => (float) $this->price,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
