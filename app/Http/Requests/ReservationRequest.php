@@ -109,6 +109,37 @@ class ReservationRequest extends FormRequest
     public function rules()
     {
         return [
+            // 'name' => 'required|string',
+            // 'cc' => 'required|string',
+            // 'nif' => 'required|string',
+            // 'address' => 'required|string',
+            // 'country' => 'required|string',
+            // 'postal_code' => 'required|string',
+            // 'email' => 'required|string',
+            // 'phone' => 'required|string',
+            // 'local_address' => 'required|string',
+
+            // 'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day'),
+            // 'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
+            // 'pickup_place' => 'required|string',
+            // 'return_place' => 'required|string',
+            // 'flight' => 'required|string',
+            // 'car_id' =>  'required|integer|exists:cars,id',
+            // 'price' => 'required|numeric',
+            // 'days' => 'required|integer|min:1',
+            // 'car_price' => 'required|numeric',
+            // 'car_price_per_day' => 'required|numeric',
+
+            // 'extras' => 'nullable|array',
+            // 'extras.*' => 'integer|exists:extras,id',
+
+            // 'drivers' => 'required|array|min:1',
+            // 'drivers.*.name' => 'required|string',
+            // 'drivers.*.birthday' => 'required|date|before:-21 years',
+            // 'drivers.*.license' => 'required|string',
+            // 'drivers.*.emission' => 'required|date|before:' . $this->pickup_date,
+            // 'drivers.*.validity' => 'required|date|after:' . $this->return_date,
+            // 'drivers.*.emission_place' => 'required|string',
             'name' => 'required|string',
             'cc' => 'required|string',
             'nif' => 'required|string',
@@ -119,8 +150,8 @@ class ReservationRequest extends FormRequest
             'phone' => 'required|string',
             'local_address' => 'required|string',
 
-            'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day'),
-            'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
+            'pickup_date' => 'required|date',
+            'return_date' => 'required|date',
             'pickup_place' => 'required|string',
             'return_place' => 'required|string',
             'flight' => 'required|string',
@@ -135,10 +166,10 @@ class ReservationRequest extends FormRequest
 
             'drivers' => 'required|array|min:1',
             'drivers.*.name' => 'required|string',
-            'drivers.*.birthday' => 'required|date|before:-21 years',
+            'drivers.*.birthday' => 'required|date',
             'drivers.*.license' => 'required|string',
-            'drivers.*.emission' => 'required|date|before:' . $this->pickup_date,
-            'drivers.*.validity' => 'required|date|after:' . $this->return_date,
+            'drivers.*.emission' => 'required|date',
+            'drivers.*.validity' => 'required|date',
             'drivers.*.emission_place' => 'required|string',
         ];
     }
@@ -155,7 +186,7 @@ class ReservationRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        Log::alert(json_encode($validator));
+        Log::alert(json_encode($validator->errors()));
         // return $validator;
         throw new HttpResponseException(response()->json([
             'success' => false,
