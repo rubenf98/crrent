@@ -99,7 +99,7 @@ class ReservationRequest extends FormRequest
             'car_price' => round($carPrice, 2),
             'car_price_per_day' => round($value, 2)
         ]);
-        Log::alert("step 6");
+        Log::alert("step 7");
     }
 
     /**
@@ -141,15 +141,7 @@ class ReservationRequest extends FormRequest
             // 'drivers.*.emission' => 'required|date|before:' . $this->pickup_date,
             // 'drivers.*.validity' => 'required|date|after:' . $this->return_date,
             // 'drivers.*.emission_place' => 'required|string',
-            'name' => 'required|string',
-            'cc' => 'required|string',
-            'nif' => 'required|string',
-            'address' => 'required|string',
-            'country' => 'required|string',
-            'postal_code' => 'required|string',
-            'email' => 'required|string',
-            'phone' => 'required|string',
-            'local_address' => 'required|string',
+
 
 
         ];
