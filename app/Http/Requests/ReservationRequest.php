@@ -177,14 +177,14 @@ class ReservationRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'drivers.*.validity.after' => 'The drivers\' license validity should be after the rental date',
-            'drivers.*.emission.before' => 'The drivers\' license emission should be before the rental date',
-            'drivers.*.birthday.before' => 'Driver\'s should be at least 21 years old',
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'drivers.*.validity.after' => 'The drivers\' license validity should be after the rental date',
+    //         'drivers.*.emission.before' => 'The drivers\' license emission should be before the rental date',
+    //         'drivers.*.birthday.before' => 'Driver\'s should be at least 21 years old',
+    //     ];
+    // }
 
 
     protected function failedValidation(Validator $validator)
