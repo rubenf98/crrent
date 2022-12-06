@@ -348,15 +348,15 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
         const dateFormat = "YYYY-MM-DD HH:mm";
 
         data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
-        var drivers = [...data.drivers];
+        // var drivers = [...data.drivers];
 
-        drivers.map((driver) => {
-            driver.birthday = moment(driver.birthday).format(dateFormat);
-            driver.emission = moment(driver.emission).format(dateFormat);
-            driver.validity = moment(driver.validity).format(dateFormat);
-        })
+        // drivers.map((driver) => {
+        //     driver.birthday = moment(driver.birthday).format(dateFormat);
+        //     driver.emission = moment(driver.emission).format(dateFormat);
+        //     driver.validity = moment(driver.validity).format(dateFormat);
+        // })
 
-        data.drivers = drivers;
+        // data.drivers = drivers;
 
 
         createReservation({ ...data, car_id: currentCar.id }).then((response) => {
