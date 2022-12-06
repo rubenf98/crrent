@@ -29,6 +29,18 @@ const rules = {
             required: true,
             message: 'Selecione as datas que pretende bloquear',
         },
+    ],
+    factor: [
+        {
+            required: true,
+            message: 'O factor de multiplicação é obrigatório',
+        },
+    ],
+    value: [
+        {
+            required: true,
+            message: 'O valor promocional é obrigatório',
+        },
     ]
 };
 
@@ -88,12 +100,12 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
 
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Form.Item label="Valor promocional" name="value">
+                                <Form.Item rules={rules.value} label="Valor promocional" name="value">
                                     <Input placeholder="Ex. 40%" />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label="Factor de multiplicação" name="factor">
+                                <Form.Item rules={rules.factor} label="Factor de multiplicação" name="factor">
                                     <InputNumber placeholder="Ex. 0.6" style={{ width: "100%" }} max={10} min={0} />
                                 </Form.Item>
                             </Col>

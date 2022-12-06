@@ -40,7 +40,7 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 loading: false,
-                data: [...action.payload.data.data, ...state.data]
+                data: [action.payload.data.data, ...state.data]
             };
 
 
