@@ -33,12 +33,12 @@ class ReservationRequest extends FormRequest
         $value = 0;
 
         $level = $car->level;
-        $out = new ConsoleOutput();
-        $out->writeln($days);
+        // $out = new ConsoleOutput();
+        // $out->writeln($days);
 
         $promotions = Promotion::all();
 
-
+        Log::alert("step 1");
         // $out->writeln($level);
         $prices = $level->prices;
         $index = 0;
@@ -59,7 +59,8 @@ class ReservationRequest extends FormRequest
             $init->addDay();
             $index++;
         }
-        $out->writeln($factors);
+        Log::alert("step 2");
+        // $out->writeln($factors);
         foreach ($prices as $index => $price) {
             if ($days >= $price->min && $days <= $price->max) {
                 $value = $price->price;
@@ -67,18 +68,18 @@ class ReservationRequest extends FormRequest
         }
 
         $prices = array_fill(0, $days, $value);
-        $out->writeln($prices);
+        // $out->writeln($prices);
         $carPrice = 0;
 
-
+        Log::alert("step 3");
         foreach ($prices as $index => $price) {
             $carPrice += $price * $factors[$index];
         }
 
-        $out->writeln($carPrice);
+        // $out->writeln($carPrice);
         $extraPrice = 0;
         $extras = Extra::findMany($this->extras);
-        $out->writeln($extras);
+        // $out->writeln($extras);
         foreach ($extras as $extra) {
             if ($extra->type == "day") {
                 $extraPrice += $days * $extra->price;
@@ -87,8 +88,8 @@ class ReservationRequest extends FormRequest
             }
         }
 
-
-        $out->writeln($extraPrice);
+        Log::alert("step 4");
+        // $out->writeln($extraPrice);
 
 
         $this->merge([
