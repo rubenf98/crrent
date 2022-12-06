@@ -156,7 +156,7 @@ class ReservationRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         Log::alert(json_encode($validator));
-        return $validator;
+        // return $validator;
         throw new HttpResponseException(response()->json([
             'success' => false,
             'errors' => $validator->errors()
