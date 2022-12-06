@@ -38,7 +38,7 @@ class ReservationRequest extends FormRequest
 
         $promotions = Promotion::all();
 
-        Log::alert("step 1");
+
         // $out->writeln($level);
         $prices = $level->prices;
         $index = 0;
@@ -59,7 +59,7 @@ class ReservationRequest extends FormRequest
             $init->addDay();
             $index++;
         }
-        Log::alert("step 2");
+
         // $out->writeln($factors);
         foreach ($prices as $index => $price) {
             if ($days >= $price->min && $days <= $price->max) {
@@ -71,7 +71,7 @@ class ReservationRequest extends FormRequest
         // $out->writeln($prices);
         $carPrice = 0;
 
-        Log::alert("step 3");
+
         foreach ($prices as $index => $price) {
             $carPrice += $price * $factors[$index];
         }
@@ -88,7 +88,6 @@ class ReservationRequest extends FormRequest
             }
         }
 
-        Log::alert("step 4");
         // $out->writeln($extraPrice);
 
 
@@ -100,8 +99,7 @@ class ReservationRequest extends FormRequest
             'car_price' => round($carPrice, 2),
             'car_price_per_day' => round($value, 2)
         ]);
-
-        Log::alert("step 5");
+        Log::alert("step 6");
     }
 
     /**
@@ -153,27 +151,7 @@ class ReservationRequest extends FormRequest
             'phone' => 'required|string',
             'local_address' => 'required|string',
 
-            'pickup_date' => 'required|date',
-            'return_date' => 'required|date',
-            'pickup_place' => 'required|string',
-            'return_place' => 'required|string',
-            'flight' => 'required|string',
-            'car_id' =>  'required|integer|exists:cars,id',
-            'price' => 'required|numeric',
-            'days' => 'required|integer|min:1',
-            'car_price' => 'required|numeric',
-            'car_price_per_day' => 'required|numeric',
 
-            'extras' => 'nullable|array',
-            'extras.*' => 'integer|exists:extras,id',
-
-            'drivers' => 'required|array|min:1',
-            'drivers.*.name' => 'required|string',
-            'drivers.*.birthday' => 'required|date',
-            'drivers.*.license' => 'required|string',
-            'drivers.*.emission' => 'required|date',
-            'drivers.*.validity' => 'required|date',
-            'drivers.*.emission_place' => 'required|string',
         ];
     }
 
