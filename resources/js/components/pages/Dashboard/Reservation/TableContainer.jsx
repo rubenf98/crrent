@@ -20,24 +20,23 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
             fixed: 'left',
         },
         {
+            title: 'Referência',
+            dataIndex: 'token',
+        },
+        {
             title: 'Datas',
             dataIndex: 'pickup_date',
             render: (pickup, row) => pickup + " | " + row.return_date,
         },
         {
-            title: 'Entrega',
-            dataIndex: 'pickup_place',
-            render: (pickup, row) => pickup + " | " + row.return_place,
+            title: 'Confirmado',
+            dataIndex: 'confirmed_at',
+            render: (confirmed_at) => confirmed_at ? confirmed_at : "Por confirmar",
         },
         {
             title: 'Carro',
             dataIndex: 'car',
             render: (car) => car.title,
-        },
-        {
-            title: 'Cliente',
-            dataIndex: 'client',
-            render: (client) => client.name + " | " + client.email + " | " + client.phone,
         },
         {
             title: 'Valor',
