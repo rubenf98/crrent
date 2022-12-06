@@ -100,6 +100,8 @@ class ReservationRequest extends FormRequest
             'car_price' => round($carPrice, 2),
             'car_price_per_day' => round($value, 2)
         ]);
+
+        Log::alert("step 5");
     }
 
     /**
