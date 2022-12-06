@@ -38,7 +38,7 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        return $request;
+        // return $request;
         $validator = $request->validated();
 
         DB::beginTransaction();
