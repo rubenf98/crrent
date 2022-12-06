@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ReservationRequest extends FormRequest
@@ -154,6 +155,7 @@ class ReservationRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        Log::alert($validator);
         return $validator;
         throw new HttpResponseException(response()->json([
             'success' => false,
