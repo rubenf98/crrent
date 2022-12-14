@@ -29,19 +29,10 @@ const TitleContainer = styled.div`
         box-sizing: border-box;
 
         h2, h3 {
-            font-size: 96px;
+            font-size: clamp(40px, 7vw, 80px);
             font-weight: 700;
             text-transform: uppercase;
-            margin: 0px;
-
-            @media (max-width: ${dimensions.lg}) {
-                font-size: 60px;
-            }
-
-            @media (max-width: ${dimensions.md}) {
-                font-size: 40px;
-            }
-            
+            margin: 0px;            
         }
 
         h2 {
@@ -112,7 +103,7 @@ const AboutContainer = styled.div`
         }
 
         h3 {
-            font-size: 40px;
+            font-size: 30px;
             font-weight: 700;
             text-transform: uppercase;
 

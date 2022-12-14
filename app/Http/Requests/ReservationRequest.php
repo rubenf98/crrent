@@ -10,7 +10,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\Console\Output\ConsoleOutput;
+use LVR\CreditCard\CardCvc;
+use LVR\CreditCard\CardNumber;
+use LVR\CreditCard\CardExpirationYear;
+use LVR\CreditCard\CardExpirationMonth;
 
 class ReservationRequest extends FormRequest
 {
@@ -142,8 +145,9 @@ class ReservationRequest extends FormRequest
             'drivers.*.validity' => 'required|date|after:' . $this->return_date,
             'drivers.*.emission_place' => 'required|string',
 
-
-
+            'card_number' => ['required', new CardNumber],
+            'card_validity' => 'required|date|after:' . $this->return_date,
+            'card_cvv' => ['required', new CardCvc($this->card_number)],
         ];
     }
 

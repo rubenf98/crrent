@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '2c7ccb010e3c8d976c51afccd338c60b71935a73',
+        'reference' => 'a737175efde7f4ff680c999c0c9faa9ecea53fad',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -394,6 +394,15 @@
                 0 => '*',
             ),
         ),
+        'laravel-validation-rules/credit-card' => array(
+            'pretty_version' => '1.7.0',
+            'version' => '1.7.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel-validation-rules/credit-card',
+            'aliases' => array(),
+            'reference' => '7f8934fa8dccdff5a67ab6d70840122f304c1469',
+            'dev_requirement' => false,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v8.83.25',
             'version' => '8.83.25.0',
@@ -409,7 +418,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '2c7ccb010e3c8d976c51afccd338c60b71935a73',
+            'reference' => 'a737175efde7f4ff680c999c0c9faa9ecea53fad',
             'dev_requirement' => false,
         ),
         'laravel/sail' => array(

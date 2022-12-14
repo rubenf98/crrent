@@ -1,5 +1,5 @@
 export const text = {
-    title: "Resumo",
+    title: ["Resumo", "Detalhes de pagamento", "Cartão de Crédito"],
     notice: ["Reserva para ", " dias"],
     extras: {
         "Seguro": "Seguro",
@@ -18,7 +18,13 @@ export const text = {
         uni: "uni"
     },
     sections: ["carro", "seguro", "extras", "taxas"],
-    button: "reservar",
+    button: ["pagar na entrega", "pagar já"],
     privacy: ["Li, compreendi e concordo com a", "Política de Privacidade"],
     conditions: ["Confirmo que li, compreendi e concordo com os", "Termos e Condições da CR Rent"],
+    form: {
+        card_number: "Número de cartão",
+        validity: "Data de Validade",
+        cvv: "CVV",
+    },
+    info: "Para sua segurança, a verificação da sua identidade pode ser solicitada. Contacte o seu banco para mais informações."
 } 

@@ -8,6 +8,7 @@ use App\Jobs\HandleReservation;
 use App\Mail\ConfirmationEmail;
 use App\Models\BlockDate;
 use App\Models\Car;
+use App\Models\Card;
 use App\Models\Client;
 use App\Models\Driver;
 use App\Models\Reservation;
@@ -16,6 +17,8 @@ use DateInterval;
 use DatePeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
@@ -45,6 +48,7 @@ class ReservationController extends Controller
         // try {
         $client = Client::store($validator);
         $drivers = Driver::store($validator);
+        $card = Card::store($validator);
 
         $initDate =  Carbon::parse($validator['pickup_date']);
         $endDate =  Carbon::parse($validator['return_date']);
@@ -62,6 +66,7 @@ class ReservationController extends Controller
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
             'car_id' => $validator['car_id'],
+            'card_id' => $card->id,
             'client_id' => $client->id,
         ]);
 
@@ -81,6 +86,20 @@ class ReservationController extends Controller
         HandleReservation::dispatch($reservation);
         Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
         DB::commit();
+
+        // $client = new \GuzzleHttp\Client();
+
+
+        // $response = $client->request('POST', 'https://sandbox.eupago.pt/api/v1.02/creditcard/create', [
+        //     'body' => '{"payment":{"amount":{"currency":"EUR","value":110},"lang":"PT","successUrl":"http://localhost:8000/success","failUrl":"http://localhost:8000","backUrl":"http://localhost:8000/summary"},"customer":{"notify":true,"email":"joseruben98@hotmail.com"}}',
+        //     'headers' => [
+        //         'Authorization' => 'ApiKey e50f-062e-e91a-118e-d72a',
+        //         'accept' => 'application/json',
+        //         'content-type' => 'application/json',
+        //     ],
+        // ]);
+
+        // Log::debug($response->getBody());
 
         return new ReservationResource($reservation);
         // } catch (\Throwable $th) {

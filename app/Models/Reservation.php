@@ -10,7 +10,7 @@ use setasign\Fpdi\Fpdi;
 
 class Reservation extends Model
 {
-    protected $fillable = ['car_price_per_day', 'days', 'car_price', 'token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
+    protected $fillable = ['card_id', 'car_price_per_day', 'days', 'car_price', 'token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
 
     use HasFactory;
 
@@ -19,8 +19,6 @@ class Reservation extends Model
         'car_price_per_day' => 'decimal:2',
         'price' => 'decimal:2',
     ];
-
-
 
     public function generateDoc()
     {
@@ -193,5 +191,10 @@ class Reservation extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function card()
+    {
+        return $this->hasOne(Card::class);
     }
 }

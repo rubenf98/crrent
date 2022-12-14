@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
-import { Button, maxWidthStyle } from '../../styles';
-import { Checkbox, Input, DatePicker, InputNumber } from 'antd';
+import { Button, maxWidthStyle, SecundaryButton } from '../../styles';
+import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col } from 'antd';
 import TitleContainer from './Common/TitleContainer';
-import { dimensions } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 import { connect } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import { createReservation, setCurrentErrors } from '../../../redux/reservation/actions';
 import moment from "moment";
 import { getPriceRounded } from '../../functions';
-import { dark } from '../../themes';
 
 const stretch = keyframes`
   from {
@@ -29,12 +28,15 @@ const Submit = styled(Button)`
     opacity: ${props => props.active ? "1" : ".3"};
 `;
 
+const SubmitSecundary = styled(SecundaryButton)`
+    cursor: ${props => props.active ? "pointer" : "default"};
+    opacity: ${props => props.active ? "1" : ".3"};
+`;
+
 export const inputStyle = css`
     width: 100%;
     padding: 15px;
     box-sizing: border-box;
-    -webkit-box-shadow: 0px 4px 31px rgba(0, 0, 0, 0.15);
-    box-shadow: 0px 4px 31px rgba(0, 0, 0, 0.15);
 
     input::placeholder, .ant-picker-input > input::placeholder {
         color: black;
@@ -73,6 +75,8 @@ const Container = styled.section`
 
 const Content = styled.div`
     ${maxWidthStyle}
+
+    max-width: calc(${maxWidth} - 200px);
 `;
 
 const Car = styled.div`
@@ -206,10 +210,16 @@ const SummaryContainer = styled.section`
     flex-wrap: wrap;
 `;
 
+const Back = styled.img`
+    width: 30px;
+    margin-bottom: 20px;
+    cursor: pointer;
+`;
+
 const PolicyContainer = styled.section`
     font-weight: 400;
     font-size: 20px;
-    margin: 100px 0px;
+    margin: 100px 0px 50px 0px;
     display: flex;
     flex-direction: column;
 
@@ -232,7 +242,7 @@ const PaymentContainer = styled.section`
     box-sizing: border-box;
     border: 2px solid;
     border-color: ${props => props.primary};
-    box-shadow: 0px 4px 31px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -245,6 +255,22 @@ const PaymentContainer = styled.section`
         @media (max-width: ${dimensions.md}) {
             width: 100%;
             padding: 0px;
+        }
+    }
+
+    .right-side {
+        display: flex;
+        flex-direction: column;
+
+        p {
+            flex: 1;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
         }
     }
 
@@ -279,10 +305,10 @@ const PaymentContainer = styled.section`
     }
 
     .info {
-        margin: 20px 0px 80px 0px;
+        margin: 20px 0px 80px auto;
 
         @media (max-width: ${dimensions.md}) {
-            margin: 20px 0px 40px 0px;
+            margin: 20px 0px 40px auto;
 
         }
     }
@@ -303,9 +329,17 @@ const MonthPicker = styled(DatePicker.MonthPicker)`
 `;
 
 const rules = {
-    name: [{
+    card_number: [{
         required: true,
-        message: 'Please input your fullname!',
+        message: 'Please input your card number!',
+    }],
+    validity: [{
+        required: true,
+        message: 'Please input your card validity date!',
+    }],
+    cvv: [{
+        required: true,
+        message: 'Please input your CVV!',
     }],
 };
 
@@ -316,6 +350,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
     const [days, setDays] = useState(1);
     const [privacy, setPrivacy] = useState(false);
     const [conditions, setConditions] = useState(false);
+    const [form] = Form.useForm();
     const { text } = require('../../../../assets/' + language + "/summary");
 
     const content = [
@@ -344,33 +379,39 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
     }, [])
 
     const handleSubmit = () => {
-        var data = { ...currentReservation };
-        const dateFormat = "YYYY-MM-DD HH:mm";
+        form.validateFields().then((card_info) => {
+            var data = { ...currentReservation, ...card_info };
+            const dateFormat = "YYYY-MM-DD HH:mm";
 
-        data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
-        // var drivers = [...data.drivers];
+            data.card_number = data.card_number.replace(/\s/g, "");
 
-        // drivers.map((driver) => {
-        //     driver.birthday = moment(driver.birthday).format(dateFormat);
-        //     driver.emission = moment(driver.emission).format(dateFormat);
-        //     driver.validity = moment(driver.validity).format(dateFormat);
-        // })
+            data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
+            // var drivers = [...data.drivers];
 
-        // data.drivers = drivers;
+            // drivers.map((driver) => {
+            //     driver.birthday = moment(driver.birthday).format(dateFormat);
+            //     driver.emission = moment(driver.emission).format(dateFormat);
+            //     driver.validity = moment(driver.validity).format(dateFormat);
+            // })
+
+            // data.drivers = drivers;
 
 
-        createReservation({ ...data, car_id: currentCar.id }).then((response) => {
-            navigate("/success");
-        }).catch((errors) => {
-            setCurrentErrors(errors.response.data.errors);
-            navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
-        });
+            createReservation({ ...data, car_id: currentCar.id }).then((response) => {
+                navigate("/success");
+            }).catch((errors) => {
+                setCurrentErrors(errors.response.data.errors);
+                navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
+            });
+        })
+
     }
 
     return (
         <Container>
 
             <Content>
+                <Back onClick={() => navigate("/checkout?from=" + currentReservation.date[0].format(dateFormat) + "&to=" + currentReservation.date[1].format(dateFormat))} src="/icon/back.svg" alt="return to checkout" />
                 {Object.values(currentCar).length &&
                     <SummaryContainer>
                         <Car>
@@ -378,7 +419,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                             <img src={currentCar.image} alt="car" />
                         </Car>
                         <Info>
-                            <TitleContainer title={text.title} />
+                            <TitleContainer title={text.title[0]} />
                             <h3 style={{ marginTop: "-40px" }}>{text.notice[0]} {days} {text.notice[1]}</h3>
 
                             {content.map((section, key) => (
@@ -426,22 +467,19 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
 
                 </PolicyContainer>
 
-                <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                    {text.button}
-                </Submit>
-
-                {/* <TitleContainer title="Detalhes de pagamento" />
+                <TitleContainer title={text.title[1]} />
                 <PaymentContainer primary={theme.primary}>
                     <div className='column'>
 
-                        <h3>Cartão de Crédito</h3>
+                        <h3>{text.title[2]}</h3>
                         <Form
                             layout="vertical"
                             requiredMark={false}
+                            form={form}
                         >
                             <Row>
                                 <Col xs={24} md={20}>
-                                    <Form.Item name="card_number" label="Número de cartão" rules={rules.name}>
+                                    <Form.Item name="card_number" label={text.form.card_number} rules={rules.card_number}>
                                         <StyledInput placeholder='XXXX XXXX XXXX XXXX' />
                                     </Form.Item>
                                 </Col>
@@ -449,28 +487,32 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
 
                             <Row type="flex" gutter={16}>
                                 <Col xs={24} md={10}>
-                                    <Form.Item name="card_validity" label="Data de Validade" rules={rules.name}>
+                                    <Form.Item name="card_validity" label={text.form.validity} rules={rules.validity}>
                                         <MonthPicker placeholder='MM/AA' />
                                     </Form.Item>
                                 </Col>
 
                                 <Col xs={24} md={10}>
-                                    <Form.Item name="card_cvv" label="CVV" rules={rules.name}>
+                                    <Form.Item name="card_cvv" label={text.form.cvv} rules={rules.cvv}>
                                         <StyledInputNumber placeholder='XXX' />
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Form>
                     </div>
-                    <div className='column'>
-                        <p className='info'>Para sua segurança, a verificação da sua identidade pode ser solicitada. Contacte o seu banco para mais informações.</p>
-                        <Button background={theme.primary}>
-                            pagar já
-                        </Button>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        <p>( +351 ) 964 546 324</p>
+                    <div className='column right-side'>
+                        <p className='info'>{text.info}</p>
+
+                        <div className='button-container'>
+                            <SubmitSecundary disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} primary={theme.primary}>
+                                {text.button[0]}
+                            </SubmitSecundary>
+                            <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                {text.button[1]}
+                            </Submit>
+                        </div>
                     </div>
-                </PaymentContainer> */}
+                </PaymentContainer>
 
             </Content>
         </Container>

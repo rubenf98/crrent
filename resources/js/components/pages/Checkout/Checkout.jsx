@@ -47,6 +47,8 @@ const Title = styled.h1`
 
 const ButtonContainer = styled.div`
     ${maxWidthStyle}
+
+    max-width: calc(${maxWidth} - 200px);
 `;
 
 const Price = styled.div`
@@ -65,7 +67,7 @@ const Price = styled.div`
         color: inherit;
         text-transform: uppercase;
         font-weight: 700;
-        font-size: 20px;
+        font-size: 18px;
         margin-bottom: 0px;
     }
     p {
@@ -77,7 +79,7 @@ const Price = styled.div`
     .price {
         text-transform: uppercase;
         font-weight: 700;
-        font-size: 40px;
+        font-size: 36px;
         margin-bottom: 0px;
     }
 

@@ -57,7 +57,7 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
             var dates = [];
 
             values.dates.map((date) => {
-                dates.push(moment(date).format("YYYY-MM-DD"));
+                dates.push(moment(date).format("DD-MM-YYYY"));
             })
 
             values = { ...values, dates };
@@ -89,6 +89,7 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
                             rules={rules.name}
                         >
                             <RangePicker
+                                format="DD-MM-YYYY"
                                 disabledDate={(currentDate) => {
                                     return currentDate && (
                                         (currentDate < moment())

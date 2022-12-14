@@ -41,7 +41,7 @@ const Accordion = styled(Collapse)`
         }
     }
     .ant-collapse-header {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
         text-transform: uppercase;
 
@@ -52,7 +52,7 @@ const Accordion = styled(Collapse)`
 
     .ant-collapse-content-box {
         p {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 400;
 
             @media (max-width: ${dimensions.md}) {

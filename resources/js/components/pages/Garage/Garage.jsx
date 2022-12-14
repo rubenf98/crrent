@@ -55,7 +55,7 @@ const Search = styled.button`
     background-color: ${props => props.background};
     color: white;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 16px;
     border: 0px;
     cursor: pointer;
     text-transform: uppercase;
@@ -110,7 +110,7 @@ const Car = styled.div`
     .image-container {
         width: 50%;
         position: relative;
-        padding: 30px 0px;
+        padding: 30px 50px 30px 0px;
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -118,6 +118,7 @@ const Car = styled.div`
 
         @media (max-width: ${dimensions.md}) {
             width: 100%;
+            padding: 30px 0px 30px 0px;
         }
 
         img {
@@ -150,24 +151,12 @@ const Car = styled.div`
 
         h3 {
             font-weight: 700;
-            font-size: 40px;
-            margin: 0px;
+            font-size: 36px;
+            margin: 0px 0px 30px 0px;
 
             @media (max-width: ${dimensions.md}) {
                 margin: 0px;
                 margin-top: 10px;
-                font-size: 16px;
-
-            }
-        }
-
-        h4 {
-            font-weight: 400;
-            font-size: 20px;
-            opacity: .5;
-            margin: 0px;
-
-            @media (max-width: ${dimensions.md}) {
                 font-size: 16px;
             }
         }
@@ -202,19 +191,6 @@ const Car = styled.div`
                 }
             }
         } 
-
-        .disclaimer, .phone {
-            font-weight: 400;
-            opacity: .5;
-        }
-
-        .disclaimer {
-            margin-top: 15px;
-        }
-
-        .phone {
-            margin: 50px 0px 0px 0px;
-        }
     }
 `;
 
@@ -232,10 +208,8 @@ const IconContainer = styled.div`
 
 
 const Icon = styled.div`
-    width: 65px;
-    height: 65px;
-    
-    
+    width: 55px;
+    height: 55px;
 
     div {
         padding: 10px;
@@ -243,7 +217,6 @@ const Icon = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-
     }
 
     p {
@@ -253,6 +226,7 @@ const Icon = styled.div`
         margin-top: 15px;
     }
 `;
+
 const dateFormat = "YYYY-MM-DD HH:mm";
 function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetchPromotions, language, promotions }) {
     const [dates, setDates] = useState([undefined, undefined]);
@@ -316,7 +290,6 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                 <div className='info-container'>
                     <h3>{info.title}</h3>
 
-                    <h4>{info.subtitle}</h4>
                     <IconContainer border={theme.primary}>
                         <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[info.shift_mode]}</p></Icon>
                         <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[info.gas]}</p></Icon>
@@ -335,10 +308,6 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>
                         {text.continue}
                     </Button>
-                    <p className='disclaimer'>{text.disclaimer}</p>
-
-                    <p className='phone'>( +351 ) 934 953 682</p>
-
                 </div>
             </Car>
         )

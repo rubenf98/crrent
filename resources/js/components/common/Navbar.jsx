@@ -73,7 +73,7 @@ const ButtonContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
 

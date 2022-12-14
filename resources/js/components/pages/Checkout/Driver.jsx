@@ -3,11 +3,12 @@ import styled, { withTheme } from "styled-components";
 import { maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
-import { dimensions } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 import moment from "moment";
+
 const Container = styled.section`
     ${maxWidthStyle};
-
+    max-width: calc(${maxWidth} - 200px);
     @media (max-width: ${dimensions.md}) {
         padding: 0px;
     }
@@ -46,7 +47,7 @@ function Driver({ text, drivers }) {
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label={placeholder.birthday} name="birthday" rules={rules.birthday}>
-                                                    <DatePicker size="large" maxDate={moment().subtract(21, "years")} />
+                                                    <DatePicker format="DD-MM-YYYY" size="large" maxDate={moment().subtract(21, "years")} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -58,12 +59,12 @@ function Driver({ text, drivers }) {
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label={placeholder.emission} name="emission" rules={rules.emission_date}>
-                                                    <DatePicker size="large" />
+                                                    <DatePicker format="DD-MM-YYYY" size="large" />
                                                 </Form.Item>
                                             </Col>
                                             <Col xs={24} md={6}>
                                                 <Form.Item label={placeholder.validity} name="validity" rules={rules.validity_date}>
-                                                    <DatePicker size="large" />
+                                                    <DatePicker format="DD-MM-YYYY" size="large" />
                                                 </Form.Item>
                                             </Col>
 

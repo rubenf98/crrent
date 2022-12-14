@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled, { withTheme, keyframes } from "styled-components";
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon } from '../../../icons';
+import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon, AirIcon } from '../../../icons';
 import { maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from 'antd';
 import { dimensions } from '../../helper';
@@ -86,26 +86,14 @@ const Info = styled.div`
     }
 
     h2 {
-        font-size: 40px;
+        font-size: 36px;
         font-weight: 700;
-        margin-bottom: 0px;
-    }
-
-    h3 {
-        margin-top: 0px;
-        font-size: 20px;
-        font-weight: 400;
-        opacity: .5;
-        
+        margin-bottom: 50px;
     }
 
     @media (max-width: ${dimensions.lg}) {
         h2 {
             font-size: 18px;
-        }
-
-        h3 {
-            font-size: 16px;
         }
     }
 `;
@@ -359,12 +347,13 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                 </Car>
                 <Info>
                     <h2>{car.title}</h2>
-                    <h3>{car.subtitle}</h3>
+
                     <IconContainer border={theme.primary}>
                         <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[car.shift_mode]}</p></Icon>
                         <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[car.gas]}</p></Icon>
                         <Icon><div className='border'><PeopleIcon /></div> <p>{car.people}</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>{car.doors}</p></Icon>
+                        <Icon><div className='border'><AirIcon /></div> <p></p></Icon>
                     </IconContainer>
                     <DesktopContainer>
                         <Col xs={24} md={24}>
@@ -372,8 +361,8 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                                 <RangePicker
                                     onChange={handleDateChange}
                                     showTime={{ format: "HH:mm", hideDisabledOptions: true }}
-                                    minuteStep={30}
-                                    format="YYYY-MM-DD HH:mm"
+                                    minuteStep={15}
+                                    format="DD-MM-YYYY HH:mm"
                                     placeholder={text.placeholder.date}
                                     suffixIcon={(<></>)}
                                     onOpenChange={handleDateReset}
@@ -483,7 +472,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                         <RangePicker showTime={{
                             format: "HH:mm"
                         }}
-                            format="YYYY-MM-DD HH:mm"
+                            format="DD-MM-YYYY HH:mm"
                             placeholder={text.placeholder.date}
                             suffixIcon={(<></>)}
                         />

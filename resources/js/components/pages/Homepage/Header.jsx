@@ -4,14 +4,14 @@ import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { InstagramIcon, MailIcon, WhatsappIcon } from '../../../icons';
+import { FacebookIcon, MailIcon, WhatsappIcon } from '../../../icons';
 import DateFormItem from '../../common/DateFormItem';
 
 const RangePickerContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 0px;
+    margin-top: 100px;
     position: relative;
 
     @media (max-width: ${dimensions.md}) {
@@ -66,11 +66,11 @@ const TitleContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     position: relative;
-    max-width: ${maxWidth};
+    max-width: calc(${maxWidth} - 300px);
     margin: auto;
 
     h1 {
-        font-size: 128px;
+        font-size: clamp(60px, 10vw, 80px);
         font-weight: 700;
         line-height: 94%;
         color: ${props => props.color};
@@ -78,7 +78,6 @@ const TitleContainer = styled.div`
         text-transform: uppercase;
 
         @media (max-width: ${dimensions.xxl}) {
-            font-size: 100px;
             padding-left: 30px;
             box-sizing: border-box;
         }
@@ -96,8 +95,6 @@ const TitleContainer = styled.div`
     }
 
     
-
-
     @media (max-width: ${dimensions.md}) {
         padding: 100px 0px 0px 30px;
         margin: 100px auto 0px auto;
@@ -141,11 +138,17 @@ const LinksContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 100px;
-    opacity: .7;
+    gap: 60px;
+    opacity: .8;
+
+    svg {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
 
     @media (max-width: ${dimensions.xxl}) {
-        gap: 50px;
+        gap: 40px;
     }
 
     @media (max-width: ${maxWidth}) {
@@ -159,8 +162,8 @@ const LinksContainer = styled.div`
 `;
 
 const Accent = styled.div`
-    width: 100px;
-    height: 270px;
+    width: 80px;
+    height: 250px;
     top: -50px;
     left: -50px;
     position: absolute;
@@ -207,9 +210,17 @@ function Header({ theme, text }) {
                 </TitleContainer>
                 <RangePickerContainer>
                     <LinksContainer>
-                        <WhatsappIcon />
-                        <MailIcon />
-                        <InstagramIcon />
+                        <a href="https://api.whatsapp.com/send?l=en&phone=351934953682" target="_blank">
+                            <WhatsappIcon />
+                        </a>
+                        <a href="mailto:info@cr-rent.com" target="_blank">
+                            <MailIcon />
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=100087592815470" target="_blank">
+                            <FacebookIcon />
+                        </a>
+
+
                     </LinksContainer>
                     <DateFormItem text={text} dates={dates} setDates={setDates} />
                     <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button}</Search>

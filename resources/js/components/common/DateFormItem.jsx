@@ -27,7 +27,7 @@ const RangePicker = styled(DatePicker.RangePicker)`
         opacity: .8;
         font-weight: 400;
         text-transform: uppercase;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     @media (max-width: ${dimensions.lg}) {
@@ -61,12 +61,12 @@ function DateFormItem({ setDates, dates, text, blockedDates }) {
             var dateCopy = [...dates];
 
             if (e.target.placeholder == "data levantamento" || e.target.placeholder == "pickup date") {
-                setDates([moment(e.target.value), dateCopy[1]]);
-                setCurrentDates([moment(e.target.value), dateCopy[1]]);
+                setDates([moment(e.target.value, "DD-MM-YYYY HH:mm"), dateCopy[1]]);
+                setCurrentDates([moment(e.target.value, "DD-MM-YYYY HH:mm"), dateCopy[1]]);
             }
             else if (e.target.placeholder == "data devolução" || e.target.placeholder == "return date") {
-                setDates([dateCopy[0], moment(e.target.value)]);
-                setCurrentDates([dateCopy[0], moment(e.target.value)]);
+                setDates([dateCopy[0], moment(e.target.value, "DD-MM-YYYY HH:mm")]);
+                setCurrentDates([dateCopy[0], moment(e.target.value, "DD-MM-YYYY HH:mm")]);
             }
         }
     };
@@ -89,10 +89,10 @@ function DateFormItem({ setDates, dates, text, blockedDates }) {
             onBlur={onBlur}
             onOpenChange={handleDateReset}
             showTime={{ format: "HH:mm", hideDisabledOptions: true }}
-            minuteStep={30}
+            minuteStep={15}
             onChange={(e) => setDates(e)}
             onCalendarChange={(val) => setCurrentDates(val)}
-            format="YYYY-MM-DD HH:mm"
+            format="DD-MM-YYYY HH:mm"
             placeholder={text.placeholder}
             suffixIcon={(<></>)}
             disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates)}

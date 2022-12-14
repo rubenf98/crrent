@@ -68,7 +68,7 @@ class CarSeeder extends Seeder
                 'image' => '/image/garage/yaris.png'
             ],
             [
-                'title' => 'Toyota Aygo',
+                'title' => 'Toyota Aygo X',
                 'subtitle' => 'X',
                 'level_id' => 2,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
@@ -79,7 +79,7 @@ class CarSeeder extends Seeder
 
 
             [
-                'title' => 'Dacia Sandero',
+                'title' => 'Dacia Sandero III',
                 'registration' => 'AT-39-XU',
                 'subtitle' => 'Comfort',
                 'level_id' => 3,
@@ -122,16 +122,16 @@ class CarSeeder extends Seeder
 
 
             [
-                'title' => 'Dacia Sandero III',
-                'subtitle' => 'Stepway Comfort',
+                'title' => 'Dacia Sandero III Stepway',
+                'subtitle' => 'Comfort',
                 'registration' => 'AT-60-IQ',
                 'level_id' => 4,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',
                 'image' => '/image/garage/daciastep.png'
             ],
             [
-                'title' => 'Dacia Sandero III',
-                'subtitle' => 'Stepway Comfort',
+                'title' => 'Dacia Sandero III Stepway',
+                'subtitle' => 'Comfort',
                 'registration' => 'AT-94-IQ',
                 'level_id' => 4,
                 'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual',

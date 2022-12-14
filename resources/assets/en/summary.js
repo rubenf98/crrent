@@ -1,5 +1,5 @@
 export const text = {
-    title: "Summary",
+    title: ["Summary", "Payment details", "Credit Card"],
     notice: ["Reservation for ", " days"],
     extras: {
         "Seguro": "Insurance",
@@ -18,7 +18,13 @@ export const text = {
         uni: "uni"
     },
     sections: ["car", "insurance", "addons", "fees"],
-    button: "book",
+    button: ["pay at pickup", "pay now"],
     privacy: ["I've read, understood and agree with the", "Privacy policy"],
     conditions: ["I confirm that I've read understood and agree with", "CR Rent terms and conditions"],
+    form: {
+        card_number: "Card number",
+        validity: "Card validity",
+        cvv: "CVV",
+    },
+    info: "For safety reasons, your identity may be requested. Contact your banking institution for additional information."
 } 

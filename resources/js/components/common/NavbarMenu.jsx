@@ -2,7 +2,7 @@ import { Drawer } from 'antd'
 import styled, { withTheme } from "styled-components";
 import React from 'react'
 import { connect } from "react-redux";
-import { CloseIcon, InstagramIcon, MailIcon, WhatsappIcon } from '../../icons';
+import { CloseIcon, FacebookIcon, MailIcon, WhatsappIcon } from '../../icons';
 import { handleMenu } from "../../redux/application/actions";
 
 const Container = styled(Drawer)`
@@ -140,7 +140,7 @@ function NavbarMenu({ theme, handleMenu, menuVisible }) {
             <SocialContainer>
                 <WhatsappIcon />
                 <MailIcon />
-                <InstagramIcon />
+                <FacebookIcon />
             </SocialContainer>
 
 

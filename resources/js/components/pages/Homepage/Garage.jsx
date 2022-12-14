@@ -179,22 +179,12 @@ const Car = styled.div`
     }
 
     .info-container {
-        h3, h4 {
+        h3 {
             text-align: center;
             color: ${props => props.primary};
-        }
-
-        h3 {
             font-size: 20px;
             font-weight: 700;
-            margin: 20px 0px 0px 0px;
-        }
-
-        h4 {
-            font-size: 16px;
-            font-weight: 400;
-            opacity: .5;
-            margin: 0px 0px 40px 0px;
+            margin: 20px 0px 40px 0px;
         }
 
         .price-container {
@@ -296,7 +286,6 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
 
             <div className='info-container'>
                 <h3>{info.title}</h3>
-                <h4>{info.subtitle}</h4>
 
                 <div className='price-container'>
                     <p><span>{text.car.price[0]}</span>  {info.level.prices[2].price * currentFactor}€ <span>/ {text.car.price[1]}</span></p>
@@ -342,6 +331,9 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
                         </div>
                     </CarContainer>
                     : <>
+
+
+
                         <Carousel
                             arrows={false}
                             responsive={getCarouselBreakpoints([1, 1, 3, 3, 3])}
@@ -357,6 +349,8 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
                             <div className='separator' />
                             <div onClick={() => handleClick("next")}> {window.innerWidth < dimensions.md ? 7 : currentSlides[1]} <NextIcon /></div>
                         </ArrowContainer>
+
+
 
                     </>
             }

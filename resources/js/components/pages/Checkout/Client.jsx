@@ -3,11 +3,12 @@ import styled, { withTheme } from "styled-components";
 import { maxWidthStyle } from '../../styles';
 import { Col, Form, Input, Row } from 'antd';
 import TitleContainer from './Common/TitleContainer';
-import { dimensions } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 
 const Container = styled.section`
     ${maxWidthStyle}
     margin: 120px auto;
+    max-width: calc(${maxWidth} - 200px);
 
     @media (max-width: ${dimensions.md}) {
         padding: 0px;

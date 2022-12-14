@@ -3,7 +3,7 @@ import styled, { withTheme } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
 import { Checkbox } from 'antd';
 import TitleContainer from './Common/TitleContainer';
-import { dimensions } from '../../helper';
+import { dimensions, maxWidth } from '../../helper';
 import { fetchExtras } from "../../../redux/extra/actions";
 import { connect } from "react-redux";
 
@@ -15,6 +15,7 @@ const Container = styled.section`
     align-items: flex-start;
     flex-wrap: wrap;
     margin: 120px auto;
+    max-width: calc(${maxWidth} - 200px);
 
     @media (max-width: ${dimensions.md}) {
         padding: 0px;
@@ -187,7 +188,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
 
 
                 <PackageContainer>
-                    <Package>
+                    {/* <Package>
                         <h3>{text.insurance.basic.title}</h3>
                         <ul>
                             <li>{text.insurance.basic.items[0]}</li>
@@ -199,7 +200,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
                         <p>
                             TOTAL 12.00€
                         </p>
-                    </Package>
+                    </Package> */}
 
                     <Package border={theme.primary} active>
                         <h3>{text.insurance.premium.title}</h3>
@@ -212,7 +213,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
                             {text.insurance.button}
                         </Button>
                         <p className='discount'>
-                            TOTAL 0.00€
+                            TOTAL 15.00€
                         </p>
                     </Package>
                 </PackageContainer>

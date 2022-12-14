@@ -35,13 +35,13 @@ export const text = {
         date: ["data levantamento", "data devolução"],
         pickup_place: {
             label: "local levantamento",
-            options: ["aeroporto", "loja"],
+            options: ["Aeroporto", "Loja"],
             tax: "Fora",
             placeholder: "Indique outra morada ou hotel"
         },
         return_place: {
             label: "local devolução",
-            options: ["aeroporto", "loja"],
+            options: ["Aeroporto", "Loja"],
             tax: "Fora",
             placeholder: "Indique outra morada ou hotel"
         },

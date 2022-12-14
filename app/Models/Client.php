@@ -10,11 +10,6 @@ class Client extends Model
     use HasFactory;
     protected $fillable = ['name', 'cc', 'nif', 'address', 'country', 'postal_code', 'email', 'phone', 'local_address', 'company'];
 
-    public function card()
-    {
-        return $this->hasOne(Card::class);
-    }
-
     public static function store($validator)
     {
         $client = self::where('cc', $validator['cc'])->first();
