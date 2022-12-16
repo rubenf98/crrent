@@ -10,6 +10,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `;
 
 function Car({ data, loading, meta, fetchCars, deleteCar }) {

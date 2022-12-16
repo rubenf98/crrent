@@ -4,7 +4,7 @@ export const text = {
         button: "search"
     },
     title: "our offer",
-    level: "class",
+    level: "group",
     descriptions: {
         manual: "manual",
         automatic: "automatic",
@@ -14,7 +14,7 @@ export const text = {
         diesel: "diesel"
     },
     from: "from",
-    notice: ["Include 22% VAT for", "days"],
+    notice: ["Price for", "days"],
     continue: "continue",
     disclaimer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 } 

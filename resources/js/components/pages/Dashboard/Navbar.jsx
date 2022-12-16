@@ -10,7 +10,7 @@ const Container = styled(Row)`
 `;
 
 const NavBarContainer = styled(Row)`
-    width: 60%;
+    width: 100%;
     text-transform: uppercase;
     margin: auto;
 
@@ -27,38 +27,26 @@ const TabList = styled.ul`
 
     li {
         display: inline-block;
-        :last-child {
-            div::after {
-                content: "";
-            }
-        }
     }
 
     .link--active{
         color: black;
         font-weight: bold;
-        ::before {
-            width: 105%;
-        }
     }
 `;
 
 const LinkWithSeparator = styled(NavLink)`
     text-decoration: none;
-    font-size: 1.2em;
+    font-size: 16px;
     display: inline-block;
     padding: 0 10px;
     margin: auto 5px;
     position: relative;
     cursor: pointer;
-    -webkit-transition: 0.3s;
-    -moz-transition: 0.3s;
-    -o-transition: 0.3s;
     transition: 0.3s;
-    border-bottom: 6px solid white;
-    margin: 0 20px;
+    margin: 0 10px;
     text-transform: uppercase;
-    font-size: 1em;
+    font-size: 16px;
     color: black;
 
     &:hover {
@@ -68,25 +56,6 @@ const LinkWithSeparator = styled(NavLink)`
     @media (max-width: ${dimensions.sm}){
         font-size: .9em;
         margin: 0 10px;
-    }
-
-
-
-    ::after {
-        position: absolute;
-        content: "•";
-        color: #777;
-        right: -25px;
-
-        @media (max-width: ${dimensions.sm}){
-            right: -15px;
-        }
-    }
-
-    :last-child {
-        ::after {
-        content: "";
-        }
     }
 `;
 

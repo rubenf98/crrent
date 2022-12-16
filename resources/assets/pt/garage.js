@@ -14,7 +14,7 @@ export const text = {
         diesel: "diesel"
     },
     from: "desde",
-    notice: ["Inclui IVA a 22% para", "dias"],
+    notice: ["Preço para", "dias"],
     continue: "continuar",
     disclaimer: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
 } 

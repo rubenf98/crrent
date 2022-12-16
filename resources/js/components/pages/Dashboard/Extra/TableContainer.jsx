@@ -7,6 +7,11 @@ import StopPropagation from "../../../common/StopPropagation";
 
 const Container = styled.div`
     width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px 0px #c6c6c6;
 `;
 
 

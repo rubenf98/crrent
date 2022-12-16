@@ -1,117 +1,67 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { dimensions } from "../../helper";
+import TodayTableContainer from "./Homepage/TodayTableContainer";
+import { connect } from "react-redux";
+import { fetchTodayReservations, fetchNextReservations } from "../../../redux/reservation/actions";
+import NextTableContainer from "./Homepage/NextTableContainer";
 
 const Container = styled.div`
     h1 {
-        text-align: center;
         font-size: 36px;
-        text-align: center;
+        text-align: left;
         padding: 50px 0;
     }
 `;
 
-const Content = styled.div`
-    width: 100%;
+
+
+const TodayContainer = styled.section`
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: space-between;
     gap: 20px;
-    flex-wrap: wrap;
-
-    @media (max-width: ${dimensions.md}){
-        flex-wrap: wrap;
-    }
+    margin-bottom: 20px;
 `;
 
-const CardContent = styled.div`
-    width: 30%;
-    box-sizing: border-box;
-    text-align: center;
-    min-width: 200px;
-    border-radius: 6px;
-    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
-    transition: .3s ease-in-out;
-    padding: 20px;
-    box-sizing: border-box;
-    
-    &:hover {
-        transform: scale(1.01);
-        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
-    }
 
-    @media (max-width: ${dimensions.md}){
-        width: 100%;
-    }
 
-    img {
-        width: 80%;
-        margin: auto;
-        display: block;
-    }
+function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, nextData }) {
 
-    p {
-        font-weight: bold;
-        margin: 15px auto;
-        font-size: 16px;
-        color: #222222;
-    }
-`;
+    useEffect(() => {
+        fetchTodayReservations();
+        fetchNextReservations();
+    }, [])
 
-const CardContainer = ({ img, text, to }) => (
-    <CardContent>
 
-        <Link to={to}>
-            <img src={img} alt="iPhone icon" />
-            <p className="card-text">{text}</p>
-        </Link>
+    return (
+        <Container>
+            <h1>Bem vindo de volta ao painel de controlo</h1>
+            <TodayContainer>
+                <TodayTableContainer title="Levantamentos Hoje" data={todayData.pickup} />
+                <TodayTableContainer title="Devoluções Hoje" data={todayData.return} />
+            </TodayContainer>
 
-    </CardContent>
-);
+            <NextTableContainer title="Devoluções Hoje" data={nextData} />
 
-class Dashboard extends Component {
-    render() {
-        return (
-            <Container>
-                <h1>Bem vindo de volta ao painel de controlo</h1>
-                <Content >
 
-                    <CardContainer
-                        img="/icon/dashboard/reservation.svg"
-                        text="Listagem de reservas"
-                        to="/painel/reservas"
-                    />
-
-                    <CardContainer
-                        img="/icon/dashboard/blocked.svg"
-                        text="Datas bloqueadas"
-                        to="/painel/bloqueado"
-                    />
-
-                    <CardContainer
-                        img="/icon/dashboard/car.svg"
-                        text="Carros na plataforma"
-                        to="/painel/carros"
-                    />
-
-                    <CardContainer
-                        img="/icon/dashboard/extra.svg"
-                        text="Extras disponibilizados"
-                        to="/painel/extras"
-                    />
-
-                    <CardContainer
-                        img="/icon/dashboard/promotion.svg"
-                        text="Preços e promoções"
-                        to="/painel/precos"
-                    />
-
-                </Content>
-
-            </Container>
-        );
-    }
+        </Container>
+    )
 }
 
-export default Dashboard;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchTodayReservations: () => dispatch(fetchTodayReservations()),
+        fetchNextReservations: () => dispatch(fetchNextReservations()),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        loading: state.reservation.loading,
+        todayData: state.reservation.todayData,
+        nextData: state.reservation.nextData
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

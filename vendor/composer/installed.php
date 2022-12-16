@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'a737175efde7f4ff680c999c0c9faa9ecea53fad',
+        'reference' => '647ead07724f1dc35a238be2ffea125a935eb8f3',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -418,7 +418,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'a737175efde7f4ff680c999c0c9faa9ecea53fad',
+            'reference' => '647ead07724f1dc35a238be2ffea125a935eb8f3',
             'dev_requirement' => false,
         ),
         'laravel/sail' => array(
@@ -987,6 +987,15 @@
             'install_path' => __DIR__ . '/../setasign/fpdi',
             'aliases' => array(),
             'reference' => '6231e315f73e4f62d72b73f3d6d78ff0eed93c31',
+            'dev_requirement' => false,
+        ),
+        'spatie/laravel-translatable' => array(
+            'pretty_version' => '4.6.0',
+            'version' => '4.6.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/laravel-translatable',
+            'aliases' => array(),
+            'reference' => '5900d6002a5795712058a04c7ca7c2c44b3e0850',
             'dev_requirement' => false,
         ),
         'swiftmailer/swiftmailer' => array(

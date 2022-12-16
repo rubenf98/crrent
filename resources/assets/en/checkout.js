@@ -2,10 +2,10 @@ export const text = {
     titles: ["data on your reservation", "Insurance", "Addons", "Client Information", "Main Driver", "Additional Driver"],
     extras: {
         "Cobertura SCDW": "SCDW cover",
-        "Cobertura vidros e pneus": "Windows and tyres cover",
+        "Cobertura vidros e pneus": "Windows and tyres coverage",
         "Condutor adicional": "Additional driver",
         "Cadeira de bébé": "Baby seat",
-        "Assento de criança": "Children chair"
+        "Assento de criança": "Child seat"
     },
     descriptions: {
         manual: "manual",
@@ -24,11 +24,11 @@ export const text = {
         button: "selected",
         basic: {
             title: "Basic",
-            items: ["CDW protection", "With no excess on car bodywork damage"]
+            items: ["CDW protection", "Subject to a minimum excess of 800€"]
         },
         premium: {
             title: "Premium",
-            items: ["SCDW protection", "Thief Protection", "Possible damage is covered"]
+            items: ["Premium coverage - SCDW (Super Collision Damage Waiver)", "Possible damages are covered", "No credit card required"]
         }
     },
     placeholder: {
@@ -60,11 +60,11 @@ export const text = {
         },
         driver: {
             name: "Name*",
-            birthday: "Birthday*",
-            license: "License number*",
-            emission: "Emission date*",
-            validity: "Validity date*",
-            emission_place: "Emission country*",
+            birthday: "Birth date*",
+            license: "Driver's License number*",
+            emission: "Date of Issue*",
+            validity: "Date of Expiry*",
+            emission_place: "Place of issue*",
         },
     },
     button: "book",

@@ -22,9 +22,11 @@ class CarResource extends JsonResource
                 'code' => $this->level->code,
                 'prices' => $this->level->prices
             ],
+            'description' => $this->getTranslations('description'),
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'gas' => $this->gas,
+            'air' => $this->air,
             'people' => $this->people,
             'doors' => $this->doors,
             'shift_mode' => $this->shift_mode,

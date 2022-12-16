@@ -57,7 +57,7 @@ class CarController extends Controller
 
         return CarResource::collection(Car::filterBy($filters)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
             $query->whereNotIn('id', $blockedLevels);
-        })->groupBy('title')->orderBy('level_id', 'asc')->get());
+        })->where('visible', 1)->orderBy('level_id', 'asc')->get());
     }
 
     /**

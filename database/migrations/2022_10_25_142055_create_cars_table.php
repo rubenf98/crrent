@@ -17,9 +17,12 @@ class CreateCarsTable extends Migration
             $table->id();
             $table->string('registration')->nullable()->unique();
             $table->string('title');
-            $table->string('subtitle');
+            $table->string('subtitle')->nullable();
+            $table->boolean('visible');
+            $table->text('description')->nullable();
             $table->string('gas');
             $table->integer('people');
+            $table->integer('air');
             $table->integer('doors');
             $table->string('shift_mode');
             $table->string('image');

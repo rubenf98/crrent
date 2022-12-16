@@ -400,6 +400,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
             createReservation({ ...data, car_id: currentCar.id }).then((response) => {
                 navigate("/success");
             }).catch((errors) => {
+                console.log(errors);
                 setCurrentErrors(errors.response.data.errors);
                 navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
             });

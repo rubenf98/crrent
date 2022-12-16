@@ -353,7 +353,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                         <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[car.gas]}</p></Icon>
                         <Icon><div className='border'><PeopleIcon /></div> <p>{car.people}</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>{car.doors}</p></Icon>
-                        <Icon><div className='border'><AirIcon /></div> <p></p></Icon>
+                        {car.air && <Icon><div className='border'><AirIcon /></div> <p></p></Icon>}
                     </IconContainer>
                     <DesktopContainer>
                         <Col xs={24} md={24}>

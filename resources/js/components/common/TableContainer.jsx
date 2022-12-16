@@ -8,6 +8,10 @@ const Container = styled.div`
     background: transparent;
     border-radius: 5px;
     
+    td, th {
+        font-size: 12px;
+    }
+    
 
     .table-row  {
         &:hover {
@@ -30,9 +34,6 @@ function TableContainer({ onRow, columns, data, meta, handlePageChange, loading,
         <div>
             <Container>
                 <Table
-                    scroll={{
-                        x: 1250,
-                    }}
                     rowClassName="table-row"
                     bordered={bordered}
                     onRow={onRow}

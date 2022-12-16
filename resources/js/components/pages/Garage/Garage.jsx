@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
+import { AirIcon, DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../icons';
 import { dimensions, maxWidth } from '../../helper';
 import styled, { withTheme } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
@@ -152,13 +152,20 @@ const Car = styled.div`
         h3 {
             font-weight: 700;
             font-size: 36px;
-            margin: 0px 0px 30px 0px;
+            margin: 0px 0px 0px 0px;
 
             @media (max-width: ${dimensions.md}) {
                 margin: 0px;
                 margin-top: 10px;
                 font-size: 16px;
             }
+        }
+
+        h4 {
+            margin: 0px 0px 30px 0px;
+            font-size: 16px;
+            opacity: .7;
+
         }
 
         .price { 
@@ -179,6 +186,7 @@ const Car = styled.div`
                 opacity: .5;
                 font-weight: 400;
                 margin: 0px;
+                font-weight: bold;
             }
 
             .value {
@@ -224,6 +232,11 @@ const Icon = styled.div`
         text-align: center;
         margin: auto;
         margin-top: 15px;
+    }
+
+    svg {
+        width: 100%;
+        height: 100%;
     }
 `;
 
@@ -289,12 +302,14 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
 
                 <div className='info-container'>
                     <h3>{info.title}</h3>
+                    <h4>{info.description[language]}</h4>
 
                     <IconContainer border={theme.primary}>
                         <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[info.shift_mode]}</p></Icon>
                         <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[info.gas]}</p></Icon>
                         <Icon><div className='border'><PeopleIcon /></div> <p>{info.people}</p></Icon>
                         <Icon><div className='border'><DoorsIcon /></div> <p>{info.doors}</p></Icon>
+                        {info.air ? <Icon><div className='border'><AirIcon /></div> <p></p></Icon> : <></>}
                     </IconContainer>
 
                     <div className='price'>

@@ -2,6 +2,7 @@ import { types } from "./types";
 
 export const initialState = {
     data: [],
+    todayData: [],
     loading: false,
     loadingDownload: false,
     meta: {},
@@ -17,6 +18,8 @@ export default (state = initialState, action = {}) => {
         case `${types.UPDATE_RESERVATION}_PENDING`:
         case `${types.CREATE_RESERVATION}_PENDING`:
         case `${types.FETCH_RESERVATIONS}_PENDING`:
+        case `${types.FETCH_NEXT_RESERVATIONS}_PENDING`:
+        case `${types.FETCH_TODAY_RESERVATIONS}_PENDING`:
         case `${types.FETCH_RESERVATION}_PENDING`:
             return {
                 ...state,
@@ -49,7 +52,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 data: state.data.filter(
-                    record => record.id !== action.meta.id
+                    record => record.id !== actiFETCH_TODAY_RESERVATIONSon.meta.id
                 )
             };
 
@@ -71,6 +74,21 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 current: {},
             };
+
+        case `${types.FETCH_TODAY_RESERVATIONS}_REJECTED`:
+            return {
+                ...state,
+                loading: false,
+                todayData: []
+            };
+
+        case `${types.FETCH_NEXT_RESERVATIONS}_REJECTED`:
+            return {
+                ...state,
+                loading: false,
+                nextData: []
+            };
+
         case `${types.FETCH_RESERVATIONS}_REJECTED`:
             return {
                 ...state,
@@ -82,6 +100,20 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 current: action.payload.data.data,
+            };
+
+        case `${types.FETCH_TODAY_RESERVATIONS}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                todayData: action.payload.data,
+            };
+
+        case `${types.FETCH_NEXT_RESERVATIONS}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                nextData: action.payload.data.data,
             };
 
         case `${types.FETCH_RESERVATIONS}_FULFILLED`:

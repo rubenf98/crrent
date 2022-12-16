@@ -11,6 +11,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
 `;
 
 function Reservation({ data, loading, meta, fetchReservations, deleteReservation }) {
@@ -33,7 +34,6 @@ function Reservation({ data, loading, meta, fetchReservations, deleteReservation
     }
 
     const handleRowClick = (row) => {
-        console.log(row);
         setCurrent(row);
         setDrawerState(1);
     }

@@ -24,11 +24,11 @@ export const text = {
         button: "selecionado",
         basic: {
             title: "Básico",
-            items: ["Cobertura CDW", "Sem excesso de danos na carroçaria"]
+            items: ["Cobertura CDW", "Sujeito a franquia mínima de 800€"]
         },
         premium: {
             title: "Premium",
-            items: ["Cobertura SCDW", "Proteção de roubo", "Danos possíveis estão incluídos"]
+            items: ["Cobertura Premium - SCDW (Super Collision Damage Waiver)", "Possíveis danos estão cobertos", "Não é necessário cartão de crédito"]
         }
     },
     placeholder: {

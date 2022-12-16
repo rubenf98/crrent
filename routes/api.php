@@ -35,6 +35,10 @@ Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@s
 Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
 
 
+Route::get('/reservations-today', 'App\Http\Controllers\GetTodayReservationsController');
+Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsController');
+
+
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
 
 Route::apiResource('cars', CarController::class);

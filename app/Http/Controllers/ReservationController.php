@@ -87,20 +87,6 @@ class ReservationController extends Controller
         Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
         DB::commit();
 
-        // $client = new \GuzzleHttp\Client();
-
-
-        // $response = $client->request('POST', 'https://sandbox.eupago.pt/api/v1.02/creditcard/create', [
-        //     'body' => '{"payment":{"amount":{"currency":"EUR","value":110},"lang":"PT","successUrl":"http://localhost:8000/success","failUrl":"http://localhost:8000","backUrl":"http://localhost:8000/summary"},"customer":{"notify":true,"email":"joseruben98@hotmail.com"}}',
-        //     'headers' => [
-        //         'Authorization' => 'ApiKey e50f-062e-e91a-118e-d72a',
-        //         'accept' => 'application/json',
-        //         'content-type' => 'application/json',
-        //     ],
-        // ]);
-
-        // Log::debug($response->getBody());
-
         return new ReservationResource($reservation);
         // } catch (\Throwable $th) {
         //     DB::rollBack();
