@@ -1,50 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Table from "../../../common/TableContainer";
 import moment from "moment";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
+import CardContainer from "../Common/CardContainer";
+import { Button, Col, DatePicker, Input, Row, Tag } from "antd";
+import { SearchIcon, UserIcon } from "../../../../icons";
 
 const Container = styled.div`
     width: 100%;
 `;
 
+const FilterContainer = styled(Row)`
+    width: 100%;
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick }) {
+    input::placeholder {
+        color: #000;
+
+        
+    }
+
+    svg {
+        height: 15px;
+        width: auto;
+    }
+`;
+
+
+function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
+    const [filters, setFilters] = useState({ id: undefined, name: undefined, date: undefined });
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
-            width: 100,
-            fixed: 'left',
+            render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'Referência',
-            dataIndex: 'token',
+            title: 'CLIENTE',
+            dataIndex: 'client',
+            render: (client) => client?.name,
         },
         {
-            title: 'Datas',
+            title: 'LEVANTAMENTO',
             dataIndex: 'pickup_date',
-            render: (pickup, row) => pickup + " | " + row.return_date,
+            render: (pickup, row) => row.pickup_place + " " + moment(pickup).format("DD/MM/YYYY HH:mm") + "h",
         },
         {
-            title: 'Confirmado',
-            dataIndex: 'confirmed_at',
-            render: (confirmed_at) => confirmed_at ? confirmed_at : "Por confirmar",
+            title: 'ENTREGA',
+            dataIndex: 'return_date',
+            render: (return_date, row) => row.return_place + " " + moment(return_date).format("DD/MM/YYYY HH:mm") + "h",
         },
         {
-            title: 'Carro',
+            title: 'VEÍCULO',
             dataIndex: 'car',
             render: (car) => car.title,
         },
         {
-            title: 'Valor',
-            dataIndex: 'price',
-            render: (price) => price + "€",
+            title: 'ESTADO',
+            dataIndex: 'confirmed_at',
+            render: (confirmed_at) => confirmed_at ? <Tag color="success">Confirmado</Tag>
+                : <Tag color="warning">Pendente</Tag>,
         },
         {
-            title: 'Ações',
+            title: 'AÇÕES',
             dataIndex: 'id',
             render: (text, row) => (
                 <StopPropagation>
@@ -55,22 +75,46 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
             ),
         },
     ];
-
+    console.log(filters);
     return (
         <Container>
-            <Table
-                loading={loading}
-                data={data}
-                meta={meta}
-                columns={columns}
-                handlePageChange={handlePageChange}
-                onRow={(record) => ({
-                    onClick: () => {
-                        handleRowClick(record);
-                    },
-                })}
-            />
-        </Container>
+            <CardContainer text="Tabela de Reservas">
+                <FilterContainer style={{ margin: "30px 0px" }} gutter={16}>
+                    <Col md={6}>
+                        <Input allowClear value={filters.id} onChange={(e) => setFilters({ ...filters, id: e.target.value })} placeholder="Referência/ID de reserva" suffix={<SearchIcon />} />
+                    </Col>
+                    <Col md={6}>
+                        <Input allowClear value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} placeholder="Nome do cliente" suffix={<UserIcon />} />
+                    </Col>
+                    <Col md={6}>
+                        <DatePicker value={filters.date} onChange={(e) => setFilters({ ...filters, date: e })} style={{ width: "100%" }} format="DD-MM-YYYY" placeholder="Data de reserva" suffix={<UserIcon />} />
+                    </Col>
+                    <Col md={6}>
+                        <Button
+                            onClick={() => handleFilters({ ...filters, date: filters.date && moment(filters.date).format('YYYY-MM-DD') })}
+                            style={{ float: "right" }} type="primary"
+                            loading={loading}
+                        >
+                            Pesquisar
+                        </Button>
+                    </Col>
+
+
+                </FilterContainer>
+                <Table
+                    loading={loading}
+                    data={data}
+                    meta={meta}
+                    columns={columns}
+                    handlePageChange={handlePageChange}
+                    onRow={(record) => ({
+                        onClick: () => {
+                            handleRowClick(record);
+                        },
+                    })}
+                />
+            </CardContainer>
+        </Container >
     )
 }
 

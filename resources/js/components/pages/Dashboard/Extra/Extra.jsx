@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
-import { fetchExtras, deleteExtra } from "../../../../redux/extra/actions";
+import { fetchExtras, deleteExtra, setCurrentExtra } from "../../../../redux/extra/actions";
 import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
+import FormContainer from './FormContainer';
+import CardContainer from '../Common/CardContainer';
+import { ActionButton } from "../../../styles";
 
 
 const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
 `;
 
-function Extra({ data, loading, fetchExtras, deleteExtra }) {
+function Extra({ data, current, loading, fetchExtras, deleteExtra, setCurrentExtra, theme }) {
     const [filters, setFilters] = useState({});
+    const [visible, setVisible] = useState(false);
+    const [edit, setEdit] = useState(false);
 
     const handleFilters = (aFilters) => {
         setFilters({ ...filters, ...aFilters });
@@ -25,13 +27,42 @@ function Extra({ data, loading, fetchExtras, deleteExtra }) {
         fetchExtras(filters);
     }, [filters])
 
+    const handleUpdateClick = (row) => {
+        setVisible(true);
+        setEdit(true);
+        setCurrentExtra(row);
+
+    }
+
+    const handleCreateClick = () => {
+        setVisible(true);
+        setEdit(false);
+        setCurrentExtra({});
+
+    }
+
+
     return (
         <Container>
-            <TableContainer
-                data={data}
-                loading={loading}
-                onDelete={deleteExtra}
-            />
+            <CardContainer text="Listagem de extras">
+                <FormContainer
+                    visible={visible}
+                    handleClose={() => setVisible(false)}
+                    current={current}
+                    edit={edit}
+                />
+
+                <ActionButton onClick={handleCreateClick} background={theme.primary}>
+                    <img src="/icon/add_white.svg" alt="add" />
+                </ActionButton>
+                <TableContainer
+                    data={data}
+                    loading={loading}
+                    onDelete={deleteExtra}
+                    handleUpdateClick={handleUpdateClick}
+                    handleCreateClick={handleCreateClick}
+                />
+            </CardContainer>
         </Container>
     )
 }
@@ -40,6 +71,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchExtras: (filters) => dispatch(fetchExtras(filters)),
         deleteExtra: (id) => dispatch(deleteExtra(id)),
+        setCurrentExtra: (row) => dispatch(setCurrentExtra(row)),
     };
 };
 
@@ -47,7 +79,8 @@ const mapStateToProps = (state) => {
     return {
         loading: state.extra.loading,
         data: state.extra.data,
+        current: state.extra.current
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Extra);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Extra));

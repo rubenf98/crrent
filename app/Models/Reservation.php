@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
+use Cerbero\QueryFilters\FiltersRecords;
 
 class Reservation extends Model
 {
     protected $fillable = ['card_id', 'car_price_per_day', 'days', 'car_price', 'token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
 
-    use HasFactory;
+    use HasFactory, FiltersRecords;
 
     protected $casts = [
         'car_price' => 'decimal:2',

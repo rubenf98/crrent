@@ -17,6 +17,8 @@ class CarResource extends JsonResource
         return [
             'id' => $this->id,
             'registration' => $this->registration,
+            'visible' => (bool) $this->visible,
+            'status' => (bool) $this->status,
             'level' => [
                 'id' => $this->level->id,
                 'code' => $this->level->code,

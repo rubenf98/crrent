@@ -412,7 +412,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
         <Container>
 
             <Content>
-                <Back onClick={() => navigate("/checkout?from=" + currentReservation.date[0].format(dateFormat) + "&to=" + currentReservation.date[1].format(dateFormat))} src="/icon/back.svg" alt="return to checkout" />
+                <Back onClick={() => navigate("/checkout?from=" + currentReservation.date[0].format("YYYY-MM-DD HH:mm") + "&to=" + currentReservation.date[1].format("YYYY-MM-DD HH:mm"))} src="/icon/back.svg" alt="return to checkout" />
                 {Object.values(currentCar).length &&
                     <SummaryContainer>
                         <Car>
@@ -489,7 +489,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                             <Row type="flex" gutter={16}>
                                 <Col xs={24} md={10}>
                                     <Form.Item name="card_validity" label={text.form.validity} rules={rules.validity}>
-                                        <MonthPicker placeholder='MM/AA' />
+                                        <MonthPicker placeholder='YYYY-MM' />
                                     </Form.Item>
                                 </Col>
 
@@ -505,12 +505,12 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                         <p className='info'>{text.info}</p>
 
                         <div className='button-container'>
-                            <SubmitSecundary disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} primary={theme.primary}>
-                                {text.button[0]}
-                            </SubmitSecundary>
                             <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                                {text.button[1]}
+                                {text.button[0]}
                             </Submit>
+                            {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                {text.button[1]}
+                            </Submit> */}
                         </div>
                     </div>
                 </PaymentContainer>

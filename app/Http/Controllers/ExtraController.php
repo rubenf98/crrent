@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ExtraRequest;
 use App\Http\Resources\ExtraResource;
 use App\Models\Extra;
 use Illuminate\Http\Request;
@@ -34,9 +35,12 @@ class ExtraController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ExtraRequest $request)
     {
-        //
+        $validator = $request->validated();
+        $extra = Extra::create($validator);
+
+        return new ExtraResource($extra);
     }
 
     /**
@@ -51,26 +55,19 @@ class ExtraController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Extra  $extra
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Extra $extra)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Extra  $extra
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Extra $extra)
+    public function update(ExtraRequest $request, Extra $extra)
     {
-        //
+        $validator = $request->validated();
+
+        $extra->update($validator);
+
+        return new ExtraResource($extra);
     }
 
     /**

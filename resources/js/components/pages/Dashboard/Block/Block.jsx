@@ -5,13 +5,10 @@ import { fetchBlockPeriods, deleteBlockPeriod } from "../../../../redux/blockPer
 import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
 import FormContainer from './FormContainer';
+import CardContainer from '../Common/CardContainer';
 
 
 const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
     width: 100%;
 `;
 
@@ -37,19 +34,20 @@ function Block({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod, met
     return (
 
         <Container>
-
-            <TableContainer
-                data={data}
-                loading={loading}
-                onDelete={deleteBlockPeriod}
-                meta={meta}
-                setVisible={setVisible}
-                handlePageChange={handlePageChange}
-            />
-            <FormContainer
-                visible={visible}
-                handleClose={() => setVisible(false)}
-            />
+            <CardContainer text="Datas Bloqueadas">
+                <TableContainer
+                    data={data}
+                    loading={loading}
+                    onDelete={deleteBlockPeriod}
+                    meta={meta}
+                    setVisible={setVisible}
+                    handlePageChange={handlePageChange}
+                />
+                <FormContainer
+                    visible={visible}
+                    handleClose={() => setVisible(false)}
+                />
+            </CardContainer>
         </Container>
 
 

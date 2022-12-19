@@ -9,6 +9,12 @@ class Price extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'max',
+        'min',
+        'price',
+    ];
+
     protected $casts = [
         'max' => 'integer',
         'min' => 'integer',

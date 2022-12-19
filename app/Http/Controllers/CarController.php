@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarRequest;
+use App\Http\Requests\UpdateCarRequest;
 use App\Http\Resources\CarResource;
 use App\Models\BlockDate;
 use App\Models\Car;
@@ -22,7 +24,7 @@ class CarController extends Controller
      */
     public function index(Request $request)
     {
-        return CarResource::collection(Car::with('level')->paginate(5));
+        return CarResource::collection(Car::with('level')->paginate(10));
     }
 
     /**
@@ -55,19 +57,9 @@ class CarController extends Controller
         }
         $filters = CarFilters::hydrate($request->query());
 
-        return CarResource::collection(Car::filterBy($filters)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
+        return CarResource::collection(Car::filterBy($filters)->where('status', true)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
             $query->whereNotIn('id', $blockedLevels);
         })->where('visible', 1)->orderBy('level_id', 'asc')->get());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -76,9 +68,12 @@ class CarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {
-        //
+        $validator = $request->validated();
+        $record = Car::create($validator);
+
+        return new CarResource($record);
     }
 
     /**
@@ -89,18 +84,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Car  $car
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Car $car)
-    {
-        //
+        return new CarResource($car);
     }
 
     /**
@@ -110,9 +94,13 @@ class CarController extends Controller
      * @param  \App\Models\Car  $car
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Car $car)
+    public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $validator = $request->validated();
+
+        $car->update($validator);
+
+        return new CarResource($car);
     }
 
     /**

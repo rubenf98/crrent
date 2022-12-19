@@ -32,13 +32,19 @@ export const updateCar = (id, data) => ({
     payload: axios.put(`${window.location.origin}/api/cars/${id}`, data),
 });
 
-export const createCar = (id, data) => ({
+export const createCar = (data) => ({
     type: types.CREATE_CAR,
-    payload: axios.post(`${window.location.origin}/api/cars/${id}`, data),
+    payload: axios.post(`${window.location.origin}/api/cars/`, data),
+});
+
+
+export const setCarStatus = (id, status) => ({
+    type: types.SET_CAR_STATUS,
+    payload: axios.put(`${window.location.origin}/api/car-status/${id}`, status),
 });
 
 
 export const setCurrent = (data) => ({
-    type: types.SET_CURRENT,
+    type: types.SET_CURRENT_CAR,
     payload: data,
 });

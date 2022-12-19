@@ -99,7 +99,7 @@ const PackageContainer = styled.div`
     gap: 35px;
 
     @media (max-width: ${dimensions.lg}) {
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     .border {
@@ -116,10 +116,10 @@ const Package = styled.div`
     border: ${props => props.active ? "2px solid" : "0px"};
     border-color: ${props => props.border};
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
-    width: 40%;
+    width: 60%;
 
     @media (max-width: ${dimensions.lg}) {
-        width: 45%;
+        width: 60%;
     }
 
     @media (max-width: ${dimensions.md}) {

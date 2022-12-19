@@ -4,6 +4,7 @@ use App\Http\Controllers\BlockDateController;
 use App\Http\Controllers\BlockPeriodController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
@@ -37,12 +38,15 @@ Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
 
 Route::get('/reservations-today', 'App\Http\Controllers\GetTodayReservationsController');
 Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsController');
+Route::get('/reservations-per-month', 'App\Http\Controllers\GetReservationsPerMonthController');
 
+Route::put('/car-status/{car}', 'App\Http\Controllers\CarStatusController');
 
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
 
 Route::apiResource('cars', CarController::class);
 Route::apiResource('extras', ExtraController::class);
+Route::apiResource('prices', PriceController::class);
 Route::apiResource('reservations', ReservationController::class);
 Route::apiResource('promotions', PromotionController::class);
 Route::apiResource('blockedDates', BlockDateController::class);

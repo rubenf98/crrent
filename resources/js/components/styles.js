@@ -105,3 +105,25 @@ export const SecundaryButton = styled.button`
     }
 
 `;
+
+export const ActionButton = styled.button`
+
+        width: 80px;
+        height: 40px;
+        flex: 1;
+        float: right;
+        background: ${props => props.background};
+        cursor: pointer;
+        padding: 10px;
+
+        &:hover {
+        }
+
+        img {
+            height: 100%;
+            margin: auto;
+            display: block;
+        }
+    
+    
+`;

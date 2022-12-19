@@ -9,6 +9,10 @@ class Extra extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'price', 'type', 'price', 'name'
+    ];
+
     protected $casts = [
         'price' => 'decimal:2',
         'visible' => 'integer',

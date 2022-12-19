@@ -19,13 +19,14 @@ class CreateCarsTable extends Migration
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->boolean('visible');
+            $table->boolean('status')->default(false);
             $table->text('description')->nullable();
             $table->string('gas');
             $table->integer('people');
             $table->integer('air');
             $table->integer('doors');
             $table->string('shift_mode');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->unsignedBigInteger("level_id");
             $table->timestamps();
 

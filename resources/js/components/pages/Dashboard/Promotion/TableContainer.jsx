@@ -3,66 +3,42 @@ import styled, { withTheme } from "styled-components";
 import Table from "../../../common/TableContainer";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
+import Tag from "antd/es/tag";
+import { ActionButton } from "../../../styles";
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0px 0px 5px 0px #c6c6c6;
 `;
 
-const ActionButton = styled.div`
 
-        width: 80px;
-        height: 40px;
-        flex: 1;
-        float: right;
-        background: ${props => props.background};
-        cursor: pointer;
-        padding: 10px;
-
-        &:hover {
-        }
-
-        img {
-            height: 100%;
-            margin: auto;
-            display: block;
-        }
-    
-    
-`;
 
 
 function TableContainer({ theme, loading, meta, data, onDelete, setVisible, handlePageChange }) {
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
-            width: 100,
-            fixed: 'left',
+            render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'Desde',
+            title: 'DESDE',
             dataIndex: 'start',
         },
         {
-            title: 'Até',
+            title: 'ATÉ',
             dataIndex: 'end',
         },
         {
-            title: 'Valor promocional',
+            title: 'VALOR PROMOCIONAL',
             dataIndex: 'value',
         },
         {
-            title: 'Factor de multiplicação',
+            title: 'FATOR DE MULTIPLICAÇÃO',
             dataIndex: 'factor',
         },
         {
-            title: 'Ações',
+            title: 'AÇÕES',
             dataIndex: 'id',
             render: (text, row) => (
                 <StopPropagation>

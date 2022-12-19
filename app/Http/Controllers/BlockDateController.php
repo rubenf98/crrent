@@ -31,7 +31,8 @@ class BlockDateController extends Controller
     public function selector(Request $request)
     {
         $level = Level::find($request->level_id);
-        $treshold = $level->cars()->count();
+        $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+
         $counter = [];
         $blocked = [];
         $dates = BlockDate::where('level_id', $level->id)->get();

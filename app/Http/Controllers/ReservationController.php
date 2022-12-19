@@ -12,6 +12,7 @@ use App\Models\Card;
 use App\Models\Client;
 use App\Models\Driver;
 use App\Models\Reservation;
+use App\QueryFilters\ReservationFilters;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -28,9 +29,9 @@ class ReservationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::with("car")->with('client')->with('drivers')->with('extras')->paginate(5));
+        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 
     /**

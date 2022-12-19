@@ -5,7 +5,7 @@ import moment from "moment";
 import Navbar from './Navbar';
 import ThemeContainer from '../../ThemeContainer';
 import { Menu } from 'antd';
-import { MailIcon } from '../../../icons';
+import { AirIcon, MailIcon } from '../../../icons';
 import { Link } from 'react-router-dom';
 
 const Container = styled.div`
@@ -13,7 +13,7 @@ const Container = styled.div`
     min-height: 100vh;
     display: flex;
     font-family: 'Lato';
-    background-color: #ededed;
+    background-color: #ececec;
 `;
 
 const Content = styled.div`
@@ -24,11 +24,17 @@ const Content = styled.div`
 
 const SideMenu = styled.div`
     min-height: 100vh;
-    width: 300px;
+    width: 250px;
 
     .ant-menu {
         height: 100%;
-        width: 300px;
+        width: 250px;
+
+        .icon {
+            width: 18px;
+            height: auto;
+            margin: auto;
+        }
     }
 
    
@@ -78,15 +84,7 @@ const Logo = styled.img`
 `;
 
 function DashboardLayout({ children }) {
-    function getItem(label, key, icon, children, type) {
-        return {
-            key,
-            icon,
-            children,
-            label,
-            type,
-        };
-    }
+
 
     const items = [
         {
@@ -96,26 +94,32 @@ function DashboardLayout({ children }) {
         {
             label: <Link to="/painel/">Página Inicial</Link>,
             key: '',
+            icon: <img className='icon' src="/icon/dashboard/dashboard.svg" />
         },
         {
             label: <Link to="/painel/reservas">Reservas</Link>,
             key: 'reservas',
+            icon: <img className='icon' src="/icon/dashboard/reservations.svg" />
         },
         {
             label: <Link to="/painel/datas">Datas Bloqueadas</Link>,
             key: 'datas',
+            icon: <img className='icon' src="/icon/dashboard/blocked.svg" />
         },
         {
             label: <Link to="/painel/carros">Carros</Link>,
             key: 'carros',
+            icon: <img className='icon' src="/icon/dashboard/car.svg" />
         },
         {
             label: <Link to="/painel/extras">Extras</Link>,
             key: 'extras',
+            icon: <img className='icon' src="/icon/dashboard/extras.svg" />
         },
         {
             label: <Link to="/painel/precos">Preços</Link>,
             key: 'precos',
+            icon: <img className='icon' src="/icon/dashboard/price.svg" />
         },
 
 

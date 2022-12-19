@@ -65,8 +65,8 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
             createPromotion(values);
             handleModalClose();
         })
-
     };
+
     return (
         <Container>
             <div>
@@ -113,8 +113,8 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
                         </Row>
 
                         <ButtonContainer type="flex" justify="end">
-                            <Button loading={loading} size="large" width="150px" type="primary" htmlType="submit">
-                                Bloquear Data(s)
+                            <Button disabled={loading} loading={loading} size="large" width="150px" type="primary" htmlType="submit">
+                                Submeter
                             </Button>
                         </ButtonContainer>
                     </Form>

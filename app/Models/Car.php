@@ -13,8 +13,12 @@ class Car extends Model
     use FiltersRecords;
     use HasTranslations;
 
+    protected $fillable = ['car', 'air', 'registration', 'description', 'doors', 'gas', 'level_id', 'people', 'shift_mode', 'subtitle', 'title'];
+
+
     protected $casts = [
         'air' => 'integer',
+        'status' => 'boolean',
     ];
 
     public $translatable = ['description'];

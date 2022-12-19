@@ -4,27 +4,47 @@ import Table from "../../../common/TableContainer";
 import moment from "moment";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
-import { Tag } from "antd";
+import { Row, Tag } from "antd";
+import CardContainer from "../Common/CardContainer";
 
-const Container = styled.div`
+const Container = styled.section`
     width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0px 0px 5px 0px #c6c6c6;
 `;
 
+const Status = styled.div`
+    width: 15px;
+    height: 15px;
+    background-color: ${props => props.active ? "green" : "red"};
+    border-radius: 15px;
+`;
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
+const Action = styled.button`
+    padding: 6px 12px;
+    color: white;
+    font-weight: bold;
+    box-shadow: none;
+    border: 0px;
+    cursor: pointer;
+    background-color: ${props => props.active ? "red" : "green"};
+    
+    &:nth-child(2) {
+        margin-left: 5px;
+    }
+
+`;
+
+function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleUpdateClick, setCarStatus }) {
 
     const columns = [
         {
             title: 'ID',
             dataIndex: 'id',
-            width: 100,
-            fixed: 'left',
             render: (id) => <Tag color="purple">#{id}</Tag>,
+        },
+        {
+            title: 'VISIBILIDADE',
+            dataIndex: 'visible',
+            render: (visible, row) => <Action onClick={() => setCarStatus(row.id, { visible: !visible })} active={visible} >{visible ? "Esconder" : "Visível"}</Action>,
         },
         {
             title: 'MATRÍCULA',
@@ -40,11 +60,9 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
             render: (level) => level.code,
         },
         {
-            title: 'VALORES',
-            dataIndex: 'level',
-            render: (level) => <div> {level.prices.map((price) => (
-                <p style={{ margin: "0px" }}>{price.min}/{price.max == 10000 ? "--" : price.max} dias - {price.price}€</p>
-            ))} </div>,
+            title: 'ESTADO',
+            dataIndex: 'status',
+            render: (status, row) => <Action onClick={() => setCarStatus(row.id, { status: !status })} active={status} >{status ? "Bloquear" : "Desbloquear"}</Action>,
         },
         {
             title: 'Ações',
@@ -52,7 +70,7 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
             render: (text, row) => (
                 <StopPropagation>
                     <RowOperation
-                        onDeleteConfirm={() => onDelete(row.id)}
+                        onDeleteConfirm={() => onDelete(row.id)} onUpdateClick={() => handleUpdateClick(row)}
                     />
                 </StopPropagation>
             ),
@@ -61,6 +79,7 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete }) {
 
     return (
         <Container>
+
             <Table
                 loading={loading}
                 data={data}

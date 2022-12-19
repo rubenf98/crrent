@@ -1,51 +1,44 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
 import Table from "../../../common/TableContainer";
-import moment from "moment";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
+import { Tag } from "antd";
 
 const Container = styled.div`
     width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: white;
-    border-radius: 6px;
-    box-shadow: 0px 0px 5px 0px #c6c6c6;
 `;
 
 
-
-function TableContainer({ loading, data, onDelete }) {
+function TableContainer({ loading, data, onDelete, handleUpdateClick, setVisible, theme }) {
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
-            width: 100,
-            fixed: 'left',
+            render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'Nome',
+            title: 'NOME',
             dataIndex: 'name',
         },
         {
-            title: 'Tipo',
+            title: 'TIPOLOGIA',
             dataIndex: 'type',
             render: (type) => type == "day" ? "valor por dia" : "valor unitário",
         },
         {
-            title: 'Valor',
+            title: 'PREÇO',
             dataIndex: 'price',
             render: (price) => price + "€",
         },
         {
-            title: 'Ações',
+            title: 'AÇÕES',
             dataIndex: 'id',
             render: (text, row) => (
                 <StopPropagation>
                     <RowOperation
-                        onDeleteConfirm={() => onDelete(row.id)}
+                        onDeleteConfirm={() => onDelete(row.id)} onUpdateClick={() => handleUpdateClick(row)}
                     />
                 </StopPropagation>
             ),
@@ -63,4 +56,4 @@ function TableContainer({ loading, data, onDelete }) {
     )
 }
 
-export default TableContainer;
+export default withTheme(TableContainer);

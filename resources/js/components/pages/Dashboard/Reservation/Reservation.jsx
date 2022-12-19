@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { fetchReservations, deleteReservation } from "../../../../redux/reservation/actions";
+import { fetchReservations, deleteReservation, fetchReservationsPerMonth } from "../../../../redux/reservation/actions";
 import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
 import DrawerContainer from './DrawerContainer';
-
+import CalendarContainer from './CalendarContainer';
+import moment from "moment";
 
 const Container = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
 `;
-
-function Reservation({ data, loading, meta, fetchReservations, deleteReservation }) {
-    const [filters, setFilters] = useState({});
+const dateFormat = "YYYY-MM-DD";
+function Reservation({ data, loading, meta, fetchReservations, deleteReservation, fetchReservationsPerMonth }) {
+    const [calendarFilters, setCalendarFilters] = useState({ dates: [moment().startOf('month').startOf('day').subtract(5, 'days').format(dateFormat), moment().endOf('month').endOf('day').add(10, 'days').format(dateFormat)] });
+    const [filters, setFilters] = useState({})
     const [current, setCurrent] = useState({});
     const [drawerState, setDrawerState] = useState(0);
 
@@ -24,12 +23,20 @@ function Reservation({ data, loading, meta, fetchReservations, deleteReservation
 
     }
 
+    const handleCalendarFilters = (aFilters) => {
+        setCalendarFilters({ ...calendarFilters, ...aFilters });
+
+    }
+
+    useEffect(() => {
+        fetchReservationsPerMonth(calendarFilters);
+    }, [calendarFilters])
+
     useEffect(() => {
         fetchReservations(1, filters);
     }, [filters])
 
     const handlePageChange = (pagination) => {
-
         fetchReservations(pagination.current, filters);
     }
 
@@ -41,6 +48,7 @@ function Reservation({ data, loading, meta, fetchReservations, deleteReservation
     return (
         <Container>
             <DrawerContainer data={current} drawerState={drawerState} setDrawerState={setDrawerState} />
+            <CalendarContainer handleFilters={handleCalendarFilters} />
             <TableContainer
                 data={data}
                 meta={meta}
@@ -48,6 +56,7 @@ function Reservation({ data, loading, meta, fetchReservations, deleteReservation
                 handleRowClick={handleRowClick}
                 onDelete={deleteReservation}
                 handlePageChange={handlePageChange}
+                handleFilters={handleFilters}
             />
         </Container>
     )
@@ -56,6 +65,7 @@ function Reservation({ data, loading, meta, fetchReservations, deleteReservation
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchReservations: (page, filters) => dispatch(fetchReservations(page, filters)),
+        fetchReservationsPerMonth: (filters) => dispatch(fetchReservationsPerMonth(filters)),
         deleteReservation: (id) => dispatch(deleteReservation(id)),
     };
 };

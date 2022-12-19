@@ -3,6 +3,8 @@ import { types } from "./types";
 export const initialState = {
     data: [],
     todayData: [],
+    nextData: [],
+    dataPerMonth: [],
     loading: false,
     loadingDownload: false,
     meta: {},
@@ -21,6 +23,7 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_NEXT_RESERVATIONS}_PENDING`:
         case `${types.FETCH_TODAY_RESERVATIONS}_PENDING`:
         case `${types.FETCH_RESERVATION}_PENDING`:
+        case `${types.FETCH_RESERVATIONS_PER_MONTH}_PENDING`:
             return {
                 ...state,
                 loading: true,
@@ -75,6 +78,13 @@ export default (state = initialState, action = {}) => {
                 current: {},
             };
 
+        case `${types.FETCH_RESERVATIONS_PER_MONTH}_REJECTED`:
+            return {
+                ...state,
+                loading: false,
+                dataPerMonth: []
+            };
+
         case `${types.FETCH_TODAY_RESERVATIONS}_REJECTED`:
             return {
                 ...state,
@@ -89,12 +99,21 @@ export default (state = initialState, action = {}) => {
                 nextData: []
             };
 
+
         case `${types.FETCH_RESERVATIONS}_REJECTED`:
             return {
                 ...state,
                 loading: false,
                 data: []
             };
+
+        case `${types.FETCH_RESERVATIONS_PER_MONTH}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                dataPerMonth: action.payload.data.data,
+            };
+
         case `${types.FETCH_RESERVATION}_FULFILLED`:
             return {
                 ...state,

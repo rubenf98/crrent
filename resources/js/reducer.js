@@ -9,6 +9,7 @@ import extra from './redux/extra'
 import promotion from './redux/promotion'
 import block from './redux/block'
 import blockPeriod from './redux/blockPeriod'
+import price from './redux/price'
 
 const reducer = combineReducers({
     auth,
@@ -18,7 +19,8 @@ const reducer = combineReducers({
     extra,
     promotion,
     block,
-    blockPeriod
+    blockPeriod,
+    price
 })
 
 export default reducer

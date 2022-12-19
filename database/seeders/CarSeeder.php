@@ -174,6 +174,7 @@ class CarSeeder extends Seeder
             Car::create([
                 'title' => $item["title"],
                 'subtitle' => $item["subtitle"],
+                'status' => true,
                 'registration' => array_key_exists('registration', $item) ? $item["registration"] : null,
                 'level_id' => $item["level_id"],
                 "visible" => $item["visible"],
