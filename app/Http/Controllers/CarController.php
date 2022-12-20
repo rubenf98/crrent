@@ -42,24 +42,28 @@ class CarController extends Controller
 
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
-
+            $out = new ConsoleOutput();
             foreach ($period as $dt) {
                 $levels = Level::all();
-
+                $out->writeln($dt->format("Y-m-d"));
                 foreach ($levels as $level) {
+                    $out->writeln($level);
                     $n = BlockDate::where('date', $dt->format("Y-m-d"))->where('level_id', $level->id)->count();
-                    $cars = $level->cars()->count();
-                    if ($n >= $cars) {
+                    $out->writeln($n);
+                    $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+                    $out->writeln($treshold);
+                    if ($n >= $treshold) {
                         array_push($blockedLevels, $level->id);
                     }
                 }
+                $out->writeln("------------------------------------");
             }
         }
         $filters = CarFilters::hydrate($request->query());
 
         return CarResource::collection(Car::filterBy($filters)->where('status', true)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
             $query->whereNotIn('id', $blockedLevels);
-        })->where('visible', 1)->orderBy('level_id', 'asc')->get());
+        })->where('visible', 1)->orderBy('level_id', 'asc')->groupBy('title')->get());
     }
 
     /**

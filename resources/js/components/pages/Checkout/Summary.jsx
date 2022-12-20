@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { useNavigate } from 'react-router-dom'
 import { createReservation, setCurrentErrors } from '../../../redux/reservation/actions';
 import moment from "moment";
-import { getPriceRounded } from '../../functions';
+import { getDaysDifference, getPriceRounded } from '../../functions';
 
 const stretch = keyframes`
   from {
@@ -371,7 +371,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                     aPrice += row[row.length - 1];
                 })
             }))
-            var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
+            var difference = getDaysDifference(currentReservation.date[0], currentReservation.date[1]);
             setDays(difference);
             setPrice(aPrice);
             window.scrollTo(0, 0);
@@ -386,21 +386,10 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
             data.card_number = data.card_number.replace(/\s/g, "");
 
             data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
-            // var drivers = [...data.drivers];
-
-            // drivers.map((driver) => {
-            //     driver.birthday = moment(driver.birthday).format(dateFormat);
-            //     driver.emission = moment(driver.emission).format(dateFormat);
-            //     driver.validity = moment(driver.validity).format(dateFormat);
-            // })
-
-            // data.drivers = drivers;
-
 
             createReservation({ ...data, car_id: currentCar.id }).then((response) => {
                 navigate("/success");
             }).catch((errors) => {
-                console.log(errors);
                 setCurrentErrors(errors.response.data.errors);
                 navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
             });

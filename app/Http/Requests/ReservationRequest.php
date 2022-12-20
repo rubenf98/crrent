@@ -127,7 +127,7 @@ class ReservationRequest extends FormRequest
             'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
             'pickup_place' => 'required|string',
             'return_place' => 'required|string',
-            'flight' => 'required|string',
+            'flight' => 'nullable|string',
             'car_id' =>  'required|integer|exists:cars,id',
             'price' => 'required|numeric',
             'days' => 'required|integer|min:1',

@@ -20,7 +20,7 @@ class CreateReservationsTable extends Migration
             $table->datetime('return_date');
             $table->string('pickup_place');
             $table->string('return_place');
-            $table->string('flight');
+            $table->string('flight')->nullable();
             $table->double('price', 5, 2);
             $table->double('car_price', 5, 2);
             $table->double('car_price_per_day', 5, 2);

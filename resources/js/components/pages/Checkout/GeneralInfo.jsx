@@ -249,11 +249,7 @@ const AddButton = styled.button`
     
 `;
 
-const rules = {
-    date: [{ required: true, message: 'Please input the reservation date!' }],
-    place: [{ required: true, message: 'Please input the pickup and return place!' }],
-    flight: [{ required: true }],
-};
+
 
 
 function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, setTax,
@@ -263,8 +259,15 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
     const [customPickupTax, setCustomPickupTax] = useState(undefined);
     const [customReturn, setCustomReturn] = useState(undefined);
     const [customReturnTax, setCustomReturnTax] = useState(undefined);
+    const [mandatory, setMandatory] = useState(true)
 
     const [dates, setDates] = useState(null);
+
+    const rules = {
+        date: [{ required: true, message: 'Please input the reservation date!' }],
+        place: [{ required: true, message: 'Please input the pickup and return place!' }],
+        flight: [{ required: mandatory }],
+    };
 
     var pickupCondition = customPickup != undefined && customPickup != "" && customPickupTax;
     var returnCondition = customReturn != undefined && customReturn != "" && customReturnTax;
@@ -310,18 +313,35 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
         }
     }
 
-    const handlePlaceSelection = (itemName) => {
+    const handlePlaceSelection = (itemName, e) => {
         var id = returnID(itemName);
+        if (itemName === "pickup_place") {
+            if (e === "loja") {
+                setMandatory(false);
+            } else {
+                setMandatory(true);
+            }
+        }
+
 
         if (tax.includes(id)) {
-            var price = extras.find(e => e.id === id).price;
-            const index = tax.indexOf(id);
+            if (e === "loja") {
+                var price = extras.find(e => e.id === id).price;
+                const index = tax.indexOf(id);
 
-            var taxCopy = [...tax];
-            taxCopy.splice(index, 1);
+                var taxCopy = [...tax];
+                taxCopy.splice(index, 1);
 
-            setTax(taxCopy);
-            setTaxPrice(taxPrice - price);
+                setTax(taxCopy);
+                setTaxPrice(taxPrice - price);
+            }
+        } else if (!tax.includes(id)) {
+            if (e === "aeroporto") {
+                var price = extras.find(e => e.id === id).price;
+
+                setTax([...tax, id]);
+                setTaxPrice(taxPrice + price);
+            }
         }
     }
 
@@ -400,7 +420,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
 
                         <Col xs={24} md={24}>
                             <Form.Item name="pickup_place" rules={rules.place}>
-                                <StyledSelect onChange={() => handlePlaceSelection("pickup_place")} bordered={false} dropdownRender={(menu) => (
+                                <StyledSelect onChange={(e) => handlePlaceSelection("pickup_place", e)} bordered={false} dropdownRender={(menu) => (
                                     <>
                                         {menu}
                                         <Divider style={{ margin: '12px 0' }} />
@@ -429,7 +449,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                         </Col>
                         <Col xs={24} md={24}>
                             <Form.Item name="return_place" rules={rules.place}>
-                                <StyledSelect onChange={() => handlePlaceSelection("return_place")} bordered={false} dropdownRender={(menu) => (
+                                <StyledSelect onChange={(e) => handlePlaceSelection("return_place", e)} bordered={false} dropdownRender={(menu) => (
                                     <>
                                         {menu}
                                         <Divider style={{ margin: '12px 0' }} />
@@ -531,7 +551,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
-                    <Form.Item name="flight" rules={rules.name}>
+                    <Form.Item name="flight" rules={rules.flight}>
                         <StyledInput prefix={<FlightIcon />} size="large" placeholder={text.placeholder.flight} />
                     </Form.Item>
                 </Col>

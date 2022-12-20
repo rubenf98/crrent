@@ -21,10 +21,11 @@ const Field = styled.div`
     }
 
     .value {
+        opacity: .6;
     }
 
     .name {
-        opacity: .5;
+       
     }
 `;
 
@@ -70,8 +71,9 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
 
     const FieldContainer = ({ name, value }) => (
         <Field className='field-width'>
-            <p className='value'>{value}</p>
             <p className='name'>{name}</p>
+            <p className='value'>{value}</p>
+
         </Field>
     )
 

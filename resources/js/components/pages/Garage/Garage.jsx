@@ -10,7 +10,7 @@ import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
 import moment from "moment";
 import { fetchPromotions } from '../../../redux/promotion/actions';
 import { fetchExtras } from '../../../redux/extra/actions';
-import { getCarPrice, getPriceRounded, getPromotions } from '../../functions';
+import { getCarPrice, getDaysDifference, getPriceRounded, getPromotions } from '../../functions';
 
 const Container = styled.section`
     width: 100%;
@@ -99,7 +99,7 @@ const Car = styled.div`
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 150px 0px;
+    margin: 100px auto;
 
     @media (max-width: ${dimensions.md}) {
         padding: 0px;
@@ -108,9 +108,9 @@ const Car = styled.div`
     
     
     .image-container {
-        width: 50%;
+        width: 40%;
         position: relative;
-        padding: 30px 50px 30px 0px;
+        padding: 20px 30px 20px 0px;
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -140,8 +140,8 @@ const Car = styled.div`
     }
 
     .info-container {
-        width: 50%;
-        padding: 0px 50px;
+        width: 60%;
+        padding: 0px 30px;
         box-sizing: border-box;
 
         @media (max-width: ${dimensions.md}) {
@@ -151,7 +151,7 @@ const Car = styled.div`
 
         h3 {
             font-weight: 700;
-            font-size: 36px;
+            font-size: 30px;
             margin: 0px 0px 0px 0px;
 
             @media (max-width: ${dimensions.md}) {
@@ -165,6 +165,7 @@ const Car = styled.div`
             margin: 0px 0px 30px 0px;
             font-size: 16px;
             opacity: .7;
+            font-weight: 400;
 
         }
 
@@ -172,7 +173,7 @@ const Car = styled.div`
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
 
             .total {
                 font-size: 20px;
@@ -191,7 +192,7 @@ const Car = styled.div`
 
             .value {
                 color: ${props => props.primary};
-                font-size: 60px;
+                font-size: 50px;
                 font-weight: 700;
 
                 @media (max-width: ${dimensions.md}) {
@@ -258,7 +259,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
         from = moment(from);
         to = moment(to);
 
-        var difference = to.diff(from, 'days');
+        var difference = getDaysDifference(from, to);
 
         setDays(difference);
         setDates([from, to]);
@@ -276,7 +277,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
     const handleSearch = () => {
         fetchCarsSelector({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat), hasRegistration: true });
 
-        var difference = dates[1].diff(dates[0], 'days');
+        var difference = getDaysDifference(dates[0], dates[1]);
 
         setDays(difference);
         setDates([dates[0], dates[1]]);

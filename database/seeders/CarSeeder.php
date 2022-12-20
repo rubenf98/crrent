@@ -68,7 +68,7 @@ class CarSeeder extends Seeder
                 'subtitle' => 'Comfort Plus',
                 'level_id' => 2,
                 "visible" => 1,
-                'gas' => 'gasoline', 'people' => 3, 'doors' => 3, 'shift_mode' => 'manual', 'air' => 1,
+                'gas' => 'gasoline', 'people' => 5, 'doors' => 5, 'shift_mode' => 'manual', 'air' => 1,
                 'image' => '/image/garage/yaris.png',
                 'descen' => 'Compact, agile, economic and ready for anything',
                 'descpt' => 'Compacto, ágil, económico e pronto para tudo',

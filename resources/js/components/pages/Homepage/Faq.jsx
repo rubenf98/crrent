@@ -29,6 +29,8 @@ const Accordion = styled(Collapse)`
         width: 100%;
     }
 
+
+
     .ant-collapse-item, .ant-collapse-item:last-child {
         background-color: white;
         margin-bottom: 20px;
@@ -41,7 +43,7 @@ const Accordion = styled(Collapse)`
         }
     }
     .ant-collapse-header {
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 700;
         text-transform: uppercase;
 
@@ -52,8 +54,9 @@ const Accordion = styled(Collapse)`
 
     .ant-collapse-content-box {
         p {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 400;
+            margin: 0px;
 
             @media (max-width: ${dimensions.md}) {
                 font-size: 16px;
@@ -67,8 +70,8 @@ const Accordion = styled(Collapse)`
     }
 
     .ant-collapse-item {
-        opacity: .2;
-        padding: 34px;
+        opacity: .4;
+        padding: 8px 16px;
         box-sizing: border-box;
     }
 

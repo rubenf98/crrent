@@ -1,10 +1,35 @@
 import moment from "moment";
 
+const hourTreshold = (1 / 24) * 2;
+
+
 export function getPriceRounded(price) {
 
     return Math.round((price + Number.EPSILON) * 100) / 100;
 }
 
+
+export function getDaysDifference(from, to) {
+    var differenceHour = moment(to).diff(moment(from), 'hours');
+
+    var factor = differenceHour / 24;
+    factor = (factor + "").split(".");
+
+    var baseInt = parseInt(factor[0]);
+    var baseDecimal = parseFloat("0." + factor[1]).toFixed(5);
+
+    if (baseDecimal > hourTreshold.toFixed(5)) {
+        baseInt++;
+    }
+    else if (baseDecimal == hourTreshold.toFixed(5)) {
+        var differenceMin = moment(to).diff(moment(from), 'minutes');
+        if (differenceMin - (differenceHour * 60) > 0) {
+            baseInt++;
+        }
+    }
+
+    return baseInt;
+};
 
 export function getPromotions(promotions, start, days) {
     var init = moment(start);

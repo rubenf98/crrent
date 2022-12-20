@@ -11,13 +11,6 @@ const Container = styled.section`
     width: 100%;
 `;
 
-const Status = styled.div`
-    width: 15px;
-    height: 15px;
-    background-color: ${props => props.active ? "green" : "red"};
-    border-radius: 15px;
-`;
-
 const Action = styled.button`
     padding: 6px 12px;
     color: white;
@@ -25,7 +18,7 @@ const Action = styled.button`
     box-shadow: none;
     border: 0px;
     cursor: pointer;
-    background-color: ${props => props.active ? "red" : "green"};
+    background-color: ${props => props.active ? "green" : "red"};
     
     &:nth-child(2) {
         margin-left: 5px;
@@ -44,7 +37,7 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
         {
             title: 'VISIBILIDADE',
             dataIndex: 'visible',
-            render: (visible, row) => <Action onClick={() => setCarStatus(row.id, { visible: !visible })} active={visible} >{visible ? "Esconder" : "Visível"}</Action>,
+            render: (visible, row) => <Action onClick={() => setCarStatus(row.id, { visible: !visible })} active={visible} >{visible ? "Visível" : "Escondido"}</Action>,
         },
         {
             title: 'MATRÍCULA',
@@ -62,7 +55,7 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
         {
             title: 'ESTADO',
             dataIndex: 'status',
-            render: (status, row) => <Action onClick={() => setCarStatus(row.id, { status: !status })} active={status} >{status ? "Bloquear" : "Desbloquear"}</Action>,
+            render: (status, row) => <Action onClick={() => setCarStatus(row.id, { status: !status })} active={status} >{status ? "Desbloqueado" : "Bloqueado"}</Action>,
         },
         {
             title: 'Ações',

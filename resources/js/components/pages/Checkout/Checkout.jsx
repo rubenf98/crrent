@@ -14,7 +14,8 @@ import { setCurrentReservation, setCurrentReservationValues } from "../../../red
 import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
-import { getCarPrice, getPriceRounded, getPromotions } from '../../functions';
+import { getCarPrice, getPriceRounded, getPromotions, getDaysDifference } from '../../functions';
+
 
 const Container = styled.section`
     width: 100%;
@@ -168,8 +169,7 @@ function Checkout({ language, fetchExtras, theme,
 
                 handleDate(moment(currentReservation.date[0]), moment(currentReservation.date[1]));
 
-                var difference = moment(currentReservation.date[1]).diff(moment(currentReservation.date[0]), 'days');
-
+                var difference = getDaysDifference(currentReservation.date[0], currentReservation.date[1]);
                 setExtras(newExtras);
                 setExtraPrice(newExtraPrice * difference);
 
@@ -181,10 +181,11 @@ function Checkout({ language, fetchExtras, theme,
 
     const onDateChange = (e) => {
         handleDate(e[0], e[1], false);
+        getDaysDifference(e[0], e[1]);
     };
 
     const handleDate = (from, to, initDate) => {
-        var difference = moment(to).diff(moment(from), 'days');
+        var difference = getDaysDifference(from, to);
 
         var factors = getPromotions(promotions, from, difference);
 
