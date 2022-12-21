@@ -14,6 +14,7 @@ use App\Models\Driver;
 use App\Models\Reservation;
 use App\QueryFilters\ReservationFilters;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use DateInterval;
 use DatePeriod;
 use Illuminate\Http\Request;
@@ -129,7 +130,21 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
+        DB::beginTransaction();
+        $period = CarbonPeriod::create($reservation->pickup_date, $reservation->return_date)->toArray();
+        $level = $reservation->carPref()->pluck('level_id');
+        foreach ($period as $date) {
+            
+            $blockedDate = BlockDate::where('date', $date->toDateString())->where('fill', 0)->where('level_id', $level)->first();
+
+            if ($blockedDate) {
+                $blockedDate->delete();
+            }
+            
+        }
+
         $reservation->delete();
+        DB::commit();
 
         return response()->json(null, 204);
     }
