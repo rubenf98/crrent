@@ -59,7 +59,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 data: state.data.filter(
-                    record => record.id !== actiFETCH_TODAY_RESERVATIONSon.meta.id
+                    record => record.id !== action.meta.id
                 )
             };
 
