@@ -76,15 +76,21 @@ export function getCarPrice(prices, days, factors) {
     return carPrice;
 }
 
-export function isDateDisabled(current, blockedDates, currentDates, registration = true) {
+export function isDateDisabled(current, blockedDates, currentDates, registration = true, blockedCars = []) {
     if (!registration) {
         return true;
     }
     let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
 
+    let isCarBlocked = false;
 
-
-    if (isBlocked) {
+    blockedCars.map((currentDate) => {
+        if (current.isBetween(moment(currentDate.from), moment(currentDate.to))) {
+            isCarBlocked = true;
+        }
+    })
+    console.log(blockedCars);
+    if (isBlocked || isCarBlocked) {
         return true
     } else {
         let tomorrow = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");

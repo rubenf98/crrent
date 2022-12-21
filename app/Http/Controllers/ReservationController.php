@@ -31,7 +31,7 @@ class ReservationController extends Controller
      */
     public function index(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with('client')->with('drivers')->with('extras')->paginate(5));
+        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with("carPref")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 
     /**
@@ -61,12 +61,12 @@ class ReservationController extends Controller
             'return_date' =>  $endDate,
             'pickup_place' => $validator['pickup_place'],
             'return_place' => $validator['return_place'],
-            'flight' => $validator['flight'],
+            'flight' => array_key_exists('flight', $validator)  ? $validator['flight'] : null,
             'price' => $validator['price'],
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
-            'car_id' => $validator['car_id'],
+            'car_pref_id' => $validator['car_id'],
             'card_id' => $card->id,
             'client_id' => $client->id,
         ]);

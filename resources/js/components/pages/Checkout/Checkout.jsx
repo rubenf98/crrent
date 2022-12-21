@@ -15,6 +15,7 @@ import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
 import { getCarPrice, getPriceRounded, getPromotions, getDaysDifference } from '../../functions';
+import { fetchBlockCars } from '../../../redux/blockCar/actions';
 
 
 const Container = styled.section`
@@ -100,7 +101,7 @@ const Price = styled.div`
 
 function Checkout({ language, fetchExtras, theme,
     currentCar, setCurrentReservation, setCurrentReservationValues, extrasData,
-    fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
+    fetchBlocksSelector, promotions, currentReservation, currentErrors, fetchBlockCars }) {
     const { text } = require('../../../../assets/' + language + "/checkout");
 
     const [form] = Form.useForm();
@@ -126,6 +127,7 @@ function Checkout({ language, fetchExtras, theme,
             var to = searchParams.get("to");
             fetchExtras();
             fetchBlocksSelector(currentCar.level.id);
+            fetchBlockCars({ car: currentCar.id });
 
             if (from && to) {
                 handleDate(moment(from), moment(to), true);
@@ -308,6 +310,7 @@ const mapDispatchToProps = (dispatch) => {
         setCurrentReservationValues: (data) => dispatch(setCurrentReservationValues(data)),
         setCurrentPromotion: (data) => dispatch(setCurrentPromotion(data)),
         fetchBlocksSelector: (level) => dispatch(fetchBlocksSelector(level)),
+        fetchBlockCars: (filters) => dispatch(fetchBlockCars(filters)),
         fetchExtras: () => dispatch(fetchExtras()),
     };
 };

@@ -254,7 +254,7 @@ const AddButton = styled.button`
 
 function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, setTax,
     taxPrice,
-    setTaxPrice, blockedDates }) {
+    setTaxPrice, blockedDates, blockedCars }) {
     const [customPickup, setCustomPickup] = useState(undefined);
     const [customPickupTax, setCustomPickupTax] = useState(undefined);
     const [customReturn, setCustomReturn] = useState(undefined);
@@ -356,7 +356,6 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
         }
     }
 
-
     return (
         <Container>
 
@@ -387,7 +386,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                                     suffixIcon={(<></>)}
                                     onOpenChange={handleDateReset}
                                     onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, car.registration)}
+                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, car.registration, blockedCars)}
                                     disabledTime={(endDate, type) => ({
                                         disabledHours: () => {
                                             if (type == "end" && dates && endDate) {
@@ -563,7 +562,8 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
 const mapStateToProps = (state) => {
     return {
         extras: state.extra.data,
-        blockedDates: state.block.selector
+        blockedDates: state.block.selector,
+        blockedCars: state.blockCar.data
     };
 };
 

@@ -93,7 +93,8 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
                         <FieldContainer name="Local de levantamento" value={data.pickup_place} />
                         <FieldContainer name="Local de devolução" value={data.return_place} />
                         <FieldContainer name="Número de voo" value={data.flight} />
-                        <FieldContainer name="Carro preferencial" value={data.car?.title} />
+                        <FieldContainer name="Carro preferencial" value={data.car_pref?.title} />
+                        {/* <FieldContainer name="Carro" value={data.car?.title} /> */}
                         <FieldContainer name="Gama" value={levelDecoder[data.car?.level_id]} />
                         <FieldContainer name="Preço" value={data.price + "€"} />
                     </FieldsContainer>

@@ -26,5 +26,5 @@ export const text = {
         validity: "Data de Validade",
         cvv: "CVV",
     },
-    info: "Para sua segurança, a verificação da sua identidade pode ser solicitada. Contacte o seu banco para mais informações."
+    info: "Para sua segurança, armazenamos os seus dados bancários. Não utilizamos estes dados e servem apenas como salvaguarda da nossa parte."
 } 

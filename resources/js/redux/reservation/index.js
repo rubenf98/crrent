@@ -4,10 +4,12 @@ export const initialState = {
     data: [],
     todayData: [],
     nextData: [],
+    dataArchive: [],
     dataPerMonth: [],
     loading: false,
     loadingDownload: false,
     meta: {},
+    metaArchive: {},
     current: {},
     values: {},
     errors: [],
@@ -24,6 +26,7 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_TODAY_RESERVATIONS}_PENDING`:
         case `${types.FETCH_RESERVATION}_PENDING`:
         case `${types.FETCH_RESERVATIONS_PER_MONTH}_PENDING`:
+        case `${types.FETCH_RESERVATIONS_ARCHIVE}_PENDING`:
             return {
                 ...state,
                 loading: true,
@@ -33,6 +36,7 @@ export default (state = initialState, action = {}) => {
         case `${types.DELETE_RESERVATION}_REJECTED`:
         case `${types.CREATE_RESERVATION}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_REJECTED`:
+        case `${types.FETCH_RESERVATIONS_ARCHIVE}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_FULFILLED`:
             return {
                 ...state,
@@ -105,6 +109,14 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 data: []
+            };
+
+        case `${types.FETCH_RESERVATIONS_ARCHIVE}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                dataArchive: action.payload.data.data,
+                metaArchive: action.payload.data.meta,
             };
 
         case `${types.FETCH_RESERVATIONS_PER_MONTH}_FULFILLED`:

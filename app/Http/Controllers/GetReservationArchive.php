@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\QueryFilters\ReservationFilters;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 
-class GetReservationsPerMonthController extends Controller
+class GetReservationArchive extends Controller
 {
     /**
      * Handle the incoming request.
@@ -17,6 +17,8 @@ class GetReservationsPerMonthController extends Controller
      */
     public function __invoke(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::filterBy($filters)->with("carPref")->with("car")->with('client')->with('drivers')->with('extras')->get());
+        return ReservationResource::collection(Reservation::filterBy($filters)
+            ->where('pickup_date', '<', Carbon::now())
+            ->with("car")->with("carPref")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 }

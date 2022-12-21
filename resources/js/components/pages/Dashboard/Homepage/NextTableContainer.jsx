@@ -51,7 +51,7 @@ function NextTableContainer({ title, loading, data, meta, handlePageChange, hand
         },
         {
             title: 'VEÍCULO',
-            dataIndex: 'car',
+            dataIndex: 'car_pref',
             render: (car) => car.title,
         },
         {

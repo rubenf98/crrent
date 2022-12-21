@@ -36,4 +36,18 @@ class ReservationFilters extends QueryFilters
 
         $this->query->whereBetween('pickup_date', $dates)->orWhereBetween('return_date', $dates);
     }
+
+    public function after($string)
+    {
+        $date = Carbon::parse($string);
+
+        $this->query->where('pickup_date', '>=', $date);
+    }
+
+    public function before($string)
+    {
+        $date = Carbon::parse($string);
+
+        $this->query->where('pickup_date', '<', $date);
+    }
 }

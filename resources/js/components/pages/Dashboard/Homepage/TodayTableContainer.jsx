@@ -50,7 +50,7 @@ function TodayTableContainer({ title, loading, data, meta, handlePageChange, han
         },
         {
             title: 'VEÍCULO',
-            dataIndex: 'car',
+            dataIndex: 'car_pref',
             render: (car) => car.title,
         },
         {

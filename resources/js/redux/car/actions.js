@@ -16,6 +16,13 @@ export const fetchCarsSelector = (filters = {}) => ({
     })}`)
 })
 
+export const fetchCarsAvailability = (filters = {}) => ({
+    type: types.FETCH_CARS_AVAILABILITY,
+    payload: axios.get(`${window.location.origin}/api/car-availability?${stringify(filters, {
+        arrayFormat: "index"
+    })}`)
+})
+
 export const fetchCar = (id) => ({
     type: types.FETCH_CAR,
     payload: axios.get(`${window.location.origin}/api/cars/${id}`)

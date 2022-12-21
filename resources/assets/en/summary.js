@@ -26,5 +26,5 @@ export const text = {
         validity: "Card validity",
         cvv: "CVV",
     },
-    info: "For safety reasons, your identity may be requested. Contact your banking institution for additional information."
+    info: "For safety reasons, we collect you banking information. We will not use this information and serve solely as safety measure in our part."
 } 

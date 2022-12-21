@@ -16,6 +16,10 @@ const Container = styled.section`
         text-align: left;
         padding: 50px 0;
     }
+
+    .ant-picker-calendar-date-content {
+        height: 60px !important;
+    }
 `;
 
 function CalendarContainer({ data, loading, handleFilters }) {

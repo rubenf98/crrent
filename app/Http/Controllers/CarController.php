@@ -6,9 +6,11 @@ use App\Http\Requests\CarRequest;
 use App\Http\Requests\UpdateCarRequest;
 use App\Http\Resources\CarResource;
 use App\Models\BlockDate;
+use App\Models\BlockedCar;
 use App\Models\Car;
 use App\Models\Level;
 use App\QueryFilters\CarFilters;
+use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -35,33 +37,45 @@ class CarController extends Controller
     public function selector(Request $request)
     {
         $blockedLevels = [];
+        $blockedCars = [];
 
+        $blockedCarDates = BlockedCar::all();
         if ($request->from && $request->to) {
             $begin = new DateTime($request->from);
             $end = new DateTime($request->to);
 
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
-            $out = new ConsoleOutput();
+
             foreach ($period as $dt) {
+
+                foreach ($blockedCarDates as $blockedCarDate) {
+                    if (Carbon::parse($dt)->isBetween($blockedCarDate->from, $blockedCarDate->to)) {
+                        if (!in_array($blockedCarDate->car_id, $blockedCars)) {
+                            array_push($blockedCars, $blockedCarDate->car_id);
+                        }
+                    }
+                }
+
                 $levels = Level::all();
-                $out->writeln($dt->format("Y-m-d"));
+
                 foreach ($levels as $level) {
-                    $out->writeln($level);
+
                     $n = BlockDate::where('date', $dt->format("Y-m-d"))->where('level_id', $level->id)->count();
-                    $out->writeln($n);
+
                     $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
-                    $out->writeln($treshold);
+
                     if ($n >= $treshold) {
                         array_push($blockedLevels, $level->id);
                     }
                 }
-                $out->writeln("------------------------------------");
             }
         }
+
+
         $filters = CarFilters::hydrate($request->query());
 
-        return CarResource::collection(Car::filterBy($filters)->where('status', true)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
+        return CarResource::collection(Car::filterBy($filters)->whereNotIn('id', $blockedCars)->where('status', true)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
             $query->whereNotIn('id', $blockedLevels);
         })->where('visible', 1)->orderBy('level_id', 'asc')->groupBy('title')->get());
     }

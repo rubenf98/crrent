@@ -2,6 +2,7 @@ import { types } from "./types";
 
 export const initialState = {
     data: [],
+    availability: [],
     current: {},
     loading: false,
     selector: [],
@@ -17,6 +18,7 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_CARS}_PENDING`:
         case `${types.FETCH_CAR}_PENDING`:
         case `${types.SET_CAR_STATUS}_PENDING`:
+        case `${types.FETCH_CARS_AVAILABILITY}_PENDING`:
             return {
                 ...state,
                 loading: true,
@@ -26,6 +28,7 @@ export default (state = initialState, action = {}) => {
         case `${types.DELETE_CAR}_REJECTED`:
         case `${types.CREATE_CAR}_REJECTED`:
         case `${types.SET_CAR_STATUS}_REJECTED`:
+        case `${types.FETCH_CARS_AVAILABILITY}_REJECTED`:
             return {
                 ...state,
                 loading: false,
@@ -67,6 +70,8 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 current: {},
             };
+
+
         case `${types.FETCH_CARS}_REJECTED`:
             return {
                 ...state,
@@ -101,6 +106,13 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 data: action.payload.data.data,
                 meta: action.payload.data.meta,
+            };
+
+        case `${types.FETCH_CARS_AVAILABILITY}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                availability: action.payload.data.data,
             };
 
         case `${types.SET_CURRENT_CAR}`:

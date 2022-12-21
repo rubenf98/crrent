@@ -10,7 +10,6 @@ import { SearchIcon, UserIcon } from "../../../../icons";
 
 const Container = styled.div`
     width: 100%;
-    margin-bottom: 50px;
 `;
 
 const FilterContainer = styled(Row)`
@@ -29,7 +28,7 @@ const FilterContainer = styled(Row)`
 `;
 
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
+function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
     const [filters, setFilters] = useState({ id: undefined, name: undefined, date: undefined });
 
     const columns = [
@@ -79,7 +78,7 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
 
     return (
         <Container>
-            <CardContainer text="Tabela de Reservas">
+            <CardContainer text="Arquivo">
                 <FilterContainer style={{ margin: "30px 0px" }} gutter={16}>
                     <Col md={6}>
                         <Input allowClear value={filters.id} onChange={(e) => setFilters({ ...filters, id: e.target.value })} placeholder="Referência/ID de reserva" suffix={<SearchIcon />} />
@@ -119,4 +118,4 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
     )
 }
 
-export default TableContainer;
+export default ArchiveTableContainer;

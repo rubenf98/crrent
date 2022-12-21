@@ -6,16 +6,15 @@ import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
 import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
-import BlockLevel from '../BlockLevel/BlockLevel';
-import BlockCar from '../BlockCar/BlockCar';
 
 
 const Container = styled.div`
     width: 100%;
+    margin-bottom: 50px;
 `;
 
 
-function Block({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod, meta }) {
+function BlockLevel({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod, meta }) {
     const [filters, setFilters] = useState({});
     const [visible, setVisible] = useState(false)
 
@@ -36,8 +35,20 @@ function Block({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod, met
     return (
 
         <Container>
-            <BlockLevel />
-            <BlockCar />
+            <CardContainer text="Grupos Bloqueados">
+                <TableContainer
+                    data={data}
+                    loading={loading}
+                    onDelete={deleteBlockPeriod}
+                    meta={meta}
+                    setVisible={setVisible}
+                    handlePageChange={handlePageChange}
+                />
+                <FormContainer
+                    visible={visible}
+                    handleClose={() => setVisible(false)}
+                />
+            </CardContainer>
         </Container>
 
 
@@ -59,4 +70,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Block));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(BlockLevel));
