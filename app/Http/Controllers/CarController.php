@@ -62,17 +62,19 @@ class CarController extends Controller
                 foreach ($levels as $level) {
 
                     $n = BlockDate::where('date', $dt->format("Y-m-d"))->where('level_id', $level->id)->count();
-
-                    $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
-
-                    if ($n >= $treshold) {
+                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('fill', 1)->where('level_id', $level->id)->first();
+                    if ($isFilled) {
                         array_push($blockedLevels, $level->id);
+                    } else {
+                        $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+
+                        if ($n >= $treshold) {
+                            array_push($blockedLevels, $level->id);
+                        }
                     }
                 }
             }
         }
-
-
         $filters = CarFilters::hydrate($request->query());
 
         return CarResource::collection(Car::filterBy($filters)->whereNotIn('id', $blockedCars)->where('status', true)->with('level')->whereHas('level', function ($query) use ($blockedLevels) {
