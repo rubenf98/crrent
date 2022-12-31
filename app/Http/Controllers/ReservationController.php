@@ -74,7 +74,7 @@ class ReservationController extends Controller
 
         $car = Car::find($validator['car_id']);
         $interval = DateInterval::createFromDateString('1 day');
-        $period = new DatePeriod($initDate, $interval, $endDate);
+        $period = new DatePeriod($initDate, $interval, $endDate->addSecond());
 
         foreach ($period as $dt) {
             BlockDate::create([
@@ -134,13 +134,12 @@ class ReservationController extends Controller
         $period = CarbonPeriod::create($reservation->pickup_date, $reservation->return_date)->toArray();
         $level = $reservation->carPref()->pluck('level_id');
         foreach ($period as $date) {
-            
+
             $blockedDate = BlockDate::where('date', $date->toDateString())->where('fill', 0)->where('level_id', $level)->first();
 
             if ($blockedDate) {
                 $blockedDate->delete();
             }
-            
         }
 
         $reservation->delete();

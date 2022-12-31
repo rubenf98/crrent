@@ -38,17 +38,17 @@ class CarController extends Controller
     {
         $blockedLevels = [];
         $blockedCars = [];
-
+        // $out = new ConsoleOutput();
         $blockedCarDates = BlockedCar::all();
         if ($request->from && $request->to) {
             $begin = new DateTime($request->from);
-            $end = new DateTime($request->to);
+            $end = new DateTime(Carbon::parse($request->to)->addSecond());
 
             $interval = DateInterval::createFromDateString('1 day');
-            $period = new DatePeriod($begin, $interval, $end);
+            $period = new DatePeriod($begin, $interval, $end, DatePeriod::EXCLUDE_START_DATE);
 
             foreach ($period as $dt) {
-
+                // $out->writeln(Carbon::parse($dt));
                 foreach ($blockedCarDates as $blockedCarDate) {
                     if (Carbon::parse($dt)->isBetween($blockedCarDate->from, $blockedCarDate->to)) {
                         if (!in_array($blockedCarDate->car_id, $blockedCars)) {
@@ -60,14 +60,15 @@ class CarController extends Controller
                 $levels = Level::all();
 
                 foreach ($levels as $level) {
-
+                    // $out->writeln($level);
                     $n = BlockDate::where('date', $dt->format("Y-m-d"))->where('level_id', $level->id)->count();
                     $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('fill', 1)->where('level_id', $level->id)->first();
                     if ($isFilled) {
                         array_push($blockedLevels, $level->id);
                     } else {
                         $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
-
+                        // $out->writeln($treshold);
+                        // $out->writeln($n);
                         if ($n >= $treshold) {
                             array_push($blockedLevels, $level->id);
                         }

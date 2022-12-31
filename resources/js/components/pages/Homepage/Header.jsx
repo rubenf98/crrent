@@ -1,11 +1,13 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { FacebookIcon, MailIcon, WhatsappIcon } from '../../../icons';
 import DateFormItem from '../../common/DateFormItem';
+import { fetchBlocksSelector } from "../../../redux/block/actions";
+import { connect } from 'react-redux';
 
 const RangePickerContainer = styled.div`
     width: 100%;
@@ -191,9 +193,15 @@ const Accent = styled.div`
     }
 `;
 
-function Header({ theme, text }) {
+function Header({ theme, text, fetchBlocksSelector }) {
     const [dates, setDates] = useState([undefined, undefined]);
     var navigate = useNavigate();
+
+    useEffect(() => {
+        fetchBlocksSelector();
+
+    }, [])
+
 
     const handleSearch = () => {
         const dateFormat = "YYYY-MM-DD HH:mm";
@@ -232,4 +240,12 @@ function Header({ theme, text }) {
     )
 }
 
-export default withTheme(Header)
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+        fetchBlocksSelector: (level) => dispatch(fetchBlocksSelector(level)),
+    };
+};
+
+
+export default connect(null, mapDispatchToProps)(withTheme(Header));

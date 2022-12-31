@@ -30,12 +30,21 @@ class BlockDateController extends Controller
      */
     public function selector(Request $request)
     {
-        $level = Level::find($request->level_id);
-        $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+        if ($request->level_id != "undefined") {
+            $level = Level::find($request->level_id);
+            $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+
+            $dates = BlockDate::where('level_id', $level->id)->get();
+        } else {
+            $treshold = 1000000;
+
+            $dates = BlockDate::where('fill', 1)->get();
+        }
+
 
         $counter = [];
         $blocked = [];
-        $dates = BlockDate::where('level_id', $level->id)->get();
+
 
         foreach ($dates as $date) {
             if ($date->fill) {
