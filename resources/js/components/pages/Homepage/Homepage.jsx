@@ -10,17 +10,17 @@ import { fetchExtras } from '../../../redux/extra/actions'
 function Homepage({ fetchPromotions, language, fetchExtras }) {
     const { text } = require('../../../../assets/' + language + "/homepage");
 
-    useEffect(() => {
-        fetchPromotions()
-        fetchExtras()
-    }, [])
+    // useEffect(() => {
+    //     fetchPromotions()
+    //     fetchExtras()
+    // }, [])
 
     return (
         <div>
             <Header text={text.header} />
-            <Garage text={text.garage} />
+            {/* <Garage text={text.garage} />
             <About text={text.about} />
-            <Faq text={text.faq} />
+            <Faq text={text.faq} /> */}
         </div>
     )
 }

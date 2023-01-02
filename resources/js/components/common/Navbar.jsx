@@ -22,7 +22,7 @@ const Content = styled.section`
     box-sizing: border-box;
     display: flex;
     align-items: flex-end;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-wrap: wrap;
 
     @media (max-width: ${dimensions.md}) {
@@ -217,7 +217,7 @@ function Navbar({ theme, handleMenu, setLanguage,
     return (
         <Container>
             <Content>
-                <LinksContainer opacity={opacityLinks}>
+                {/* <LinksContainer opacity={opacityLinks}>
                     <img onClick={() => handleClick("/")} src="/image/logo.png" alt="logo" />
                     {visibleLinks &&
                         <>
@@ -228,7 +228,7 @@ function Navbar({ theme, handleMenu, setLanguage,
                         </>
                     }
 
-                </LinksContainer>
+                </LinksContainer> */}
                 <MobileMenu background={theme.primary}>
                     <div className='language'>
                         {language}

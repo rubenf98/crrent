@@ -2,10 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { FacebookIcon, MailIcon, WhatsappIcon } from '../../../icons';
-import DateFormItem from '../../common/DateFormItem';
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { connect } from 'react-redux';
 
@@ -68,11 +64,32 @@ const TitleContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     position: relative;
-    max-width: calc(${maxWidth} - 300px);
+    max-width: calc(${maxWidth});
     margin: auto;
 
+    @media (max-width: ${dimensions.sm}) {
+             br {
+                display: none;
+             }
+        }
+
+    h2 {
+        width: 70%;
+        padding-right: 10px;
+        box-sizing: border-box;
+        font-size: clamp(16px, 3vw, 30px);
+
+        span {
+            text-decoration: underline;
+        }
+
+        @media (max-width: ${dimensions.md}) {
+            width: 100%;
+        }
+    } 
+
     h1 {
-        font-size: clamp(60px, 10vw, 80px);
+        font-size: clamp(50px, 10vw, 90px);
         font-weight: 700;
         line-height: 94%;
         color: ${props => props.color};
@@ -94,6 +111,10 @@ const TitleContainer = styled.div`
             font-size: 40px;
             padding-left: 0px;
         }
+
+        @media (max-width: ${dimensions.sm}) {
+            font-size: 30px;
+        }
     }
 
     
@@ -114,7 +135,7 @@ const Image = styled.img`
     z-index: -2;
 
     @media (max-width: ${dimensions.md}) {
-        height: 50vh;
+        height: 45vh;
         width: 100vw;
     }
 `;
@@ -194,45 +215,30 @@ const Accent = styled.div`
 `;
 
 function Header({ theme, text, fetchBlocksSelector }) {
-    const [dates, setDates] = useState([undefined, undefined]);
-    var navigate = useNavigate();
+    // const [dates, setDates] = useState([undefined, undefined]);
+    // var navigate = useNavigate();
 
-    useEffect(() => {
-        fetchBlocksSelector();
+    // useEffect(() => {
+    //     fetchBlocksSelector();
 
-    }, [])
+    // }, [])
 
 
-    const handleSearch = () => {
-        const dateFormat = "YYYY-MM-DD HH:mm";
-        navigate("/garage?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat))
-    };
+    // const handleSearch = () => {
+    //     const dateFormat = "YYYY-MM-DD HH:mm";
+    //     navigate("/garage?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat))
+    // };
 
     return (
         <Container id="header">
             <Content>
                 <TitleContainer color={theme.primary}>
                     <Accent background={theme.secundary} />
-                    {text.title}
+                    <h1>{text.title}</h1>
 
+                    <h2>{text.subtitle}</h2>
                 </TitleContainer>
-                <RangePickerContainer>
-                    <LinksContainer>
-                        <a href="https://api.whatsapp.com/send?l=en&phone=351934953682" target="_blank">
-                            <WhatsappIcon />
-                        </a>
-                        <a href="mailto:info@cr-rent.com" target="_blank">
-                            <MailIcon />
-                        </a>
-                        <a href="https://www.facebook.com/profile.php?id=100087592815470" target="_blank">
-                            <FacebookIcon />
-                        </a>
 
-
-                    </LinksContainer>
-                    <DateFormItem text={text} dates={dates} setDates={setDates} />
-                    <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button}</Search>
-                </RangePickerContainer>
             </Content>
 
             <Image src="/image/homepage/header_1920.jpg" />

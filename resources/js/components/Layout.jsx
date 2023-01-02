@@ -25,7 +25,7 @@ class Layout extends Component {
                         <Navbar />
                         <NavbarMenu />
                         <div> {this.props.children} </div>
-                        <Footer />
+                        {/* <Footer /> */}
                     </Container>
                 </ScrollToTop>
             </ThemeContainer>
