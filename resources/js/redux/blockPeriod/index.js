@@ -13,9 +13,18 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_BLOCK_PERIODS}_PENDING`:
         case `${types.DELETE_BLOCK_PERIOD}_PENDING`:
         case `${types.CREATE_BLOCK}_PENDING`:
+        case `${types.FETCH_BLOCK_PERIODS_SELECTOR}_PENDING`:
             return {
                 ...state,
                 loading: true,
+            };
+
+        case `${types.FETCH_BLOCK_PERIODS_SELECTOR}_PENDING`:
+            return {
+                ...state,
+                loading: false,
+                data: [],
+                meta: {}
             };
 
         case `${types.FETCH_BLOCK_PERIODS}_REJECTED`:
@@ -42,6 +51,13 @@ export default (state = initialState, action = {}) => {
                 data: state.data.filter(
                     record => record.id !== action.meta.id
                 )
+            };
+
+        case `${types.FETCH_BLOCK_PERIODS_SELECTOR}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                selector: action.payload.data,
             };
 
         case `${types.FETCH_BLOCK_PERIODS}_FULFILLED`:

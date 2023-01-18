@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Footer from "./common/Footer";
 import Navbar from "./common/Navbar";
 import NavbarMenu from "./common/NavbarMenu";
 import ScrollToTop from "./common/ScrollToTop";
 import ThemeContainer from "./ThemeContainer";
+import { connect } from 'react-redux'
+import { fetchGlobalParameters } from "../redux/globalParameter/actions";
 
 const Container = styled.div`
     width: 100%;
@@ -16,22 +18,33 @@ const Container = styled.div`
     overflow-x: hidden;
 `;
 
-class Layout extends Component {
-    render() {
-        return (
-            <ThemeContainer>
-                <ScrollToTop>
-                    <Container>
-                        <Navbar />
-                        <NavbarMenu />
-                        <div> {this.props.children} </div>
-                        <Footer />
-                    </Container>
-                </ScrollToTop>
-            </ThemeContainer>
-        );
-    }
+
+
+export const Layout = ({ fetchGlobalParameters, children }) => {
+    useEffect(() => {
+        fetchGlobalParameters();
+    }, [])
+
+    return (
+        <ThemeContainer>
+            <ScrollToTop>
+                <Container>
+                    <Navbar />
+                    <NavbarMenu />
+                    <div> {children} </div>
+                    <Footer />
+                </Container>
+            </ScrollToTop>
+        </ThemeContainer>
+    )
 }
 
 
-export default Layout;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchGlobalParameters: () => dispatch(fetchGlobalParameters())
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Layout);

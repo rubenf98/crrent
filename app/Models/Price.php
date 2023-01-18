@@ -13,6 +13,8 @@ class Price extends Model
         'max',
         'min',
         'price',
+        'level_id',
+        'color'
     ];
 
     protected $casts = [

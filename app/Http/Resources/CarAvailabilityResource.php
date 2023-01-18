@@ -17,8 +17,8 @@ class CarAvailabilityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'size' => Car::where('title', $this->title)->count(),
             'availability' => $this->getAvailability($request->from, $request->to),
+            'registration' => $this->registration,
             'title' => $this->title,
             'image' => $this->image,
         ];

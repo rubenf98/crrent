@@ -42,6 +42,10 @@
         scroll-behavior: smooth;
     }
 
+    .ant-popover-inner-content {
+        padding: 0px !important;
+    }
+
     body {
         margin: 0;
         position: relative;

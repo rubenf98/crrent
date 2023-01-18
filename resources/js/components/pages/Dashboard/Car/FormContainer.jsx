@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import TextArea from "antd/lib/input/TextArea";
 import Checkbox from "antd/es/checkbox";
 import { createCar, updateCar } from "../../../../redux/car/actions";
+import LevelRemoteSelectContainer from "../Level/LevelRemoteSelectContainer";
 
 
 const ButtonContainer = styled(Row)`
@@ -143,12 +144,7 @@ function FormContainer({ loading, edit, handleClose, updateCar, visible, current
                             </Col>
                             <Col span={12}>
                                 <Form.Item rules={rules.level} label="Grupo" name="level_id">
-                                    <Select placeholder="Gama da viatura">
-                                        <Option value={1}>A</Option>
-                                        <Option value={2}>B</Option>
-                                        <Option value={3}>C</Option>
-                                        <Option value={4}>D</Option>
-                                    </Select>
+                                    <LevelRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>

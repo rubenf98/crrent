@@ -33,10 +33,9 @@ class Car extends Model
     {
         $startDate = Carbon::parse($from)->startOfDay();
         $endDate = Carbon::parse($to)->endOfDay();
-        $cars = Car::where('title', $this->title)->pluck('id');
 
         $response = [];
-        $reservations = Reservation::whereIn('car_pref_id', $cars)
+        $reservations = Reservation::where('car_pref_id', $this->id)
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('pickup_date', [$startDate, $endDate])
                     ->orWhereBetween('return_date', [$startDate, $endDate]);
@@ -49,7 +48,7 @@ class Car extends Model
                 $min = Carbon::parse($reservation->pickup_date)->startOfDay();
                 $max = Carbon::parse($reservation->return_date)->endOfDay();
                 if ($startDate->between($min, $max)) {
-                    $hasReservation++;
+                    $hasReservation = $reservation->id;
                 }
             }
 

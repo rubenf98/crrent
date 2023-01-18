@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Level extends Model
 {
     use HasFactory;
+    protected $fillable = ["name", "code", "color"];
 
     public function cars()
     {

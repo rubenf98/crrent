@@ -278,7 +278,7 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
     }
 
     const CarSection = ({ info }) => (
-        <Car className='car-section' onClick={() => handleCarSelection(info)} primary={theme.primary} background={theme.levels[info.level.code]}>
+        <Car className='car-section' onClick={() => handleCarSelection(info)} primary={theme.primary} background={info.level.color}>
             <div className='image-container'>
                 <div className='car-background' />
                 <img loading='lazy' src={info.image} alt={info.title} />

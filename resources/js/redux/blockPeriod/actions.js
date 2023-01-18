@@ -9,6 +9,11 @@ export const fetchBlockPeriods = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 })
 
+export const fetchBlockPeriodSelector = () => ({
+    type: types.FETCH_BLOCK_PERIODS_SELECTOR,
+    payload: axios.get(`${window.location.origin}/api/selector/blockPeriods`)
+})
+
 export const deleteBlockPeriod = id => ({
     type: types.DELETE_BLOCK_PERIOD,
     payload: axios.delete(`${window.location.origin}/api/blockPeriods/${id}`),

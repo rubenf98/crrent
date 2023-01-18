@@ -6,13 +6,14 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { FacebookIcon, MailIcon, WhatsappIcon } from '../../../icons';
 import DateFormItem from '../../common/DateFormItem';
-import { fetchBlocksSelector } from "../../../redux/block/actions";
+import { fetchBlockPeriodSelector } from "../../../redux/blockPeriod/actions";
 import { connect } from 'react-redux';
 
 const RangePickerContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    gap: 10px;
     margin-top: 100px;
     position: relative;
 
@@ -193,13 +194,12 @@ const Accent = styled.div`
     }
 `;
 
-function Header({ theme, text, fetchBlocksSelector }) {
+function Header({ theme, text, fetchBlockPeriodSelector }) {
     const [dates, setDates] = useState([undefined, undefined]);
     var navigate = useNavigate();
 
     useEffect(() => {
-        fetchBlocksSelector();
-
+        fetchBlockPeriodSelector();
     }, [])
 
 
@@ -243,7 +243,7 @@ function Header({ theme, text, fetchBlocksSelector }) {
 const mapDispatchToProps = (dispatch) => {
     return {
 
-        fetchBlocksSelector: (level) => dispatch(fetchBlocksSelector(level)),
+        fetchBlockPeriodSelector: () => dispatch(fetchBlockPeriodSelector()),
     };
 };
 

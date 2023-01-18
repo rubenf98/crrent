@@ -361,7 +361,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
 
             <Content>
                 <Car>
-                    <Background background={theme.levels[car.level.code]} />
+                    <Background background={car.level.color} />
                     <img src={car.image} alt={car.title} />
                 </Car>
                 <Info>
@@ -386,7 +386,7 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                                     suffixIcon={(<></>)}
                                     onOpenChange={handleDateReset}
                                     onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, car.registration, blockedCars)}
+                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, 0, car.registration, blockedCars)}
                                     disabledTime={(endDate, type) => ({
                                         disabledHours: () => {
                                             if (type == "end" && dates && endDate) {

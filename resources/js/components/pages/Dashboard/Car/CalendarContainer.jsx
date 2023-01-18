@@ -142,12 +142,12 @@ function CalendarContainer({ data, loading, handleFilters }) {
                             <CalendarTitle background="#fff">
                                 <div>
                                     <h3>{car.title}</h3>
-                                    <h4>{car.size}</h4>
+                                    <h4>{car.registration}</h4>
                                 </div>
                             </CalendarTitle>
                             {car.availability.map((availability, index) => (
                                 <CalendarItem key={'availability-' + index} background={availability ? "red" : "white"} >
-                                    <div className='value'>{availability ? availability : <></>}</div>
+                                    {/* <div className='value'>{availability ? availability : <></>}</div> */}
                                 </CalendarItem>
                             ))}
                         </div>

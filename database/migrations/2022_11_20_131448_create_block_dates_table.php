@@ -15,12 +15,14 @@ class CreateBlockDatesTable extends Migration
     {
         Schema::create('block_dates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('level_id');
+            $table->unsignedBigInteger('car_id');
+            $table->unsignedBigInteger('reservation_id')->nullable();
             $table->date('date');
-            $table->boolean('fill')->default(false);
+            $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('level_id')->references('id')->on('levels');
+            $table->foreign('car_id')->references('id')->on('cars');
+            $table->foreign('reservation_id')->references('id')->on('reservations');
         });
     }
 

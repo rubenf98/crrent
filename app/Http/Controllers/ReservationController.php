@@ -52,8 +52,8 @@ class ReservationController extends Controller
         $drivers = Driver::store($validator);
         $card = Card::store($validator);
 
-        $initDate =  Carbon::parse($validator['pickup_date']);
-        $endDate =  Carbon::parse($validator['return_date']);
+        $initDate = Carbon::parse($validator['pickup_date']);
+        $endDate = Carbon::parse($validator['return_date']);
         $token = uniqid();
 
         $reservation = Reservation::create([
@@ -68,18 +68,20 @@ class ReservationController extends Controller
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
             'car_pref_id' => $validator['car_id'],
+            'car_id' => $validator['car_id'],
             'card_id' => $card->id,
             'client_id' => $client->id,
         ]);
 
         $car = Car::find($validator['car_id']);
         $interval = DateInterval::createFromDateString('1 day');
-        $period = new DatePeriod($initDate, $interval, $endDate->addSecond());
+        $period = new DatePeriod($initDate->startOfDay(), $interval, $endDate->endOfDay());
 
         foreach ($period as $dt) {
             BlockDate::create([
                 "date" => $dt,
-                "level_id" => $car->level->id
+                "car_id" => $car->id,
+                "reservation_id" => $reservation->id
             ]);
         }
 

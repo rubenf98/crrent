@@ -76,21 +76,13 @@ export function getCarPrice(prices, days, factors) {
     return carPrice;
 }
 
-export function isDateDisabled(current, blockedDates, currentDates, registration = true, blockedCars = []) {
+export function isDateDisabled(current, blockedDates, currentDates, index, registration = true) {
     if (!registration) {
         return true;
     }
     let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
 
-    let isCarBlocked = false;
-
-    blockedCars.map((currentDate) => {
-        if (current.isBetween(moment(currentDate.from), moment(currentDate.to))) {
-            isCarBlocked = true;
-        }
-    })
-    console.log(blockedCars);
-    if (isBlocked || isCarBlocked) {
+    if (isBlocked) {
         return true
     } else {
         let tomorrow = moment().add(1, 'days').format("YYYY-MM-DD HH:mm");
@@ -101,21 +93,31 @@ export function isDateDisabled(current, blockedDates, currentDates, registration
             let tooLate = false;
 
             if (currentDates) {
-                tooLate = currentDates[0] && current.diff(currentDates[0], 'days') > 365;
-                tooEarly = currentDates[0] && moment(current).startOf('day').diff(moment(currentDates[0]).startOf('day'), 'days') < 2;
+                var condition = false;
+                if (index != 0) {
+                    condition = currentDates[0];
+                }
 
-                var currentBlockedDate = null;
-                for (let index = 0; index < blockedDates.length; index++) {
-                    var blockedDate = moment(blockedDates[index]);
+                tooLate = condition ? current.diff(currentDates[0], 'days') > 48 : current.diff(moment(), 'days') > 31;
+                tooEarly = condition ?
+                    moment(current).startOf('day').diff(moment(currentDates[0]).startOf('day'), 'days') < 2
+                    : moment(current).startOf('day').diff(moment().startOf('day'), 'days') < 2;
 
-                    if (blockedDate.isAfter(currentDates[0])) {
-                        currentBlockedDate = blockedDate;
-                        break;
+                var nextBlockedDate = null;
+                if (condition) {
+                    for (let index = 0; index < blockedDates.length; index++) {
+                        var blockedDate = moment(blockedDates[index]);
+
+                        if (blockedDate.isAfter(currentDates[0])) {
+                            nextBlockedDate = blockedDate;
+                            break;
+                        }
                     }
                 }
 
-                if (currentBlockedDate) {
-                    if (current.isAfter(currentBlockedDate)) {
+
+                if (nextBlockedDate) {
+                    if (current.isAfter(nextBlockedDate)) {
                         tooLate = true;
                     }
                 }
@@ -125,5 +127,33 @@ export function isDateDisabled(current, blockedDates, currentDates, registration
             return !!tooEarly || !!tooLate;
         }
     }
+
+}
+
+
+export function isTimeDisabled(dates, type) {
+    // console.log(dates);
+    // console.log(type);
+    // if (type == "end" && dates[0] && dates[1]) {
+    //     var tooEarly = moment(dates[0]).diff(dates[1], 'days') == 1;
+    //     console.log(moment(dates[0]).diff(dates[1], 'days'));
+    //     var hour = 0;
+    //     var blocked = [];
+    //     var initHour = dates[0].hour();
+
+    //     if (tooEarly) {
+    //         while (hour < 24) {
+    //             if (hour < initHour) {
+    //                 blocked.push(hour);
+    //             }
+    //             hour++;
+    //         }
+    //     }
+
+    //     return blocked.concat([0, 1, 2, 3, 4, 5, 6, 23])
+
+    // }
+
+    return [0, 1, 2, 3, 4, 5, 6, 23];
 
 }

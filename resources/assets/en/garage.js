@@ -1,6 +1,6 @@
 export const text = {
     button: {
-        placeholder: ["pickup date", "return date"],
+        placeholder: ["pickup date", "pickup time", "return date", "return time"],
         button: "search"
     },
     title: "our offer",

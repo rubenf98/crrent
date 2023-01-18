@@ -7,12 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlockDate extends Model
 {
-    protected $fillable = ['level_id', 'date', 'fill'];
+    protected $fillable = ['car_id', 'date', 'notes', 'reservation_id'];
 
     use HasFactory;
 
-    public function level()
+    public function car()
     {
-        return $this->belongsTo(Level::class);
+        return $this->belongsTo(Car::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
     }
 }

@@ -22,12 +22,14 @@ class ReservationFilters extends QueryFilters
     public function id($string)
     {
         $this->query->where('id', $string)
-            ->orWhere('token', 'like', '%' . $string . '%');
+            ->orWhere('token', $string);
     }
 
     public function name($string)
     {
-        $this->query->where('name', 'like', '%' . $string . '%');
+        $this->query->whereHas('client', function ($query) use ($string) {
+            $query->where('name', $string);
+        });
     }
 
     public function date($string)

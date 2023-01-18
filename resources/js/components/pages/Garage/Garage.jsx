@@ -295,7 +295,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
     const CarSection = ({ info }) => {
         var pricing = getCarPrice(info.level.prices, days, factors);
         return (
-            <Car primary={theme.primary} background={theme.levels[info.level.code]}>
+            <Car primary={theme.primary} background={info.level.color}>
                 <div className='image-container'>
                     <div className='car-background' />
                     <img src={info.image} alt={info.title} />

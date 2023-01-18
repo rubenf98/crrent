@@ -19,6 +19,7 @@ class Reservation extends Model
         'car_price' => 'decimal:2',
         'car_price_per_day' => 'decimal:2',
         'price' => 'decimal:2',
+        'created_at' => 'string',
     ];
 
     public function generateDoc()

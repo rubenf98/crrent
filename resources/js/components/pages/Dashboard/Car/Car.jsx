@@ -7,6 +7,7 @@ import { ActionButton } from '../../../styles';
 import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
 import CalendarContainer from './CalendarContainer';
+import Level from '../Level/Level';
 
 
 const Container = styled.div`
@@ -60,6 +61,7 @@ function Car({ current, theme, data, loading, meta, fetchCars, deleteCar, setCur
     return (
         <Container>
             <CalendarContainer data={availability} loading={loading} handleFilters={handleAvailabilityFilters} />
+            <Level />
             <CardContainer text="Listagem de Carros">
                 <FormContainer
                     visible={visible}

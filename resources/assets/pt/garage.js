@@ -1,6 +1,6 @@
 export const text = {
     button: {
-        placeholder: ["pickup place", "return place"],
+        placeholder: ["data levantamento", "horário levantamento", "data devolução", "horário devolução"],
         button: "search"
     },
     title: "Nossa oferta",

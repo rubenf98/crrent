@@ -1,25 +1,25 @@
-import React, { useState } from 'react'
-import { DatePicker } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { DatePicker, Row, TimePicker } from 'antd';
 import styled from "styled-components";
 import { dimensions } from '../helper';
 import moment from "moment";
 import { connect } from 'react-redux';
-import { isDateDisabled } from '../functions';
+import { isDateDisabled, isTimeDisabled } from '../functions';
 
-const RangePicker = styled(DatePicker.RangePicker)`
-    width: 50%;
+const StyledDatePicker = styled(DatePicker)`
+    width: 25%;
     margin: 0px;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
-    -webkit-box-shadow: -8px 0px 20px 0px #0000002f; 
-    box-shadow: -8px 0px 20px 0px #0000002f;
+    -webkit-box-shadow: 0px 0px 10px 0px #0000002f; 
+    box-shadow: 0px 0px 10px 0px #0000002f;
 
     .ant-picker-input {
         background-image: url("/icon/calendar.svg");
         background-repeat: no-repeat;
         background-size: 23px 25px;
         text-indent: 20px;
-        padding-left: 50px;
+        padding-left: 40px;
         box-sizing: border-box;
     }
     .ant-picker-input > input::placeholder {
@@ -27,7 +27,53 @@ const RangePicker = styled(DatePicker.RangePicker)`
         opacity: .8;
         font-weight: 400;
         text-transform: uppercase;
-        font-size: 16px;
+        font-size: 14px;
+    }
+
+    @media (max-width: ${dimensions.lg}) {
+        padding: 10px;
+        flex: 1;
+
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 10px;
+        flex: 1;
+
+        .ant-picker-input {
+            background-image: none;
+            text-indent: 0px;
+            padding-left: 0px;
+        }
+
+        .ant-picker-input > input::placeholder {
+            font-size: 14px;
+        }
+    }
+`;
+
+const StyledTimePicker = styled(TimePicker)`
+    width: 25%;
+    margin: 0px;
+    padding: 10px;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0px 0px 10px 0px #0000002f; 
+    box-shadow: 0px 0px 10px 0px #0000002f;
+
+    .ant-picker-input {
+        background-image: url("/icon/calendar.svg");
+        background-repeat: no-repeat;
+        background-size: 23px 25px;
+        text-indent: 20px;
+        padding-left: 40px;
+        box-sizing: border-box;
+    }
+    .ant-picker-input > input::placeholder {
+        color: black;
+        opacity: .8;
+        font-weight: 400;
+        text-transform: uppercase;
+        font-size: 14px;
     }
 
     @media (max-width: ${dimensions.lg}) {
@@ -53,84 +99,122 @@ const RangePicker = styled(DatePicker.RangePicker)`
 `;
 
 
+const Container = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+
 function DateFormItem({ setDates, dates, text, blockedDates }) {
-    const [currentDates, setCurrentDates] = useState(null);
+    const [currentDates, setCurrentDates] = useState([undefined, undefined]);
+    const [currentTimes, setCurrentTimes] = useState([undefined, undefined]);
 
-    const onBlur = (e) => {
-        if (e.target.placeholder && e.target.value) {
-            var dateCopy = [...dates];
+    useEffect(() => {
+        if (!currentDates[0] || !currentDates[1]) {
+            var initDate = [undefined, undefined];
+            var initTime = [undefined, undefined];
 
-            if (e.target.placeholder == "data levantamento" || e.target.placeholder == "pickup date") {
-                setDates([moment(e.target.value, "DD-MM-YYYY HH:mm"), dateCopy[1]]);
-                setCurrentDates([moment(e.target.value, "DD-MM-YYYY HH:mm"), dateCopy[1]]);
+            if (dates[0]) {
+                initDate[0] = moment(dates[0], "DD-MM-YYYY");
+                initTime[0] = moment(dates[0], "HH:mm");
             }
-            else if (e.target.placeholder == "data devolução" || e.target.placeholder == "return date") {
-                setDates([dateCopy[0], moment(e.target.value, "DD-MM-YYYY HH:mm")]);
-                setCurrentDates([dateCopy[0], moment(e.target.value, "DD-MM-YYYY HH:mm")]);
+
+            if (dates[1]) {
+                initDate[1] = moment(dates[1], "DD-MM-YYYY");
+                initTime[1] = moment(dates[1], "HH:mm");
             }
+
+            setCurrentDates(initDate);
+            setCurrentTimes(initTime);
         }
-    };
+    }, [dates])
 
-    const handleDateReset = (isOpen, a) => {
-        if (isOpen) {
-            if (currentDates && (currentDates[0] && currentDates[1])) {
-                setCurrentDates(null);
-                setDates([undefined, undefined]);
-            }
+    const handleTimeChange = (e, index) => {
+        if (currentDates[index]) {
+            var aNewDate = [...currentDates];
+            aNewDate[index].set('hour', e.hour()).set('minute', e.minute());
+
+            if (index)
+                setDates([dates[0], aNewDate[1]]);
+            else setDates([aNewDate[0], dates[1]]);
+
         }
-        else {
-            setCurrentDates(null);
+
+        if (index)
+            setCurrentTimes([currentTimes[0], e]);
+        else setCurrentTimes([e, currentTimes[1]]);
+    }
+
+    const handleDateChange = (e, index) => {
+        if (e) {
+            if (currentTimes[index]) {
+                var aNewDate = [...currentTimes];
+                aNewDate[index].set('year', e.year()).set('month', e.month()).set('day', e.day());
+
+                if (index)
+                    setDates([dates[0], aNewDate[1]]);
+                else setDates([aNewDate[0], undefined]);
+            }
+
+            if (index)
+                setCurrentDates([currentDates[0], e]);
+            else setCurrentDates([e, undefined]);
+        } else {
+
+            if (index)
+                setDates([dates[0], undefined]);
+            else setDates([undefined, undefined]);
+
+            if (index)
+                setCurrentDates([currentDates[0], undefined]);
+            else setCurrentDates([undefined, undefined]);
         }
     }
 
-
     return (
-        <RangePicker
-            onBlur={onBlur}
-            onOpenChange={handleDateReset}
-            showTime={{ format: "HH:mm", hideDisabledOptions: true }}
-            minuteStep={15}
-            onChange={(e) => setDates(e)}
-            onCalendarChange={(val) => setCurrentDates(val)}
-            format="DD-MM-YYYY HH:mm"
-            placeholder={text.placeholder}
-            suffixIcon={(<></>)}
-            disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates)}
-            disabledTime={(endDate, type) => ({
-                disabledHours: () => {
-                    if (type == "end" && currentDates && endDate) {
-                        var tooEarly = currentDates[0] && moment(endDate).diff(currentDates[0], 'days') == 1;
-
-                        var hour = 0;
-                        var blocked = [];
-                        var initHour = currentDates[0].hour();
-
-                        if (tooEarly) {
-                            while (hour < 24) {
-                                if (hour < initHour) {
-                                    blocked.push(hour);
-                                }
-                                hour++;
-                            }
-                        }
-
-                        return blocked.concat([0, 1, 2, 3, 4, 5, 6, 23])
-
-                    }
-
-                    return [0, 1, 2, 3, 4, 5, 6, 23];
-                },
-
-            })}
-            value={dates}
-        />
+        <Container>
+            <StyledDatePicker
+                value={currentDates[0]}
+                format="DD-MM-YYYY"
+                placeholder={text.placeholder[0]}
+                suffixIcon={(<></>)}
+                disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates, 0)}
+                onChange={(e) => handleDateChange(e, 0)}
+                onClear={() => console.log("teste")}
+            />
+            <StyledTimePicker
+                value={currentTimes[0]}
+                placeholder={text.placeholder[1]}
+                disabledHours={() => isTimeDisabled(dates, "start")}
+                onSelect={(e) => handleTimeChange(e, 0)}
+                minuteStep={15}
+                format="HH:mm"
+                hideDisabledOptions
+            />
+            <StyledDatePicker
+                value={currentDates[1]}
+                format="DD-MM-YYYY"
+                placeholder={text.placeholder[2]}
+                onChange={(e) => handleDateChange(e, 1)}
+                suffixIcon={(<></>)}
+                disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates, 1)}
+            />
+            <StyledTimePicker
+                value={currentTimes[1]}
+                disabledHours={() => isTimeDisabled(dates, "end")}
+                placeholder={text.placeholder[3]} onSelect={(e) => handleTimeChange(e, 1)}
+                minuteStep={15}
+                format="HH:mm"
+                hideDisabledOptions
+            />
+        </Container>
     )
 }
 
 
 const mapStateToProps = (state) => {
     return {
-        blockedDates: state.block.selector
+        blockedDates: state.blockPeriod.selector
     };
 };
 

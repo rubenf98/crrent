@@ -81,7 +81,7 @@ function NextTableContainer({ title, loading, data, meta, handlePageChange, hand
     return (
         <Container>
             <div className="title">
-                <h2>Reservas nos próximos 5 dias</h2>
+                <h2>Atividade nos próximos 5 dias</h2>
             </div>
             <Table
                 loading={loading}

@@ -15,9 +15,10 @@ class CreateLevelsTable extends Migration
     {
         Schema::create('levels', function (Blueprint $table) {
             $table->id();
+            $table->string('color')->unique();
             $table->string('code')->unique();
             $table->string('name')->unique();
-            $table->integer('min_caution');
+            $table->integer('min_caution')->nullable();
             $table->timestamps();
         });
     }

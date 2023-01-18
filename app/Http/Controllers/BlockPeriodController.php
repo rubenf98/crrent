@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\BlockPeriodResource;
 use App\Models\BlockDate;
 use App\Models\BlockPeriod;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use DateInterval;
+use DatePeriod;
 use Illuminate\Http\Request;
 
 class BlockPeriodController extends Controller
@@ -18,6 +21,24 @@ class BlockPeriodController extends Controller
     public function index(Request $request)
     {
         return BlockPeriodResource::collection(BlockPeriod::with('levels')->paginate(5));
+    }
+
+    public function selector(Request $request)
+    {
+        $dates = BlockPeriod::all();
+        $blocked = [];
+
+
+        foreach ($dates as $date) {
+            $interval = DateInterval::createFromDateString('1 day');
+            $period = new DatePeriod(Carbon::parse($date->from), $interval, Carbon::parse($date->to));
+
+            foreach ($period as $dt) {
+                array_push($blocked, $dt->toDateString());
+            }
+        }
+
+        return $blocked;
     }
 
     /**

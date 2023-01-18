@@ -6,6 +6,7 @@ use App\Http\Resources\BlockDateResource;
 use App\Http\Resources\BlockPeriodResource;
 use App\Models\BlockDate;
 use App\Models\BlockPeriod;
+use App\Models\Car;
 use App\Models\Level;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -30,36 +31,30 @@ class BlockDateController extends Controller
      */
     public function selector(Request $request)
     {
-        if ($request->level_id != "undefined") {
-            $level = Level::find($request->level_id);
-            $treshold = $level->cars()->where('status', true)->whereNotNull('registration')->count();
+        if ($request->car_id != "undefined") {
+            $car = Car::find($request->car_id);
 
-            $dates = BlockDate::where('level_id', $level->id)->get();
-        } else {
-            $treshold = 1000000;
-
-            $dates = BlockDate::where('fill', 1)->get();
+            $dates = BlockDate::where('car_id', $car->id)->get();
         }
 
-
-        $counter = [];
         $blocked = [];
 
 
         foreach ($dates as $date) {
-            if ($date->fill) {
-                array_push($blocked, $date->date);
-            } else {
-                if (!array_key_exists($date->date, $counter)) {
-                    $counter[$date->date] = 1;
-                } else {
-                    $counter[$date->date] += 1;
-                }
+            array_push($blocked, $date->date);
+            // if ($date->fill) {
+            //     array_push($blocked, $date->date);
+            // } else {
+            //     if (!array_key_exists($date->date, $counter)) {
+            //         $counter[$date->date] = 1;
+            //     } else {
+            //         $counter[$date->date] += 1;
+            //     }
 
-                if ($counter[$date->date] >= $treshold) {
-                    array_push($blocked, $date->date);
-                }
-            }
+            //     if ($counter[$date->date] >= $treshold) {
+            //         array_push($blocked, $date->date);
+            //     }
+            // }
         }
 
         return $blocked;

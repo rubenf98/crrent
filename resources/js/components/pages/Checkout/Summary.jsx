@@ -405,7 +405,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                 {Object.values(currentCar).length &&
                     <SummaryContainer>
                         <Car>
-                            <Background background={theme.levels[currentCar.level.code]} />
+                            <Background background={currentCar.level.color} />
                             <img src={currentCar.image} alt="car" />
                         </Car>
                         <Info>

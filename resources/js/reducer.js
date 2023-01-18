@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 import auth from './redux/auth'
 import application from './redux/application'
+import globalParameter from './redux/globalParameter'
 
 import reservation from './redux/reservation'
 import car from './redux/car'
@@ -11,10 +12,12 @@ import block from './redux/block'
 import blockPeriod from './redux/blockPeriod'
 import blockCar from './redux/blockCar'
 import price from './redux/price'
+import level from './redux/level'
 
 const reducer = combineReducers({
     auth,
     application,
+    globalParameter,
     car,
     reservation,
     extra,
@@ -22,7 +25,8 @@ const reducer = combineReducers({
     block,
     blockPeriod,
     blockCar,
-    price
+    price,
+    level
 })
 
 export default reducer

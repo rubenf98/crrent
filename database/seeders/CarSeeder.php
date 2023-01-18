@@ -17,10 +17,10 @@ class CarSeeder extends Seeder
     public function run()
     {
         $levels = [
-            ['code' => 'A', 'name' => 'Citadino 3P', 'min_caution' => 800],
-            ['code' => 'B', 'name' => 'Utilitário 5P', 'min_caution' => 850],
-            ['code' => 'C', 'name' => 'Utilitário 5P c/ AC', 'min_caution' => 1250],
-            ['code' => 'D', 'name' => 'SUV/Crossover', 'min_caution' => 1350]
+            ['code' => 'A', 'color' => "#BFC5C5", 'name' => 'Citadino 3P', 'min_caution' => 800],
+            ['code' => 'B', 'color' => "#A8D6E3", 'name' => 'Utilitário 5P', 'min_caution' => 850],
+            ['code' => 'C', 'color' => "#FFC103", 'name' => 'Utilitário 5P c/ AC', 'min_caution' => 1250],
+            ['code' => 'D', 'color' => "#951D26", 'name' => 'SUV/Crossover', 'min_caution' => 1350]
         ];
 
         foreach ($levels as $item) {

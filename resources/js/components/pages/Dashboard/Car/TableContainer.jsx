@@ -35,11 +35,6 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
             render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'VISIBILIDADE',
-            dataIndex: 'visible',
-            render: (visible, row) => <Action onClick={() => setCarStatus(row.id, { visible: !visible })} active={visible} >{visible ? "Visível" : "Escondido"}</Action>,
-        },
-        {
             title: 'MATRÍCULA',
             dataIndex: 'registration',
         },

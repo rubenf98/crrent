@@ -17,11 +17,11 @@ export const fetchReservationsPerMonth = (filters = {}) => ({
     })}`)
 })
 
-export const fetchReservationsArchive = (filters = {}) => ({
+export const fetchReservationsArchive = (page = 1, filters = {}) => ({
     type: types.FETCH_RESERVATIONS_ARCHIVE,
     payload: axios.get(`${window.location.origin}/api/reservations-archive?${stringify(filters, {
         arrayFormat: "index"
-    })}`)
+    })}&page=${page}`)
 })
 
 export const fetchTodayReservations = () => ({

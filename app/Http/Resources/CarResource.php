@@ -22,6 +22,7 @@ class CarResource extends JsonResource
             'level' => [
                 'id' => $this->level->id,
                 'code' => $this->level->code,
+                'color' => $this->level->color,
                 'prices' => $this->level->prices
             ],
             'description' => $this->getTranslations('description'),
