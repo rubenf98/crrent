@@ -20,8 +20,8 @@ class GetTodayReservationsController extends Controller
         $startDate =  Carbon::now()->startOfDay();
         $endDate = Carbon::now()->endOfDay();
 
-        $pickup = ReservationResource::collection(Reservation::with("carPref")->with("car")->with('client')->whereBetween('pickup_date', [$startDate, $endDate])->get());
-        $return = ReservationResource::collection(Reservation::with("carPref")->with("car")->with('client')->whereBetween('return_date', [$startDate, $endDate])->get());
+        $pickup = ReservationResource::collection(Reservation::with("car")->with("car.category")->with('client')->whereBetween('pickup_date', [$startDate, $endDate])->get());
+        $return = ReservationResource::collection(Reservation::with("car")->with("car.category")->with('client')->whereBetween('return_date', [$startDate, $endDate])->get());
 
         return response()->json([
             'pickup' => $pickup,

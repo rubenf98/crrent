@@ -11,13 +11,25 @@ use Cerbero\QueryFilters\QueryFilters;
  */
 class ReservationFilters extends QueryFilters
 {
+
+    public function car($string)
+    {
+        $this->query->whereHas('car', function ($query) use ($string) {
+            $query->where('registration', 'like', '%' . $string . '%')
+                ->orWhereHas('category', function ($query) use ($string) {
+                    $query->where('title', 'like', '%' . $string . '%');
+                });
+        });
+    }
     public function dates($array)
     {
         // $startDate = Carbon::parse($array[0]);
         // $endDate = Carbon::parse($array[0]);
 
-        $this->query->whereBetween('pickup_date', $array)->orWhereBetween('return_date', $array);
+        $this->query->whereBetween('pickup_date', $array)->whereBetween('return_date', $array);
     }
+
+
 
     public function id($string)
     {

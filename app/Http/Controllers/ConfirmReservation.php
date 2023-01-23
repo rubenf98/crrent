@@ -25,7 +25,7 @@ class ConfirmReservation extends Controller
             $reservation->confirmed_at = Carbon::now();
             $reservation->save();
             // Mail::to("jrubenf98@gmail.com")->queue(new ReservationEmail($reservation->token, $reservation->pickup_date, $reservation->return_date, $reservation->carPref->title));
-            Mail::to("info@cr-rent.com")->queue(new ReservationEmail($reservation->token, $reservation->pickup_date, $reservation->return_date, $reservation->carPref->title));
+            Mail::to("info@cr-rent.com")->queue(new ReservationEmail($reservation->token, $reservation->pickup_date, $reservation->return_date, $reservation->car->category->title));
         }
     }
 }

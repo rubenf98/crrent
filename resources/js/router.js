@@ -21,6 +21,7 @@ import Block from "./components/pages/Dashboard/Block/Block";
 import Value from "./components/pages/Dashboard/Value/Value";
 import Success from "./components/pages/Checkout/Success";
 import Confirmation from "./components/pages/Checkout/Confirmation";
+import CarDetail from "./components/pages/Dashboard/CarDetail/CarDetail";
 export const history = createBrowserHistory();
 
 function Router() {
@@ -39,6 +40,7 @@ function Router() {
                 <Route path="/painel/reservas" element={<DashboardLayout><Reservation /></DashboardLayout>} />
                 <Route path="/painel/extras" element={<DashboardLayout><Extra /></DashboardLayout>} />
                 <Route path="/painel/carros" element={<DashboardLayout><Car /></DashboardLayout>} />
+                <Route path="/painel/carros/:id" element={<DashboardLayout><CarDetail /></DashboardLayout>} />
                 <Route path="/painel/precos" element={<DashboardLayout><Value /></DashboardLayout>} />
                 <Route path="/login" element={<Login />} />
                 <Route exact path="/privacy" element={<Layout><Privacy /></Layout>} />

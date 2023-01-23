@@ -3,7 +3,7 @@ import styled, { withTheme, keyframes } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { dimensions, getCarouselBreakpoints } from '../../helper';
 import { maxWidthStyle, titleStyle, SecundaryButton } from '../../styles';
-import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
+import { fetchCarCategorySelector, setCurrentCarCategory } from "../../../redux/carCategory/actions";
 import { PreviousIcon, NextIcon } from '../../../icons';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -235,15 +235,17 @@ const CarContainer = styled.div`
     }
 `;
 
-function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }) {
+function Garage(props) {
     const carouselRef = useRef(null);
     const [currentSlides, setCurrentSlides] = useState([1, 3])
     const [currentFactor, setCurrentFactor] = useState(1)
     const [seeMore, setSeeMore] = useState(false)
+    const { data, text, promotions, theme } = props;
+
     var navigate = useNavigate();
 
     useEffect(() => {
-        fetchCarsSelector();
+        props.fetchCarCategorySelector();
     }, []);
 
     useEffect(() => {
@@ -298,10 +300,8 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
 
 
     function handleCarSelection(car) {
-        setCurrent(car);
+        props.setCurrentCarCategory(car);
         navigate("/checkout");
-
-
     }
 
     return (
@@ -372,15 +372,15 @@ function Garage({ theme, fetchCarsSelector, setCurrent, data, text, promotions }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCarsSelector: () => dispatch(fetchCarsSelector()),
-        setCurrent: (car) => dispatch(setCurrent(car)),
+        fetchCarCategorySelector: () => dispatch(fetchCarCategorySelector()),
+        setCurrentCarCategory: (record) => dispatch(setCurrentCarCategory(record)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        data: state.car.selector,
-        loading: state.car.loading,
+        data: state.carCategory.selector,
+        loading: state.carCategory.loading,
         promotions: state.promotion.data,
     };
 };

@@ -17,23 +17,22 @@ class CarResource extends JsonResource
         return [
             'id' => $this->id,
             'registration' => $this->registration,
-            'visible' => (bool) $this->visible,
             'status' => (bool) $this->status,
-            'level' => [
-                'id' => $this->level->id,
-                'code' => $this->level->code,
-                'color' => $this->level->color,
-                'prices' => $this->level->prices
+            'category' => [
+                'id' => $this->category->id,
+                'title' => $this->category->title,
+                'description' => $this->category->getTranslations('description'),
+                'image' => $this->category->image,
+                'prices' => $this->category->prices,
+                'charateristics' => $this->category->charateristics,
+                'level' => [
+                    'id' => $this->category->level->id,
+                    'code' => $this->category->level->code,
+                    'color' => $this->category->level->color,
+                    'prices' => $this->category->level->prices
+                ],
             ],
-            'description' => $this->getTranslations('description'),
-            'title' => $this->title,
-            'subtitle' => $this->subtitle,
-            'gas' => $this->gas,
-            'air' => $this->air,
-            'people' => $this->people,
-            'doors' => $this->doors,
-            'shift_mode' => $this->shift_mode,
-            'image' => $this->image,
+            'kms' => $this->kms,
         ];
     }
 }

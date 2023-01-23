@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlockDateController;
 use App\Http\Controllers\BlockedCarController;
 use App\Http\Controllers\BlockPeriodController;
+use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\GlobalParameterController;
@@ -34,6 +35,7 @@ Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
 Route::get('me', 'App\Http\Controllers\AuthController@me');
 
 Route::get('/selector/cars', 'App\Http\Controllers\CarController@selector');
+Route::get('/selector/car-categories', 'App\Http\Controllers\CarCategoryController@selector');
 Route::get('/selector/blockPeriods', 'App\Http\Controllers\BlockPeriodController@selector');
 Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@selector');
 
@@ -51,6 +53,7 @@ Route::get('/car-availability', 'App\Http\Controllers\GetCarAvailability');
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
 
 Route::apiResource('cars', CarController::class);
+Route::apiResource('car-categories', CarCategoryController::class);
 Route::apiResource('levels', LevelController::class);
 Route::apiResource('extras', ExtraController::class);
 Route::apiResource('prices', PriceController::class);

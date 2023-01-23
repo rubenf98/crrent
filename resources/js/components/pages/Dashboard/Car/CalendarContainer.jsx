@@ -33,10 +33,10 @@ const Calendar = styled.div`
 `;
 
 const CalendarItem = styled.div`
-    min-width: 80px;
-    height: 60px;
+    min-width: 45px;
+    height: 40px;
     background-color: ${props => props.background};
-    /* border: 1px solid #777; */
+    border: 1px solid #ffffff;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
     align-items: center;

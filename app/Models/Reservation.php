@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
 use Cerbero\QueryFilters\FiltersRecords;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Reservation extends Model
 {
@@ -175,6 +176,35 @@ class Reservation extends Model
         $fpdi->Text(196, 58, str_pad($returnDate->minute, 2, '0', STR_PAD_LEFT));
     }
 
+    public static function getNumDays($start, $end)
+    {
+        $hourTreshold = (1 / 24) * 2;
+        $hourTreshold = round($hourTreshold, 2);
+        $differenceHour = $start->diffInHours($end);
+        $factor = $differenceHour / 24;
+        $out = new ConsoleOutput();
+        $factor = explode(".", strval($factor));
+
+        $out->writeln($factor);
+        $baseInt = intval($factor[0]);
+        if (count($factor) == 2) {
+            $baseDecimal = round(floatval("0." . $factor[1]), 2);
+        } else $baseDecimal = 0;
+
+
+        if ($baseDecimal > $hourTreshold) {
+            $baseInt++;
+        } else if ($baseDecimal == $hourTreshold) {
+            $differenceMin = $end->diffInMinutes($start);
+            if ($differenceMin - ($differenceHour * 60) > 0) {
+                $baseInt++;
+            }
+        }
+
+        return $baseInt;
+    }
+
+
     public function extras()
     {
         return $this->belongsToMany(Extra::class, 'reservation_has_extras');
@@ -199,6 +229,12 @@ class Reservation extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
+
 
     public function card()
     {

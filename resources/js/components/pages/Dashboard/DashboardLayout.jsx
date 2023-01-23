@@ -107,7 +107,7 @@ function DashboardLayout({ children }) {
             icon: <img className='icon' src="/icon/dashboard/blocked.svg" />
         },
         {
-            label: <Link to="/painel/carros">Carros</Link>,
+            label: <Link to="/painel/carros">Veículos</Link>,
             key: 'carros',
             icon: <img className='icon' src="/icon/dashboard/car.svg" />
         },

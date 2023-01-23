@@ -17,6 +17,10 @@ class GetReservationsPerMonthController extends Controller
      */
     public function __invoke(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::filterBy($filters)->with("carPref")->with("car")->with('client')->with('drivers')->with('extras')->get());
+        return ReservationResource::collection(
+            Reservation::filterBy($filters)
+                ->with("car")->with("car.category")->with('client')->with('drivers')->with('extras')
+                ->get()
+        );
     }
 }

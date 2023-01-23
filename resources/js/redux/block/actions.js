@@ -10,9 +10,11 @@ export const fetchBlocks = (page = 1, filters = {}) => ({
 })
 
 
-export const fetchBlocksSelector = (level) => ({
+export const fetchBlocksSelector = (filters) => ({
     type: types.FETCH_BLOCKS_SELECTOR,
-    payload: axios.get(`${window.location.origin}/api/selector/blockedDates?car_id=${level}`)
+    payload: axios.get(`${window.location.origin}/api/selector/blockedDates?${stringify(filters, {
+        arrayFormat: "index"
+    })}`)
 })
 
 export const deleteBlock = id => ({

@@ -20,10 +20,6 @@ class CarStatusController extends Controller
             $car->status = $request->status;
         }
 
-        if ($request->has('visible')) {
-            $car->visible = $request->visible;
-        }
-
         $car->save();
 
         return new CarResource($car);

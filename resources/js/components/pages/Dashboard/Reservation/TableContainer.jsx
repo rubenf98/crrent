@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Table from "../../../common/TableContainer";
 import moment from "moment";
@@ -29,8 +29,14 @@ const FilterContainer = styled(Row)`
 `;
 
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
-    const [filters, setFilters] = useState({ id: undefined, name: undefined, date: undefined });
+function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters, aFilters = { id: undefined, name: undefined, date: undefined, car: undefined } }) {
+    const [filters, setFilters] = useState({});
+
+    useEffect(() => {
+        console.log(aFilters);
+        setFilters(aFilters);
+    }, [])
+
 
     const columns = [
         {
@@ -55,8 +61,8 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
         },
         {
             title: 'VEÍCULO',
-            dataIndex: 'car_pref',
-            render: (car) => car.title,
+            dataIndex: 'car',
+            render: (car) => car.category.title + " (" + car.registration + ")",
         },
         {
             title: 'ESTADO',
@@ -81,14 +87,17 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
         <Container>
             <CardContainer text="Tabela de Reservas">
                 <FilterContainer style={{ margin: "30px 0px" }} gutter={16}>
-                    <Col md={6}>
+                    <Col md={4}>
                         <Input allowClear value={filters.id} onChange={(e) => setFilters({ ...filters, id: e.target.value })} placeholder="Referência/ID de reserva" suffix={<SearchIcon />} />
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                         <Input allowClear value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} placeholder="Nome do cliente" suffix={<UserIcon />} />
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                         <DatePicker value={filters.date} onChange={(e) => setFilters({ ...filters, date: e })} style={{ width: "100%" }} format="DD-MM-YYYY" placeholder="Data de reserva" suffix={<UserIcon />} />
+                    </Col>
+                    <Col md={4}>
+                        <Input allowClear value={filters.car} onChange={(e) => setFilters({ ...filters, car: e.target.value })} placeholder="Veículo" suffix={<SearchIcon />} />
                     </Col>
                     <Col md={6}>
                         <Button

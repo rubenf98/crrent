@@ -61,7 +61,8 @@ export default (state = initialState, action = {}) => {
                         record.id === action.payload.data.data.id
                             ? action.payload.data.data
                             : record
-                )
+                ),
+                current: state.current.id === action.payload.data.data.id ? action.payload.data.data : state.current,
             };
 
         case `${types.FETCH_CAR}_REJECTED`:

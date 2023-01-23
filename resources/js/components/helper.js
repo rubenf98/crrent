@@ -9,6 +9,9 @@ export const dimensions = {
     "xxl": "1600px",
 };
 
+export const dateFormat = "YYYY-MM-DD";
+export const dateTimeFormat = dateFormat + " HH:mm";
+
 export function download(response, filename) {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");

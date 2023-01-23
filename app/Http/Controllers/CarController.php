@@ -26,7 +26,7 @@ class CarController extends Controller
      */
     public function index(Request $request)
     {
-        return CarResource::collection(Car::with('level')->paginate(10));
+        return CarResource::collection(Car::with('category')->paginate(10));
     }
 
     /**
@@ -62,7 +62,7 @@ class CarController extends Controller
         return CarResource::collection(
             Car::filterBy($filters)
                 ->whereNotIn('id', $blockedCars)->where('status', true)->with('level')
-                ->where('visible', 1)->orderBy('level_id', 'asc')->groupBy('title')->get()
+                ->orderBy('level_id', 'asc')->groupBy('title')->get()
         );
     }
 

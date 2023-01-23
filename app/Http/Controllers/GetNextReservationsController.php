@@ -21,7 +21,7 @@ class GetNextReservationsController extends Controller
         $endDate = Carbon::now()->endOfDay()->addDays(5);
 
         return ReservationResource::collection(
-            Reservation::with("car")->with("carPref")
+            Reservation::with("car")->with("car.category")
                 ->with('client')->orderBy('pickup_date', 'asc')
                 ->whereBetween('pickup_date', [$startDate, $endDate])
                 ->orWhereBetween('return_date', [$startDate, $endDate])->get()

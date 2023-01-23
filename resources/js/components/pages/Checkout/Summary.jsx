@@ -387,7 +387,7 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
 
             data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
 
-            createReservation({ ...data, car_id: currentCar.id }).then((response) => {
+            createReservation({ ...data, car_category_id: currentCar.id }).then((response) => {
                 navigate("/success");
             }).catch((errors) => {
                 setCurrentErrors(errors.response.data.errors);
@@ -518,7 +518,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        currentCar: state.car.current,
+        currentCar: state.carCategory.current,
         loading: state.reservation.loading,
         values: state.reservation.values,
         currentReservation: state.reservation.current,

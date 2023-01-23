@@ -7,6 +7,7 @@ use App\Http\Resources\BlockPeriodResource;
 use App\Models\BlockDate;
 use App\Models\BlockPeriod;
 use App\Models\Car;
+use App\Models\CarCategory;
 use App\Models\Level;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class BlockDateController extends Controller
      */
     public function index(Request $request)
     {
-        return BlockDateResource::collection(BlockDate::where('fill', true)->with('level')->paginate(5));
+        return BlockDateResource::collection(BlockDate::with('car')->paginate(5));
     }
 
     /**
@@ -31,33 +32,41 @@ class BlockDateController extends Controller
      */
     public function selector(Request $request)
     {
-        if ($request->car_id != "undefined") {
-            $car = Car::find($request->car_id);
+        if ($request->car && $request->car != "undefined") {
+            $car = Car::find($request->car);
 
             $dates = BlockDate::where('car_id', $car->id)->get();
+            $blocked = [];
+
+
+            foreach ($dates as $date) {
+                array_push($blocked, $date->date);
+            }
+
+            return $blocked;
+        } else if ($request->carCategory && $request->carCategory != "undefined") {
+            $carCategory = CarCategory::find($request->carCategory);
+
+            $dates = BlockDate::where('car_category_id', $carCategory->id)->get();
+            $treshold = $carCategory->cars()->where('status', true)->count();
+            $blocked = [];
+            $counter = [];
+
+
+            foreach ($dates as $date) {
+                if (!array_key_exists($date->date, $counter)) {
+                    $counter[$date->date] = 1;
+                } else {
+                    $counter[$date->date] += 1;
+                }
+
+                if ($counter[$date->date] >= $treshold) {
+                    array_push($blocked, $date->date);
+                }
+            }
+
+            return $blocked;
         }
-
-        $blocked = [];
-
-
-        foreach ($dates as $date) {
-            array_push($blocked, $date->date);
-            // if ($date->fill) {
-            //     array_push($blocked, $date->date);
-            // } else {
-            //     if (!array_key_exists($date->date, $counter)) {
-            //         $counter[$date->date] = 1;
-            //     } else {
-            //         $counter[$date->date] += 1;
-            //     }
-
-            //     if ($counter[$date->date] >= $treshold) {
-            //         array_push($blocked, $date->date);
-            //     }
-            // }
-        }
-
-        return $blocked;
     }
 
     /**

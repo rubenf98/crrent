@@ -32,7 +32,7 @@ export const text = {
         }
     },
     placeholder: {
-        date: ["data levantamento", "data devolução"],
+        date: ["data levantamento", "horário levantamento", "data devolução", "horário devolução"],
         pickup_place: {
             label: "local levantamento",
             options: ["Aeroporto", "Loja"],

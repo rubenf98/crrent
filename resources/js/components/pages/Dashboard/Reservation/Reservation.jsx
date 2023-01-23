@@ -45,7 +45,6 @@ function Reservation({ data, dataArchive,
     }, [filters])
 
     useEffect(() => {
-        console.log(archiveFilters);
         fetchReservationsArchive(1, archiveFilters);
     }, [archiveFilters])
 

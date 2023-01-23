@@ -6,15 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cerbero\QueryFilters\FiltersRecords;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Translatable\HasTranslations;
+
 
 class Car extends Model
 {
     use HasFactory;
     use FiltersRecords;
-    use HasTranslations;
 
-    protected $fillable = ['car', 'air', 'registration', 'description', 'doors', 'gas', 'level_id', 'people', 'shift_mode', 'subtitle', 'title'];
+    protected $fillable = ['kms', 'car', 'air', 'registration', 'description', 'doors', 'gas', 'level_id', 'people', 'shift_mode', 'subtitle', 'title'];
 
 
     protected $casts = [
@@ -22,7 +21,7 @@ class Car extends Model
         'status' => 'boolean',
     ];
 
-    public $translatable = ['description'];
+
 
     public function level()
     {
@@ -35,7 +34,7 @@ class Car extends Model
         $endDate = Carbon::parse($to)->endOfDay();
 
         $response = [];
-        $reservations = Reservation::where('car_pref_id', $this->id)
+        $reservations = Reservation::where('car_id', $this->id)
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('pickup_date', [$startDate, $endDate])
                     ->orWhereBetween('return_date', [$startDate, $endDate]);
@@ -63,5 +62,10 @@ class Car extends Model
     public function blockedDates()
     {
         return $this->hasMany(BlockedCar::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CarCategory::class, 'car_category_id');
     }
 }

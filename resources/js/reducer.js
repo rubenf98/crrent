@@ -6,6 +6,7 @@ import globalParameter from './redux/globalParameter'
 
 import reservation from './redux/reservation'
 import car from './redux/car'
+import carCategory from './redux/carCategory'
 import extra from './redux/extra'
 import promotion from './redux/promotion'
 import block from './redux/block'
@@ -19,6 +20,7 @@ const reducer = combineReducers({
     application,
     globalParameter,
     car,
+    carCategory,
     reservation,
     extra,
     promotion,

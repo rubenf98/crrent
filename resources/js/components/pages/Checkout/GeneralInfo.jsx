@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled, { withTheme, keyframes } from "styled-components";
-import { DoorsIcon, GasIcon, PeopleIcon, ShiftIcon, PlaceIcon, FlightIcon, AirIcon } from '../../../icons';
+import { FlightIcon } from '../../../icons';
 import { maxWidthStyle } from '../../styles';
 import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from 'antd';
 import { dimensions } from '../../helper';
 import { connect } from 'react-redux';
 import moment from "moment";
-import { isDateDisabled } from '../../functions';
+import DateFormItem from '../../common/DateFormItem';
 
 const stretch = keyframes`
   from {
@@ -137,7 +137,7 @@ const Icon = styled.div`
         margin: 15px 0px;
     }
 
-    svg {
+    img {
         width: 100%;
         height: 100%;
     }
@@ -196,29 +196,6 @@ const StyledSelect = styled(Select)`
     }
 `;
 
-
-const RangePicker = styled(DatePicker.RangePicker)`
-    width: 100%;
-    padding: 15px;
-    box-sizing: border-box;
-    border: 1px solid rgba(0,0,0,.4);
-
-    .ant-picker-input {
-        background-image: url("/icon/calendar.svg");
-        background-repeat: no-repeat;
-        background-size: 23px 25px;
-        text-indent: 20px;
-        padding-left: 50px;
-        box-sizing: border-box;
-    }
-
-
-
-    @media (max-width: ${dimensions.md}) {
-        margin: 10px 0px;
-    }
-`;
-
 const DesktopContainer = styled(Row)`
 
     @media (max-width: ${dimensions.md}) {
@@ -249,19 +226,17 @@ const AddButton = styled.button`
     
 `;
 
-
-
-
-function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, setTax,
-    taxPrice,
-    setTaxPrice, blockedDates, blockedCars }) {
+function GeneralInfo(props) {
     const [customPickup, setCustomPickup] = useState(undefined);
     const [customPickupTax, setCustomPickupTax] = useState(undefined);
     const [customReturn, setCustomReturn] = useState(undefined);
     const [customReturnTax, setCustomReturnTax] = useState(undefined);
     const [mandatory, setMandatory] = useState(true)
+    
 
-    const [dates, setDates] = useState(null);
+    const { text, theme, car, form, extras, tax, setTax,
+        taxPrice,
+        setTaxPrice, dates, setDates } = props;
 
     const rules = {
         date: [{ required: true, message: 'Please input the reservation date!' }],
@@ -345,17 +320,6 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
         }
     }
 
-    const handleDateReset = (isOpen) => {
-        if (isOpen) {
-            if (dates && (dates[0] && dates[1])) {
-                setDates(null);
-            }
-        }
-        else {
-            setDates(null);
-        }
-    }
-
     return (
         <Container>
 
@@ -368,54 +332,23 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
                     <h2>{car.title}</h2>
 
                     <IconContainer border={theme.primary}>
-                        <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[car.shift_mode]}</p></Icon>
-                        <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[car.gas]}</p></Icon>
-                        <Icon><div className='border'><PeopleIcon /></div> <p>{car.people}</p></Icon>
-                        <Icon><div className='border'><DoorsIcon /></div> <p>{car.doors}</p></Icon>
-                        {car.air ? <Icon><div className='border'><AirIcon /></div> <p></p></Icon> : <></>}
+                        {car.charateristics.map((charateristic) => (
+                            <Icon>
+                                <div className='border'>
+                                    <img src={charateristic.icon} />
+                                </div>
+                                <p>{charateristic.pivot.value}</p>
+                            </Icon>
+                        ))}
                     </IconContainer>
                     <DesktopContainer>
-                        <Col xs={24} md={24}>
-                            <Form.Item name="date" rules={rules.date}>
-                                <RangePicker
-                                    onChange={handleDateChange}
-                                    showTime={{ format: "HH:mm", hideDisabledOptions: true }}
-                                    minuteStep={15}
-                                    format="DD-MM-YYYY HH:mm"
-                                    placeholder={text.placeholder.date}
-                                    suffixIcon={(<></>)}
-                                    onOpenChange={handleDateReset}
-                                    onCalendarChange={(val) => setDates(val)}
-                                    disabledDate={(current) => isDateDisabled(current, blockedDates, dates, 0, car.registration, blockedCars)}
-                                    disabledTime={(endDate, type) => ({
-                                        disabledHours: () => {
-                                            if (type == "end" && dates && endDate) {
-                                                var tooEarly = dates[0] && moment(endDate).diff(dates[0], 'days') == 1;
-
-                                                var hour = 0;
-                                                var blocked = [];
-                                                var initHour = dates[0].hour();
-
-                                                if (tooEarly) {
-                                                    while (hour < 24) {
-                                                        if (hour < initHour) {
-                                                            blocked.push(hour);
-                                                        }
-                                                        hour++;
-                                                    }
-                                                }
-
-                                                return blocked.concat([0, 1, 2, 3, 4, 5, 6, 23])
-
-                                            }
-
-                                            return [0, 1, 2, 3, 4, 5, 6, 23];
-                                        },
-
-                                    })}
-                                />
-                            </Form.Item>
-                        </Col>
+                        <DateFormItem
+                            width={12}
+                            text={text.placeholder.date}
+                            dates={dates}
+                            setDates={setDates}
+                            treshold={car.treshold}
+                        />
 
                         <Col xs={24} md={24}>
                             <Form.Item name="pickup_place" rules={rules.place}>
@@ -486,17 +419,13 @@ function GeneralInfo({ text, theme, car, handleDateChange, form, extras, tax, se
 
             </Content >
             <MobileContainer>
-                <Col xs={24} md={24}>
-                    <Form.Item name="date" rules={rules.name}>
-                        <RangePicker showTime={{
-                            format: "HH:mm"
-                        }}
-                            format="DD-MM-YYYY HH:mm"
-                            placeholder={text.placeholder.date}
-                            suffixIcon={(<></>)}
-                        />
-                    </Form.Item>
-                </Col>
+                <DateFormItem
+                    width={24}
+                    text={text.placeholder.date}
+                    dates={dates}
+                    setDates={setDates}
+                    treshold={car.treshold}
+                />
                 <Col xs={24} md={24}>
                     <Form.Item name="pickup_place" rules={rules.place}>
                         <StyledSelect bordered={false} dropdownRender={(menu) => (
@@ -563,7 +492,6 @@ const mapStateToProps = (state) => {
     return {
         extras: state.extra.data,
         blockedDates: state.block.selector,
-        blockedCars: state.blockCar.data
     };
 };
 

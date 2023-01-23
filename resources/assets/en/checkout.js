@@ -32,7 +32,7 @@ export const text = {
         }
     },
     placeholder: {
-        date: ["pickup date", "return date"],
+        date: ["pickup date", "pickup time", "return date", "return time"],
         pickup_place: {
             label: "pickup place",
             options: ["Airport", "Store"],

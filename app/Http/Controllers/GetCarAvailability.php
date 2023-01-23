@@ -17,7 +17,7 @@ class GetCarAvailability extends Controller
     public function __invoke(Request $request)
     {
         return CarAvailabilityResource::collection(
-            Car::where('status', true)->whereNotNull('registration')->orderBy('id')->get()
+            Car::all()
         );
     }
 }

@@ -4,6 +4,7 @@ import { Col, Drawer, Row } from 'antd';
 import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
 import { downloadContract } from '../../../../redux/reservation/actions';
+import moment from "moment";
 
 const Section = styled.h3`
     margin-top: 30px;
@@ -14,18 +15,19 @@ const Section = styled.h3`
 const Field = styled.div`
     padding: 5px 5px 5px 0px;
     box-sizing: border-box;
-    font-family: "Lato";
+    display: inline;
+    width: ${props => props.width && props.width + " !important"};
 
     p {
         margin: 0px;
     }
 
     .value {
-        opacity: .6;
+        opacity: .7;
     }
 
     .name {
-       
+        
     }
 `;
 
@@ -40,16 +42,17 @@ const FieldsContainer = styled.div`
     }
 `;
 
-const Download = styled.div`
+const Download = styled.button`
     font-weight: bold;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     margin-top: 20px;
     gap: 5px;
     cursor: pointer;
     align-items: center;
-    width: 100%;
     font-size: 16px;
+    padding: 6px 12px;
+    box-sizing: border-box;
 
     svg {
         width: 16px;
@@ -69,39 +72,49 @@ const levelDecoder = {
 
 function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, loadingDownload }) {
 
-    const FieldContainer = ({ name, value }) => (
-        <Field className='field-width'>
-            <p className='name'>{name}</p>
-            <p className='value'>{value}</p>
+    const FieldContainer = ({ name, value, width }) => (
+        <Field className='field-width' width={width}>
+            <p>
+                <span className='name'>{name}:</span> <span className='value'>{value}</span>
+            </p>
 
         </Field>
     )
 
     function EmptyField(field) {
-        return field ? field : "---"
+        return field ? field : "N/A"
     }
 
 
     return (
         <Drawer closable={false} width={"60%"} open={drawerState} onClose={() => setDrawerState(0)}>
             <Row type="flex" dire>
-                <Col xs={24} md={12}>
+                <Col xs={24}>
                     <Section>Informação geral</Section>
-                    <FieldsContainer width="50%">
-                        <FieldContainer name="Data de levantamento" value={data.pickup_date} />
-                        <FieldContainer name="Data de devolução" value={data.return_date} />
-                        <FieldContainer name="Local de levantamento" value={data.pickup_place} />
-                        <FieldContainer name="Local de devolução" value={data.return_place} />
-                        <FieldContainer name="Número de voo" value={data.flight} />
-                        <FieldContainer name="Carro preferencial" value={data.car_pref?.title} />
-                        {/* <FieldContainer name="Carro" value={data.car?.title} /> */}
-                        <FieldContainer name="Gama" value={levelDecoder[data.car?.level_id]} />
-                        <FieldContainer name="Preço" value={data.price + "€"} />
+                    <FieldsContainer width="25%">
+                        <FieldContainer name="Data da reserva" value={moment(data.created_at).format('DD-MM-YYYY HH:mm')} />
+                        <FieldContainer name="Levantamento" value={moment(data.pickup_date).format('DD-MM-YYYY HH:mm') + ", " + data.pickup_place} />
+                        <FieldContainer name="Entrega" value={moment(data.return_date).format('DD-MM-YYYY HH:mm') + ", " + data.return_place} />
+                        <FieldContainer name="Viatura" value={data.car?.category?.title + " (" + data.car?.registration + ")"} />
+
+                        <FieldContainer name="KM entrega" value={EmptyField(data.pickup_kms)} />
+                        <FieldContainer name="Combustível entrega" value={EmptyField(data.pickup_gas)} />
+                        <FieldContainer name="KM devolução" value={EmptyField(data.return_kms)} />
+                        <FieldContainer name="Combustível devolução" value={EmptyField(data.return_gas)} />
+
+                        <FieldContainer name="Número de voo" value={EmptyField(data.flight)} />
+                        <FieldContainer name="Número de quarto" value={EmptyField(data.room)} />
+                        <FieldContainer width="50%" name="Número de dias" value={data.days} />
+
+                        <FieldContainer name="Valor aluguer" value={data.car_price + "€"} />
+                        <FieldContainer name="Preço unitário" value={data.car_price_per_day + "€"} />
+                        <FieldContainer name="Valor extras/seguro" value={data.price - data.car_price + "€"} />
+                        <FieldContainer name="Total" value={data.price + "€"} />
                     </FieldsContainer>
                 </Col>
-                <Col xs={24} md={12}>
+                <Col xs={24}>
                     <Section>Cliente</Section>
-                    <FieldsContainer width="50%">
+                    <FieldsContainer width="25%">
                         <FieldContainer name="Agência" value={data.client?.company} />
                         <FieldContainer name="Nome" value={data.client?.name} />
                         <FieldContainer name="Telefone" value={data.client?.phone} />
@@ -145,7 +158,7 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
                         ))}
                     </ul>
                 </Col>
-                <Download onClick={() => downloadContract(data.token)}><p>Descarregar contrato</p><DownloadIcon /></Download>
+                <Download onClick={() => downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
 
             </Row>
         </Drawer>

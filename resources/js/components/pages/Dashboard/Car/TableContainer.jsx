@@ -6,6 +6,7 @@ import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
 import { Row, Tag } from "antd";
 import CardContainer from "../Common/CardContainer";
+import { Link } from "react-router-dom";
 
 const Container = styled.section`
     width: 100%;
@@ -39,18 +40,24 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
             dataIndex: 'registration',
         },
         {
-            title: 'TÍTULO',
-            dataIndex: 'title',
+            title: 'CATEGORIA',
+            dataIndex: 'category',
+            render: (record) => record?.title,
         },
         {
             title: 'GRUPO',
-            dataIndex: 'level',
-            render: (level) => level.code,
+            dataIndex: 'category',
+            render: (category) => category?.level?.code,
         },
         {
             title: 'ESTADO',
             dataIndex: 'status',
             render: (status, row) => <Action onClick={() => setCarStatus(row.id, { status: !status })} active={status} >{status ? "Desbloqueado" : "Bloqueado"}</Action>,
+        },
+        {
+            title: '',
+            dataIndex: 'id',
+            render: (id) => <Link to={"/painel/carros/" + id}>ver detalhes</Link>
         },
         {
             title: 'Ações',

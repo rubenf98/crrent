@@ -15,7 +15,6 @@ import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
 import { getCarPrice, getPriceRounded, getPromotions, getDaysDifference } from '../../functions';
-import { fetchBlockCars } from '../../../redux/blockCar/actions';
 
 
 const Container = styled.section`
@@ -101,9 +100,9 @@ const Price = styled.div`
 
 function Checkout({ language, fetchExtras, theme,
     currentCar, setCurrentReservation, setCurrentReservationValues, extrasData,
-    fetchBlocksSelector, promotions, currentReservation, currentErrors, fetchBlockCars }) {
+    fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
     const { text } = require('../../../../assets/' + language + "/checkout");
-
+    const [dates, setDates] = useState([undefined, undefined]);
     const [form] = Form.useForm();
 
     const [extras, setExtras] = useState([])
@@ -126,8 +125,7 @@ function Checkout({ language, fetchExtras, theme,
             var from = searchParams.get("from");
             var to = searchParams.get("to");
             fetchExtras();
-            fetchBlocksSelector(currentCar.level.id);
-            fetchBlockCars({ car: currentCar.id });
+            fetchBlocksSelector({ carCategory: currentCar.id });
 
             if (from && to) {
                 handleDate(moment(from), moment(to), true);
@@ -181,10 +179,16 @@ function Checkout({ language, fetchExtras, theme,
         }
     };
 
-    const onDateChange = (e) => {
-        handleDate(e[0], e[1], false);
-        getDaysDifference(e[0], e[1]);
-    };
+    useEffect(() => {
+        if (dates[0] && dates[1]) {
+            handleDate(dates[0], dates[1], false);
+            getDaysDifference(dates[0], dates[1]);
+        } else {
+            if (price != 0) {
+                setPrice(0);
+            }
+        }
+    }, [dates])
 
     const handleDate = (from, to, initDate) => {
         var difference = getDaysDifference(from, to);
@@ -192,7 +196,7 @@ function Checkout({ language, fetchExtras, theme,
         var factors = getPromotions(promotions, from, difference);
 
         if (initDate) {
-            form.setFieldValue('date', [from, to])
+            setDates([from, to])
         }
         setDays(difference);
         var value = getCarPrice(currentCar.level.prices, difference, factors);
@@ -233,7 +237,7 @@ function Checkout({ language, fetchExtras, theme,
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            setCurrentReservation({ ...values, extras: [...extras, ...tax] });
+            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates });
 
             var extraArray = [], taxArray = [];
 
@@ -262,6 +266,8 @@ function Checkout({ language, fetchExtras, theme,
         console.log('Failed:', errorInfo);
     };
 
+
+
     return (
         <Container>
             <Title>{text.titles[0]}</Title>
@@ -284,12 +290,20 @@ function Checkout({ language, fetchExtras, theme,
             >
                 {Object.values(currentCar).length &&
                     <>
-                        <GeneralInfo text={text} form={form} handleDateChange={onDateChange} car={currentCar}
-                            tax={tax}
-                            setTax={setTax}
-                            taxPrice={taxPrice}
-                            setTaxPrice={setTaxPrice} />
-                        <Addons text={text} days={days} extras={extras} setExtras={setExtras} extraPrice={extraPrice} setExtraPrice={setExtraPrice} />
+                        <GeneralInfo
+                            text={text}
+                            form={form}
+                            car={currentCar}
+                            tax={tax} setTax={setTax}
+                            taxPrice={taxPrice} setTaxPrice={setTaxPrice}
+                            dates={dates} setDates={setDates}
+                        />
+                        <Addons
+                            text={text}
+                            days={days}
+                            extras={extras} setExtras={setExtras}
+                            extraPrice={extraPrice} setExtraPrice={setExtraPrice}
+                        />
                         <Client text={text} />
                         <Driver text={text} drivers={extras.includes(2) ? 2 : 1} />
                     </>
@@ -309,15 +323,14 @@ const mapDispatchToProps = (dispatch) => {
         setCurrentReservation: (data) => dispatch(setCurrentReservation(data)),
         setCurrentReservationValues: (data) => dispatch(setCurrentReservationValues(data)),
         setCurrentPromotion: (data) => dispatch(setCurrentPromotion(data)),
-        fetchBlocksSelector: (level) => dispatch(fetchBlocksSelector(level)),
-        fetchBlockCars: (filters) => dispatch(fetchBlockCars(filters)),
+        fetchBlocksSelector: (filter) => dispatch(fetchBlocksSelector(filter)),
         fetchExtras: () => dispatch(fetchExtras()),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        currentCar: state.car.current,
+        currentCar: state.carCategory.current,
         extrasData: state.extra.data,
         loadingExtras: state.extra.loading,
         promotions: state.promotion.data,

@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\Car;
+use App\Models\CarCategory;
 use App\Models\Extra;
 use App\Models\Promotion;
+use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -12,8 +14,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Facades\Log;
 use LVR\CreditCard\CardCvc;
 use LVR\CreditCard\CardNumber;
-use LVR\CreditCard\CardExpirationYear;
-use LVR\CreditCard\CardExpirationMonth;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ReservationRequest extends FormRequest
 {
@@ -29,24 +30,24 @@ class ReservationRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $car = Car::find($this->car_id);
+        $carCategory = CarCategory::find($this->car_category_id);
+
         $from = Carbon::parse($this->date[0]);
         $now = Carbon::parse($this->date[1]);
-        $days = $from->diffInDays($now);
-        $value = 0;
-
-        $level = $car->level;
+        $days = Reservation::getNumDays($from, $now);
+        $car = $carCategory->getAvailableCar($from, $now);
         // $out = new ConsoleOutput();
+        
+        $value = 0;
         // $out->writeln($days);
 
         $promotions = Promotion::all();
 
-
-        // $out->writeln($level);
-        $prices = $level->prices;
+        $prices = $carCategory->level->prices;
         $index = 0;
         $init = Carbon::parse($this->date[0]);
         $factors = [];
+
         while ($index < $days) {
             $factor = 1;
             foreach ($promotions as $promotion) {
@@ -99,6 +100,7 @@ class ReservationRequest extends FormRequest
             'return_date' => $this->date[1],
             'price' => round(($carPrice + $extraPrice) + (15 * $days), 2),
             'days' => $days,
+            'car_id' => $car ? $car->id : 0,
             'car_price' => round($carPrice, 2),
             'car_price_per_day' => round($value, 2)
         ]);

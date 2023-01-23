@@ -15,22 +15,13 @@ class CreateCarsTable extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
-            $table->string('registration')->nullable()->unique();
-            $table->string('title');
-            $table->string('subtitle')->nullable();
-            $table->boolean('visible');
+            $table->string('registration')->unique();
             $table->boolean('status')->default(false);
-            $table->text('description')->nullable();
-            $table->string('gas');
-            $table->integer('people');
-            $table->integer('air');
-            $table->integer('doors');
-            $table->string('shift_mode');
-            $table->string('image')->nullable();
-            $table->unsignedBigInteger("level_id");
+            $table->string('kms')->nullable();
+            $table->unsignedBigInteger("car_category_id");
             $table->timestamps();
 
-            $table->foreign("level_id")->references("id")->on("levels")->onDelete("cascade");
+            $table->foreign("car_category_id")->references("id")->on("car_categories")->onDelete("cascade");
         });
     }
 

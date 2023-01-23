@@ -230,7 +230,7 @@ function Header({ theme, text, fetchBlockPeriodSelector }) {
 
 
                     </LinksContainer>
-                    <DateFormItem text={text} dates={dates} setDates={setDates} />
+                    <DateFormItem text={text.placeholder} dates={dates} setDates={setDates} />
                     <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button}</Search>
                 </RangePickerContainer>
             </Content>

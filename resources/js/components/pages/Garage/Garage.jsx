@@ -6,7 +6,7 @@ import { Button, maxWidthStyle } from '../../styles';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import DateFormItem from '../../common/DateFormItem';
 import { connect } from "react-redux";
-import { fetchCarsSelector, setCurrent } from "../../../redux/car/actions";
+import { fetchCarCategorySelector, setCurrentCarCategory } from "../../../redux/carCategory/actions";
 import moment from "moment";
 import { fetchPromotions } from '../../../redux/promotion/actions';
 import { fetchExtras } from '../../../redux/extra/actions';
@@ -205,9 +205,10 @@ const Car = styled.div`
 
 const IconContainer = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin: 30px 0px 60px 0px;
+    gap: 35px;
 
     .border {
         border: 2px solid;
@@ -235,26 +236,28 @@ const Icon = styled.div`
         margin-top: 15px;
     }
 
-    svg {
+    img {
         width: 100%;
         height: 100%;
     }
 `;
 
 const dateFormat = "YYYY-MM-DD HH:mm";
-function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetchPromotions, language, promotions }) {
+function Garage(props) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(1)
     const [factors, setFactors] = useState([])
     var navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
+    const { fetchExtras, theme, data, language, promotions } = props;
     const { text } = require('../../../../assets/' + language + "/garage");
+
 
     useEffect(() => {
         var from = searchParams.get("from");
         var to = searchParams.get("to");
 
-        fetchCarsSelector({ from: from, to: to, hasRegistration: 1 });
+        props.fetchCarCategorySelector({ from: from, to: to });
 
         from = moment(from);
         to = moment(to);
@@ -265,7 +268,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
         setDates([from, to]);
 
 
-        fetchPromotions().then((response) => {
+        props.fetchPromotions().then((response) => {
             var newFactors = getPromotions(response.action.payload.data.data, from, difference);
             setFactors(newFactors);
         });
@@ -275,7 +278,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
     }, [])
 
     const handleSearch = () => {
-        fetchCarsSelector({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat), hasRegistration: true });
+        props.fetchCarCategorySelector({ from: dates[0].format(dateFormat), to: dates[1].format(dateFormat) });
 
         var difference = getDaysDifference(dates[0], dates[1]);
 
@@ -288,7 +291,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
     };
 
     function handleCarSelection(car) {
-        setCurrent(car);
+        props.setCurrentCarCategory(car);
         navigate("/checkout?from=" + moment(dates[0]).format(dateFormat) + "&to=" + moment(dates[1]).format(dateFormat));
     }
 
@@ -306,11 +309,14 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
                     <h4>{info.description[language]}</h4>
 
                     <IconContainer border={theme.primary}>
-                        <Icon><div className='border'><ShiftIcon /></div> <p>{text.descriptions[info.shift_mode]}</p></Icon>
-                        <Icon><div className='border'><GasIcon /></div> <p>{text.descriptions[info.gas]}</p></Icon>
-                        <Icon><div className='border'><PeopleIcon /></div> <p>{info.people}</p></Icon>
-                        <Icon><div className='border'><DoorsIcon /></div> <p>{info.doors}</p></Icon>
-                        {info.air ? <Icon><div className='border'><AirIcon /></div> <p></p></Icon> : <></>}
+                        {info.charateristics.map((charateristic) => (
+                            <Icon>
+                                <div className='border'>
+                                    <img src={charateristic.icon} />
+                                </div>
+                                <p>{charateristic.pivot.value}</p>
+                            </Icon>
+                        ))}
                     </IconContainer>
 
                     <div className='price'>
@@ -333,7 +339,7 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
         <Container>
             <Title>{text.title}</Title>
             <RangePickerContainer>
-                <DateFormItem text={text.button} dates={dates} setDates={setDates} />
+                <DateFormItem text={text.button.placeholder} dates={dates} setDates={setDates} />
                 <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button.button}</Search>
             </RangePickerContainer>
 
@@ -354,8 +360,8 @@ function Garage({ fetchExtras, theme, data, fetchCarsSelector, setCurrent, fetch
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCarsSelector: (filters) => dispatch(fetchCarsSelector(filters)),
-        setCurrent: (car) => dispatch(setCurrent(car)),
+        fetchCarCategorySelector: (filters) => dispatch(fetchCarCategorySelector(filters)),
+        setCurrentCarCategory: (car) => dispatch(setCurrentCarCategory(car)),
         fetchPromotions: (car) => dispatch(fetchPromotions(car)),
         fetchExtras: () => dispatch(fetchExtras()),
     };
@@ -363,8 +369,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.car.selector,
-        loading: state.car.loading,
+        data: state.carCategory.selector,
+        loading: state.carCategory.loading,
         language: state.application.language,
         promotions: state.promotion.data
     };

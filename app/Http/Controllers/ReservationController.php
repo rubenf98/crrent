@@ -32,7 +32,7 @@ class ReservationController extends Controller
      */
     public function index(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with("carPref")->with('client')->with('drivers')->with('extras')->paginate(5));
+        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with("car.category")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 
     /**
@@ -81,6 +81,7 @@ class ReservationController extends Controller
             BlockDate::create([
                 "date" => $dt,
                 "car_id" => $car->id,
+                "car_category_id" => $car->car_category_id,
                 "reservation_id" => $reservation->id
             ]);
         }
@@ -134,14 +135,11 @@ class ReservationController extends Controller
     {
         DB::beginTransaction();
         $period = CarbonPeriod::create($reservation->pickup_date, $reservation->return_date)->toArray();
-        $level = $reservation->carPref()->pluck('level_id');
-        foreach ($period as $date) {
 
-            $blockedDate = BlockDate::where('date', $date->toDateString())->where('fill', 0)->where('level_id', $level)->first();
+        $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 
-            if ($blockedDate) {
-                $blockedDate->delete();
-            }
+        foreach ($blockedDates as $blockedDate) {
+            $blockedDate->delete();
         }
 
         $reservation->delete();
