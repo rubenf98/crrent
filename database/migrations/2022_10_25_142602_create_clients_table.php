@@ -23,8 +23,8 @@ class CreateClientsTable extends Migration
             $table->string('postal_code');
             $table->string('email');
             $table->string('phone');
-            $table->string('local_address');
             $table->string('company')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

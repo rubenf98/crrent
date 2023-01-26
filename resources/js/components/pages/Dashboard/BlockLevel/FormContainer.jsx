@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Modal, Row, Form, DatePicker, Button, Input, Checkbox, Col } from 'antd';
 import moment from 'moment';
 import { connect } from "react-redux";
-import { createBlock } from "../../../../redux/blockPeriod/actions"
+import { createBlockPeriod } from "../../../../redux/blockPeriod/actions"
+import TextArea from "antd/lib/input/TextArea";
 
 const { RangePicker } = DatePicker;
 
@@ -41,12 +42,12 @@ const classes = [
 
 
 
-function FormContainer({ loading, handleClose, createBlock, visible }) {
+function FormContainer(props) {
     const [form] = Form.useForm();
-
+    const { loading, visible } = props;
     const handleModalClose = () => {
         form.resetFields();
-        handleClose();
+        props.handleClose();
     }
 
     const onFinish = (values) => {
@@ -58,7 +59,7 @@ function FormContainer({ loading, handleClose, createBlock, visible }) {
 
             values = { ...values, dates };
 
-            createBlock(values);
+            props.createBlockPeriod(values);
             handleModalClose();
         })
 
@@ -82,13 +83,14 @@ function FormContainer({ loading, handleClose, createBlock, visible }) {
 
                         <Form.Item
                             name="dates"
+                            label="Período"
                             rules={rules.name}
                         >
                             <RangePicker
                                 format="DD-MM-YYYY"
                                 disabledDate={(currentDate) => {
                                     return currentDate && (
-                                        (currentDate < moment())
+                                        (currentDate < moment().startOf('day'))
                                     );
                                 }}
                                 style={{ width: "100%" }}
@@ -107,6 +109,13 @@ function FormContainer({ loading, handleClose, createBlock, visible }) {
                                     ))}
                                 </Row>)}
                         </Form.List>
+
+                        <Form.Item
+                            name="notes"
+                            label="Observações e/ou notas"
+                        >
+                            <TextArea style={{ width: "100%" }} />
+                        </Form.Item>
 
                         <ButtonContainer type="flex" justify="end">
                             <Button loading={loading} size="large" width="150px" type="primary" htmlType="submit">
@@ -129,7 +138,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createBlock: (data) => dispatch(createBlock(data)),
+        createBlockPeriod: (data) => dispatch(createBlockPeriod(data)),
     };
 };
 

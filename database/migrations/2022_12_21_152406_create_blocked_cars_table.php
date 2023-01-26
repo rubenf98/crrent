@@ -18,6 +18,7 @@ class CreateBlockedCarsTable extends Migration
             $table->unsignedBigInteger('car_id');
             $table->date('from');
             $table->date('to');
+            $table->text('notes')->nullable();
             $table->timestamps();
 
             $table->foreign('car_id')->references('id')->on('cars');

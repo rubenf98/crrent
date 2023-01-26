@@ -18,6 +18,7 @@ class CreateBlockDatesTable extends Migration
             $table->unsignedBigInteger('car_id');
             $table->unsignedBigInteger('car_category_id');
             $table->unsignedBigInteger('reservation_id')->nullable();
+            $table->unsignedBigInteger('level_id')->nullable();
             $table->date('date');
             $table->text('notes')->nullable();
             $table->timestamps();
@@ -25,6 +26,7 @@ class CreateBlockDatesTable extends Migration
             $table->foreign('car_id')->references('id')->on('cars');
             $table->foreign('car_category_id')->references('id')->on('car_categories');
             $table->foreign('reservation_id')->references('id')->on('reservations');
+            $table->foreign('level_id')->references('id')->on('levels');
         });
     }
 

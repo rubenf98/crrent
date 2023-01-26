@@ -16,8 +16,6 @@ class GetCarAvailability extends Controller
      */
     public function __invoke(Request $request)
     {
-        return CarAvailabilityResource::collection(
-            Car::all()
-        );
+        return CarAvailabilityResource::collection(Car::all());
     }
 }

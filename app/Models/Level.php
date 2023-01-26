@@ -12,7 +12,7 @@ class Level extends Model
 
     public function cars()
     {
-        return $this->hasMany(Car::class);
+        return $this->hasManyThrough(Car::class, CarCategory::class);
     }
 
     public function prices()

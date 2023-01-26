@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BlockPeriod extends Model
 {
     use HasFactory;
-    protected $fillable = ['from', 'to'];
+    protected $fillable = ['from', 'to', 'notes'];
 
     public function levels()
     {

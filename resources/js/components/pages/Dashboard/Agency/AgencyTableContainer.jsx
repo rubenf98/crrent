@@ -3,6 +3,7 @@ import styled, { withTheme } from "styled-components";
 import Table from "../../../common/TableContainer";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
+import Tag from "antd/es/tag";
 
 const Container = styled.div`
     width: 100%;
@@ -31,37 +32,34 @@ const ActionButton = styled.div`
 `;
 
 
-function TableContainer({ theme, loading, meta, data, onDelete, setVisible, handlePageChange }) {
+function TableContainer({ theme, loading, handleUpdateClick, data, onDelete, setVisible, handlePageChange }) {
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
-            width: 100,
-            fixed: 'left',
+            render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'Desde',
-            dataIndex: 'from',
+            title: 'HOTEL / AGÊNCIA',
+            dataIndex: 'name',
         },
         {
-            title: 'Até',
-            dataIndex: 'to',
+            title: 'COMISSÃO',
+            dataIndex: 'comission',
         },
         {
-            title: 'Gamas',
-            dataIndex: 'levels',
-            render: (levels) => levels.map((level) => (
-                <span>{level.code}, </span>
-            ))
+            title: 'Nº RESERVAS',
+            dataIndex: 'reservations',
+            render: (reservations) => reservations.length,
         },
         {
-            title: 'Ações',
+            title: 'AÇÕES',
             dataIndex: 'id',
             render: (text, row) => (
                 <StopPropagation>
                     <RowOperation
-                        onDeleteConfirm={() => onDelete(row.id)}
+                        onDeleteConfirm={() => onDelete(row.id)} onUpdateClick={() => handleUpdateClick(row)}
                     />
                 </StopPropagation>
             ),
@@ -70,15 +68,9 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
 
     return (
         <Container>
-            <ActionButton onClick={() => setVisible(true)} background={theme.primary}>
-
-                <img src="/icon/add_white.svg" alt="add" />
-
-            </ActionButton>
             <Table
                 loading={loading}
                 data={data}
-                meta={meta}
                 columns={columns}
                 handlePageChange={handlePageChange}
             />

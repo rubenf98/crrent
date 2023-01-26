@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Jobs\HandleReservation;
 use App\Mail\ConfirmationEmail;
+use App\Models\Agency;
 use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Card;
@@ -18,6 +20,7 @@ use Carbon\CarbonPeriod;
 use DateInterval;
 use DatePeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -62,6 +65,7 @@ class ReservationController extends Controller
             'return_date' =>  $endDate,
             'pickup_place' => $validator['pickup_place'],
             'return_place' => $validator['return_place'],
+            'address' => $validator['local_address'],
             'flight' => array_key_exists('flight', $validator)  ? $validator['flight'] : null,
             'price' => $validator['price'],
             'car_price' => $validator['car_price'],
@@ -110,7 +114,7 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        //
+        return new ReservationResource($reservation);
     }
 
     /**
@@ -120,9 +124,74 @@ class ReservationController extends Controller
      * @param  \App\Models\Reservation  $reservation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reservation $reservation)
+    public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        //
+        $validator = $request->validated();
+
+        DB::beginTransaction();
+        $removeDates = BlockDate::where("reservation_id", $reservation->id)->get();
+
+        foreach ($removeDates as $removeDate) {
+            $removeDate->delete();
+        }
+        $initDate = Carbon::parse($validator['pickup_date']);
+        $endDate = Carbon::parse($validator['return_date']);
+
+        $car = Car::find($validator['car_id']);
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($initDate->startOfDay(), $interval, $endDate->endOfDay());
+
+        foreach ($period as $dt) {
+            BlockDate::create([
+                "date" => $dt,
+                "car_id" => $car->id,
+                "car_category_id" => $car->car_category_id,
+                "reservation_id" => $reservation->id
+            ]);
+        }
+
+        $reservation->update([
+            'pickup_date' => $validator['pickup_date'],
+            'return_date' =>  $validator['return_date'],
+            'pickup_place' => $validator['pickup_place'],
+            'return_place' => $validator['return_place'],
+            'flight' => Arr::get($validator, "flight"),
+            'address' => Arr::get($validator, "address"),
+            'price' => $validator['price'],
+            'car_price' => $validator['car_price'],
+            'car_price_per_day' => $validator['car_price_per_day'],
+            'days' => $validator['days'],
+            'car_id' => $validator['car_id'],
+
+            'kms_pickup' => Arr::get($validator, "kms_pickup"),
+            'kms_return' => Arr::get($validator, "kms_return"),
+            'gas_pickup' => Arr::get($validator, "gas_pickup"),
+            'gas_return' => Arr::get($validator, "gas_return"),
+
+            'notes' => Arr::get($validator, "notes"),
+        ]);
+
+        // if (Arr::has($validator, ['agency_name', 'agency_intermediary', 'agency_comission'])) {
+        //     if ($reservation->agency_id) {
+        //         $agency = Agency::find($reservation->agency_id);
+        //         $agency->update([
+        //             'agency_name' => $validator['agency_name'],
+        //             'agency_intermediary' => $validator['agency_intermediary'],
+        //             'agency_comission' => $validator['agency_comission'],
+        //         ]);
+        //     } else {
+        //         $agency = Agency::create([
+        //             'agency_name' => $validator['agency_name'],
+        //             'agency_intermediary' => $validator['agency_intermediary'],
+        //             'agency_comission' => $validator['agency_comission'],
+        //         ]);
+        //         $reservation->agency_id = $agency->id;
+        //         $reservation->save();
+        //     }
+        // }
+        $reservation->extras()->sync($validator['extras']);
+        DB::commit();
+        return new ReservationResource($reservation);
     }
 
     /**

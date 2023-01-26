@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AgencyResource;
 use App\Models\Agency;
 use Illuminate\Http\Request;
 
@@ -14,17 +15,7 @@ class AgencyController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return AgencyResource::collection(Agency::all());
     }
 
     /**
@@ -46,18 +37,7 @@ class AgencyController extends Controller
      */
     public function show(Agency $agency)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Agency  $agency
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Agency $agency)
-    {
-        //
+        return new AgencyResource($agency);
     }
 
     /**

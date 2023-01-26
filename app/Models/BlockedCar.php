@@ -10,7 +10,7 @@ class BlockedCar extends Model
 {
     use HasFactory, FiltersRecords;
 
-    protected $fillable = ['from', 'to', 'car_id'];
+    protected $fillable = ['from', 'to', 'car_id', 'notes'];
 
     public function car()
     {

@@ -66,7 +66,7 @@ class CarCategoryController extends Controller
      */
     public function store(CarCategory $carCategory)
     {
-        return new CarCategoryResource($carCategory);
+        //
     }
 
     /**
@@ -77,7 +77,7 @@ class CarCategoryController extends Controller
      */
     public function show(CarCategory $carCategory)
     {
-        //
+        return new CarCategoryResource($carCategory);
     }
 
     /**

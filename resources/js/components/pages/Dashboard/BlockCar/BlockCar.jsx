@@ -6,7 +6,6 @@ import TableContainer from "./TableContainer";
 import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
 
-
 const Container = styled.div`
     width: 100%;
 `;
@@ -31,7 +30,7 @@ function BlockCar({ theme, data, loading, fetchBlockCars, deleteBlockCar, meta }
     return (
 
         <Container>
-            <CardContainer text="Carros Bloqueados">
+            <CardContainer text="Carros bloqueados">
                 <TableContainer
                     data={data}
                     loading={loading}

@@ -16,15 +16,10 @@ class BlockDateResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'level_id' => $this->level_id,
+            'car' => $this->car->with('category')->get(),
+            'car_category_id' => $this->car_category_id,
             'date' => $this->date,
-            'level' => [
-                'id' => $this->level->id,
-                'code' => $this->level->code,
-                'name' => $this->level->name,
-                'min_caution' => $this->level->min_caution
-            ],
-            'fill' => $this->fill,
+            'level' => $this->level,
             'created_at' => (string) $this->created_at,
         ];
     }

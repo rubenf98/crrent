@@ -23,14 +23,20 @@ class CreateReservationsTable extends Migration
             $table->string('pickup_place');
             $table->string('return_place');
             $table->string('flight')->nullable();
-            $table->string('room')->nullable();
+            $table->string('address')->nullable();
             $table->double('price', 5, 2);
             $table->double('car_price', 5, 2);
             $table->double('car_price_per_day', 5, 2);
+
+            $table->string('kms_pickup')->nullable();
+            $table->string('kms_return')->nullable();
+            $table->string('gas_pickup')->nullable();
+            $table->string('gas_return')->nullable();
+
             $table->integer('days');
             $table->text('notes')->nullable();
             $table->unsignedBigInteger("card_id")->nullable();
-            $table->unsignedBigInteger("agency_id")->nullable();
+            $table->unsignedBigInteger("comission_id")->nullable();
             $table->unsignedBigInteger("car_id")->nullable();
             $table->unsignedBigInteger("car_pref_id")->nullable();
             $table->unsignedBigInteger("client_id")->nullable();
@@ -39,7 +45,7 @@ class CreateReservationsTable extends Migration
 
             $table->foreign("car_pref_id")->references("id")->on("cars")->onDelete("set null");
             $table->foreign("car_id")->references("id")->on("cars")->onDelete("set null");
-            $table->foreign("agency_id")->references("id")->on("agencies")->onDelete("set null");
+            $table->foreign("comission_id")->references("id")->on("comissions")->onDelete("set null");
             $table->foreign("card_id")->references("id")->on("cards")->onDelete("set null");
             $table->foreign("client_id")->references("id")->on("clients")->onDelete("set null");
         });

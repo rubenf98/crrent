@@ -29,7 +29,7 @@ const FilterContainer = styled(Row)`
 `;
 
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters, aFilters = { id: undefined, name: undefined, date: undefined, car: undefined } }) {
+function TableContainer({ handleUpdateComissionClick, handleUpdateClick, handleUpdateClientClick, loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters, aFilters = { id: undefined, name: undefined, date: undefined, car: undefined } }) {
     const [filters, setFilters] = useState({});
 
     useEffect(() => {
@@ -77,6 +77,11 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
                 <StopPropagation>
                     <RowOperation
                         onDeleteConfirm={() => onDelete(row.id)}
+                        onUpdateClick={() => handleUpdateClick(row)}
+                        additionalOptions={[
+                            { text: "Atualizar cliente", function: () => handleUpdateClientClick(row) },
+                            { text: "Atualizar comissão", function: () => handleUpdateComissionClick(row) }
+                        ]}
                     />
                 </StopPropagation>
             ),
@@ -86,31 +91,32 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
     return (
         <Container>
             <CardContainer text="Tabela de Reservas">
-                <FilterContainer style={{ margin: "30px 0px" }} gutter={16}>
-                    <Col md={4}>
-                        <Input allowClear value={filters.id} onChange={(e) => setFilters({ ...filters, id: e.target.value })} placeholder="Referência/ID de reserva" suffix={<SearchIcon />} />
-                    </Col>
-                    <Col md={4}>
-                        <Input allowClear value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} placeholder="Nome do cliente" suffix={<UserIcon />} />
-                    </Col>
-                    <Col md={4}>
-                        <DatePicker value={filters.date} onChange={(e) => setFilters({ ...filters, date: e })} style={{ width: "100%" }} format="DD-MM-YYYY" placeholder="Data de reserva" suffix={<UserIcon />} />
-                    </Col>
-                    <Col md={4}>
-                        <Input allowClear value={filters.car} onChange={(e) => setFilters({ ...filters, car: e.target.value })} placeholder="Veículo" suffix={<SearchIcon />} />
-                    </Col>
-                    <Col md={6}>
-                        <Button
-                            onClick={() => handleFilters({ ...filters, date: filters.date && moment(filters.date).format('YYYY-MM-DD') })}
-                            style={{ float: "right" }} type="primary"
-                            loading={loading}
-                        >
-                            Pesquisar
-                        </Button>
-                    </Col>
+                {handleFilters &&
+                    <FilterContainer style={{ margin: "30px 0px" }} gutter={16}>
+                        <Col md={4}>
+                            <Input allowClear value={filters.id} onChange={(e) => setFilters({ ...filters, id: e.target.value })} placeholder="Referência/ID de reserva" suffix={<SearchIcon />} />
+                        </Col>
+                        <Col md={4}>
+                            <Input allowClear value={filters.name} onChange={(e) => setFilters({ ...filters, name: e.target.value })} placeholder="Nome do cliente" suffix={<UserIcon />} />
+                        </Col>
+                        <Col md={4}>
+                            <DatePicker value={filters.date} onChange={(e) => setFilters({ ...filters, date: e })} style={{ width: "100%" }} format="DD-MM-YYYY" placeholder="Data de reserva" suffix={<UserIcon />} />
+                        </Col>
+                        <Col md={4}>
+                            <Input allowClear value={filters.car} onChange={(e) => setFilters({ ...filters, car: e.target.value })} placeholder="Veículo" suffix={<SearchIcon />} />
+                        </Col>
+                        <Col md={8}>
+                            <Button
+                                onClick={() => handleFilters({ ...filters, date: filters.date && moment(filters.date).format('YYYY-MM-DD') })}
+                                style={{ float: "right" }} type="primary"
+                                loading={loading}
+                            >
+                                Pesquisar
+                            </Button>
+                        </Col>
+                    </FilterContainer>
+                }
 
-
-                </FilterContainer>
                 <Table
                     loading={loading}
                     data={data}

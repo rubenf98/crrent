@@ -35,25 +35,29 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
             width: 100,
             fixed: 'left',
         },
         {
-            title: 'Desde',
+            title: 'DESDE',
             dataIndex: 'from',
         },
         {
-            title: 'Até',
+            title: 'ATÉ',
             dataIndex: 'to',
         },
         {
-            title: 'Gamas',
+            title: 'GAMAS',
             dataIndex: 'levels',
             render: (levels) => levels.map((level) => (
                 <span>{level.code}, </span>
             ))
+        },
+        {
+            title: 'NOTAS',
+            dataIndex: 'notes',
         },
         {
             title: 'Ações',

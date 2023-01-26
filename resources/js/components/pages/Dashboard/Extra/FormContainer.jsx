@@ -112,7 +112,7 @@ function FormContainer({ loading, edit, handleClose, updateExtra, visible, curre
                             </Col>
                             <Col span={12}>
                                 <Form.Item rules={rules.price} label="Preço" name="price">
-                                    <InputNumber placeholder="Ex. 5" style={{ width: "100%" }} min={0} />
+                                    <InputNumber style={{ width: "100%" }} min={0} />
                                 </Form.Item>
                             </Col>
                         </Row>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAgenciesTable extends Migration
+class CreateComissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateAgenciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('agencies', function (Blueprint $table) {
+        Schema::create('comissions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger("agency_id");
             $table->string('intermediary')->nullable();
-            $table->double('commission', 5, 2)->default(0);
+            $table->double('value', 5, 2)->default(0);
             $table->timestamps();
+
+            $table->foreign("agency_id")->references("id")->on("agencies")->onDelete("cascade");
         });
     }
 
@@ -29,6 +31,6 @@ class CreateAgenciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('agencies');
+        Schema::dropIfExists('comissions');
     }
 }

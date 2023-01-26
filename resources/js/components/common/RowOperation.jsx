@@ -11,9 +11,14 @@ const StyledDropdownLink = styled.div`
         width: 15px;
     }
 `;
-const RowOperation = ({ onDeleteConfirm, children, onUpdateClick }) => {
+const RowOperation = ({ onDeleteConfirm, children, onUpdateClick, additionalOptions = [] }) => {
     const menu = (
         <Menu>
+            {additionalOptions.map((option, index) => (
+                <Menu.Item key={index} onClick={option.function}>
+                    {option.text}
+                </Menu.Item>
+            ))}
             {onUpdateClick && (
                 <Menu.Item key="update" onClick={() => onUpdateClick()}>
                     Atualizar

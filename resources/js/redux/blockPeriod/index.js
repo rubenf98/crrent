@@ -12,7 +12,7 @@ export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.FETCH_BLOCK_PERIODS}_PENDING`:
         case `${types.DELETE_BLOCK_PERIOD}_PENDING`:
-        case `${types.CREATE_BLOCK}_PENDING`:
+        case `${types.CREATE_BLOCK_PERIOD}_PENDING`:
         case `${types.FETCH_BLOCK_PERIODS_SELECTOR}_PENDING`:
             return {
                 ...state,
@@ -29,7 +29,7 @@ export default (state = initialState, action = {}) => {
 
         case `${types.FETCH_BLOCK_PERIODS}_REJECTED`:
         case `${types.DELETE_BLOCK_PERIOD}_REJECTED`:
-        case `${types.CREATE_BLOCK}_REJECTED`:
+        case `${types.CREATE_BLOCK_PERIOD}_REJECTED`:
             return {
                 ...state,
                 loading: false,
@@ -37,7 +37,7 @@ export default (state = initialState, action = {}) => {
                 meta: {}
             };
 
-        case `${types.CREATE_BLOCK}_FULFILLED`:
+        case `${types.CREATE_BLOCK_PERIOD}_FULFILLED`:
             return {
                 ...state,
                 loading: false,

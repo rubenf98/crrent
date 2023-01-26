@@ -35,7 +35,7 @@ function BlockLevel({ theme, data, loading, fetchBlockPeriods, deleteBlockPeriod
     return (
 
         <Container>
-            <CardContainer text="Grupos Bloqueados">
+            <CardContainer text="Grupos bloqueados">
                 <TableContainer
                     data={data}
                     loading={loading}

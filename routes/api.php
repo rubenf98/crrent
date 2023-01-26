@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AgencyController;
 use App\Http\Controllers\BlockDateController;
 use App\Http\Controllers\BlockedCarController;
 use App\Http\Controllers\BlockPeriodController;
 use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ComissionController;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\GlobalParameterController;
 use App\Http\Controllers\LevelController;
@@ -57,9 +60,12 @@ Route::apiResource('car-categories', CarCategoryController::class);
 Route::apiResource('levels', LevelController::class);
 Route::apiResource('extras', ExtraController::class);
 Route::apiResource('prices', PriceController::class);
+Route::apiResource('clients', ClientController::class);
 Route::apiResource('reservations', ReservationController::class);
 Route::apiResource('promotions', PromotionController::class);
 Route::apiResource('blockedDates', BlockDateController::class);
 Route::apiResource('blockPeriods', BlockPeriodController::class);
 Route::apiResource('blockedCars', BlockedCarController::class);
 Route::apiResource('globalParameters', GlobalParameterController::class);
+Route::apiResource('agencies', AgencyController::class);
+Route::apiResource('comissions', ComissionController::class);

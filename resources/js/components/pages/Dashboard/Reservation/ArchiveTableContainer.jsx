@@ -55,7 +55,7 @@ function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete
         {
             title: 'VEÍCULO',
             dataIndex: 'car',
-            render: (car) => car.category.title + " (" + car.registration + ")",
+            render: (car) => car?.category?.title + " (" + car.registration + ")",
         },
         {
             title: 'ESTADO',

@@ -35,26 +35,30 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
 
     const columns = [
         {
-            title: '#',
+            title: 'ID',
             dataIndex: 'id',
             width: 100,
             fixed: 'left',
         },
         {
-            title: 'Desde',
+            title: 'VEÍCULO',
+            dataIndex: 'car',
+            render: (car) => <span>{car?.category?.title} ({car.registration})</span>
+        },
+        {
+            title: 'DESDE',
             dataIndex: 'from',
         },
         {
-            title: 'Até',
+            title: 'ATÉ',
             dataIndex: 'to',
         },
         {
-            title: 'Carro',
-            dataIndex: 'car',
-            render: (car) => <span>{car.registration} - {car.title}</span>
+            title: 'OBSERVAÇÕES',
+            dataIndex: 'notes',
         },
         {
-            title: 'Ações',
+            title: 'AÇÕES',
             dataIndex: 'id',
             render: (text, row) => (
                 <StopPropagation>

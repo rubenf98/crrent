@@ -19,8 +19,8 @@ class CarAvailabilityResource extends JsonResource
             'id' => $this->id,
             'availability' => $this->getAvailability($request->from, $request->to),
             'registration' => $this->registration,
-            'title' => $this->title,
-            'image' => $this->image,
+            'title' => $this->category->title,
+            'image' => $this->category->image,
         ];
     }
 }

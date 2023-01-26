@@ -19,6 +19,7 @@ class BlockPeriodResource extends JsonResource
             'from' => $this->from,
             'to' => $this->to,
             'levels' => $this->levels,
+            'notes' => $this->notes,
             'created_at' => (string) $this->created_at,
         ];
     }

@@ -22,6 +22,9 @@ import Value from "./components/pages/Dashboard/Value/Value";
 import Success from "./components/pages/Checkout/Success";
 import Confirmation from "./components/pages/Checkout/Confirmation";
 import CarDetail from "./components/pages/Dashboard/CarDetail/CarDetail";
+import Client from "./components/pages/Dashboard/Client/Client";
+import ClientDetail from "./components/pages/Dashboard/ClientDetail/ClientDetail";
+
 export const history = createBrowserHistory();
 
 function Router() {
@@ -36,6 +39,8 @@ function Router() {
                         <DashboardLayout><Dashboard /></DashboardLayout>
                     }
                 />
+                <Route path="/painel/clientes" element={<DashboardLayout><Client /></DashboardLayout>} />
+                <Route path="/painel/clientes/:id" element={<DashboardLayout><ClientDetail /></DashboardLayout>} />
                 <Route path="/painel/datas" element={<DashboardLayout><Block /></DashboardLayout>} />
                 <Route path="/painel/reservas" element={<DashboardLayout><Reservation /></DashboardLayout>} />
                 <Route path="/painel/extras" element={<DashboardLayout><Extra /></DashboardLayout>} />

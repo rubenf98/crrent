@@ -17,6 +17,7 @@ class CreateBlockPeriodsTable extends Migration
             $table->id();
             $table->date('from');
             $table->date('to');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

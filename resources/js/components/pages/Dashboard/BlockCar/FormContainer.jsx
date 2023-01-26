@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Modal, Row, Form, DatePicker, Button, Input, Checkbox, Col, Select } from 'antd';
+import { Modal, Row, Form, DatePicker, Button, Col } from 'antd';
 import moment from 'moment';
 import { connect } from "react-redux";
 import { createBlockCar } from "../../../../redux/blockCar/actions"
-import { fetchCars } from "../../../../redux/car/actions";
+import CarRemoteSelectContainer from "../Car/CarRemoteSelectContainer";
+import TextArea from "antd/lib/input/TextArea";
 
 const { RangePicker } = DatePicker;
 
@@ -42,16 +43,13 @@ const rules = {
 
 
 
-function FormContainer({ loading, handleClose, createBlockCar, visible, cars, fetchCars }) {
+function FormContainer({ loading, handleClose, createBlockCar, visible }) {
     const [form] = Form.useForm();
 
     const handleModalClose = () => {
         form.resetFields();
         handleClose();
     }
-    useEffect(() => {
-        fetchCars();
-    }, [])
 
 
     const onFinish = (values) => {
@@ -89,12 +87,13 @@ function FormContainer({ loading, handleClose, createBlockCar, visible, cars, fe
                                 <Form.Item
                                     name="dates"
                                     rules={rules.name}
+                                    label="Data(s)"
                                 >
                                     <RangePicker
                                         format="DD-MM-YYYY"
                                         disabledDate={(currentDate) => {
                                             return currentDate && (
-                                                (currentDate < moment())
+                                                (currentDate < moment().startOf('day'))
                                             );
                                         }}
                                         style={{ width: "100%" }}
@@ -105,19 +104,25 @@ function FormContainer({ loading, handleClose, createBlockCar, visible, cars, fe
                                 <Form.Item
                                     name="car_id"
                                     rules={rules.car}
+                                    label="Veículo"
                                 >
-                                    <Select style={{ width: "100%" }} placeholder="Carro">
-                                        {cars.map((car) => (
-                                            <Select.Option value={car.id} index={car.id}>{car.registration} - {car.title}</Select.Option>
-                                        ))}
-                                    </Select>
+                                    <CarRemoteSelectContainer />
+                                </Form.Item>
+                            </Col>
+
+                            <Col xs={24} md={24}>
+                                <Form.Item
+                                    name="notes"
+                                    label="Notas e/ou observações"
+                                >
+                                    <TextArea />
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <ButtonContainer type="flex" justify="end">
                             <Button loading={loading} size="large" width="150px" type="primary" htmlType="submit">
-                                Bloquear Data(s)
+                                Submeter
                             </Button>
                         </ButtonContainer>
                     </Form>
@@ -131,14 +136,12 @@ function FormContainer({ loading, handleClose, createBlockCar, visible, cars, fe
 const mapStateToProps = (state) => {
     return {
         loading: state.blockCar.loading,
-        cars: state.car.data,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         createBlockCar: (data) => dispatch(createBlockCar(data)),
-        fetchCars: () => dispatch(fetchCars()),
     };
 };
 

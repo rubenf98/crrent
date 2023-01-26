@@ -1,11 +1,11 @@
-import { Badge, DatePicker, Row } from 'antd'
+import { DatePicker, Row } from 'antd'
 import React, { useEffect, useState } from 'react'
 import moment from "moment"
 import styled from "styled-components";
 import CardContainer from '../Common/CardContainer';
 import { connect } from 'react-redux';
-
-const dateFormat = "YYYY-MM-DD";
+import PopoverContainer from "../Reservation/PopoverContainer";
+import { fetchCarsAvailability } from '../../../../redux/car/actions';
 
 const Container = styled.section`
     margin-bottom: 50px;
@@ -56,30 +56,22 @@ const CalendarItem = styled.div`
 `;
 
 const CalendarTitle = styled.div`
-    min-width:200px;
+    min-width: 200px;
     border-bottom: 1px solid #f0f0f0;
-    background-color: ${props => props.background};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
+    background-color: ${props => props.background}; 
+    padding: 5px;
+    box-sizing: border-box;
 
-
-    h4 {
-        text-align: center;
-        margin: 0px auto;
+   span {
         opacity: .7;
         font-size: 12px;   
         font-weight: bold;
     }
 
     h3 {
-        text-align: center;
+        text-align: left;
         margin: 0px auto;
         font-size: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis; 
-        white-space: nowrap; 
         width: 200px;
     }
 
@@ -89,19 +81,14 @@ const CalendarTitle = styled.div`
     }
 `;
 
-function CalendarContainer({ data, loading, handleFilters }) {
+function CalendarContainer(props) {
     const [calendar, setCalendar] = useState([])
     const [date, setDate] = useState(moment())
-
-    // useEffect(() => {
-    //     const startDate = moment().startOf('month');
-    //     const endDate = moment().endOf('month');
-
-    //     handleDateChange(startDate, endDate);
-    // }, [])
+    const [filters, setFilters] = useState({})
+    const { data, loading } = props;
 
     function handleDateChange(startDate, endDate) {
-        handleFilters({ from: startDate.format('YYYY-MM-DD'), to: endDate.format('YYYY-MM-DD') })
+        setFilters({ ...filters, from: startDate.format('YYYY-MM-DD'), to: endDate.format('YYYY-MM-DD') });
 
         let aCalendar = [];
         while (startDate < endDate) {
@@ -118,6 +105,10 @@ function CalendarContainer({ data, loading, handleFilters }) {
 
         handleDateChange(startDate, endDate);
     }, [date])
+
+    useEffect(() => {
+        props.fetchCarsAvailability(filters);
+    }, [filters])
 
     return (
         <Container>
@@ -141,15 +132,25 @@ function CalendarContainer({ data, loading, handleFilters }) {
                         <div className="flex-container" index={"car-" + car.id}>
                             <CalendarTitle background="#fff">
                                 <div>
-                                    <h3>{car.title}</h3>
-                                    <h4>{car.registration}</h4>
+                                    <h3>{car.title} (<span>{car.registration}</span>)</h3>
                                 </div>
                             </CalendarTitle>
-                            {car.availability.map((availability, index) => (
-                                <CalendarItem key={'availability-' + index} background={availability ? "red" : "white"} >
-                                    {/* <div className='value'>{availability ? availability : <></>}</div> */}
-                                </CalendarItem>
-                            ))}
+                            {car.availability.map((availability, index) => {
+                                return Object.values(availability).length ?
+                                    <PopoverContainer
+                                        key={index}
+                                        item={{
+                                            ...availability,
+                                            car: {
+                                                registration: car.registration,
+                                                category: { title: car.title }
+                                            }
+                                        }
+                                        }>
+                                        <CalendarItem key={'availability-' + index} background={availability ? "red" : "white"} />
+                                    </PopoverContainer>
+                                    : <CalendarItem key={'availability-' + index} background={availability ? "red" : "white"} />
+                            })}
                         </div>
                     ))}
                 </Calendar>
@@ -158,11 +159,18 @@ function CalendarContainer({ data, loading, handleFilters }) {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        loading: state.reservation.loading,
-        data: state.car.availability,
+        fetchCarsAvailability: (filters) => dispatch(fetchCarsAvailability(filters)),
     };
 };
 
-export default connect(mapStateToProps, null)(CalendarContainer);
+const mapStateToProps = (state) => {
+    return {
+        loading: state.car.loading,
+        data: state.car.availability,
+
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarContainer);

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BlockPeriodRequest;
 use App\Http\Resources\BlockPeriodResource;
 use App\Models\BlockDate;
 use App\Models\BlockPeriod;
+use App\Models\Car;
+use App\Models\Level;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateInterval;
@@ -49,7 +52,39 @@ class BlockPeriodController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $period = CarbonPeriod::create($request->dates[0], $request->dates[1])->toArray();
+        $levels = $request->levels;
+        $notes = $request->notes;
+        $levels_id = [];
+        foreach ($levels as $id => $level) {
+            if ($level) {
+                $levelObject = Level::find($id);
+                $cars = $levelObject->cars()->get();
+                array_push($levels_id, $id);
+                foreach ($period as $date) {
+
+                    foreach ($cars as $car) {
+                        BlockDate::create([
+                            'date' => $date->format('Y-m-d'),
+                            'car_id' => $car->id,
+                            'car_category_id' => $car->car_category_id,
+                            'level_id' => $id,
+                            'notes' => $notes ? $notes : null
+                        ]);
+                    }
+                }
+            }
+        }
+
+        $blockPeriod = BlockPeriod::create([
+            'from' => $request->dates[0],
+            'to' => $request->dates[1],
+            'notes' => $notes ? $notes : null
+        ]);
+
+        $blockPeriod->levels()->attach($levels_id);
+
+        return new BlockPeriodResource($blockPeriod);
     }
 
     /**

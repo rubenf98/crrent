@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cerbero\QueryFilters\FiltersRecords;
 
 class Client extends Model
 {
-    use HasFactory;
-    protected $fillable = ['name', 'cc', 'nif', 'address', 'country', 'postal_code', 'email', 'phone', 'local_address', 'company'];
+    use HasFactory, FiltersRecords;
+
+    protected $fillable = ['notes', 'name', 'cc', 'nif', 'address', 'country', 'postal_code', 'email', 'phone', 'company'];
 
     public static function store($validator)
     {
@@ -24,7 +26,6 @@ class Client extends Model
                 'postal_code' => $validator['postal_code'],
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
-                'local_address' => $validator['local_address'],
             ]);
         } else {
             $client = self::create([
@@ -36,11 +37,15 @@ class Client extends Model
                 'postal_code' => $validator['postal_code'],
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
-                'local_address' => $validator['local_address'],
             ]);
         }
 
 
         return $client;
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

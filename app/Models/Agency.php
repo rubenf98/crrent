@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Agency extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'intermediary', 'comission'];
+    protected $fillable = ['name', 'comission'];
 
     public function reservations()
     {
-        return $this->hasMany(Agency::class);
+        return $this->hasManyThrough(Reservation::class, Comission::class);
+    }
+
+    public function comissions()
+    {
+        return $this->hasMany(Comission::class);
     }
 }

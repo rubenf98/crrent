@@ -14,6 +14,9 @@ import blockPeriod from './redux/blockPeriod'
 import blockCar from './redux/blockCar'
 import price from './redux/price'
 import level from './redux/level'
+import client from './redux/client'
+import agency from './redux/agency'
+import comission from './redux/comission'
 
 const reducer = combineReducers({
     auth,
@@ -28,7 +31,10 @@ const reducer = combineReducers({
     blockPeriod,
     blockCar,
     price,
-    level
+    level,
+    client,
+    agency,
+    comission
 })
 
 export default reducer

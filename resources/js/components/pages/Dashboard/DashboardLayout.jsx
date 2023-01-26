@@ -121,6 +121,11 @@ function DashboardLayout({ children }) {
             key: 'precos',
             icon: <img className='icon' src="/icon/dashboard/price.svg" />
         },
+        {
+            label: <Link to="/painel/clientes">Clientes</Link>,
+            key: 'clientes',
+            icon: <img className='icon' src="/icon/dashboard/price.svg" />
+        },
 
 
     ];

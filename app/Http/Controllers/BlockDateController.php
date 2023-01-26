@@ -22,7 +22,7 @@ class BlockDateController extends Controller
      */
     public function index(Request $request)
     {
-        return BlockDateResource::collection(BlockDate::with('car')->paginate(5));
+        return BlockDateResource::collection(BlockDate::where('level_id', null)->where('reservation_id', null)->paginate(5));
     }
 
     /**
@@ -78,31 +78,20 @@ class BlockDateController extends Controller
     public function store(Request $request)
     {
         $period = CarbonPeriod::create($request->dates[0], $request->dates[1])->toArray();
-        $levels = $request->levels;
         $data = [];
-        $levels_id = [];
-        foreach ($levels as $id => $level) {
-            if ($level) {
-                array_push($levels_id, $id);
-                foreach ($period as $date) {
-                    $blockedDate = BlockDate::create([
-                        'date' => $date->format('Y-m-d'),
-                        'level_id' => $id,
-                        'fill' => 1
-                    ]);
-                    array_push($data, $blockedDate);
-                }
-            }
+        $car = Car::find($request->car_id);
+
+        foreach ($period as $date) {
+            $blockedDate = BlockDate::create([
+                'date' => $date->format('Y-m-d'),
+                'car_id' => $car->id,
+                'car_category_id' => $car->car_category_id,
+                'notes' => $request->notes ? $request->notes : null
+            ]);
+
+            array_push($data, $blockedDate->id);
         }
-
-        $blockPeriod = BlockPeriod::create([
-            'from' => $request->dates[0],
-            'to' => $request->dates[1],
-        ]);
-
-        $blockPeriod->levels()->attach($levels_id);
-
-        return new BlockPeriodResource($blockPeriod);
+        return BlockDateResource::collection(BlockDate::whereIn('id', $data)->get());
     }
 
     /**

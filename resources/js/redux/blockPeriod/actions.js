@@ -20,7 +20,7 @@ export const deleteBlockPeriod = id => ({
     meta: { id }
 });
 
-export const createBlock = (data) => ({
-    type: types.CREATE_BLOCK,
-    payload: axios.post(`${window.location.origin}/api/blockedDates`, data),
+export const createBlockPeriod = (data) => ({
+    type: types.CREATE_BLOCK_PERIOD,
+    payload: axios.post(`${window.location.origin}/api/blockPeriods`, data),
 });

@@ -12,7 +12,13 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Reservation extends Model
 {
-    protected $fillable = ['car_pref_id', 'card_id', 'car_price_per_day', 'days', 'car_price', 'token', 'pickup_date', 'return_date', 'pickup_place', 'return_place', 'flight', 'price', 'car_id', 'client_id'];
+    protected $fillable = [
+        'kms_pickup', 'kms_return', 'gas_pickup', 'gas_return',
+        'address', 'car_pref_id', 'card_id', 'car_price_per_day',  'car_id', 'client_id',
+        'days', 'car_price', 'token', 'price',
+        'pickup_date', 'return_date', 'pickup_place', 'return_place',
+        'flight', 'comission_id', 'notes'
+    ];
 
     use HasFactory, FiltersRecords;
 
@@ -141,7 +147,7 @@ class Reservation extends Model
         $fpdi->Text(143, 79.5, $client->phone);
 
         $fpdi->Text(26, 84.5, utf8_decode($client->name));
-        $fpdi->Text(32, 89.5, utf8_decode($client->address));
+        $fpdi->Text(32, 89.5, utf8_decode($this->address));
         $fpdi->Text(40, 94.5, $client->postal_code);
         $fpdi->Text(92, 94.5, utf8_decode($client->email));
 
@@ -230,11 +236,10 @@ class Reservation extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function agency()
+    public function comission()
     {
-        return $this->belongsTo(Agency::class);
+        return $this->belongsTo(Comission::class);
     }
-
 
     public function card()
     {

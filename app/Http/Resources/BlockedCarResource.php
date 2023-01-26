@@ -14,6 +14,17 @@ class BlockedCarResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'from' => $this->from,
+            'to' => $this->to,
+            'car' => [
+                'id' => $this->car->id,
+                'registration' => $this->car->registration,
+                'category' => $this->car->category
+            ],
+            'notes' => $this->notes,
+            'created_at' => (string) $this->created_at,
+        ];
     }
 }

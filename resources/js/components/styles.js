@@ -82,9 +82,9 @@ export const Button = styled.button`
 export const SecundaryButton = styled.button`
     background-color: white;
     border: 2px solid;
-    border-color: ${props => props.primary};
+    border-color: ${({ theme }) => theme.primary};
     cursor: pointer;
-    color: ${props => props.primary};
+    color:  ${({ theme }) => theme.primary};
     padding: 12px 33px;
     box-sizing: border-box;
     font-size: 20px;
@@ -95,7 +95,7 @@ export const SecundaryButton = styled.button`
 
     &:hover {
         color: white;
-        background-color: ${props => props.primary};
+        background-color:  ${({ theme }) => theme.primary};
         border: 2px solid;
 
         p, a {
@@ -104,6 +104,12 @@ export const SecundaryButton = styled.button`
         }
     }
 
+`;
+
+export const SmallSecundaryButton = styled(SecundaryButton)`
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
 `;
 
 export const ActionButton = styled.button`

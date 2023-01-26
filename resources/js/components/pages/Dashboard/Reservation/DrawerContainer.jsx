@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { Col, Drawer, Row } from 'antd';
 import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
-import { downloadContract } from '../../../../redux/reservation/actions';
+import { downloadContract, fetchReservation } from '../../../../redux/reservation/actions';
 import moment from "moment";
 
 const Section = styled.h3`
@@ -70,7 +70,15 @@ const levelDecoder = {
     4: "D",
 }
 
-function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, loadingDownload }) {
+function DrawerContainer(props) {
+    const { currentId, drawerState, data } = props;
+
+    useEffect(() => {
+        if (currentId) {
+            props.fetchReservation(currentId);
+        }
+    }, [currentId])
+
 
     const FieldContainer = ({ name, value, width }) => (
         <Field className='field-width' width={width}>
@@ -87,7 +95,7 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
 
 
     return (
-        <Drawer closable={false} width={"60%"} open={drawerState} onClose={() => setDrawerState(0)}>
+        <Drawer closable={false} width={"60%"} open={drawerState} onClose={() => props.setDrawerState(0)}>
             <Row type="flex" dire>
                 <Col xs={24}>
                     <Section>Informação geral</Section>
@@ -95,17 +103,20 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
                         <FieldContainer name="Data da reserva" value={moment(data.created_at).format('DD-MM-YYYY HH:mm')} />
                         <FieldContainer name="Levantamento" value={moment(data.pickup_date).format('DD-MM-YYYY HH:mm') + ", " + data.pickup_place} />
                         <FieldContainer name="Entrega" value={moment(data.return_date).format('DD-MM-YYYY HH:mm') + ", " + data.return_place} />
+                        <FieldContainer name="Número de dias" value={data.days} />
+
+                        <FieldContainer name="KM entrega" value={EmptyField(data.kms_pickup)} />
+                        <FieldContainer name="KM devolução" value={EmptyField(data.kms_return)} />
+                        <FieldContainer name="Combustível entrega" value={EmptyField(data.gas_pickup)} />
+                        <FieldContainer name="Combustível devolução" value={EmptyField(data.gas_return)} />
+
                         <FieldContainer name="Viatura" value={data.car?.category?.title + " (" + data.car?.registration + ")"} />
 
-                        <FieldContainer name="KM entrega" value={EmptyField(data.pickup_kms)} />
-                        <FieldContainer name="Combustível entrega" value={EmptyField(data.pickup_gas)} />
-                        <FieldContainer name="KM devolução" value={EmptyField(data.return_kms)} />
-                        <FieldContainer name="Combustível devolução" value={EmptyField(data.return_gas)} />
-
-                        <FieldContainer name="Número de voo" value={EmptyField(data.flight)} />
-                        <FieldContainer name="Número de quarto" value={EmptyField(data.room)} />
-                        <FieldContainer width="50%" name="Número de dias" value={data.days} />
-
+                    </FieldsContainer>
+                </Col>
+                <Col xs={24}>
+                    <Section>Preçário</Section>
+                    <FieldsContainer width="25%">
                         <FieldContainer name="Valor aluguer" value={data.car_price + "€"} />
                         <FieldContainer name="Preço unitário" value={data.car_price_per_day + "€"} />
                         <FieldContainer name="Valor extras/seguro" value={data.price - data.car_price + "€"} />
@@ -119,12 +130,15 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
                         <FieldContainer name="Nome" value={data.client?.name} />
                         <FieldContainer name="Telefone" value={data.client?.phone} />
                         <FieldContainer name="Email" value={data.client?.email} />
+
                         <FieldContainer name="ID/Passporte" value={data.client?.cc} />
                         <FieldContainer name="NIF" value={data.client?.nif} />
                         <FieldContainer name="País" value={data.client?.country} />
                         <FieldContainer name="Morada" value={data.client?.address} />
-                        <FieldContainer name="Endereço local" value={data.client?.local_address} />
+                        
                         <FieldContainer name="Código Postal" value={data.client?.postal_code} />
+                        <FieldContainer name="Número de voo" value={EmptyField(data.flight)} />
+                        <FieldContainer width="50%" name="Morada de estadia" value={EmptyField(data.address)} />
                     </FieldsContainer>
                 </Col>
 
@@ -158,7 +172,7 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
                         ))}
                     </ul>
                 </Col>
-                <Download onClick={() => downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
+                <Download onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
 
             </Row>
         </Drawer>
@@ -168,12 +182,15 @@ function DrawerContainer({ data, drawerState, setDrawerState, downloadContract, 
 const mapDispatchToProps = (dispatch) => {
     return {
         downloadContract: (token) => dispatch(downloadContract(token)),
+        fetchReservation: (id) => dispatch(fetchReservation(id)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        loading: state.reservation.loadingDownload,
+        loadingDownload: state.reservation.loadingDownload,
+        loading: state.reservation.loading,
+        data: state.reservation.current,
     };
 };
 

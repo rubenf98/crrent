@@ -14,6 +14,30 @@ class ReservationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'rent_contract' => $this->rent_contract,
+            'payment_method' => $this->payment_method,
+            'pickup_date' => $this->pickup_date,
+            'return_date' => $this->return_date,
+            'pickup_place' => $this->pickup_place,
+            'return_place' => $this->return_place,
+            'flight' => $this->flight,
+            'address' => $this->address,
+            'price' => $this->price,
+            'car_price' => $this->car_price,
+            'car_price_per_day' => $this->car_price_per_day,
+            'days' => $this->days,
+            'notes' => $this->notes,
+            'client' => $this->client,
+            'car' => $this->car()->with('category')->first(),
+            'drivers' => $this->drivers,
+            'extras' => $this->extras,
+            'comission' => $this->comission,
+            'kms_pickup' => $this->kms_pickup,
+            'kms_return' => $this->kms_return,
+            'gas_pickup' => $this->gas_pickup,
+            'gas_return' => $this->gas_return,
+        ];
     }
 }
