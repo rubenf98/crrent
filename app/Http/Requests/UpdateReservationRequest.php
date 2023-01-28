@@ -27,17 +27,18 @@ class UpdateReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'pickup_date' => 'required|date|after:' . Carbon::now()->addDay(),
-            'return_date' => 'required|date|after:' . Carbon::now()->addDays(3),
+            'pickup_date' => 'required|date',
+            'return_date' => 'required|date|after:' . Carbon::parse($this->pickup_date),
             'pickup_place' => 'required|string',
             'return_place' => 'required|string',
             'flight' => 'nullable|string',
             'car_id' =>  'required|integer|exists:cars,id',
+            'insurance_id' =>  'required|integer|exists:insurances,id',
             'price' => 'required|numeric',
             'days' => 'required|integer|min:1',
             'car_price' => 'required|numeric',
             'car_price_per_day' => 'required|numeric',
-            'address' => 'required|string',
+            'local_address' => 'required|string',
             'notes' => 'nullable|string',
 
             'kms_pickup' => 'nullable|string',
@@ -51,6 +52,24 @@ class UpdateReservationRequest extends FormRequest
 
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',
+
+            'drivers' => 'nullable|array',
+            'drivers.*.name' => 'nullable|string',
+            'drivers.*.birthday' => 'nullable|date',
+            'drivers.*.license' => 'nullable|string',
+            'drivers.*.emission' => 'nullable|date',
+            'drivers.*.validity' => 'nullable|date',
+            'drivers.*.emission_place' => 'nullable|string',
+
+            'name' => 'required|string',
+            'cc' => 'required|string',
+            'nif' => 'nullable|string',
+            'address' => 'nullable|string',
+            'country' => 'nullable|string',
+            'postal_code' => 'nullable|string',
+            'email' => 'required|string',
+            'phone' => 'required|string',
+            'client_notes' => 'nullable|string',
         ];
     }
 

@@ -2,13 +2,16 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Row, Form, Button, Input, Col, DatePicker, InputNumber } from 'antd';
 import { connect } from "react-redux";
-import { updateReservation } from "../../../../redux/reservation/actions"
-import { fetchExtras } from "../../../../redux/extra/actions"
+import { createExternalReservation, updateReservation } from "../../../../redux/reservation/actions"
 import TextArea from "antd/lib/input/TextArea";
 import moment from "moment";
 import ExtraRemoteSelectContainer from "../Extra/ExtraRemoteSelectContainer";
 import CarRemoteSelectContainer from "../Car/CarRemoteSelectContainer";
+import InsuranceRemoteSelectContainer from "../Insurance/InsuranceRemoteSelectContainer";
 import { getDaysDifference } from "../../../functions";
+import ClientFormTemplate from "../Client/ClientFormTemplate";
+import ComissionFormTemplate from "../Comission/ComissionFormTemplate";
+import DriverFormTemplate from "../Driver/DriverFormTemplate";
 
 const ButtonContainer = styled(Row)`
     padding: 30px 0px 10px 0;
@@ -50,7 +53,7 @@ function ReservationFormContainer(props) {
     const [form] = Form.useForm();
     const { loading,
         visible,
-        current, extras } = props;
+        current, extras, edit } = props;
 
     const handleModalClose = () => {
         form.resetFields();
@@ -59,7 +62,10 @@ function ReservationFormContainer(props) {
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            props.updateReservation(current.id, values);
+            console.log(values);
+            edit ?
+                props.updateReservation(current.id, values)
+                : props.createExternalReservation(values);
             handleModalClose();
         })
     };
@@ -72,12 +78,24 @@ function ReservationFormContainer(props) {
     }
 
     useEffect(() => {
-        if (visible) {
+        if (visible && edit) {
             var initExtras = [];
             extras.map((extra) => {
                 if (current.extras.some(e => e.id === extra.id)) {
                     initExtras.push(extra.id);
                 }
+            })
+
+            var initDrivers = [];
+            current.drivers.map((driver) => {
+
+                initDrivers.push({
+                    ...driver,
+                    birthday: driver.birthday ? moment(driver.birthday) : undefined,
+                    emission: driver.emission ? moment(driver.emission) : undefined,
+                    validity: driver.validity ? moment(driver.validity) : undefined
+                });
+
             })
             form.setFieldsValue({
                 pickup_date: moment(current.pickup_date),
@@ -87,7 +105,8 @@ function ReservationFormContainer(props) {
                 car_price: current.car_price,
                 car_price_per_day: current.car_price_per_day,
                 flight: current.flight,
-                address: current.address,
+                local_address: current.local_address,
+                insurance_id: current?.insurance.id,
                 price: current.price,
                 notes: current.notes,
                 days: current.days,
@@ -96,7 +115,23 @@ function ReservationFormContainer(props) {
                 kms_return: current.kms_return,
                 gas_pickup: current.gas_pickup,
                 gas_return: current.gas_return,
-                extras: initExtras
+                extras: initExtras,
+                drivers: initDrivers,
+
+                agency_id: current?.comission?.agency_id,
+                intermediary: current?.comission?.intermediary,
+                value: current?.comission?.value,
+
+                name: current?.client?.name,
+                cc: current?.client?.cc,
+                email: current?.client?.email,
+                phone: current?.client?.phone,
+                nif: current?.client?.nif,
+                company: current?.client?.company,
+                country: current?.client?.country,
+                postal_code: current?.client?.postal_code,
+                address: current?.client?.address,
+                client_notes: current?.client?.notes,
             })
         }
     }, [visible, extras])
@@ -112,7 +147,7 @@ function ReservationFormContainer(props) {
                 >
                     <Form
                         form={form}
-                        name="blockdate"
+                        name="reservation"
                         onFinish={onFinish}
                         layout="vertical"
                     >
@@ -161,59 +196,77 @@ function ReservationFormContainer(props) {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={6}>
-                                <Form.Item label="KM entrada" name="kms_pickup">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
-                                <Form.Item label="KM saída" name="kms_return">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
-                                <Form.Item label="Combustível entrada" name="gas_pickup">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
-                                <Form.Item label="Combustível saída" name="gas_return">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
+                            {edit ? <>
+                                <Col span={6}>
+                                    <Form.Item label="KM entrada" name="kms_pickup">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item label="KM saída" name="kms_return">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item label="Combustível entrada" name="gas_pickup">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={6}>
+                                    <Form.Item label="Combustível saída" name="gas_return">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                            </>
+                                : <></>}
 
 
-                            <Col span={12}>
-                                <Form.Item rules={rules.required} label="Morada da estadia" name="address">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
+                            <Col span={6}>
                                 <Form.Item label="Nº de voo" name="flight">
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col span={6}>
                                 <Form.Item label="Extras" name="extras">
                                     <ExtraRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col span={6}>
                                 <Form.Item rules={rules.required} label="Veículo" name="car_id">
                                     <CarRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
+                            <Col span={6}>
+                                <Form.Item rules={rules.required} label="Seguro" name="insurance_id">
+                                    <InsuranceRemoteSelectContainer />
+                                </Form.Item>
+                            </Col>
 
 
-                            <Col span={24}>
+                            <Col span={12}>
+                                <Form.Item rules={rules.required} label="Morada da estadia" name="local_address">
+                                    <TextArea />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
                                 <Form.Item label="Notas" name="notes">
                                     <TextArea />
                                 </Form.Item>
                             </Col>
                         </Row>
+
+                        <Instruction>Detalhes de comissão</Instruction>
+                        <ComissionFormTemplate />
+
+                        <Instruction>Detalhes do cliente</Instruction>
+                        <ClientFormTemplate />
+
+                        <Instruction>Detalhes do(s) condutore(s)</Instruction>
+                        <DriverFormTemplate init={current.drivers ? current.drivers.length : 0} />
+
                         <ButtonContainer type="flex" justify="end">
                             <Button disabled={loading} loading={loading} size="large" width="150px" type="primary" htmlType="submit">
-                                Atualizar
+                                {edit ? "Atualizar" : "Criar"}
                             </Button>
                         </ButtonContainer>
                     </Form>
@@ -234,6 +287,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateReservation: (id, data) => dispatch(updateReservation(id, data)),
+        createExternalReservation: (data) => dispatch(createExternalReservation(data)),
     };
 };
 

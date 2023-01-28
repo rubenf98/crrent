@@ -24,7 +24,7 @@ export const text = {
         button: "selecionado",
         basic: {
             title: "Básico",
-            items: ["Cobertura CDW", "Sujeito a franquia mínima de 800€"]
+            items: ["Cobertura CDW (Collision Damage Waiver)", "Sujeito a franquia / depósito de segurança"]
         },
         premium: {
             title: "Premium",

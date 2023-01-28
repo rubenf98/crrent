@@ -25,7 +25,7 @@ const Container = styled.section`
 const Calendar = styled.div`
     width: calc(100vw - 250px - 100px - 40px);
     overflow-x: scroll;
-    border: 1px solid #777;
+    border-right: 1px solid #777;
 
     .flex-container { 
         display: flex;
@@ -94,7 +94,7 @@ function NewCalendarContainer(props) {
 
         let aCalendar = [];
         while (startDate < endDate) {
-            aCalendar.push({ day: moment(startDate).format('D'), week: moment(startDate).format('ddd') });
+            aCalendar.push({ day: moment(startDate).format('D'), week: moment(startDate).locale('pt').format('ddd') });
 
             startDate.add(1, 'days');
         }
@@ -114,7 +114,7 @@ function NewCalendarContainer(props) {
 
     return (
         <Container>
-            <CardContainer text="Calendário De Reservas">
+            <CardContainer text="Calendário">
                 <Row type="flex" justify='end' style={{ marginBottom: "20px" }}>
                     <DatePicker.MonthPicker value={date} onChange={setDate} />
                 </Row>

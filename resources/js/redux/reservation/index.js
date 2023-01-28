@@ -21,6 +21,7 @@ export default (state = initialState, action = {}) => {
         case `${types.CONFIRM_RESERVATION}_PENDING`:
         case `${types.UPDATE_RESERVATION}_PENDING`:
         case `${types.CREATE_RESERVATION}_PENDING`:
+        case `${types.CREATE_EXTERNAL_RESERVATION}_PENDING`:
         case `${types.FETCH_RESERVATIONS}_PENDING`:
         case `${types.FETCH_NEXT_RESERVATIONS}_PENDING`:
         case `${types.FETCH_TODAY_RESERVATIONS}_PENDING`:
@@ -35,12 +36,20 @@ export default (state = initialState, action = {}) => {
         case `${types.UPDATE_RESERVATION}_REJECTED`:
         case `${types.DELETE_RESERVATION}_REJECTED`:
         case `${types.CREATE_RESERVATION}_REJECTED`:
+        case `${types.CREATE_EXTERNAL_RESERVATION}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_REJECTED`:
         case `${types.FETCH_RESERVATIONS_ARCHIVE}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_FULFILLED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.CREATE_EXTERNAL_RESERVATION}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [...state.data, action.payload.data.data]
             };
 
         case `${types.CREATE_RESERVATION}_FULFILLED`:
@@ -167,6 +176,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loading: false,
                 values: action.payload,
+                errors: []
             };
 
         case `${types.SET_CURRENT_ERRORS}`:

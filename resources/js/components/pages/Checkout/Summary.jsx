@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
 import { Button, maxWidthStyle, SecundaryButton } from '../../styles';
-import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col } from 'antd';
+import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col, Alert } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions, maxWidth } from '../../helper';
 import { connect } from "react-redux";
@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { createReservation, setCurrentErrors } from '../../../redux/reservation/actions';
 import moment from "moment";
 import { getDaysDifference, getPriceRounded } from '../../functions';
+import AlertContainer from '../../common/AlertContainer';
 
 const stretch = keyframes`
   from {
@@ -344,7 +345,7 @@ const rules = {
 };
 
 
-function Summary({ language, theme, currentCar, values, currentReservation, createReservation, setCurrentErrors }) {
+function Summary({ language, theme, currentErrors, currentCar, values, currentReservation, createReservation, setCurrentErrors }) {
     let navigate = useNavigate();
     const [price, setPrice] = useState(0);
     const [days, setDays] = useState(1);
@@ -391,7 +392,17 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                 navigate("/success");
             }).catch((errors) => {
                 setCurrentErrors(errors.response.data.errors);
-                navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
+
+                Object.keys(errors.response.data.errors).map((key) => {
+                    if (key != "card_number" && key != "card_cvv") {
+                        navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
+                    }
+                })
+
+                setCurrentErrors({
+                    card_number: "Credit card number is not valid, please check for possible mistakes",
+                    card_cvv: "The provided CVV value does not match with card number and card validity field"
+                });
             });
         })
 
@@ -504,6 +515,12 @@ function Summary({ language, theme, currentCar, values, currentReservation, crea
                     </div>
                 </PaymentContainer>
 
+                <AlertContainer
+                    currentErrors={currentErrors}
+                    title="Ocorreu os seguintes erros com a reserva"
+                    onClose={() => setCurrentErrors([])}
+                />
+
             </Content>
         </Container>
     )
@@ -523,6 +540,7 @@ const mapStateToProps = (state) => {
         values: state.reservation.values,
         currentReservation: state.reservation.current,
         language: state.application.language,
+        currentErrors: state.reservation.errors,
     };
 };
 

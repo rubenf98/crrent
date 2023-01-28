@@ -19,6 +19,7 @@ class CreatePromotionsTable extends Migration
             $table->date('end');
             $table->string('value');
             $table->double('factor', 3, 1);
+            $table->integer('priority')->default(1);
             $table->timestamps();
         });
     }

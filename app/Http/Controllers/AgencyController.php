@@ -26,7 +26,13 @@ class AgencyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->has('name')) {
+            $agency = Agency::create([
+                'name' => $request->name
+            ]);
+        }
+
+        return new AgencyResource($agency);
     }
 
     /**

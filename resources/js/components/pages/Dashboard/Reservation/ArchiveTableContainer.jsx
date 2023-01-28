@@ -7,6 +7,7 @@ import StopPropagation from "../../../common/StopPropagation";
 import CardContainer from "../Common/CardContainer";
 import { Button, Col, DatePicker, Input, Row, Tag } from "antd";
 import { SearchIcon, UserIcon } from "../../../../icons";
+import { SmallSecundaryButton } from "../../../styles";
 
 const Container = styled.div`
     width: 100%;
@@ -90,13 +91,13 @@ function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete
                         <DatePicker value={filters.date} onChange={(e) => setFilters({ ...filters, date: e })} style={{ width: "100%" }} format="DD-MM-YYYY" placeholder="Data de reserva" suffix={<UserIcon />} />
                     </Col>
                     <Col md={6}>
-                        <Button
+                        <SmallSecundaryButton
                             onClick={() => handleFilters({ ...filters, date: filters.date && moment(filters.date).format('YYYY-MM-DD') })}
                             style={{ float: "right" }} type="primary"
                             loading={loading}
                         >
                             Pesquisar
-                        </Button>
+                        </SmallSecundaryButton>
                     </Col>
 
 

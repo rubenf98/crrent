@@ -17,6 +17,8 @@ import level from './redux/level'
 import client from './redux/client'
 import agency from './redux/agency'
 import comission from './redux/comission'
+import localization from './redux/localization'
+import insurance from './redux/insurance'
 
 const reducer = combineReducers({
     auth,
@@ -34,7 +36,9 @@ const reducer = combineReducers({
     level,
     client,
     agency,
-    comission
+    comission,
+    localization,
+    insurance
 })
 
 export default reducer

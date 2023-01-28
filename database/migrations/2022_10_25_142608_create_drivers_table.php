@@ -15,12 +15,12 @@ class CreateDriversTable extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->date('birthday');
-            $table->string('license');
-            $table->date('emission');
-            $table->date('validity');
-            $table->string('emission_place');
+            $table->string('name')->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('license')->nullable();
+            $table->date('emission')->nullable();
+            $table->date('validity')->nullable();
+            $table->string('emission_place')->nullable();
             $table->timestamps();
         });
     }

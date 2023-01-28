@@ -1,12 +1,24 @@
-import { Select } from 'antd';
-import React, { useEffect } from 'react'
+import { Divider, Input, Select, Space } from 'antd';
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
-import { fetchAgencies } from '../../../../redux/agency/actions';
+import { fetchAgencies, createAgency } from '../../../../redux/agency/actions';
+import { SmallSecundaryButton } from '../../../styles';
 
-function AgencyRemoteSelectContainer({ fetchAgencies, data, loading, value, onChange }) {
+function AgencyRemoteSelectContainer({ fetchAgencies, createAgency, data, loading, value, onChange }) {
+    const [name, setName] = useState(undefined);
+
     useEffect(() => {
         fetchAgencies()
     }, [])
+
+    const onNameChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const addItem = (e) => {
+        e.preventDefault();
+        createAgency({ name: name });
+    };
 
     return (
         <Select
@@ -16,9 +28,31 @@ function AgencyRemoteSelectContainer({ fetchAgencies, data, loading, value, onCh
             showSearch
             optionFilterProp="name"
             filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
+            dropdownRender={(menu) => (
+                <>
+                    {menu}
+                    <Divider
+                        style={{
+                            margin: '8px 0',
+                        }}
+                    />
+                    <Space
+                        style={{
+                            padding: '0 8px 4px',
+                        }}
+                    >
+                        <Input
+                            placeholder="Nome da agência"
+                            value={name}
+                            onChange={onNameChange}
+                        />
+                        <SmallSecundaryButton onClick={addItem}>Criar</SmallSecundaryButton>
+                    </Space>
+                </>
+            )}
         >
             {data.map((element) => (
-                <Select.Option key={element.id} value={element.id}>{element?.category?.title} ({element.registration})</Select.Option>
+                <Select.Option key={element.id} value={element.id}>{element.name}</Select.Option>
             ))}
         </Select>
     )
@@ -27,6 +61,7 @@ function AgencyRemoteSelectContainer({ fetchAgencies, data, loading, value, onCh
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchAgencies: (filters) => dispatch(fetchAgencies(filters)),
+        createAgency: (data) => dispatch(createAgency(data)),
     };
 };
 

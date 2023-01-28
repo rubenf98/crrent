@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { Button, maxWidthStyle } from '../../styles';
 import { Checkbox } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions, maxWidth } from '../../helper';
 import { fetchExtras } from "../../../redux/extra/actions";
+import { fetchInsurances } from "../../../redux/insurance/actions";
 import { connect } from "react-redux";
 
 const Container = styled.section`
@@ -23,7 +24,7 @@ const Container = styled.section`
 `;
 
 const Insurance = styled.div`
-    width: 50%;
+    width: 60%;
 
     @media (max-width: ${dimensions.xl}) {
         width: 60%;
@@ -36,7 +37,7 @@ const Insurance = styled.div`
 `;
 
 const Extra = styled.div`
-    width: 50%;
+    width: 40%;
 
     @media (max-width: ${dimensions.xl}) {
         width: 40%;
@@ -94,7 +95,6 @@ const Extra = styled.div`
 const PackageContainer = styled.div`
     display: flex;
     justify-content: flex-start;
-    align-items: center;
     flex-wrap: wrap;
     gap: 35px;
 
@@ -110,16 +110,17 @@ const PackageContainer = styled.div`
 
 
 const Package = styled.div`
-    padding: 30px 20px;
+    padding: 20px;
     box-sizing: border-box;
     opacity: ${props => props.active ? 1 : .5};
-    border: ${props => props.active ? "2px solid" : "0px"};
-    border-color: ${props => props.border};
+    border: 1px solid;
+    border-color: ${props => props.active ? props.border : "transparent"};
     box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
-    width: 60%;
+    width: 40%;
+    cursor: pointer;
 
     @media (max-width: ${dimensions.lg}) {
-        width: 60%;
+        width: 45%;
     }
 
     @media (max-width: ${dimensions.md}) {
@@ -137,14 +138,14 @@ const Package = styled.div`
     } 
 
     li {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     p {
-        font-size: 20px;
+        font-size: 14px;
         text-align: center;
         margin: auto;
-        margin-top: 5px;
+        margin-top: 10px;
         
     }
 
@@ -155,12 +156,23 @@ const Package = styled.div`
 
 
 
-function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
-    setExtraPrice, days }) {
+function Addons({ fetchInsurances, insurances, text, theme, fetchExtras, data, extras, setExtras, extraPrice,
+    setExtraPrice, days, language, activeInsurance, setActiveInsurance }) {
 
     useEffect(() => {
         fetchExtras();
+        fetchInsurances();
     }, [])
+
+    useEffect(() => {
+        if (insurances.length) {
+            var price = insurances.filter((insurance) => {
+                return insurance.id == 2;
+            })
+
+            setActiveInsurance(price[0]);
+        }
+    }, [insurances])
 
     function handleClick(value, extra) {
         const index = extras.indexOf(extra.id);
@@ -188,34 +200,21 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
 
 
                 <PackageContainer>
-                    {/* <Package>
-                        <h3>{text.insurance.basic.title}</h3>
-                        <ul>
-                            <li>{text.insurance.basic.items[0]}</li>
-                            <li>{text.insurance.basic.items[1]}</li>
-                        </ul>
-                        <Button disabled style={{ margin: "auto" }}>
-                            {text.insurance.button}
-                        </Button>
-                        <p>
-                            TOTAL 12.00€
-                        </p>
-                    </Package> */}
-
-                    <Package border={theme.primary} active>
-                        <h3>{text.insurance.premium.title}</h3>
-                        <ul>
-                            <li>{text.insurance.premium.items[0]}</li>
-                            <li>{text.insurance.premium.items[1]}</li>
-                            <li>{text.insurance.premium.items[2]}</li>
-                        </ul>
-                        <Button disabled type='default' style={{ margin: "auto" }} background={theme.primary}>
-                            {text.insurance.button}
-                        </Button>
-                        <p className='discount'>
-                            TOTAL 15.00€
-                        </p>
-                    </Package>
+                    {insurances.map((insurance) => (
+                        <Package key={insurance.id} border={theme.primary} active={activeInsurance.id == insurance.id} onClick={() => setActiveInsurance(insurance)}>
+                            <h3>{insurance.name[language]}</h3>
+                            <ul>
+                                <li>{insurance.description[language]}</li>
+                                <li>{insurance.description_one[language]}</li>
+                            </ul>
+                            <Button disabled style={{ margin: "auto" }}>
+                                {text.insurance.button}
+                            </Button>
+                            <p>
+                                {insurance.price}€ + ({parseFloat(insurance.price) ? "0.00" : "1500"}€) Security Deposit
+                            </p>
+                        </Package>
+                    ))}
                 </PackageContainer>
             </Insurance>
             <Extra>
@@ -243,6 +242,7 @@ function Addons({ text, theme, fetchExtras, data, extras, setExtras, extraPrice,
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchExtras: () => dispatch(fetchExtras()),
+        fetchInsurances: () => dispatch(fetchInsurances()),
     };
 };
 
@@ -250,6 +250,8 @@ const mapStateToProps = (state) => {
     return {
         data: state.extra.data,
         loading: state.extra.loading,
+        language: state.application.language,
+        insurances: state.insurance.data,
     };
 };
 

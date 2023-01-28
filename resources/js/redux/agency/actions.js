@@ -11,6 +11,11 @@ export const updateAgency = (id, data) => ({
     payload: axios.put(`${window.location.origin}/api/agencies/${id}`, data),
 })
 
+export const createAgency = (data) => ({
+    type: types.CREATE_AGENCY,
+    payload: axios.post(`${window.location.origin}/api/agencies`, data),
+})
+
 export const deleteAgency = id => ({
     type: types.DELETE_AGENCY,
     payload: axios.delete(`${window.location.origin}/api/agencies/${id}`),

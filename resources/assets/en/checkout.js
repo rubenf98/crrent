@@ -24,7 +24,7 @@ export const text = {
         button: "selected",
         basic: {
             title: "Basic",
-            items: ["CDW protection", "Subject to a minimum excess of 800€"]
+            items: ["CDW (Collision Damage Waiver) protection", "Subject to a excess / security deposit"]
         },
         premium: {
             title: "Premium",

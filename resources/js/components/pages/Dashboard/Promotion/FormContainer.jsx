@@ -57,7 +57,7 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
             var dates = [];
 
             values.dates.map((date) => {
-                dates.push(moment(date).format("DD-MM-YYYY"));
+                dates.push(moment(date).format("YYYY-MM-DD"));
             })
 
             values = { ...values, dates };
@@ -82,17 +82,18 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
                         onFinish={onFinish}
                         layout="vertical"
                     >
-                        <Instruction>Defina os fatores de multiplicação dos preços</Instruction>
+                        <Instruction>Defina os fatores de modificação dos preços</Instruction>
 
                         <Form.Item
                             name="dates"
                             rules={rules.name}
+                            label="Período"
                         >
                             <RangePicker
                                 format="DD-MM-YYYY"
                                 disabledDate={(currentDate) => {
                                     return currentDate && (
-                                        (currentDate < moment())
+                                        (currentDate < moment().startOf('day'))
                                     );
                                 }}
                                 style={{ width: "100%" }}
@@ -101,13 +102,13 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
 
                         <Row gutter={16}>
                             <Col span={12}>
-                                <Form.Item rules={rules.value} label="Valor promocional" name="value">
-                                    <Input placeholder="Ex. 40%" />
+                                <Form.Item rules={rules.value} label="Valor promocional (%)" name="value">
+                                    <InputNumber addonAfter="%" placeholder="Ex. 50" style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item rules={rules.factor} label="Factor de multiplicação" name="factor">
-                                    <InputNumber placeholder="Ex. 0.6" style={{ width: "100%" }} max={10} min={0} />
+                                <Form.Item rules={rules.factor} label="Nível de prioridade" name="priority">
+                                    <InputNumber style={{ width: "100%" }} min={1} />
                                 </Form.Item>
                             </Col>
                         </Row>

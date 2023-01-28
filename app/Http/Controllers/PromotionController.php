@@ -19,7 +19,6 @@ class PromotionController extends Controller
         return PromotionResource::collection(Promotion::all());
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -33,7 +32,8 @@ class PromotionController extends Controller
             'start' => $validator['dates'][0],
             'end' => $validator['dates'][1],
             'value' => $validator['value'],
-            'factor' => $validator['factor']
+            'factor' => $validator['factor'],
+            'priority' => $validator['priority']
         ]);
 
         return new PromotionResource($record);
@@ -47,7 +47,7 @@ class PromotionController extends Controller
      */
     public function show(Promotion $promotion)
     {
-        //
+        return new PromotionResource($promotion);
     }
 
     /**

@@ -14,7 +14,7 @@ class Reservation extends Model
 {
     protected $fillable = [
         'kms_pickup', 'kms_return', 'gas_pickup', 'gas_return',
-        'address', 'car_pref_id', 'card_id', 'car_price_per_day',  'car_id', 'client_id',
+        'address', 'car_pref_id', 'card_id', 'car_price_per_day',  'car_id', 'client_id', 'insurance_id',
         'days', 'car_price', 'token', 'price',
         'pickup_date', 'return_date', 'pickup_place', 'return_place',
         'flight', 'comission_id', 'notes'
@@ -234,6 +234,11 @@ class Reservation extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function insurance()
+    {
+        return $this->belongsTo(Insurance::class);
     }
 
     public function comission()

@@ -107,7 +107,8 @@ function FormContainer(props) {
                                             </Form.Item>
                                         </Col>
                                     ))}
-                                </Row>)}
+                                </Row>
+                            )}
                         </Form.List>
 
                         <Form.Item

@@ -6,6 +6,7 @@ import { MenuIcon } from '../../icons';
 import { connect } from "react-redux";
 import { handleMenu } from "../../redux/application/actions";
 import { setLanguage } from '../../redux/application/actions';
+import { Tooltip } from 'antd';
 
 const Container = styled.section`
     width: 100vw;
@@ -74,7 +75,7 @@ const ButtonContainer = styled.div`
     align-items: center;
     gap: 10px;
     font-size: 16px;
-    font-weight: bold;
+    
     color: white;
 
     @media (max-width: ${dimensions.md}) {
@@ -90,11 +91,12 @@ const ButtonContainer = styled.div`
         cursor: pointer;
         pointer-events: ${props => props.opacity ? "auto" : "none"};
         text-transform: uppercase;
+        font-weight: bold;
     }
 
     .phone {
         background-color: ${props => props.background};
-        padding: 12px 33px;
+        padding: 12px 30px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -103,14 +105,21 @@ const ButtonContainer = styled.div`
 
         p {
             margin: 0px;
+            font-weight: bold;
         }
 
-        img {
-            margin-right: 15px;
-            width: 20px;
-            height: 20px;
+        .phone-icon {
+            margin-right: 10px;
+            width: 15px;
+            height: 15px;
         }
 
+        .info {
+            margin-left: 25px;
+            cursor: pointer;
+            width: 15px;
+            height: 15px;
+        }
         
     }
     @media (max-width: ${dimensions.lg}) {
@@ -243,8 +252,11 @@ function Navbar({ theme, handleMenu, setLanguage,
                         {language}
                     </div>
                     <div className='phone'>
-                        <img src="/icon/phone.svg" alt="phone" />
+                        <img className='phone-icon' src="/icon/phone.svg" alt="phone" />
                         <p>+351 934 953 682</p>
+                        <Tooltip title={text.disclaimer}>
+                            <img className='info' src="/icon/info.svg" alt="info" />
+                        </Tooltip>
                     </div>
                 </ButtonContainer>
             </Content>

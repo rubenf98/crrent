@@ -30,12 +30,12 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
             dataIndex: 'end',
         },
         {
-            title: 'VALOR PROMOCIONAL',
+            title: 'FATOR MULTIPLICAÇÃO',
             dataIndex: 'value',
         },
         {
-            title: 'FATOR DE MULTIPLICAÇÃO',
-            dataIndex: 'factor',
+            title: 'NÍVEL DE PRIORIDADE',
+            dataIndex: 'priority',
         },
         {
             title: 'AÇÕES',

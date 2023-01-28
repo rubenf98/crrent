@@ -18,6 +18,12 @@ const Container = styled(Drawer)`
         display: flex;
         flex-direction: column;
     }
+
+    .disclaimer {
+        color: white;
+        font-size: 12px;
+        text-align: center;
+    }
 `;
 
 const LogoContainer = styled.div`
@@ -78,7 +84,7 @@ const SocialContainer = styled.div`
 const Phone = styled.div`
     color: ${props => props.color};
     padding: 10px 20px;
-    margin: 30px auto;
+    margin: 30px auto 0px auto;
     box-sizing: border-box;
     background-color: white;
     font-size: 20px;
@@ -101,6 +107,7 @@ const Phone = styled.div`
 `;
 
 function NavbarMenu({ theme, handleMenu, menuVisible }) {
+    const { text } = require('../../../assets/' + localStorage.language + "/navbar");
 
     const handleClick = (filter) => {
         if (pathname == "/") {
@@ -131,10 +138,10 @@ function NavbarMenu({ theme, handleMenu, menuVisible }) {
             </LogoContainer>
 
             <LinksContainer>
-                <p onClick={() => handleClick('header')}>home</p>
-                <p onClick={() => handleClick('garage')}>garagem</p>
-                <p onClick={() => handleClick('about')}>sobre nós</p>
-                <p onClick={() => handleClick('contact')}>contactos</p>
+                <p onClick={() => handleClick('header')}>{text.items[0]}</p>
+                <p onClick={() => handleClick('garage')}>{text.items[1]}</p>
+                <p onClick={() => handleClick('about')}>{text.items[2]}</p>
+                <p onClick={() => handleClick('contact')}>{text.items[3]}</p>
             </LinksContainer>
 
             <SocialContainer>
@@ -147,8 +154,9 @@ function NavbarMenu({ theme, handleMenu, menuVisible }) {
             <Phone color={theme.primary}>
                 <img src="/icon/phone_primary.svg" alt="phone" />
                 <p>+351 934 953 682</p>
-            </Phone>
 
+            </Phone>
+            <span className='disclaimer'>{text.disclaimer}</span>
         </Container>
     )
 }

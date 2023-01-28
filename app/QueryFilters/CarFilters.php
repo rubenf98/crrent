@@ -2,6 +2,7 @@
 
 namespace App\QueryFilters;
 
+
 use Cerbero\QueryFilters\QueryFilters;
 
 /**

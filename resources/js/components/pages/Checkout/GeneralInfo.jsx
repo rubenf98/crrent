@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled, { withTheme, keyframes } from "styled-components";
 import { FlightIcon } from '../../../icons';
 import { maxWidthStyle } from '../../styles';
+import { fetchLocalizations } from '../../../redux/localization/actions';
 import { Col, DatePicker, Divider, Form, Input, Radio, Row, Select, Space } from 'antd';
 import { dimensions } from '../../helper';
 import { connect } from 'react-redux';
@@ -232,11 +233,11 @@ function GeneralInfo(props) {
     const [customReturn, setCustomReturn] = useState(undefined);
     const [customReturnTax, setCustomReturnTax] = useState(undefined);
     const [mandatory, setMandatory] = useState(true)
-    
+
 
     const { text, theme, car, form, extras, tax, setTax,
-        taxPrice,
-        setTaxPrice, dates, setDates } = props;
+        taxPrice, language,
+        setTaxPrice, dates, setDates, localizations } = props;
 
     const rules = {
         date: [{ required: true, message: 'Please input the reservation date!' }],
@@ -246,6 +247,11 @@ function GeneralInfo(props) {
 
     var pickupCondition = customPickup != undefined && customPickup != "" && customPickupTax;
     var returnCondition = customReturn != undefined && customReturn != "" && customReturnTax;
+
+    useEffect(() => {
+        props.fetchLocalizations();
+    }, [])
+
 
     function returnID(itemName) {
         var id = undefined;
@@ -291,16 +297,16 @@ function GeneralInfo(props) {
     const handlePlaceSelection = (itemName, e) => {
         var id = returnID(itemName);
         if (itemName === "pickup_place") {
-            if (e === "loja") {
+            if (e === "Loja") {
                 setMandatory(false);
             } else {
                 setMandatory(true);
             }
         }
 
-
+        console.log(e);
         if (tax.includes(id)) {
-            if (e === "loja") {
+            if (e === "Loja") {
                 var price = extras.find(e => e.id === id).price;
                 const index = tax.indexOf(id);
 
@@ -374,8 +380,9 @@ function GeneralInfo(props) {
                                         </Row>
                                     </>
                                 )} placeholder={text.placeholder.pickup_place.label}>
-                                    <Select.Option value="aeroporto">{text.placeholder.pickup_place.options[0]}</Select.Option>
-                                    <Select.Option value="loja">{text.placeholder.pickup_place.options[1]}</Select.Option>
+                                    {localizations.map((localization) => (
+                                        <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
+                                    ))}
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -403,8 +410,9 @@ function GeneralInfo(props) {
                                         </Row>
                                     </>
                                 )} placeholder={text.placeholder.return_place.label}>
-                                    <Select.Option value="aeroporto">{text.placeholder.return_place.options[0]}</Select.Option>
-                                    <Select.Option value="loja">{text.placeholder.return_place.options[1]}</Select.Option>
+                                    {localizations.map((localization) => (
+                                        <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
+                                    ))}
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -450,7 +458,10 @@ function GeneralInfo(props) {
                                 </Row>
                             </>
                         )} placeholder={text.placeholder.pickup_place.label}>
-                            <Select.Option value="aeroporto">{text.placeholder.pickup_place.options[0]}</Select.Option>
+                            {localizations.map((localization) => (
+                                <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
+                            ))}
+
                             <Select.Option value="loja">{text.placeholder.pickup_place.options[1]}</Select.Option>
                         </StyledSelect>
                     </Form.Item>
@@ -473,8 +484,9 @@ function GeneralInfo(props) {
                                 </Space>
                             </>
                         )} placeholder={text.placeholder.return_place.label}>
-                            <Select.Option value="aeroporto">{text.placeholder.return_place.options[0]}</Select.Option>
-                            <Select.Option value="loja">{text.placeholder.return_place.options[1]}</Select.Option>
+                            {localizations.map((localization) => (
+                                <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
+                            ))}
                         </StyledSelect>
                     </Form.Item>
                 </Col>
@@ -492,7 +504,15 @@ const mapStateToProps = (state) => {
     return {
         extras: state.extra.data,
         blockedDates: state.block.selector,
+        language: state.application.language,
+        localizations: state.localization.data,
     };
 };
 
-export default connect(mapStateToProps, null)(withTheme(GeneralInfo));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchLocalizations: () => dispatch(fetchLocalizations()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GeneralInfo));

@@ -111,6 +111,8 @@ function Checkout({ language, fetchExtras, theme,
     const [tax, setTax] = useState([])
     const [taxPrice, setTaxPrice] = useState(0)
 
+    const [activeInsurance, setActiveInsurance] = useState({})
+
     const [price, setPrice] = useState(0)
 
     const [days, setDays] = useState(1)
@@ -144,7 +146,7 @@ function Checkout({ language, fetchExtras, theme,
             })
 
             message.error(messages.map((message) => (
-                <span>{message}</span>
+                <p>{message}</p>
             )));
 
             handleReturn();
@@ -217,7 +219,6 @@ function Checkout({ language, fetchExtras, theme,
         var taxPriceCopy = initData[1];
 
         if (time >= 9 && time <= 19) {
-
             if (taxCopy.includes(id)) {
                 const index = taxCopy.indexOf(id);
                 taxCopy.splice(index, 1);
@@ -237,7 +238,7 @@ function Checkout({ language, fetchExtras, theme,
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates });
+            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates, insurance_id: activeInsurance.id });
 
             var extraArray = [], taxArray = [];
 
@@ -253,7 +254,7 @@ function Checkout({ language, fetchExtras, theme,
 
             setCurrentReservationValues({
                 car: [[currentCar.title, price]],
-                insurance: [["Seguro", 15 + "€", 15 * days]],
+                insurance: [[language == "pt" ? "Seguro" : "Insurance", activeInsurance.price + "€", activeInsurance.price * days]],
                 extras: extraArray,
                 tax: taxArray,
             });
@@ -275,7 +276,7 @@ function Checkout({ language, fetchExtras, theme,
                 <h3>total</h3>
                 <p>{text.notice}</p>
                 <div className='price'>
-                    {getPriceRounded(price + extraPrice + taxPrice + (15 * days))}€
+                    {getPriceRounded(price + extraPrice + taxPrice + (activeInsurance.price * days))}€
                 </div>
             </Price>
             <Form
@@ -303,6 +304,7 @@ function Checkout({ language, fetchExtras, theme,
                             days={days}
                             extras={extras} setExtras={setExtras}
                             extraPrice={extraPrice} setExtraPrice={setExtraPrice}
+                            activeInsurance={activeInsurance} setActiveInsurance={setActiveInsurance}
                         />
                         <Client text={text} />
                         <Driver text={text} drivers={extras.includes(2) ? 2 : 1} />

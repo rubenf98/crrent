@@ -51,6 +51,8 @@ const RangePickerContainer = styled.div`
 
 const Search = styled.button`
     padding: 25px;
+    margin-bottom: 24px;
+    margin-left: 16px;
     box-sizing: border-box;
     background-color: ${props => props.background};
     color: white;
@@ -324,7 +326,7 @@ function Garage(props) {
                             <p className='total'>{text.from}</p>
                             <p className='warning'>{text.notice[0]} {days} {text.notice[1]}</p>
                         </div>
-                        <div className='value'>{getPriceRounded(pricing + (15 * days))}€</div>
+                        <div className='value'>{getPriceRounded(pricing)}€</div>
                     </div>
 
                     <Button onClick={() => handleCarSelection(info)} background={theme.primary}>

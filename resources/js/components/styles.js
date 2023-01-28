@@ -28,7 +28,7 @@ export const titleStyle = css`
 `;
 
 export const Button = styled.button`
-    background-color: ${props => props.background};
+    background-color: ${({ theme }) => theme.primary};
     padding: 12px 33px;
     box-sizing: border-box;
     color: white;
@@ -38,11 +38,10 @@ export const Button = styled.button`
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    border-color: ${props => props.background};
+    border-color: ${({ theme }) => theme.primary};
     cursor: pointer;
     transition: all .3s ease;
 
-    
 
     p, a {
         margin: 0px;
@@ -56,13 +55,11 @@ export const Button = styled.button`
     }
 
     &:hover {
-        color: ${props => props.background};
-        background-color: white;
-        border: 2px solid;
+        background-color: ${({ theme }) => theme.primaryHover};
+        border-color: ${({ theme }) => theme.primaryHover};
 
         p, a {
             margin: 0px;
-            color: ${props => props.background};
         }
     }
 
@@ -78,6 +75,12 @@ export const Button = styled.button`
     }
 `;
 
+export const SmallPrimaryButton = styled(Button)`
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+`;
 
 export const SecundaryButton = styled.button`
     background-color: white;
@@ -94,9 +97,8 @@ export const SecundaryButton = styled.button`
     transition: all .3s ease;
 
     &:hover {
-        color: white;
-        background-color:  ${({ theme }) => theme.primary};
-        border: 2px solid;
+        color: ${({ theme }) => theme.primaryHover};
+        border-color: ${({ theme }) => theme.primaryHover};
 
         p, a {
             margin: 0px;
@@ -110,6 +112,7 @@ export const SmallSecundaryButton = styled(SecundaryButton)`
     padding: 6px 12px;
     font-size: 14px;
     font-weight: bold;
+    text-transform: capitalize;
 `;
 
 export const ActionButton = styled.button`

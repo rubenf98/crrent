@@ -12,6 +12,7 @@ use App\Models\BlockDate;
 use App\Models\Car;
 use App\Models\Card;
 use App\Models\Client;
+use App\Models\Comission;
 use App\Models\Driver;
 use App\Models\Reservation;
 use App\QueryFilters\ReservationFilters;
@@ -73,6 +74,7 @@ class ReservationController extends Controller
             'days' => $validator['days'],
             'car_pref_id' => $validator['car_id'],
             'car_id' => $validator['car_id'],
+            'insurance_id' => $validator['insurance_id'],
             'card_id' => $card->id,
             'client_id' => $client->id,
         ]);
@@ -150,46 +152,65 @@ class ReservationController extends Controller
             ]);
         }
 
+        $client = Client::store($validator);
         $reservation->update([
             'pickup_date' => $validator['pickup_date'],
             'return_date' =>  $validator['return_date'],
             'pickup_place' => $validator['pickup_place'],
             'return_place' => $validator['return_place'],
             'flight' => Arr::get($validator, "flight"),
-            'address' => Arr::get($validator, "address"),
+            'address' => Arr::get($validator, "local_address"),
             'price' => $validator['price'],
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
             'car_id' => $validator['car_id'],
-
+            'insurance_id' => $validator['insurance_id'],
             'kms_pickup' => Arr::get($validator, "kms_pickup"),
             'kms_return' => Arr::get($validator, "kms_return"),
             'gas_pickup' => Arr::get($validator, "gas_pickup"),
             'gas_return' => Arr::get($validator, "gas_return"),
 
             'notes' => Arr::get($validator, "notes"),
+            'client_id' => $client->id,
         ]);
 
-        // if (Arr::has($validator, ['agency_name', 'agency_intermediary', 'agency_comission'])) {
-        //     if ($reservation->agency_id) {
-        //         $agency = Agency::find($reservation->agency_id);
-        //         $agency->update([
-        //             'agency_name' => $validator['agency_name'],
-        //             'agency_intermediary' => $validator['agency_intermediary'],
-        //             'agency_comission' => $validator['agency_comission'],
-        //         ]);
-        //     } else {
-        //         $agency = Agency::create([
-        //             'agency_name' => $validator['agency_name'],
-        //             'agency_intermediary' => $validator['agency_intermediary'],
-        //             'agency_comission' => $validator['agency_comission'],
-        //         ]);
-        //         $reservation->agency_id = $agency->id;
-        //         $reservation->save();
-        //     }
-        // }
+        if (Arr::has($validator, ['agency_id', 'intermediary', 'comission'])) {
+            if ($reservation->comission_id) {
+                $comission = Comission::find($reservation->comission_id);
+                $comission->update([
+                    'agency_id' => $validator['agency_id'],
+                    'intermediary' => $validator['intermediary'],
+                    'value' => $validator['value'],
+                ]);
+            } else {
+                $comission = Agency::create([
+                    'agency_id' => $validator['agency_id'],
+                    'intermediary' => $validator['intermediary'],
+                    'value' => $validator['value'],
+                ]);
+                $reservation->comission_id = $comission->id;
+                $reservation->save();
+            }
+        }
+
+
         $reservation->extras()->sync($validator['extras']);
+
+        $drivers = [];
+
+        foreach ($validator['drivers'] as $driverData) {
+            $driver = Driver::create([
+                'name' => Arr::get($driverData, 'name'),
+                'birthday' => array_key_exists('birthday', $driverData)  ? Carbon::parse($driverData['birthday']) : null,
+                'license' => Arr::get($driverData, 'license'),
+                'emission' => array_key_exists('emission', $driverData)  ? Carbon::parse($driverData['emission']) : null,
+                'validity' => array_key_exists('validity', $driverData)  ? Carbon::parse($driverData['validity']) : null,
+                'emission_place' => Arr::get($driverData, 'emission_place'),
+            ]);
+            array_push($drivers, $driver->id);
+        }
+        $reservation->drivers()->sync($drivers);
         DB::commit();
         return new ReservationResource($reservation);
     }

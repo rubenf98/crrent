@@ -1,3 +1,4 @@
+import { Tooltip } from 'antd';
 import React from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions } from '../helper';
@@ -101,6 +102,13 @@ const Item = styled.div`
         white-space: nowrap;
         width: 50%;
         margin: 5px 0px;
+
+        .info {
+            margin-left: 15px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
     }
 
     @media (max-width: ${dimensions.lg}) {
@@ -160,7 +168,17 @@ function Footer({ theme }) {
                 <InfoContainer color={theme.primary}>
                     {text.title}
 
-                    <ItemContainer field={text.items[0].name} value={text.items[0].value} />
+                    <ItemContainer
+                        field={text.items[0].name}
+                        value={(
+                            <>
+                                {text.items[0].value}
+                                <Tooltip title={text.disclaimer}>
+                                    <img className='info' src="/icon/info_black.svg" alt="info" />
+                                </Tooltip>
+                            </>
+                        )}
+                    />
                     <ItemContainer field={text.items[1].name} value={text.items[1].value} />
                     <ItemContainer field={text.items[2].name} value={text.items[2].value} />
                     <ItemContainer field={text.items[3].name} value={text.items[3].value} />

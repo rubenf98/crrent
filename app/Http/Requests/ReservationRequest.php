@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Car;
 use App\Models\CarCategory;
 use App\Models\Extra;
+use App\Models\Insurance;
 use App\Models\Promotion;
 use App\Models\Reservation;
 use Carbon\Carbon;
@@ -37,7 +38,7 @@ class ReservationRequest extends FormRequest
         $days = Reservation::getNumDays($from, $now);
         $car = $carCategory->getAvailableCar($from, $now);
         // $out = new ConsoleOutput();
-        
+
         $value = 0;
         // $out->writeln($days);
 
@@ -94,11 +95,13 @@ class ReservationRequest extends FormRequest
 
         // $out->writeln($extraPrice);
 
+        $insurance = Insurance::find($this->insurance_id);
+
 
         $this->merge([
             'pickup_date' => $this->date[0],
             'return_date' => $this->date[1],
-            'price' => round(($carPrice + $extraPrice) + (15 * $days), 2),
+            'price' => round(($carPrice + $extraPrice) + ($insurance->price * $days), 2),
             'days' => $days,
             'car_id' => $car ? $car->id : 0,
             'car_price' => round($carPrice, 2),
@@ -131,6 +134,7 @@ class ReservationRequest extends FormRequest
             'return_place' => 'required|string',
             'flight' => 'nullable|string',
             'car_id' =>  'required|integer|exists:cars,id',
+            'insurance_id' => 'required|integer|exists:insurances,id',
             'price' => 'required|numeric',
             'days' => 'required|integer|min:1',
             'car_price' => 'required|numeric',
@@ -159,6 +163,7 @@ class ReservationRequest extends FormRequest
             'drivers.*.validity.after' => 'The drivers\' license validity should be after the rental date',
             'drivers.*.emission.before' => 'The drivers\' license emission should be before the rental date',
             'drivers.*.birthday.before' => 'Driver\'s should be at least 21 years old',
+            'card_number.*' => 'Cartão inválido'
         ];
     }
 

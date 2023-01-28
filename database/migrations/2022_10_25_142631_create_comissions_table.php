@@ -17,7 +17,7 @@ class CreateComissionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger("agency_id");
             $table->string('intermediary')->nullable();
-            $table->double('value', 5, 2)->default(0);
+            $table->string('value')->default("0");
             $table->timestamps();
 
             $table->foreign("agency_id")->references("id")->on("agencies")->onDelete("cascade");

@@ -35,7 +35,7 @@ export function getPromotions(promotions, start, days) {
     var init = moment(start);
     var min = undefined;
     var max = undefined;
-    var factors = Array(days).fill(1);
+    var factors = Array(days).fill({ value: 1, priority: 1 });
     var index = 0;
     while (index < factors.length) {
 
@@ -44,7 +44,9 @@ export function getPromotions(promotions, start, days) {
             max = moment(promotion.end).endOf('day');
 
             if (init.isBetween(min, max)) {
-                factors[index] = promotion.factor;
+                if (factors[index].priority <= promotion.priority) {
+                    factors[index] = { value: promotion.factor, priority: promotion.priority };
+                }
             }
         })
 
@@ -54,8 +56,12 @@ export function getPromotions(promotions, start, days) {
             break;
         }
     }
-
-    return factors;
+    var response = [];
+    factors.map((factor) => {
+        response.push(factor.value);
+    })
+    
+    return response;
 }
 
 export function getCarPrice(prices, days, factors) {
@@ -65,14 +71,14 @@ export function getCarPrice(prices, days, factors) {
             value = price.price;
         }
     })
-
+    
     var array = Array(days).fill(value);
     var carPrice = 0;
 
     array.map((day, index) => {
         carPrice += day * factors[index];
     });
-
+    
     return carPrice;
 }
 

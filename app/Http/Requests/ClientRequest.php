@@ -28,15 +28,14 @@ class ClientRequest extends FormRequest
         return [
             'name' => 'required|string',
             'cc' => 'required|string',
-            'nif' => 'required|string',
-            'address' => 'required|string',
-            'country' => 'required|string',
-            'postal_code' => 'required|string',
+            'nif' => 'nullable|string',
+            'address' => 'nullable|string',
+            'country' => 'nullable|string',
+            'postal_code' => 'nullable|string',
             'email' => 'required|string',
             'phone' => 'required|string',
-            'local_address' => 'nullable|string',
             'company' => 'nullable|string',
-            'notes' => 'nullable|string',
+            'client_notes' => 'nullable|string',
         ];
     }
 

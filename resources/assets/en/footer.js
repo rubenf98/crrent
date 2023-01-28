@@ -6,5 +6,6 @@ export const text = {
         { name: "Email:", value: "info@cr-rent.com" },
         { name: "Opening hours:", value: (<span>Everyday from<br /> 9am to 7pm</span>) },
     ],
-    button: "let's talk"
+    button: "let's talk",
+    disclaimer: "Call to national mobile network"
 } 

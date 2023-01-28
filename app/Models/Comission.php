@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comission extends Model
 {
     use HasFactory;
-    protected $fillable = ['intermediary', 'value'];
+    protected $fillable = ['intermediary', 'value', 'agency_id'];
 
     public function agency()
     {

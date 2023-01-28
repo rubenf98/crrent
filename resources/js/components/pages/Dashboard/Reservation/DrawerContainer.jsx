@@ -114,63 +114,75 @@ function DrawerContainer(props) {
 
                     </FieldsContainer>
                 </Col>
-                <Col xs={24}>
+                <Col xs={12}>
                     <Section>Preçário</Section>
-                    <FieldsContainer width="25%">
+                    <FieldsContainer width="50%">
                         <FieldContainer name="Valor aluguer" value={data.car_price + "€"} />
                         <FieldContainer name="Preço unitário" value={data.car_price_per_day + "€"} />
                         <FieldContainer name="Valor extras/seguro" value={data.price - data.car_price + "€"} />
                         <FieldContainer name="Total" value={data.price + "€"} />
                     </FieldsContainer>
                 </Col>
+
+                <Col xs={12}>
+                    <Section>Comissão</Section>
+                    <FieldsContainer width="50%">
+                        <FieldContainer name="Agência" value={EmptyField(data?.comission?.agency?.name)} />
+                        <FieldContainer name="Reservado por" value={EmptyField(data?.comission?.intermediary)} />
+                        <FieldContainer name="Valor comissão" value={EmptyField(data?.comission?.value)} />
+                    </FieldsContainer>
+                </Col>
                 <Col xs={24}>
                     <Section>Cliente</Section>
                     <FieldsContainer width="25%">
-                        <FieldContainer name="Agência" value={data.client?.company} />
+                        <FieldContainer name="Agência" value={EmptyField(data.client?.company)} />
                         <FieldContainer name="Nome" value={data.client?.name} />
                         <FieldContainer name="Telefone" value={data.client?.phone} />
                         <FieldContainer name="Email" value={data.client?.email} />
 
-                        <FieldContainer name="ID/Passporte" value={data.client?.cc} />
-                        <FieldContainer name="NIF" value={data.client?.nif} />
-                        <FieldContainer name="País" value={data.client?.country} />
-                        <FieldContainer name="Morada" value={data.client?.address} />
-                        
-                        <FieldContainer name="Código Postal" value={data.client?.postal_code} />
+                        <FieldContainer name="ID/Passporte" value={EmptyField(data.client?.cc)} />
+                        <FieldContainer name="NIF" value={EmptyField(data.client?.nif)} />
+                        <FieldContainer name="País" value={EmptyField(data.client?.country)} />
+                        <FieldContainer name="Morada" value={EmptyField(data.client?.address)} />
+
+                        <FieldContainer name="Código Postal" value={EmptyField(data.client?.postal_code)} />
                         <FieldContainer name="Número de voo" value={EmptyField(data.flight)} />
                         <FieldContainer width="50%" name="Morada de estadia" value={EmptyField(data.address)} />
                     </FieldsContainer>
                 </Col>
 
                 <Col span={24}>
-                    <Section>Condutores</Section>
+                    <Section>Condutor(es)</Section>
                     <Row type="flex" dire>
 
                         {data.drivers && data.drivers.map((driver, index) => (
                             <Col key={"driver-" + index} span={12}>
-                                <h2>{index == 0 ? "Condutor Principal" : "Condutor Adicional"}</h2>
+                                <h2>{index == 0 ? "Principal" : "Adicional"}</h2>
                                 <FieldsContainer width="50%">
-                                    <FieldContainer name="Nome" value={driver.name} />
-                                    <FieldContainer name="Data de nascimento" value={driver.birthday} />
-                                    <FieldContainer name="Número carta de condução" value={driver.license} />
-                                    <FieldContainer name="Data de emissão" value={driver.emission} />
-                                    <FieldContainer name="Data de validade" value={driver.validity} />
-                                    <FieldContainer name="Local de emissão" value={driver.emission_place} />
+                                    <FieldContainer name="Nome" value={EmptyField(driver.name)} />
+                                    <FieldContainer name="Data de nascimento" value={EmptyField(driver.birthday)} />
+                                    <FieldContainer name="Número carta de condução" value={EmptyField(driver.license)} />
+                                    <FieldContainer name="Data de emissão" value={EmptyField(driver.emission)} />
+                                    <FieldContainer name="Data de validade" value={EmptyField(driver.validity)} />
+                                    <FieldContainer name="Local de emissão" value={EmptyField(driver.emission_place)} />
                                 </FieldsContainer>
                             </Col>
                         ))}
                     </Row>
                 </Col>
 
-                <Col span={24}>
-                    <Section>Extras/Taxas</Section>
-                    <ul>
-                        {data.extras && data.extras.map((extra, index) => (
-                            <li key={"extra-" + index} >
-                                {extra.name}
-                            </li>
-                        ))}
-                    </ul>
+                <Col style={{ marginBottom: "50px" }} span={24}>
+                    <Section>Extras e/ou taxas</Section>
+                    {data.extras && data.extras.length ?
+                        <ul>
+                            {data.extras.map((extra, index) => (
+                                <li key={"extra-" + index} >
+                                    {extra.name}
+                                </li>
+                            ))}
+                        </ul>
+                        : <p>N/A</p>
+                    }
                 </Col>
                 <Download onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
 

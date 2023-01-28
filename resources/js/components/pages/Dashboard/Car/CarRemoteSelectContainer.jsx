@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { connect } from "react-redux";
 import { fetchCars } from '../../../../redux/car/actions';
 
-function LevelRemoteSelectContainer({ fetchCars, data, loading, value, onChange }) {
+function CarRemoteSelectContainer({ fetchCars, data, loading, value, onChange }) {
     useEffect(() => {
         fetchCars()
     }, [])
@@ -37,4 +37,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LevelRemoteSelectContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CarRemoteSelectContainer);

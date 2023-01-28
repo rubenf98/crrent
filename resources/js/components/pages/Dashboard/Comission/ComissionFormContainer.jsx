@@ -4,6 +4,7 @@ import { Modal, Row, Form, Button, Input, Col, InputNumber } from 'antd';
 import { connect } from "react-redux";
 import { updateComission, createComission } from "../../../../redux/comission/actions"
 import AgencyRemoteSelectContainer from "../Agency/AgencyRemoteSelectContainer";
+import ComissionFormTemplate from "./ComissionFormTemplate";
 
 
 const ButtonContainer = styled(Row)`
@@ -21,14 +22,7 @@ const Instruction = styled.h2`
     margin-top: 50px;
 `;
 
-const rules = {
-    required: [
-        {
-            required: true,
-            message: 'O campo é obrigatório',
-        },
-    ],
-};
+
 
 function ComissionFormContainer(props) {
     const [form] = Form.useForm();
@@ -77,23 +71,7 @@ function ComissionFormContainer(props) {
                     >
                         <Instruction>Detalhes de comissão</Instruction>
 
-                        <Row gutter={16} type="flex" justify="bottom">
-                            <Col span={8}>
-                                <Form.Item rules={rules.required} label="Hotel / Agência" name="agency_id">
-                                    <AgencyRemoteSelectContainer />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item rules={rules.required} label="Reservado por" name="intermediary">
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item rules={rules.required} label="Valor comissão" name="value">
-                                    <InputNumber addonAfter="€" style={{ width: "100%" }} />
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <ComissionFormTemplate />
 
 
                         <ButtonContainer type="flex" justify="end">

@@ -18,6 +18,14 @@ class PromotionRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'factor' => $this->value / 100,
+            'value' => $this->value . "%",
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,6 +38,7 @@ class PromotionRequest extends FormRequest
             'dates.*' => 'required|date',
             'factor' => 'required|numeric',
             'value' => 'required|string',
+            'priority' => 'required|integer',
         ];
     }
 

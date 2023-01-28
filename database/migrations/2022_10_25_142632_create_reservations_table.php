@@ -24,7 +24,7 @@ class CreateReservationsTable extends Migration
             $table->string('return_place');
             $table->string('flight')->nullable();
             $table->string('address')->nullable();
-            $table->double('price', 5, 2);
+            $table->double('price', 6, 2);
             $table->double('car_price', 5, 2);
             $table->double('car_price_per_day', 5, 2);
 
@@ -37,12 +37,14 @@ class CreateReservationsTable extends Migration
             $table->text('notes')->nullable();
             $table->unsignedBigInteger("card_id")->nullable();
             $table->unsignedBigInteger("comission_id")->nullable();
+            $table->unsignedBigInteger("insurance_id")->nullable();
             $table->unsignedBigInteger("car_id")->nullable();
             $table->unsignedBigInteger("car_pref_id")->nullable();
             $table->unsignedBigInteger("client_id")->nullable();
             $table->datetime('confirmed_at')->nullable();
             $table->timestamps();
 
+            $table->foreign("insurance_id")->references("id")->on("insurances")->onDelete("set null");
             $table->foreign("car_pref_id")->references("id")->on("cars")->onDelete("set null");
             $table->foreign("car_id")->references("id")->on("cars")->onDelete("set null");
             $table->foreign("comission_id")->references("id")->on("comissions")->onDelete("set null");

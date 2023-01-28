@@ -8,9 +8,12 @@ use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ComissionController;
+use App\Http\Controllers\CreateExternalReservationController;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\GlobalParameterController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
@@ -44,6 +47,7 @@ Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@s
 
 Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
 
+Route::post('external-reservation', CreateExternalReservationController::class);
 
 Route::get('/reservations-today', 'App\Http\Controllers\GetTodayReservationsController');
 Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsController');
@@ -69,3 +73,5 @@ Route::apiResource('blockedCars', BlockedCarController::class);
 Route::apiResource('globalParameters', GlobalParameterController::class);
 Route::apiResource('agencies', AgencyController::class);
 Route::apiResource('comissions', ComissionController::class);
+Route::apiResource('localizations', LocalizationController::class);
+Route::apiResource('insurances', InsuranceController::class);

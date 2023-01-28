@@ -61,6 +61,12 @@ export const createReservation = (data) => ({
     payload: axios.post(`${window.location.origin}/api/reservations`, data),
 });
 
+export const createExternalReservation = (data) => ({
+    type: types.CREATE_EXTERNAL_RESERVATION,
+    payload: axios.post(`${window.location.origin}/api/external-reservation`, data),
+});
+
+
 
 export const setCurrentReservation = (data) => ({
     type: types.SET_CURRENT_RESERVATION,

@@ -15,7 +15,7 @@ class PromotionSeeder extends Seeder
     public function run()
     {
         $extras = [
-            ['start' => '2022-11-01', 'end' => '2022-12-14', 'factor' => .6, 'value' => "40%"],
+            ['start' => '2022-11-01', 'end' => '2022-12-14', 'factor' => .6, 'value' => "60%"],
         ];
 
         foreach ($extras as $item) {

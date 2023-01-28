@@ -9,16 +9,25 @@ export const initialState = {
 export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.FETCH_AGENCIES}_PENDING`:
+        case `${types.CREATE_AGENCY}_PENDING`:
         case `${types.UPDATE_AGENCY}_PENDING`:
             return {
                 ...state,
                 loading: true,
             };
 
+        case `${types.CREATE_AGENCY}_PENDING`:
         case `${types.UPDATE_AGENCY}_REJECTED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.CREATE_AGENCY}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: [...state.data, action.payload.data.data]
             };
 
 

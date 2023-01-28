@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Cerbero\QueryFilters\FiltersRecords;
+use Illuminate\Support\Arr;
 
 class Client extends Model
 {
@@ -20,26 +21,27 @@ class Client extends Model
             $client->update([
                 'name' => $validator['name'],
                 'cc' => $validator['cc'],
-                'nif' => $validator['nif'],
-                'address' => $validator['address'],
-                'country' => $validator['country'],
-                'postal_code' => $validator['postal_code'],
+                'nif' => Arr::get($validator, 'nif'),
+                'address' => Arr::get($validator, 'address'),
+                'country' => Arr::get($validator, 'country'),
+                'postal_code' => Arr::get($validator, 'postal_code'),
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
+                'notes' => Arr::get($validator, 'client_notes'),
             ]);
         } else {
             $client = self::create([
                 'name' => $validator['name'],
                 'cc' => $validator['cc'],
-                'nif' => $validator['nif'],
-                'address' => $validator['address'],
-                'country' => $validator['country'],
-                'postal_code' => $validator['postal_code'],
+                'nif' => Arr::get($validator, 'nif'),
+                'address' => Arr::get($validator, 'address'),
+                'country' => Arr::get($validator, 'country'),
+                'postal_code' => Arr::get($validator, 'postal_code'),
                 'email' => $validator['email'],
                 'phone' => $validator['phone'],
+                'notes' => Arr::get($validator, 'client_notes'),
             ]);
         }
-
 
         return $client;
     }
