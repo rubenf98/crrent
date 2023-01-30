@@ -11,6 +11,7 @@ use Cerbero\QueryFilters\FiltersRecords;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Reservation extends Model
 {
@@ -30,6 +31,17 @@ class Reservation extends Model
         'price' => 'decimal:2',
         'created_at' => 'string',
     ];
+
+    public function generateInvoice()
+    {
+        $reservation = $this;
+        $pdf = PDF::loadView('emails.invoice', compact('reservation'));
+
+        Storage::put("invoice_" . $this->token . ".pdf", $pdf->output());
+        $content = $pdf->download('invoice.pdf');
+
+        return $content;
+    }
 
     public function generateDoc()
     {

@@ -36,10 +36,14 @@ class ReservationEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
+
         return $this->view('emails.reservation')
             ->subject('Nova reserva CR Rent')
             ->attach(storage_path("/app/" . $this->token . ".pdf"), [
                 'as' => $this->token . '.pdf',
+                'mime' => 'application/pdf',
+            ])->attach(storage_path("/app/invoice_" . $this->token . ".pdf"), [
+                'as' => 'invoice_' . $this->token . '.pdf',
                 'mime' => 'application/pdf',
             ]);
     }

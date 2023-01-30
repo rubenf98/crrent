@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { dimensions } from "../../helper";
@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { fetchTodayReservations, fetchNextReservations } from "../../../redux/reservation/actions";
 import NextTableContainer from "./Homepage/NextTableContainer";
 import InitReservation from "./Homepage/InitReservation";
+import DrawerContainer from "./Reservation/DrawerContainer";
 
 const Container = styled.div`
     h1 {
@@ -28,22 +29,30 @@ const TodayContainer = styled.section`
 
 
 function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, nextData }) {
+    const [current, setCurrent] = useState(undefined);
+    const [drawerState, setDrawerState] = useState(0);
 
     useEffect(() => {
         fetchTodayReservations();
         fetchNextReservations();
     }, [])
 
+    const handleRowClick = (row) => {
+        setCurrent(row.id);
+        setDrawerState(1);
+    }
+
 
     return (
         <Container>
             <h1>Bem vindo de volta ao painel de controlo</h1>
+            <DrawerContainer currentId={current} drawerState={drawerState} setDrawerState={setDrawerState} />
             <TodayContainer>
-                <TodayTableContainer title="Levantamentos Hoje" data={todayData.pickup} />
-                <TodayTableContainer title="Devoluções Hoje" data={todayData.return} />
+                <TodayTableContainer handleRowClick={handleRowClick} title="Levantamentos Hoje" data={todayData.pickup} />
+                <TodayTableContainer handleRowClick={handleRowClick} title="Devoluções Hoje" data={todayData.return} />
             </TodayContainer>
 
-            <NextTableContainer title="Devoluções Hoje" data={nextData} />
+            <NextTableContainer handleRowClick={handleRowClick} title="Devoluções Hoje" data={nextData} />
 
             <InitReservation />
 

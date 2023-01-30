@@ -185,13 +185,15 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 errors: action.payload,
             };
-
+        case `${types.DOWNLOAD_INVOICE}_PENDING`:
         case `${types.DOWNLOAD_CONTRACT}_PENDING`:
             return {
                 ...state,
                 loadingDownload: true,
             };
-
+            
+        case `${types.DOWNLOAD_INVOICE}_REJECTED`:
+        case `${types.DOWNLOAD_INVOICE}_FULFILLED`:
         case `${types.DOWNLOAD_CONTRACT}_REJECTED`:
         case `${types.DOWNLOAD_CONTRACT}_FULFILLED`:
             return {

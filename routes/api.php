@@ -10,6 +10,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ComissionController;
 use App\Http\Controllers\CreateExternalReservationController;
 use App\Http\Controllers\ExtraController;
+use App\Http\Controllers\FetchInvoicePdf;
 use App\Http\Controllers\GlobalParameterController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\LevelController;
@@ -58,6 +59,7 @@ Route::get('/reservations-archive', 'App\Http\Controllers\GetReservationArchive'
 Route::put('/car-status/{car}', 'App\Http\Controllers\CarStatusController');
 Route::get('/car-availability', 'App\Http\Controllers\GetCarAvailability');
 
+Route::post('download/invoice', FetchInvoicePdf::class);
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
 
 Route::put('globalParameters', UpdateGlobalParametersController::class);

@@ -83,6 +83,24 @@ export const setCurrentErrors = (data) => ({
     payload: data,
 });
 
+
+export const downloadInvoice = (token, ext = "pdf") => ({
+    type: types.DOWNLOAD_INVOICE,
+    payload: axios({
+        url: `${window.location.origin}/api/download/invoice`,
+        data: { token: token },
+        method: "POST",
+        responseType: "blob",
+    }).then(
+        response => {
+            download(response, token + '.' + ext)
+        },
+        error => {
+            return error.data;
+        }
+    ),
+});
+
 export const downloadContract = (token, ext = "pdf") => ({
     type: types.DOWNLOAD_CONTRACT,
     payload: axios({

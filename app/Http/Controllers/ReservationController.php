@@ -107,6 +107,7 @@ class ReservationController extends Controller
         $reservation->extras()->attach($validator["extras"]);
         $reservation->drivers()->attach($drivers);
         HandleReservation::dispatch($reservation);
+        $reservation->generateInvoice();
         Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
         DB::commit();
 

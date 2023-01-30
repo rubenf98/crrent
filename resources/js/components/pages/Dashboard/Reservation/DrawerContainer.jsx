@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Col, Drawer, Row } from 'antd';
 import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
-import { downloadContract, fetchReservation } from '../../../../redux/reservation/actions';
+import { downloadContract, fetchReservation, downloadInvoice } from '../../../../redux/reservation/actions';
 import moment from "moment";
 
 const Section = styled.h3`
@@ -112,6 +112,8 @@ function DrawerContainer(props) {
 
                         <FieldContainer name="Viatura" value={data.car?.category?.title + " (" + data.car?.registration + ")"} />
 
+                        <FieldContainer width="100%" name="Notas" value={EmptyField(data.notes)} />
+
                     </FieldsContainer>
                 </Col>
                 <Col xs={12}>
@@ -185,6 +187,7 @@ function DrawerContainer(props) {
                     }
                 </Col>
                 <Download onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
+                <Download onClick={() => props.downloadInvoice(data.token)}><p>Resumo</p><DownloadIcon /></Download>
 
             </Row>
         </Drawer>
@@ -193,6 +196,7 @@ function DrawerContainer(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        downloadInvoice: (token) => dispatch(downloadInvoice(token)),
         downloadContract: (token) => dispatch(downloadContract(token)),
         fetchReservation: (id) => dispatch(fetchReservation(id)),
     };

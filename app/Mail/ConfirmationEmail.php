@@ -30,6 +30,9 @@ class ConfirmationEmail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('emails.confirmation')->subject('Finish your reservation');
+        return $this->view('emails.confirmation')->subject('Finish your reservation')->attach(storage_path("/app/" . $this->token . ".pdf"), [
+            'as' => 'invoice_' . $this->token . '.pdf',
+            'mime' => 'application/pdf',
+        ]);
     }
 }

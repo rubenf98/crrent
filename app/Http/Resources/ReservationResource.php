@@ -22,6 +22,7 @@ class ReservationResource extends JsonResource
             'return_date' => $this->return_date,
             'pickup_place' => $this->pickup_place,
             'return_place' => $this->return_place,
+            'token' => $this->token,
             'flight' => $this->flight,
             'local_address' => $this->address,
             'price' => $this->price,

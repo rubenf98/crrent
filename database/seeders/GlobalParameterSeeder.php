@@ -23,7 +23,7 @@ class GlobalParameterSeeder extends Seeder
             ['name' => 'Limite para futuras reservas na plataforma', 'code' => 'max_date', 'value' => '01-01-2024'],
             ['name' => 'Número máximo de dias para uma reserva', 'code' => 'max_days', 'value' => "31"],
 
-            ['name' => 'Reservas na plataforma', 'code' => 'enable_reservations', 'value' => "true"],
+            ['name' => 'Reservas na plataforma', 'code' => 'enable_reservations', 'value' => "1"],
 
         ];
         foreach ($items as $item) {
