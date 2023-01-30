@@ -17,7 +17,7 @@ class LocalizationResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->getTranslations('name'),
-            'price' => $this->price,
+            'price' => floatval($this->price),
             'visible' => $this->visible,
         ];
     }

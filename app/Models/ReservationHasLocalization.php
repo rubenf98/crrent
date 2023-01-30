@@ -13,4 +13,6 @@ class ReservationHasLocalization extends Model
         'localization_id',
         'price',
     ];
+
+    
 }
