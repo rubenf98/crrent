@@ -17,6 +17,11 @@ class Localization extends Model
         'visible',
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'visible' => 'integer',
+    ];
+
     public function reservations()
     {
         return $this->belongsToMany(Reservation::class, 'reservation_has_localizations')->withPivot('price');
