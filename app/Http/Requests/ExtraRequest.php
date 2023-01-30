@@ -27,7 +27,8 @@ class ExtraRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
+            'namept' => 'required|string',
+            'nameen' => 'required|string',
             'type' => 'required|string',
             'price' => 'required|numeric',
         ];

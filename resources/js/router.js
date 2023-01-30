@@ -24,6 +24,7 @@ import Confirmation from "./components/pages/Checkout/Confirmation";
 import CarDetail from "./components/pages/Dashboard/CarDetail/CarDetail";
 import Client from "./components/pages/Dashboard/Client/Client";
 import ClientDetail from "./components/pages/Dashboard/ClientDetail/ClientDetail";
+import GlobalParameter from "./components/pages/Dashboard/GlobalParameter/GlobalParameter";
 
 export const history = createBrowserHistory();
 
@@ -39,6 +40,7 @@ function Router() {
                         <DashboardLayout><Dashboard /></DashboardLayout>
                     }
                 />
+                <Route path="/painel/configuracao" element={<DashboardLayout><GlobalParameter /></DashboardLayout>} />
                 <Route path="/painel/clientes" element={<DashboardLayout><Client /></DashboardLayout>} />
                 <Route path="/painel/clientes/:id" element={<DashboardLayout><ClientDetail /></DashboardLayout>} />
                 <Route path="/painel/datas" element={<DashboardLayout><Block /></DashboardLayout>} />

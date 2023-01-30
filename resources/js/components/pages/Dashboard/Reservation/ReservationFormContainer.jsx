@@ -12,6 +12,8 @@ import { getDaysDifference } from "../../../functions";
 import ClientFormTemplate from "../Client/ClientFormTemplate";
 import ComissionFormTemplate from "../Comission/ComissionFormTemplate";
 import DriverFormTemplate from "../Driver/DriverFormTemplate";
+import LocalizationRemoteSelectContainer from "../Localization/LocalizationRemoteSelectContainer";
+import { formWidth } from "../../../helper";
 
 const ButtonContainer = styled(Row)`
     padding: 30px 0px 10px 0;
@@ -53,7 +55,7 @@ function ReservationFormContainer(props) {
     const [form] = Form.useForm();
     const { loading,
         visible,
-        current, extras, edit } = props;
+        current, extras, edit, localizations } = props;
 
     const handleModalClose = () => {
         form.resetFields();
@@ -117,6 +119,8 @@ function ReservationFormContainer(props) {
                 gas_return: current.gas_return,
                 extras: initExtras,
                 drivers: initDrivers,
+                localizations_0: current?.localizations[0]?.id,
+                localizations_1: current?.localizations[1]?.id,
 
                 agency_id: current?.comission?.agency_id,
                 intermediary: current?.comission?.intermediary,
@@ -140,7 +144,7 @@ function ReservationFormContainer(props) {
         <Container>
             <div>
                 <Modal
-                    width={1280}
+                    width={formWidth}
                     onCancel={handleModalClose}
                     open={visible}
                     footer={null}
@@ -154,24 +158,35 @@ function ReservationFormContainer(props) {
                         <Instruction>Detalhes da reserva</Instruction>
 
                         <Row gutter={16} type="flex" align="bottom">
-                            <Col span={6}>
+                            <Col span={12}>
                                 <Form.Item rules={rules.required} label="Data de entrega" name="pickup_date">
                                     <DatePicker minuteStep={15} showTime format="DD-MM-YYYY HH:mm" onChange={(e) => handleDateChange(e, "pickup_date")} allowClear={false} style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
+                            <Col span={12}>
+                                <Form.Item rules={rules.required} label="Data de devolução" name="return_date">
+                                    <DatePicker minuteStep={15} showTime format="DD-MM-YYYY HH:mm" onChange={(e) => handleDateChange(e, "return_date")} allowClear={false} style={{ width: "100%" }} />
+                                </Form.Item>
+                            </Col>
+
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Local de entrega" name="pickup_place">
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>
-                                <Form.Item rules={rules.required} label="Data de devolução" name="return_date">
-                                    <DatePicker minuteStep={15} showTime format="DD-MM-YYYY HH:mm" onChange={(e) => handleDateChange(e, "return_date")} allowClear={false} style={{ width: "100%" }} />
+                                <Form.Item rules={rules.required} label="Taxa de entrega" name="localizations_0">
+                                    <LocalizationRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Local de devolução" name="return_place">
                                     <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item rules={rules.required} label="Taxa de devolução" name="localizations_1">
+                                    <LocalizationRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
 
@@ -231,6 +246,7 @@ function ReservationFormContainer(props) {
                                     <ExtraRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
+
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Veículo" name="car_id">
                                     <CarRemoteSelectContainer />

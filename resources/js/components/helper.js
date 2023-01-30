@@ -8,7 +8,7 @@ export const dimensions = {
     "xl": "1200px",
     "xxl": "1600px",
 };
-
+export const formWidth = "1280px";
 export const dateFormat = "YYYY-MM-DD";
 export const dateTimeFormat = dateFormat + " HH:mm";
 

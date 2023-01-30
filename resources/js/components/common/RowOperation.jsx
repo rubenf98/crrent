@@ -27,6 +27,7 @@ const RowOperation = ({ onDeleteConfirm, children, onUpdateClick, additionalOpti
             {onDeleteConfirm && (
                 <Menu.Item key="delete" >
                     <Popconfirm
+                        style={{ padding: "10px", boxSizing: "border-box" }}
                         title="De certeza que quer apagar este registo?"
                         okText="Sim"
                         cancelText="Não"

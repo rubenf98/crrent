@@ -1,8 +1,12 @@
 import { Alert } from 'antd'
 import React from 'react'
 import styled from "styled-components";
+import { maxWidth } from '../helper';
 
 const Container = styled(Alert)`
+    max-width: ${maxWidth};
+    margin: 10px auto 50px auto !important;
+
     .ant-alert-message {
         font-size: 18px;
         margin: 10px 0px;

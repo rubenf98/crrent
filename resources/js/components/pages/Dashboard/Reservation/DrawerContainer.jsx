@@ -177,7 +177,7 @@ function DrawerContainer(props) {
                         <ul>
                             {data.extras.map((extra, index) => (
                                 <li key={"extra-" + index} >
-                                    {extra.name}
+                                    {extra.name.pt}
                                 </li>
                             ))}
                         </ul>

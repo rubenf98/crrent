@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Table from "../../../common/TableContainer";
 import moment from "moment";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
-import { Row, Tag } from "antd";
+import { Col, Input, Row, Tag } from "antd";
 import CardContainer from "../Common/CardContainer";
 import { Link } from "react-router-dom";
+import { SmallPrimaryButton, SmallSecundaryButton } from "../../../styles";
+import { SearchIcon } from "../../../../icons";
 
 const Container = styled.section`
     width: 100%;
@@ -27,7 +29,23 @@ const Action = styled.button`
 
 `;
 
-function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleUpdateClick, setCarStatus }) {
+const FilterContainer = styled(Row)`
+    width: 100%;
+
+    input::placeholder {
+        color: #000;
+
+        
+    }
+
+    svg {
+        height: 15px;
+        width: auto;
+    }
+`;
+
+function TableContainer({ loading, data, meta, handlePageChange, onDelete, handleUpdateClick, setCarStatus, handleCreateClick, handleFilters }) {
+    const [filters, setFilters] = useState({ registration: undefined, level: undefined, category: undefined });
 
     const columns = [
         {
@@ -74,6 +92,37 @@ function TableContainer({ loading, data, meta, handlePageChange, onDelete, handl
 
     return (
         <Container>
+            <FilterContainer type="flex" justify="space-between" style={{ margin: "30px 0px" }} gutter={16}>
+                <Col md={6}>
+                    <Input allowClear value={filters.registration} onChange={(e) => setFilters({ ...filters, registration: e.target.value })} placeholder="Matrícula" suffix={<SearchIcon />} />
+                </Col>
+                <Col md={6}>
+                    <Input allowClear value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })} placeholder="Categoria" suffix={<SearchIcon />} />
+                </Col>
+                <Col md={6}>
+                    <Input allowClear value={filters.level} onChange={(e) => setFilters({ ...filters, level: e.target.value })} placeholder="Gama" suffix={<SearchIcon />} />
+                </Col>
+
+                <Col md={6}>
+                    <SmallPrimaryButton
+                        onClick={handleCreateClick}
+                        style={{ float: "right", marginLeft: "10px" }} type="primary"
+                        loading={loading}
+                    >
+                        Adicionar
+                    </SmallPrimaryButton>
+
+                    <SmallSecundaryButton
+                        onClick={() => handleFilters({ ...filters, date: filters.date && moment(filters.date).format('YYYY-MM-DD') })}
+                        style={{ float: "right" }} type="primary"
+                        loading={loading}
+                    >
+                        Pesquisar
+                    </SmallSecundaryButton>
+
+
+                </Col>
+            </FilterContainer>
 
             <Table
                 loading={loading}

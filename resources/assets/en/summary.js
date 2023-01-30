@@ -21,6 +21,7 @@ export const text = {
     button: ["pay at pickup", "pay now"],
     privacy: ["I've read, understood and agree with the", "Privacy policy"],
     conditions: ["I confirm that I've read understood and agree with", "CR Rent terms and conditions"],
+    disabled: "Accept the privacy policy and CR Rent terms and conditions",
     form: {
         card_number: "Card number",
         validity: "Card validity",

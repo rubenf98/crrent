@@ -6,6 +6,7 @@ use App\Models\Car;
 use App\Models\CarCategory;
 use App\Models\Extra;
 use App\Models\Insurance;
+use App\Models\Localization;
 use App\Models\Promotion;
 use App\Models\Reservation;
 use Carbon\Carbon;
@@ -97,11 +98,18 @@ class ReservationRequest extends FormRequest
 
         $insurance = Insurance::find($this->insurance_id);
 
+        $localizations = Localization::whereIn('id', $this->localizations)->get();
+        $localizationPrice = 0;
+
+        foreach ($localizations as $localization) {
+            $localizationPrice += $localization->price;
+        }
+
 
         $this->merge([
             'pickup_date' => $this->date[0],
             'return_date' => $this->date[1],
-            'price' => round(($carPrice + $extraPrice) + ($insurance->price * $days), 2),
+            'price' => round(($carPrice + $extraPrice + $localizationPrice) + ($insurance->price * $days), 2),
             'days' => $days,
             'car_id' => $car ? $car->id : 0,
             'car_price' => round($carPrice, 2),
@@ -142,6 +150,9 @@ class ReservationRequest extends FormRequest
 
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',
+
+            'localizations' => 'required|array|size:2',
+            'localizations.*' => 'integer|exists:localizations,id',
 
             'drivers' => 'required|array|min:1',
             'drivers.*.name' => 'required|string',

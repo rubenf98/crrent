@@ -17,6 +17,7 @@ use App\Http\Controllers\LocalizationController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UpdateGlobalParametersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,8 @@ Route::put('/car-status/{car}', 'App\Http\Controllers\CarStatusController');
 Route::get('/car-availability', 'App\Http\Controllers\GetCarAvailability');
 
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
+
+Route::put('globalParameters', UpdateGlobalParametersController::class);
 
 Route::apiResource('cars', CarController::class);
 Route::apiResource('car-categories', CarCategoryController::class);

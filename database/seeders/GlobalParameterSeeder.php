@@ -20,10 +20,10 @@ class GlobalParameterSeeder extends Seeder
             ['name' => 'Hora mínima para aplicar taxa', 'code' => 'min_tax_time', 'value' => "9"],
             ['name' => 'Hora máxima para aplicar taxa', 'code' => 'max_tax_time', 'value' => "20"],
 
-            ['name' => 'Data limite para reservas', 'code' => 'max_date', 'value' => '01-01-2024'],
-            ['name' => 'Máximo número de dias para uma reservas', 'code' => 'max_days', 'value' => "31"],
+            ['name' => 'Limite para futuras reservas na plataforma', 'code' => 'max_date', 'value' => '01-01-2024'],
+            ['name' => 'Número máximo de dias para uma reserva', 'code' => 'max_days', 'value' => "31"],
 
-            ['name' => 'Reservas bloqueadas na plataforma', 'code' => 'enable_reservations', 'value' => "true"],
+            ['name' => 'Reservas na plataforma', 'code' => 'enable_reservations', 'value' => "true"],
 
         ];
         foreach ($items as $item) {

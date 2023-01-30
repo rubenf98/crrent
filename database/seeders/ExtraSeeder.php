@@ -15,18 +15,55 @@ class ExtraSeeder extends Seeder
     public function run()
     {
         $extras = [
-            ['name' => 'Cobertura vidros e pneus', 'price' => 5, 'type' => 'day'],
-            ['name' => 'Condutor adicional', 'price' => 10, 'type' => 'uni'],
-            ['name' => 'Cadeira de bébé', 'price' => 4, 'type' => 'day'],
-            ['name' => 'Assento de criança', 'price' => 2.5, 'type' => 'day'],
-            ['name' => 'Taxa de entrega', 'price' => 20, 'type' => 'uni', "visible" => false],
-            ['name' => 'Entrega fora do horário de expediente', 'price' => 15, 'type' => 'uni', "visible" => false],
-            ['name' => 'Taxa de devolução', 'price' => 20, 'type' => 'uni', "visible" => false],
-            ['name' => 'Levantamento fora do horário de expediente', 'price' => 15, 'type' => 'uni', "visible" => false],
+            [
+                'name' => [
+                    'en' => "Windows and tyres cover",
+                    'pt' => "Cobertura vidros e pneus"
+                ], 'price' => 5, 'type' => 'day', "visible" => true
+            ],
+            [
+                'name' => [
+                    'en' => "Additional driver",
+                    'pt' => "Condutor adicional"
+                ], 'price' => 10, 'type' => 'uni', "visible" => true
+            ],
+            [
+                'name' => [
+                    'en' => "Baby seat",
+                    'pt' => "Cadeira de bébé"
+                ], 'price' => 4, 'type' => 'day', "visible" => true
+            ],
+            [
+                'name' => [
+                    'en' => "Child seat",
+                    'pt' => "Assento de criança"
+                ], 'price' => 2.5, 'type' => 'day', "visible" => true
+            ],
+            [
+                'name' => [
+                    'en' => "Return outside office hours",
+                    'pt' => "Entrega fora do horário de expediente"
+                ], 'price' => 15, 'type' => 'uni', "visible" => false
+            ],
+            [
+                'name' => [
+                    'en' => "Pickup outside office hours",
+                    'pt' => "Levantamento fora do horário de expediente"
+                ], 'price' => 15, 'type' => 'uni', "visible" => false
+            ],
         ];
 
         foreach ($extras as $item) {
-            Extra::create($item);
+            Extra::create([
+                'name' => [
+                    'en' => $item["name"]["en"],
+                    'pt' => $item["name"]["pt"]
+                ],
+                'type' => $item["type"],
+                'price' => $item["price"],
+                'visible' => $item["visible"],
+
+            ]);
         }
     }
 }

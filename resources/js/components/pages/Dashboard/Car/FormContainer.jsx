@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Modal, Row, Form, Button, Input, Col, InputNumber, Select, Switch } from 'antd';
 import { connect } from "react-redux";
@@ -6,6 +6,7 @@ import TextArea from "antd/lib/input/TextArea";
 import Checkbox from "antd/es/checkbox";
 import { createCar, updateCar } from "../../../../redux/car/actions";
 import LevelRemoteSelectContainer from "../Level/LevelRemoteSelectContainer";
+import { formWidth } from "../../../helper";
 
 
 const ButtonContainer = styled(Row)`
@@ -44,7 +45,7 @@ const rules = {
     ],
 };
 
-function FormContainer({ loading, edit, handleClose, updateCar, visible, current, createCar }) {
+function FormContainer({ loading, edit, handleClose, updateCar, visible, current, createCar, handleCreateClick }) {
     const [form] = Form.useForm();
 
     const handleModalClose = () => {
@@ -68,32 +69,15 @@ function FormContainer({ loading, edit, handleClose, updateCar, visible, current
         if (visible && edit) {
             if (edit) {
                 form.setFieldsValue({
-                    title: current.title,
-                    subtitle: current.subtitle,
+                    kms: current?.kms,
                     registration: current.registration,
-                    description_pt: current.description?.pt,
-                    description_en: current.description?.en,
-                    level_id: current.level?.id,
-                    gas: current.gas,
-                    shift_mode: current.shift_mode,
-                    people: current.people,
-                    doors: current.doors,
-                    air: current.air,
+                    car_category_id: current?.category?.id,
                 })
             } else {
                 form.setFieldsValue({
-                    title: undefined,
-                    subtitle: undefined,
+                    kms: undefined,
                     registration: undefined,
-                    description_pt: undefined,
-                    description_en: undefined,
-                    level_id: undefined,
-                    gas: undefined,
-                    shift_mode: undefined,
-                    people: undefined,
-                    doors: undefined,
-                    checked: undefined,
-                    air
+                    car_category_id: undefined,
                 })
             }
 
@@ -104,7 +88,7 @@ function FormContainer({ loading, edit, handleClose, updateCar, visible, current
         <Container>
             <div>
                 <Modal
-                    width={720}
+                    width={formWidth}
                     onCancel={handleModalClose}
                     open={visible}
                     footer={null}
@@ -115,71 +99,23 @@ function FormContainer({ loading, edit, handleClose, updateCar, visible, current
                         onFinish={onFinish}
                         layout="vertical"
                     >
-                        <Instruction>{edit ? "Edite os campos do carro" : "Introduza um novo carro na plataforma"}</Instruction>
+                        <Instruction>{edit ? "Edite os campos do veículo" : "Introduza um novo carro na plataforma"}</Instruction>
                         <Row gutter={16}>
-                            <Col span={8}>
-                                <Form.Item rules={rules.title} name="title" label="Título do  do carro">
-                                    <Input placeholder="Título do carro" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item rules={rules.subtitle} name="subtitle" label="Subtítulo do carro">
-                                    <Input placeholder="Subtítulo do carro" />
-                                </Form.Item>
-                            </Col>
+
                             <Col span={8}>
                                 <Form.Item rules={rules.registration} name="registration" label="Matrícula">
-                                    <Input placeholder="Matrícula" />
+                                    <Input />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
-                                <Form.Item rules={rules.description} name="description_pt" label="Descrição do carro (PT)">
-                                    <TextArea placeholder="Descrição do carro (PT)" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item rules={rules.description} name="description_en" label="Descrição do carro (EN)">
-                                    <TextArea placeholder="Descrição do carro (EN)" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item rules={rules.level} label="Grupo" name="level_id">
+                            <Col span={8}>
+                                <Form.Item rules={rules.level} label="Categoria" name="car_category_id">
                                     <LevelRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
-                            <Col span={6}>
-                                <Form.Item rules={rules.gas} label="Combustível" name="gas">
-                                    <Select placeholder="Sistema de combustível">
-                                        <Option value="gasoline">Gasolina</Option>
-                                        <Option value="diesel">Diesel</Option>
-                                        <Option value="electric">Elétrico</Option>
-                                        <Option value="hybrid">Híbrido</Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
-                                <Form.Item rules={rules.shift_mode} label="Mudanças" name="shift_mode">
-                                    <Select placeholder="Sistema de mudanças">
-                                        <Option value="manual">Manuais</Option>
-                                        <Option value="automatic">Automático</Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
 
-
-                            <Col span={12}>
-                                <Form.Item rules={rules.people} name="people" label="Capacidade de pessoas">
-                                    <InputNumber style={{ width: "100%" }} placeholder="Capacidade de pessoas" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item rules={rules.door} name="doors" label="Nº de portas">
-                                    <InputNumber style={{ width: "100%" }} placeholder="Nº de portas" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item valuePropName="checked" rules={rules.air} name="air" label="A/C">
-                                    <Switch />
+                            <Col span={8}>
+                                <Form.Item rules={rules.people} name="kms" label="Quilometragem">
+                                    <InputNumber style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
 

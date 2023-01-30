@@ -22,9 +22,9 @@ export const updateExtra = (id, data) => ({
     payload: axios.put(`${window.location.origin}/api/extras/${id}`, data),
 });
 
-export const createExtra = (id, data) => ({
+export const createExtra = (data) => ({
     type: types.CREATE_EXTRA,
-    payload: axios.post(`${window.location.origin}/api/extras/${id}`, data),
+    payload: axios.post(`${window.location.origin}/api/extras`, data),
 });
 
 

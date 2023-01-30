@@ -66,13 +66,15 @@ function FormContainer({ loading, edit, handleClose, updateExtra, visible, curre
             if (edit) {
                 form.setFieldsValue({
                     price: current.price,
-                    name: current.name,
+                    namept: current.name.pt,
+                    nameen: current.name.en,
                     type: current.type,
                 })
             } else {
                 form.setFieldsValue({
                     price: undefined,
-                    name: undefined,
+                    nameen: undefined,
+                    namept: undefined,
                     type: undefined,
                 })
             }
@@ -97,11 +99,18 @@ function FormContainer({ loading, edit, handleClose, updateExtra, visible, curre
                     >
                         <Instruction>{edit ? "Altere os valores do extra" : "Introduca um novo extra"}</Instruction>
 
-                        <Form.Item rules={rules.name} name="name" label="Título do extra">
-                            <Input disabled={edit} placeholder="Título do extra" />
-                        </Form.Item>
 
                         <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item rules={rules.name} name="namept" label="Título (PT)">
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item rules={rules.name} name="nameen" label="Título (EN)">
+                                    <Input />
+                                </Form.Item>
+                            </Col>
                             <Col span={12}>
                                 <Form.Item rules={rules.type} label="Tipologia" name="type">
                                     <Select>

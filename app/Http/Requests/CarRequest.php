@@ -18,18 +18,6 @@ class CarRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
-    {
-
-        $this->merge([
-            'description' => [
-                'en' => $this->description_en,
-                'pt' => $this->description_pt,
-            ],
-            'air' => $this->air ? 1 : 0
-        ]);
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -38,18 +26,9 @@ class CarRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string',
-            'subtitle' => 'nullable|string',
-            'registration' => 'nullable|unique:cars,registration',
-            'level_id' => 'required|integer|exists:levels,id',
-            'description' => 'nullable|array',
-            'description.en' => 'required|string',
-            'description.pt' => 'required|string',
-            'air' => 'required|integer',
-            'people' => 'required|integer',
-            'doors' => 'required|integer',
-            'shift_mode' => 'required|string',
-            'gas' => 'required|string',
+            'kms' => 'nullable|numeric',
+            'registration' => 'required|unique:cars,registration',
+            'car_category_id' => 'required|integer|exists:car_categories,id',
         ];
     }
 

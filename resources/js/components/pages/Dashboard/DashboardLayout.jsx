@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components';
 import PrivateRoute from '../../common/PrivateRoute';
 import moment from "moment";
@@ -7,6 +7,8 @@ import ThemeContainer from '../../ThemeContainer';
 import { Menu } from 'antd';
 import { AirIcon, MailIcon } from '../../../icons';
 import { Link } from 'react-router-dom';
+import { fetchGlobalParameters } from '../../../redux/globalParameter/actions';
+import { connect } from 'react-redux';
 
 const Container = styled.div`
     width: 100%;
@@ -83,8 +85,11 @@ const Logo = styled.img`
 
 `;
 
-function DashboardLayout({ children }) {
+function DashboardLayout({ children, fetchGlobalParameters }) {
 
+    useEffect(() => {
+        fetchGlobalParameters();
+    }, [])
 
     const items = [
         {
@@ -124,7 +129,12 @@ function DashboardLayout({ children }) {
         {
             label: <Link to="/painel/clientes">Clientes</Link>,
             key: 'clientes',
-            icon: <img className='icon' src="/icon/dashboard/price.svg" />
+            icon: <img className='icon' src="/icon/dashboard/client.svg" />
+        },
+        {
+            label: <Link to="/painel/configuracao">Configuração</Link>,
+            key: 'configuracao',
+            icon: <img className='icon' src="/icon/dashboard/config.svg" />
         },
 
 
@@ -160,4 +170,10 @@ function DashboardLayout({ children }) {
     )
 }
 
-export default DashboardLayout;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchGlobalParameters: () => dispatch(fetchGlobalParameters())
+    };
+};
+
+export default connect(null, mapDispatchToProps)(DashboardLayout);

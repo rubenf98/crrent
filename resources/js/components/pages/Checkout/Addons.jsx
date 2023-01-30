@@ -156,7 +156,7 @@ const Package = styled.div`
 
 
 
-function Addons({ fetchInsurances, insurances, text, theme, fetchExtras, data, extras, setExtras, extraPrice,
+function Addons({ fetchInsurances, car, insurances, text, theme, fetchExtras, data, extras, setExtras, extraPrice,
     setExtraPrice, days, language, activeInsurance, setActiveInsurance }) {
 
     useEffect(() => {
@@ -211,7 +211,7 @@ function Addons({ fetchInsurances, insurances, text, theme, fetchExtras, data, e
                                 {text.insurance.button}
                             </Button>
                             <p>
-                                {insurance.price}€ + ({parseFloat(insurance.price) ? "0.00" : "1500"}€) Security Deposit
+                                {insurance.price}€ + ({parseFloat(insurance.price) ? "0.00" : car.caution}€) Security Deposit
                             </p>
                         </Package>
                     ))}
@@ -225,7 +225,7 @@ function Addons({ fetchInsurances, insurances, text, theme, fetchExtras, data, e
                         {parseInt(extra.visible) ?
                             <div className='checkbox-container'>
                                 <Checkbox checked={extras.includes(extra.id)} onChange={(e) => handleClick(e.target.checked, extra)}>
-                                    {text.extras[extra.name]}
+                                    {extra.name[language]}
                                 </Checkbox>
                                 <p>{extra.price}€ <span className='opacity'>/ <span className='hide'>{text.prices.per}</span> {text.prices[extra.type]}</span></p>
                             </div>

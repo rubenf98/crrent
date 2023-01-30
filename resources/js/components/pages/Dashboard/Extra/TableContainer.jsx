@@ -21,6 +21,7 @@ function TableContainer({ loading, data, onDelete, handleUpdateClick, setVisible
         {
             title: 'NOME',
             dataIndex: 'name',
+            render: (record) => record.pt,
         },
         {
             title: 'TIPOLOGIA',

@@ -60,7 +60,7 @@ export function getPromotions(promotions, start, days) {
     factors.map((factor) => {
         response.push(factor.value);
     })
-    
+
     return response;
 }
 
@@ -71,18 +71,18 @@ export function getCarPrice(prices, days, factors) {
             value = price.price;
         }
     })
-    
+
     var array = Array(days).fill(value);
     var carPrice = 0;
 
     array.map((day, index) => {
         carPrice += day * factors[index];
     });
-    
+
     return carPrice;
 }
 
-export function isDateDisabled(current, blockedDates, currentDates, index, registration = true) {
+export function isDateDisabled(current, blockedDates, currentDates, index, maximumValues, registration = true) {
     if (!registration) {
         return true;
     }
@@ -104,7 +104,7 @@ export function isDateDisabled(current, blockedDates, currentDates, index, regis
                     condition = currentDates[0];
                 }
 
-                tooLate = condition ? current.diff(currentDates[0], 'days') > 48 : current.diff(moment(), 'days') > 31;
+                tooLate = condition ? current.diff(currentDates[0], 'days') > maximumValues[0] : current.isAfter(maximumValues[1], 'days');
                 tooEarly = condition ?
                     moment(current).startOf('day').diff(moment(currentDates[0]).startOf('day'), 'days') < 2
                     : moment(current).startOf('day').diff(moment().startOf('day'), 'days') < 2;

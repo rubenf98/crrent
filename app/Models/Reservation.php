@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
 use Cerbero\QueryFilters\FiltersRecords;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Reservation extends Model
@@ -20,7 +22,7 @@ class Reservation extends Model
         'flight', 'comission_id', 'notes'
     ];
 
-    use HasFactory, FiltersRecords;
+    use HasFactory, FiltersRecords, SoftDeletes;
 
     protected $casts = [
         'car_price' => 'decimal:2',
@@ -48,6 +50,7 @@ class Reservation extends Model
 
                 $this->fillGeneralInfo($fpdi);
                 $this->fillClientInfo($fpdi);
+                $this->fillCarInfo($fpdi);
                 $drivers = $this->drivers()->get();
                 $start = 0;
                 foreach ($drivers as $driver) {
@@ -69,9 +72,14 @@ class Reservation extends Model
 
         $fpdi->Text(92, 242, $this->price . chr(128));
 
-        $fpdi->Text(68, 206.5, $this->days);
-        $fpdi->Text(78, 206.5, 15 . chr(128));
-        $fpdi->Text(92, 206.5, ($this->days * 15) . chr(128));
+        if ($this->insurance_id == 2) {
+            $fpdi->Text(68, 206.5, $this->days);
+            $fpdi->Text(78, 206.5, 15 . chr(128));
+            $fpdi->Text(92, 206.5, ($this->days * 15) . chr(128));
+        } else {
+            $fpdi->Text(92, 234.5, $this->car->category->level->min_caution . chr(128));
+        }
+
 
         $others = 0;
         $tax_pickup = 0;
@@ -94,21 +102,24 @@ class Reservation extends Model
                 $fpdi->Text(92, 218, ($this->days * $extra->price) . chr(128));
             }
 
-            if ($extra->id == 5 || $extra->id == 6) {
+            if ($extra->id == 6) {
                 $tax_pickup += $extra->price;
             }
 
-            if ($extra->id == 7 || $extra->id == 8) {
+            if ($extra->id == 5) {
                 $tax_return += $extra->price;
             }
         }
 
+        $localizations = $this->localizations;
+
+        $tax_pickup += $localizations[0]->price;
         if ($tax_pickup) {
             $fpdi->Text(92, 221.5, $tax_pickup . chr(128));
         }
-
+        $tax_return += $localizations[1]->price;
         if ($tax_return) {
-            $fpdi->Text(92, 225.5, $tax_return . chr(128));
+            $fpdi->Text(92, 225.5, $tax_return  . chr(128));
         }
 
         if ($others) {
@@ -157,6 +168,35 @@ class Reservation extends Model
 
         $fpdi->Text(50, 104, utf8_decode($client->local_address));
     }
+
+    public function fillCarInfo($fpdi)
+    {
+        $title = explode(" ", $this->car->category->title, 2);
+        $fpdi->Text(28, 168, $title[0]);
+        $fpdi->Text(90, 168, $title[1]);
+
+        $registration = explode("-", $this->car->registration);
+        $fpdi->Text(38, 173, $registration[0]);
+        $fpdi->Text(48, 173, $registration[1]);
+        $fpdi->Text(58, 173, $registration[2]);
+
+        $fpdi->Text(90, 173, $this->car->category->level->code);
+        $chars = $this->car->category->charateristics;
+
+        $gas = "";
+        foreach ($chars as $char) {
+            if ($char->name == 'gas') {
+                $gas = $char->pivot->value;
+            }
+        }
+        $fpdi->Text(170, 168, $gas);
+
+        $fpdi->Text(48, 178, $this->kms_pickup);
+        $fpdi->Text(48, 183, $this->kms_return);
+        $fpdi->Text(170, 173, $this->gas_pickup);
+        $fpdi->Text(170, 178, $this->gas_return);
+    }
+
 
     public function fillGeneralInfo($fpdi)
     {
@@ -214,6 +254,11 @@ class Reservation extends Model
     public function extras()
     {
         return $this->belongsToMany(Extra::class, 'reservation_has_extras');
+    }
+
+    public function localizations()
+    {
+        return $this->belongsToMany(Localization::class, 'reservation_has_localizations')->withPivot('price');
     }
 
     public function drivers()

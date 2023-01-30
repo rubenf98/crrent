@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LocalizationRequest;
 use App\Http\Resources\LocalizationResource;
 use App\Models\Localization;
+use App\QueryFilters\LocalizationFilters;
 use Illuminate\Http\Request;
 
 class LocalizationController extends Controller
@@ -13,9 +15,9 @@ class LocalizationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(LocalizationFilters $filters)
     {
-        return LocalizationResource::collection(Localization::all());
+        return LocalizationResource::collection(Localization::filterBy($filters)->get());
     }
 
     /**
@@ -24,9 +26,19 @@ class LocalizationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LocalizationRequest $request)
     {
-        //
+        $validator = $request->validated();
+        $record = Localization::create([
+            'name' => [
+                'pt' => $validator['namept'],
+                'en' => $validator['nameen'],
+            ],
+            'price' => $validator['price'],
+            'visible' => $validator['visible'],
+        ]);
+
+        return new LocalizationResource($record);
     }
 
     /**
@@ -41,26 +53,25 @@ class LocalizationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Localization  $localization
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Localization $localization)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Localization  $localization
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Localization $localization)
+    public function update(LocalizationRequest $request, Localization $localization)
     {
-        //
+        $validator = $request->validated();
+        $localization->update([
+            'name' => [
+                'pt' => $validator['namept'],
+                'en' => $validator['nameen'],
+            ],
+            'price' => $validator['price'],
+            'visible' => $validator['visible'],
+        ]);
+
+        return new LocalizationResource($localization);
     }
 
     /**

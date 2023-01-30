@@ -43,6 +43,7 @@ class CreateReservationsTable extends Migration
             $table->unsignedBigInteger("client_id")->nullable();
             $table->datetime('confirmed_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign("insurance_id")->references("id")->on("insurances")->onDelete("set null");
             $table->foreign("car_pref_id")->references("id")->on("cars")->onDelete("set null");

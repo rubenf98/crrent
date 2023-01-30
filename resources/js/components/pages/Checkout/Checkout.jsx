@@ -1,4 +1,4 @@
-import { Form, message } from 'antd';
+import { Form } from 'antd';
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
@@ -10,11 +10,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import GeneralInfo from './GeneralInfo';
 import { connect } from "react-redux";
 import moment from "moment";
-import { setCurrentReservation, setCurrentReservationValues } from "../../../redux/reservation/actions";
+import { setCurrentErrors, setCurrentReservation, setCurrentReservationValues } from "../../../redux/reservation/actions";
 import { setCurrentPromotion } from "../../../redux/promotion/actions";
 import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
 import { getCarPrice, getPriceRounded, getPromotions, getDaysDifference } from '../../functions';
+import AlertContainer from '../../common/AlertContainer';
 
 
 const Container = styled.section`
@@ -98,7 +99,7 @@ const Price = styled.div`
     }
 `;
 
-function Checkout({ language, fetchExtras, theme,
+function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCurrentErrors,
     currentCar, setCurrentReservation, setCurrentReservationValues, extrasData,
     fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
     const { text } = require('../../../../assets/' + language + "/checkout");
@@ -110,6 +111,9 @@ function Checkout({ language, fetchExtras, theme,
 
     const [tax, setTax] = useState([])
     const [taxPrice, setTaxPrice] = useState(0)
+
+    const [localization, setLocalization] = useState([undefined, undefined])
+    const [localizationPrice, setLocalizationPrice] = useState([0, 0])
 
     const [activeInsurance, setActiveInsurance] = useState({})
 
@@ -131,32 +135,18 @@ function Checkout({ language, fetchExtras, theme,
 
             if (from && to) {
                 handleDate(moment(from), moment(to), true);
-            } else {
+            }
+
+            if (currentReservation.date) {
                 handleReturn();
             }
         }
     }, [])
 
-    useEffect(() => {
-        if (Object.values(currentErrors).length) {
-            let messages = [];
-
-            Object.values(currentErrors).map(function (message) {
-                messages.push(message[0])
-            })
-
-            message.error(messages.map((message) => (
-                <p>{message}</p>
-            )));
-
-            handleReturn();
-        }
-    }, [currentErrors])
-
     const handleReturn = () => {
         if (currentReservation.date) {
             if (currentReservation.date.length == 2) {
-                var newExtras = [], newTax = [], newExtraPrice = 0, newTaxPrice = 0;
+                var newExtras = [], newTax = [], newLocalization = [undefined, undefined], newLocalizationPrice = [0, 0], newExtraPrice = 0, newTaxPrice = 0;
 
                 currentReservation.extras.map((element) => {
                     var extra = extrasData.find((currentExtra) => currentExtra.id == element);
@@ -169,6 +159,18 @@ function Checkout({ language, fetchExtras, theme,
                     }
                 })
 
+                localizations.map((currentLocalization) => {
+                    if (currentReservation.localizations[0] == currentLocalization.id) {
+                        newLocalization[0] = currentLocalization.id;
+                        newLocalizationPrice[0] = currentLocalization.price;
+                    }
+
+                    if (currentReservation.localizations[1] == currentLocalization.id) {
+                        newLocalization[1] = currentLocalization.id;
+                        newLocalizationPrice[1] = currentLocalization.price;
+                    }
+                })
+
                 handleDate(moment(currentReservation.date[0]), moment(currentReservation.date[1]));
 
                 var difference = getDaysDifference(currentReservation.date[0], currentReservation.date[1]);
@@ -177,6 +179,9 @@ function Checkout({ language, fetchExtras, theme,
 
                 setTax(newTax);
                 setTaxPrice(newTaxPrice);
+
+                setLocalization(newLocalization);
+                setLocalizationPrice(newLocalizationPrice);
             }
         }
     };
@@ -204,10 +209,10 @@ function Checkout({ language, fetchExtras, theme,
         var value = getCarPrice(currentCar.level.prices, difference, factors);
         setPrice(value);
 
-        var extra = extrasData.find((element) => element.id == 8);
+        var extra = extrasData.find((element) => element.id == 6);
 
-        var response = handleTimeTax([[...tax], taxPrice], from.hour(), 8, extra.price);
-        var data = handleTimeTax(response, to.hour(), 6, extra.price);
+        var response = handleTimeTax([[...tax], taxPrice], from.hour(), 6, extra.price);
+        var data = handleTimeTax(response, to.hour(), 5, extra.price);
 
         setTax(data[0]);
         setTaxPrice(data[1]);
@@ -218,7 +223,7 @@ function Checkout({ language, fetchExtras, theme,
         var taxCopy = initData[0];
         var taxPriceCopy = initData[1];
 
-        if (time >= 9 && time <= 19) {
+        if (time >= timeTax[0] && time <= timeTax[1]) {
             if (taxCopy.includes(id)) {
                 const index = taxCopy.indexOf(id);
                 taxCopy.splice(index, 1);
@@ -226,7 +231,6 @@ function Checkout({ language, fetchExtras, theme,
             }
         } else {
             if (!taxCopy.includes(id)) {
-
                 taxCopy.push(id)
                 taxPriceCopy = initData[1] + value;
             }
@@ -238,25 +242,33 @@ function Checkout({ language, fetchExtras, theme,
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates, insurance_id: activeInsurance.id });
+            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates, insurance_id: activeInsurance.id, localizations: localization });
 
-            var extraArray = [], taxArray = [];
+            var extraArray = [], taxArray = [], localizationArray = [];
 
             extrasData.map((extra) => {
                 if (extras.includes(extra.id)) {
-                    extraArray.push([extra.name, extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
+                    extraArray.push([extra.name[language], extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
                 }
 
                 if (tax.includes(extra.id)) {
-                    taxArray.push([extra.name, extra.price + "€", extra.price])
+                    taxArray.push([extra.name[language], extra.price + "€", extra.price])
                 }
             });
+
+            if (localizationPrice[0]) {
+                localizationArray.push(["Taxa de entrega", localizationPrice[0] + "€", localizationPrice[0]])
+            }
+
+            if (localizationPrice[1]) {
+                localizationArray.push(["Taxa de devolução", localizationPrice[1] + "€", localizationPrice[1]])
+            }
 
             setCurrentReservationValues({
                 car: [[currentCar.title, price]],
                 insurance: [[language == "pt" ? "Seguro" : "Insurance", activeInsurance.price + "€", activeInsurance.price * days]],
                 extras: extraArray,
-                tax: taxArray,
+                tax: [...taxArray, ...localizationArray],
             });
 
             navigate("/summary");
@@ -267,8 +279,6 @@ function Checkout({ language, fetchExtras, theme,
         console.log('Failed:', errorInfo);
     };
 
-
-
     return (
         <Container>
             <Title>{text.titles[0]}</Title>
@@ -276,7 +286,7 @@ function Checkout({ language, fetchExtras, theme,
                 <h3>total</h3>
                 <p>{text.notice}</p>
                 <div className='price'>
-                    {getPriceRounded(price + extraPrice + taxPrice + (activeInsurance.price * days))}€
+                    {getPriceRounded(price + extraPrice + taxPrice + localizationPrice[0] + localizationPrice[1] + (activeInsurance.price * days))}€
                 </div>
             </Price>
             <Form
@@ -291,15 +301,23 @@ function Checkout({ language, fetchExtras, theme,
             >
                 {Object.values(currentCar).length &&
                     <>
+                        <AlertContainer
+                            currentErrors={currentErrors}
+                            title={text.error}
+                            onClose={() => setCurrentErrors([])}
+                        />
                         <GeneralInfo
                             text={text}
                             form={form}
                             car={currentCar}
                             tax={tax} setTax={setTax}
                             taxPrice={taxPrice} setTaxPrice={setTaxPrice}
+                            localization={localization} setLocalization={setLocalization}
+                            localizationPrice={localizationPrice} setLocalizationPrice={setLocalizationPrice}
                             dates={dates} setDates={setDates}
                         />
                         <Addons
+                            car={currentCar}
                             text={text}
                             days={days}
                             extras={extras} setExtras={setExtras}
@@ -327,6 +345,7 @@ const mapDispatchToProps = (dispatch) => {
         setCurrentPromotion: (data) => dispatch(setCurrentPromotion(data)),
         fetchBlocksSelector: (filter) => dispatch(fetchBlocksSelector(filter)),
         fetchExtras: () => dispatch(fetchExtras()),
+        setCurrentErrors: (data) => dispatch(setCurrentErrors(data)),
     };
 };
 
@@ -339,6 +358,8 @@ const mapStateToProps = (state) => {
         language: state.application.language,
         currentReservation: state.reservation.current,
         currentErrors: state.reservation.errors,
+        localizations: state.localization.data,
+        timeTax: state.globalParameter.timeTax,
     };
 };
 

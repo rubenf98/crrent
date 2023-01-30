@@ -7,6 +7,7 @@ import { dimensions } from '../../../helper';
 import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
 import { ActionButton } from "../../../styles";
+import Localization from '../Localization/Localization';
 
 
 const Container = styled.div`
@@ -63,6 +64,10 @@ function Extra({ data, current, loading, fetchExtras, deleteExtra, setCurrentExt
                     handleCreateClick={handleCreateClick}
                 />
             </CardContainer>
+
+            <br />
+
+            <Localization />
         </Container>
     )
 }

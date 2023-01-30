@@ -69,5 +69,6 @@ export const text = {
     },
     button: "reservar",
     notice: "Inclui IVA a 22%",
+    error: "Ocorreu os seguintes erros com a reserva",
 
 } 

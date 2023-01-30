@@ -16,9 +16,28 @@ class LocalizationSeeder extends Seeder
     {
         Localization::create([
             'name' => [
+                'en' => "Outside funchal",
+                'pt' => "Fora do funchal"
+            ],
+            'visible' => false,
+            'price' => 20
+        ]);
+
+        Localization::create([
+            'name' => [
+                'en' => "Inside funchal",
+                'pt' => "Dentro do funchal"
+            ],
+            'visible' => false,
+            'price' => 0
+        ]);
+
+        Localization::create([
+            'name' => [
                 'en' => "Store",
                 'pt' => "Loja"
             ],
+            'visible' => true,
             'price' => 0
         ]);
 
@@ -27,7 +46,8 @@ class LocalizationSeeder extends Seeder
                 'en' => "Airport",
                 'pt' => "Aeroporto"
             ],
-            'price' => 20
+            'visible' => true,
+            'price' => 10
         ]);
     }
 }

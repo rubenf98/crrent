@@ -15,6 +15,11 @@ export const deleteGlobalParameter = id => ({
     meta: { id }
 });
 
+export const updateGlobalParameter = (data) => ({
+    type: types.UPDATE_GLOBAL_PARAMETER,
+    payload: axios.put(`${window.location.origin}/api/globalParameters`, data),
+});
+
 export const createGlobalParameter = (data) => ({
     type: types.CREATE_GLOBAL_PARAMETER,
     payload: axios.post(`${window.location.origin}/api/globalParameters`, data),

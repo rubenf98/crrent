@@ -21,6 +21,7 @@ export const text = {
     button: ["pagar na entrega", "pagar já"],
     privacy: ["Li, compreendi e concordo com a", "Política de Privacidade"],
     conditions: ["Confirmo que li, compreendi e concordo com os", "Termos e Condições da CR Rent"],
+    disabled: "Aceite a política de privacidade e os termos e condições da CR Rent",
     form: {
         card_number: "Número de cartão",
         validity: "Data de Validade",

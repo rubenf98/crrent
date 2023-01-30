@@ -16,6 +16,7 @@ class CreateLocalizationsTable extends Migration
         Schema::create('localizations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('visible');
             $table->double('price', 5, 2);
             $table->timestamps();
         });

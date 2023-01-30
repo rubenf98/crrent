@@ -6,6 +6,11 @@ export const fetchLocalizations = () => ({
     payload: axios.get(`${window.location.origin}/api/localizations`)
 })
 
+export const fetchTaxLocalizations = () => ({
+    type: types.FETCH_TAX_LOCALIZATIONS,
+    payload: axios.get(`${window.location.origin}/api/localizations?visible=0`)
+})
+
 export const updateLocalization = (id, data) => ({
     type: types.UPDATE_LOCALIZATION,
     payload: axios.put(`${window.location.origin}/api/localizations/${id}`, data),

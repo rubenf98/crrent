@@ -6,6 +6,7 @@ use App\Http\Requests\LevelRequest;
 use App\Http\Resources\LevelResource;
 use App\Models\Level;
 use App\Models\Price;
+use App\QueryFilters\LevelFilters;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,9 +17,9 @@ class LevelController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(LevelFilters $filters)
     {
-        return LevelResource::collection(Level::with('prices')->get());
+        return LevelResource::collection(Level::filterBy($filters)->with('prices')->get());
     }
 
 

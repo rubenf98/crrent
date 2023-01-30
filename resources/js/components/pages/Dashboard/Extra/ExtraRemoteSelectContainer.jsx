@@ -17,7 +17,7 @@ function ExtraRemoteSelectContainer({ fetchExtras, data, loading, value, onChang
             mode="multiple"
         >
             {data.map((element) => (
-                <Select.Option key={element.id} value={element.id}>{element.name} ({element.price}€ {element.type == "day" && "/dia"})</Select.Option>
+                <Select.Option key={element.id} value={element.id}>{element.name.pt} ({element.price}€ {element.type == "day" && "/dia"})</Select.Option>
             ))}
         </Select>
     )

@@ -13,15 +13,12 @@ class Car extends Model
     use HasFactory;
     use FiltersRecords;
 
-    protected $fillable = ['kms', 'car', 'air', 'registration', 'description', 'doors', 'gas', 'level_id', 'people', 'shift_mode', 'subtitle', 'title'];
+    protected $fillable = ['kms', 'registration', 'car_category_id', 'status'];
 
 
     protected $casts = [
-        'air' => 'integer',
         'status' => 'boolean',
     ];
-
-
 
     public function level()
     {
@@ -44,7 +41,7 @@ class Car extends Model
 
             foreach ($blockedDates as $blockedDate) {
                 if ($startDate->eq($blockedDate->date)) {
-                    $reservation = Reservation::find($blockedDate->reservation_id);
+                    $reservation = Reservation::with('client')->with('car.category')->find($blockedDate->reservation_id);
                     if ($reservation) {
                         $color = "orange";
                         $pickup = Carbon::parse($reservation->pickup_date)->startOfDay();
@@ -55,7 +52,7 @@ class Car extends Model
                         $hasReservation = [
                             'color' => $color,
                             'type' => 'reservation',
-                            'content' => $reservation->with('client')->with('car.category')->first()
+                            'content' => $reservation
                         ];
                     } else {
                         $hasReservation = [

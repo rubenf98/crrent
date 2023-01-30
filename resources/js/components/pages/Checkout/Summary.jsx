@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
 import { Button, maxWidthStyle, SecundaryButton } from '../../styles';
-import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col, Alert } from 'antd';
+import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col, Alert, Tooltip } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions, maxWidth } from '../../helper';
 import { connect } from "react-redux";
@@ -392,17 +392,20 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
                 navigate("/success");
             }).catch((errors) => {
                 setCurrentErrors(errors.response.data.errors);
-
+                var willNavigate = false;
                 Object.keys(errors.response.data.errors).map((key) => {
                     if (key != "card_number" && key != "card_cvv") {
+                        willNavigate = true;
                         navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
                     }
                 })
+                if (!willNavigate) {
+                    setCurrentErrors({
+                        card_number: "Credit card number is not valid, please check for possible mistakes",
+                        card_cvv: "The provided CVV value does not match with card number and card validity field"
+                    });
+                }
 
-                setCurrentErrors({
-                    card_number: "Credit card number is not valid, please check for possible mistakes",
-                    card_cvv: "The provided CVV value does not match with card number and card validity field"
-                });
             });
         })
 
@@ -430,7 +433,7 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
                                         <Section>
 
                                             <div className='title large'>{section.title}</div>
-                                            <div className='title opacity'>{key != 0 && ("€/" + (key == 2 ? "uni" : text.prices.day))}</div>
+                                            <div className='title opacity'>{key != 0 && ("€/" + (key == 3 ? "uni" : text.prices.day))}</div>
                                             <div className='title'>SUBTOTAL</div>
 
                                             {section.items.map((row) => (
@@ -503,15 +506,18 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
                     </div>
                     <div className='column right-side'>
                         <p className='info'>{text.info}</p>
+                        <Tooltip title={text.disabled}>
+                            <div className='button-container'>
 
-                        <div className='button-container'>
-                            <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                                {text.button[0]}
-                            </Submit>
-                            {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                    {text.button[0]}
+                                </Submit>
+
+                                {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
                                 {text.button[1]}
                             </Submit> */}
-                        </div>
+                            </div>
+                        </Tooltip>
                     </div>
                 </PaymentContainer>
 

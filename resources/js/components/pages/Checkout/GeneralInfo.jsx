@@ -235,9 +235,8 @@ function GeneralInfo(props) {
     const [mandatory, setMandatory] = useState(true)
 
 
-    const { text, theme, car, form, extras, tax, setTax,
-        taxPrice, language,
-        setTaxPrice, dates, setDates, localizations } = props;
+    const { text, theme, car, form, language, localization,
+        localizationPrice, dates, setDates, localizations } = props;
 
     const rules = {
         date: [{ required: true, message: 'Please input the reservation date!' }],
@@ -253,49 +252,47 @@ function GeneralInfo(props) {
     }, [])
 
 
-    function returnID(itemName) {
-        var id = undefined;
-
-        if (itemName == "pickup_place")
-            id = 5;
-        else
-            id = 7;
-
-        return id;
+    function returnIndex(itemName) {
+        return itemName == "pickup_place" ? 0 : 1;
     }
 
-    const handleCustomPlace = (itemName, value, condition) => {
+    function returnLocalization(id) {
+        return localizations.find(item => item.id === id);
+    }
+
+
+    const updateState = (id, index, itemName, customValue = undefined) => {
+        var currentLocalization = localizations.find(item => item.id === id);
+
+
+        var localizationCopy = [...localization];
+        localizationCopy[index] = currentLocalization.id;
+
+        var localizationPriceCopy = [...localizationPrice];
+        localizationPriceCopy[index] = currentLocalization.price;
+
+        var newEntry = {};
+        newEntry[itemName] = customValue ? customValue : currentLocalization.name.pt;
+        form.setFieldsValue(newEntry);
+
+        props.setLocalization(localizationCopy);
+        props.setLocalizationPrice(localizationPriceCopy);
+    }
+
+    const handleCustomPlace = (itemName, stringValue, idValue, condition) => {
         if (condition) {
+
+            var index = returnIndex(itemName);
             var newEntry = {};
-            newEntry[itemName] = value;
+            newEntry[itemName] = stringValue;
             form.setFieldsValue(newEntry);
 
-            var id = returnID(itemName);
-
-            if (condition == 2) {
-                if (!tax.includes(id)) {
-                    var price = extras.find(e => e.id === id).price;
-
-                    setTax([...tax, id]);
-                    setTaxPrice(taxPrice + price);
-                }
-            } else {
-                if (tax.includes(id)) {
-                    var price = extras.find(e => e.id === id).price;
-                    const index = tax.indexOf(id);
-
-                    var taxCopy = [...tax];
-                    taxCopy.splice(index, 1);
-
-                    setTax(taxCopy);
-                    setTaxPrice(taxPrice - price);
-                }
-            }
+            updateState(idValue, index, itemName, stringValue);
         }
     }
 
     const handlePlaceSelection = (itemName, e) => {
-        var id = returnID(itemName);
+        var index = returnIndex(itemName);
         if (itemName === "pickup_place") {
             if (e === "Loja") {
                 setMandatory(false);
@@ -304,26 +301,7 @@ function GeneralInfo(props) {
             }
         }
 
-        console.log(e);
-        if (tax.includes(id)) {
-            if (e === "Loja") {
-                var price = extras.find(e => e.id === id).price;
-                const index = tax.indexOf(id);
-
-                var taxCopy = [...tax];
-                taxCopy.splice(index, 1);
-
-                setTax(taxCopy);
-                setTaxPrice(taxPrice - price);
-            }
-        } else if (!tax.includes(id)) {
-            if (e === "aeroporto") {
-                var price = extras.find(e => e.id === id).price;
-
-                setTax([...tax, id]);
-                setTaxPrice(taxPrice + price);
-            }
-        }
+        updateState(e, index, itemName);
     }
 
     return (
@@ -368,21 +346,22 @@ function GeneralInfo(props) {
                                             </Col>
                                             <Col span={10}>
                                                 <Radio.Group onChange={(e) => setCustomPickupTax(e.target.value)} value={customPickupTax}>
-                                                    <Radio value={1}>Funchal</Radio>
-                                                    <Radio value={2}>{text.placeholder.pickup_place.tax} Funchal</Radio>
+                                                    {localizations.map((localization) => {
+                                                        return !localization.visible && <Radio value={localization.id}>{localization.name[language]}</Radio>
+                                                    })}
                                                 </Radio.Group>
                                             </Col>
                                             <Col span={2}>
-                                                <AddButton active={pickupCondition} type="text" onClick={(e) => handleCustomPlace("pickup_place", customPickup, pickupCondition)}>
+                                                <AddButton active={pickupCondition} type="text" onClick={(e) => handleCustomPlace("pickup_place", customPickup, customPickupTax, pickupCondition)}>
                                                     <img alt="add" src="/icon/add_black.svg" />
                                                 </AddButton>
                                             </Col>
                                         </Row>
                                     </>
                                 )} placeholder={text.placeholder.pickup_place.label}>
-                                    {localizations.map((localization) => (
-                                        <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
-                                    ))}
+                                    {localizations.map((localization) => {
+                                        return localization.visible && <Select.Option key={localization.id} value={localization.id}>{localization.name[language]} (+{localization.price}€)</Select.Option>
+                                    })}
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -398,21 +377,22 @@ function GeneralInfo(props) {
                                             </Col>
                                             <Col span={10}>
                                                 <Radio.Group onChange={(e) => setCustomReturnTax(e.target.value)} value={customReturnTax}>
-                                                    <Radio value={1}>Funchal</Radio>
-                                                    <Radio value={2}>{text.placeholder.return_place.tax} Funchal</Radio>
+                                                    {localizations.map((localization) => {
+                                                        return !localization.visible && <Radio value={localization.id}>{localization.name[language]}</Radio>
+                                                    })}
                                                 </Radio.Group>
                                             </Col>
                                             <Col span={2}>
-                                                <AddButton active={returnCondition} type="text" onClick={(e) => handleCustomPlace("return_place", customReturn, returnCondition)}>
+                                                <AddButton active={returnCondition} type="text" onClick={(e) => handleCustomPlace("return_place", customReturn, customReturnTax, returnCondition)}>
                                                     <img alt="add" src="/icon/add_black.svg" />
                                                 </AddButton>
                                             </Col>
                                         </Row>
                                     </>
                                 )} placeholder={text.placeholder.return_place.label}>
-                                    {localizations.map((localization) => (
-                                        <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
-                                    ))}
+                                    {localizations.map((localization) => {
+                                        return localization.visible && <Select.Option key={localization.id} value={localization.id}>{localization.name[language]} (+{localization.price}€)</Select.Option>
+                                    })}
                                 </StyledSelect>
                             </Form.Item>
                         </Col>
@@ -446,12 +426,13 @@ function GeneralInfo(props) {
                                     </Col>
                                     <Col span={10}>
                                         <Radio.Group >
-                                            <Radio value={1}>Funchal</Radio>
-                                            <Radio value={2}>{text.placeholder.pickup_place.tax} Funchal</Radio>
+                                            {localizations.map((localization) => (
+                                                <Radio value={localization.id}>{localization.name[language]}</Radio>
+                                            ))}
                                         </Radio.Group>
                                     </Col>
                                     <Col span={2}>
-                                        <AddButton type="text" onClick={(e) => handleCustomPlace("pickup_place", e)}>
+                                        <AddButton type="text" onClick={(e) => handleCustomPlace("pickup_place", customPickup, customPickupTax, pickupCondition)}>
                                             <img alt="add" src="/icon/add_black.svg" />
                                         </AddButton>
                                     </Col>
@@ -467,7 +448,7 @@ function GeneralInfo(props) {
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
-                    <Form.Item name="pickup_place" rules={rules.place}>
+                    <Form.Item name="return_place" rules={rules.place}>
                         <StyledSelect bordered={false} dropdownRender={(menu) => (
                             <>
                                 {menu}
@@ -475,10 +456,11 @@ function GeneralInfo(props) {
                                 <Space style={{ padding: '0 10px 6px' }}>
                                     <StyledInput placeholder={text.placeholder.return_place.placeholder} />
                                     <Radio.Group >
-                                        <Radio value={1}>Funchal</Radio>
-                                        <Radio value={2}>{text.placeholder.return_place.tax} Funchal</Radio>
+                                        {localizations.map((localization) => (
+                                            <Radio value={localization.id}>{localization.name[language]}</Radio>
+                                        ))}
                                     </Radio.Group>
-                                    <AddButton type="text" onClick={() => setSelected(true)}>
+                                    <AddButton type="text" onClick={(e) => handleCustomPlace("return_place", customReturn, customReturnTax, pickupCondition)}>
                                         <img alt="add" src="/icon/add_black.svg" />
                                     </AddButton>
                                 </Space>

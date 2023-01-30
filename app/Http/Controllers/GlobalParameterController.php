@@ -31,18 +31,6 @@ class GlobalParameterController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\GlobalParameter  $globalParameter
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, GlobalParameter $globalParameter)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\GlobalParameter  $globalParameter

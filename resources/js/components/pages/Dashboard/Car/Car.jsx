@@ -7,6 +7,7 @@ import { ActionButton } from '../../../styles';
 import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
 import Level from '../Level/Level';
+import CarCategory from '../CarCategory/CarCategory';
 
 
 const Container = styled.div`
@@ -51,6 +52,8 @@ function Car({ current, theme, data, loading, meta, fetchCars, deleteCar, setCur
         <Container>
             <Level />
             <br />
+            <CarCategory />
+            <br />
             <CardContainer text="Listagem de Carros">
                 <FormContainer
                     visible={visible}
@@ -58,9 +61,7 @@ function Car({ current, theme, data, loading, meta, fetchCars, deleteCar, setCur
                     current={current}
                     edit={edit}
                 />
-                <ActionButton onClick={handleCreateClick} background={theme.primary}>
-                    <img src="/icon/add_white.svg" alt="add" />
-                </ActionButton>
+
                 <TableContainer
                     data={data}
                     meta={meta}
@@ -68,7 +69,9 @@ function Car({ current, theme, data, loading, meta, fetchCars, deleteCar, setCur
                     onDelete={deleteCar}
                     handlePageChange={handlePageChange}
                     handleUpdateClick={handleUpdateClick}
+                    handleCreateClick={handleCreateClick}
                     setCarStatus={setCarStatus}
+                    handleFilters={handleFilters}
                 />
             </CardContainer>
         </Container>

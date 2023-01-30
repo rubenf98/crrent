@@ -53,6 +53,9 @@ class UpdateReservationRequest extends FormRequest
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',
 
+            'localizations_0' => 'required|exists:localizations,id',
+            'localizations_1' => 'required|exists:localizations,id',
+
             'drivers' => 'nullable|array',
             'drivers.*.name' => 'nullable|string',
             'drivers.*.birthday' => 'nullable|date',

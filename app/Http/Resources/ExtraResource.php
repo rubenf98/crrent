@@ -16,7 +16,7 @@ class ExtraResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $this->getTranslations('name'),
             'visible' => (int) $this->visible,
             'type' => $this->type,
             'price' => (float) $this->price,

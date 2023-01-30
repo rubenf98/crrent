@@ -6,6 +6,7 @@ import TodayTableContainer from "./Homepage/TodayTableContainer";
 import { connect } from "react-redux";
 import { fetchTodayReservations, fetchNextReservations } from "../../../redux/reservation/actions";
 import NextTableContainer from "./Homepage/NextTableContainer";
+import InitReservation from "./Homepage/InitReservation";
 
 const Container = styled.div`
     h1 {
@@ -43,6 +44,8 @@ function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, n
             </TodayContainer>
 
             <NextTableContainer title="Devoluções Hoje" data={nextData} />
+
+            <InitReservation />
 
 
         </Container>

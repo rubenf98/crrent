@@ -69,5 +69,6 @@ export const text = {
     },
     button: "book",
     notice: "Includes 22% VAT",
+    error: "The following errors during the reservation",
 
 } 

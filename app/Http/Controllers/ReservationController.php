@@ -14,7 +14,9 @@ use App\Models\Card;
 use App\Models\Client;
 use App\Models\Comission;
 use App\Models\Driver;
+use App\Models\Localization;
 use App\Models\Reservation;
+use App\Models\ReservationHasLocalization;
 use App\QueryFilters\ReservationFilters;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -26,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ReservationController extends Controller
 {
@@ -92,6 +95,15 @@ class ReservationController extends Controller
             ]);
         }
 
+        foreach ($validator['localizations'] as $localization) {
+            $current = Localization::find($localization);
+            ReservationHasLocalization::create([
+                'reservation_id' => $reservation->id,
+                'localization_id' => $current->id,
+                'price' => $current->price,
+            ]);
+        }
+
         $reservation->extras()->attach($validator["extras"]);
         $reservation->drivers()->attach($drivers);
         HandleReservation::dispatch($reservation);
@@ -116,6 +128,7 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
+        $reservation->generateDoc();
         return new ReservationResource($reservation);
     }
 
@@ -194,6 +207,21 @@ class ReservationController extends Controller
             }
         }
 
+        $reservation->localizations()->detach();
+
+        $current = Localization::find($validator["localizations_0"]);
+        ReservationHasLocalization::create([
+            'reservation_id' => $reservation->id,
+            'localization_id' => $current->id,
+            'price' => $current->price,
+        ]);
+
+        $current = Localization::find($validator["localizations_1"]);
+        ReservationHasLocalization::create([
+            'reservation_id' => $reservation->id,
+            'localization_id' => $current->id,
+            'price' => $current->price,
+        ]);
 
         $reservation->extras()->sync($validator['extras']);
 

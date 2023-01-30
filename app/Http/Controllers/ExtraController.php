@@ -38,7 +38,14 @@ class ExtraController extends Controller
     public function store(ExtraRequest $request)
     {
         $validator = $request->validated();
-        $extra = Extra::create($validator);
+        $extra = Extra::create([
+            'name' => [
+                'pt' => $validator['namept'],
+                'en' => $validator['nameen'],
+            ],
+            'price' => $validator['price'],
+            'type' => $validator['type'],
+        ]);
 
         return new ExtraResource($extra);
     }

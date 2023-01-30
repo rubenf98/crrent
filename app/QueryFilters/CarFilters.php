@@ -17,4 +17,26 @@ class CarFilters extends QueryFilters
             $this->query->whereNotNull('registration');
         } else $this->query;
     }
+
+    public function registration($string)
+    {
+        $this->query->where('registration', 'like', '%' . $string . '%');
+    }
+
+    public function category($string)
+    {
+        $this->query->whereHas('category', function ($query) use ($string) {
+            $query->where('title', 'like', '%' . $string . '%');
+        });
+    }
+
+    public function level($string)
+    {
+        $this->query->whereHas('category', function ($query) use ($string) {
+            $query->whereHas('level', function ($query) use ($string) {
+                $query->where('code', $string)
+                    ->orWhere('name', 'like', '%' . $string . '%');
+            });
+        });
+    }
 }

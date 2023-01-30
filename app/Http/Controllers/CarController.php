@@ -8,6 +8,7 @@ use App\Http\Resources\CarResource;
 use App\Models\BlockDate;
 use App\Models\BlockedCar;
 use App\Models\Car;
+use App\Models\CarCategory;
 use App\Models\Level;
 use App\QueryFilters\CarFilters;
 use Carbon\Carbon;
@@ -24,9 +25,9 @@ class CarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(CarFilters $filters)
     {
-        return CarResource::collection(Car::with('category')->paginate(10));
+        return CarResource::collection(Car::filterBy($filters)->with('category')->paginate(10));
     }
 
     /**
@@ -75,6 +76,7 @@ class CarController extends Controller
     public function store(CarRequest $request)
     {
         $validator = $request->validated();
+
         $record = Car::create($validator);
 
         return new CarResource($record);

@@ -110,11 +110,13 @@ const Container = styled(Row)`
 `;
 const timeOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
-function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, width = 6, treshold = 1 }) {
+function DateFormItem({ enableReservations, globalParameters, setDates, dates, text, blockedDates, width = 6, treshold = 1 }) {
     const [currentDates, setCurrentDates] = useState([undefined, undefined]);
     const [currentTimes, setCurrentTimes] = useState([undefined, undefined]);
     const [currentTimeValues, setCurrentTimeValues] = useState([undefined, undefined]);
     const [timeTreshold, setTimeTreshold] = useState([0, 0]);
+    const [maxDaysReservation, setMaxDaysReservation] = useState(0);
+    const [maxDateReservation, setMaxDateReservation] = useState(moment());
 
     useEffect(() => {
         var minTimeObject = undefined;
@@ -125,6 +127,10 @@ function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, w
                 minTimeObject = parseInt(globalParameter.value);
             } else if (globalParameter.code == 'max_time') {
                 maxTimeObject = parseInt(globalParameter.value);
+            } else if (globalParameter.code == 'max_days') {
+                setMaxDaysReservation(parseInt(globalParameter.value));
+            } else if (globalParameter.code == 'max_date') {
+                setMaxDateReservation(moment(globalParameter.value, "DD-MM-YYYY"));
             }
         })
 
@@ -204,7 +210,7 @@ function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, w
                 setCurrentDates([undefined, undefined]);
         }
     }
-    console.log(timeTreshold);
+
     return (
         <Container type="flex" gutter={16}>
             <Col xs={24} md={width}>
@@ -214,7 +220,7 @@ function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, w
                     format="DD-MM-YYYY"
                     placeholder={text[0]}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates, 0, treshold)}
+                    disabledDate={(current) => !enableReservations || isDateDisabled(current, blockedDates, currentDates, 0, [maxDaysReservation, maxDateReservation], treshold)}
                     onChange={(e) => handleDateChange(e, 0)}
                 />
             </Col>
@@ -250,7 +256,7 @@ function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, w
                     placeholder={text[2]}
                     onChange={(e) => handleDateChange(e, 1)}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => isDateDisabled(current, blockedDates, currentDates, 1, treshold)}
+                    disabledDate={(current) => !enableReservations || isDateDisabled(current, blockedDates, currentDates, 1, [maxDaysReservation, maxDateReservation], treshold)}
                 />
             </Col>
             <Col xs={24} md={width}>
@@ -285,7 +291,8 @@ function DateFormItem({ globalParameters, setDates, dates, text, blockedDates, w
 const mapStateToProps = (state) => {
     return {
         blockedDates: state.block.selector,
-        globalParameters: state.globalParameter.data
+        globalParameters: state.globalParameter.data,
+        enableReservations: state.globalParameter.enableReservations
     };
 };
 
