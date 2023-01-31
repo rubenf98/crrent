@@ -85,19 +85,21 @@ class CreateExternalReservationController extends Controller
         }
 
         $drivers = [];
-
-        foreach ($validator['drivers'] as $driverData) {
-            $driver = Driver::create([
-                'name' => Arr::get($driverData, 'name'),
-                'birthday' => array_key_exists('birthday', $driverData)  ? Carbon::parse($driverData['birthday']) : null,
-                'license' => Arr::get($driverData, 'license'),
-                'emission' => array_key_exists('emission', $driverData)  ? Carbon::parse($driverData['emission']) : null,
-                'validity' => array_key_exists('validity', $driverData)  ? Carbon::parse($driverData['validity']) : null,
-                'emission_place' => Arr::get($driverData, 'emission_place'),
-            ]);
-            array_push($drivers, $driver->id);
+        if (Arr::get($validator, 'drivers')) {
+            foreach ($validator['drivers'] as $driverData) {
+                $driver = Driver::create([
+                    'name' => Arr::get($driverData, 'name'),
+                    'birthday' => array_key_exists('birthday', $driverData)  ? Carbon::parse($driverData['birthday']) : null,
+                    'license' => Arr::get($driverData, 'license'),
+                    'emission' => array_key_exists('emission', $driverData)  ? Carbon::parse($driverData['emission']) : null,
+                    'validity' => array_key_exists('validity', $driverData)  ? Carbon::parse($driverData['validity']) : null,
+                    'emission_place' => Arr::get($driverData, 'emission_place'),
+                ]);
+                array_push($drivers, $driver->id);
+            }
+            $reservation->drivers()->attach($drivers);
         }
-        $reservation->drivers()->attach($drivers);
+
 
         HandleReservation::dispatch($reservation);
         DB::commit();

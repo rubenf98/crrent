@@ -147,13 +147,6 @@
                 <div class="boxstatusorder" style="width: 25%; padding:10px; box-sizing: border-box;">
                     <span class="vrc-email-summ-lbl"
                         style="display: block; font-weight: bold; margin-bottom: 2px; font-size: 1.1em;">
-                        Order Number
-                    </span>
-                    <span class="vrc-email-summ-values">{{$reservation->id}}</span>
-                </div>
-                <div class="boxstatusorder" style="width: 25%; padding:10px; box-sizing: border-box;">
-                    <span class="vrc-email-summ-lbl"
-                        style="display: block; font-weight: bold; margin-bottom: 2px; font-size: 1.1em;">
                         Confirmation Number
                     </span>
                     <span class="vrc-email-summ-values">{{$reservation->token}}</span>

@@ -43,7 +43,7 @@ class CarCategoryController extends Controller
 
             foreach ($period as $dt) {
                 foreach ($carCategories as $carCategory) {
-                    $treshold = $carCategory->cars()->count();
+                    $treshold = $carCategory->cars()->where('status', 1)->count();
                     $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_category_id', $carCategory->id)->count();
 
                     if ($isFilled >= $treshold && !in_array($carCategory->id, $blockedCars)) {

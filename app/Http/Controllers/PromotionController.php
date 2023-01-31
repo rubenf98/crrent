@@ -33,7 +33,7 @@ class PromotionController extends Controller
             'end' => $validator['dates'][1],
             'value' => $validator['value'],
             'factor' => $validator['factor'],
-            'priority' => $validator['priority']
+            'priority' =>  array_key_exists('priority', $validator) ?  $validator['priority'] : 1
         ]);
 
         return new PromotionResource($record);

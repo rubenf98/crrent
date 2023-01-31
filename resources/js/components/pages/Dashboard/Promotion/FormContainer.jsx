@@ -30,12 +30,6 @@ const rules = {
             message: 'Selecione as datas que pretende bloquear',
         },
     ],
-    factor: [
-        {
-            required: true,
-            message: 'O factor de multiplicação é obrigatório',
-        },
-    ],
     value: [
         {
             required: true,
@@ -107,7 +101,7 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item rules={rules.factor} label="Nível de prioridade" name="priority">
+                                <Form.Item label="Nível de prioridade" name="priority">
                                     <InputNumber style={{ width: "100%" }} min={1} />
                                 </Form.Item>
                             </Col>

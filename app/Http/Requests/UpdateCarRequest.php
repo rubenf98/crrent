@@ -26,7 +26,7 @@ class UpdateCarRequest extends FormRequest
     public function rules()
     {
         return [
-            'kms' => 'nullable|string',
+            'kms' => 'nullable|numeric',
             'registration' => 'nullable',
             'car_category_id' => 'required|integer|exists:levels,id',
         ];

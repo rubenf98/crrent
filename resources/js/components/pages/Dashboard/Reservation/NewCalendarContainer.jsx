@@ -116,7 +116,7 @@ function NewCalendarContainer(props) {
         <Container>
             <CardContainer text="Calendário">
                 <Row type="flex" justify='end' style={{ marginBottom: "20px" }}>
-                    <DatePicker.MonthPicker value={date} onChange={setDate} />
+                    <DatePicker.MonthPicker allowClear={false} value={date} onChange={setDate} />
                 </Row>
                 <Calendar>
                     <div className="flex-container">

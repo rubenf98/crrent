@@ -40,7 +40,7 @@ class ReservationFilters extends QueryFilters
     public function name($string)
     {
         $this->query->whereHas('client', function ($query) use ($string) {
-            $query->where('name', $string);
+            $query->where('name', 'like', '%' . $string . '%');
         });
     }
 

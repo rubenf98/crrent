@@ -21,7 +21,7 @@ class PromotionRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'factor' => $this->value / 100,
+            'factor' => $this->value < 100 ? ((100 - $this->value) / 100) : ($this->value / 100),
             'value' => $this->value . "%",
         ]);
     }
@@ -38,7 +38,7 @@ class PromotionRequest extends FormRequest
             'dates.*' => 'required|date',
             'factor' => 'required|numeric',
             'value' => 'required|string',
-            'priority' => 'required|integer',
+            'priority' => 'nullable|integer',
         ];
     }
 

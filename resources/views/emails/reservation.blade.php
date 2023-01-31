@@ -129,7 +129,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 36px 24px;">
-                            <a href="https://cr-rent.com" target="_blank" style="display: inline-block;">
+                            <a href="https://crrent.ruben-freitas.pt" target="_blank" style="display: inline-block;">
                                 <img src="https://cr-rent.com/image/logo.png" alt="Logo" border="0" width="48"
                                     style="display: block; width: 120px; max-width: 120px; min-width: 120px;">
                             </a>
@@ -197,7 +197,8 @@
                         <td align="left" bgcolor="#ffffff"
                             style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                             <p style="margin: 0;">A entrega da viatura {{$car}} (ou semelhante) será realizada no dia
-                                {{$fromDate}} até ao dia {{$toDate}}. Para mais detalhes verifique a restante informação no
+                                {{$fromDate}} até ao dia {{$toDate}}. Para mais detalhes verifique a restante informação
+                                no
                                 painel de controlo ou documento em anexo. </p>
                         </td>
                     </tr>

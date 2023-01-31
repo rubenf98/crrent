@@ -331,7 +331,7 @@ function GeneralInfo(props) {
                             text={text.placeholder.date}
                             dates={dates}
                             setDates={setDates}
-                            treshold={car.treshold}
+                            treshold={car.available_cars}
                         />
 
                         <Col xs={24} md={24}>

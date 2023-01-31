@@ -57,11 +57,14 @@ const Container = styled.section`
 function CalendarContainer({ data, loading, handleFilters }) {
 
     const dateCellRender = (value) => {
-
         var hasActivity = "empty";
 
         data.map((reservation) => {
-            if (value.isBetween(moment(reservation.pickup_date), moment(reservation.return_date))) {
+            if (value.isBetween(
+                moment(reservation.pickup_date).startOf('day'),
+                moment(reservation.return_date).endOf('day'),
+                'day', '[]'
+            )) {
                 hasActivity = "full";
             }
 

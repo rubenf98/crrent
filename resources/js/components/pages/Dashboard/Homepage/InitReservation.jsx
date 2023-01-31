@@ -6,8 +6,9 @@ import moment from "moment";
 import { SecundaryButton, SmallPrimaryButton } from "../../../styles";
 import { fetchCarCategorySelector } from "../../../../redux/carCategory/actions";
 import { connect } from "react-redux";
-import { getCarPrice, getDaysDifference, getPriceRounded, getPromotions } from "../../../functions";
+import { getCarPrice, getDaysDifference, getInsurancePrice, getPriceRounded, getPromotions } from "../../../functions";
 import { fetchPromotions } from "../../../../redux/promotion/actions";
+import { fetchInsurances } from "../../../../redux/insurance/actions";
 import { dimensions } from "../../../helper";
 
 const Container = styled.div`
@@ -105,7 +106,12 @@ function InitReservation(props) {
     const [factors, setFactors] = useState([])
 
 
-    const { data } = props;
+    const { data, insurances } = props;
+
+    useEffect(() => {
+        props.fetchInsurances()
+    }, [])
+
     const handleSearch = () => {
         if (dates[0] && dates[1]) {
             var difference = getDaysDifference(dates[0], dates[1]);
@@ -124,8 +130,10 @@ function InitReservation(props) {
 
 
 
-    const CarSection = ({ info }) => {
+    const CarSection = ({ info, aInsurances }) => {
+        console.log(aInsurances);
         var pricing = getCarPrice(info.level.prices, days, factors);
+        var insurance = getInsurancePrice(aInsurances, days); 
         return (
             <Car>
 
@@ -134,6 +142,7 @@ function InitReservation(props) {
                 <div className='price'>
                     <div>
                         <p className='warning'>Preço para {days} dias sem inclusão de taxas, extras e valores do seguro</p>
+                        <p className='warning'>Ao valor total acresce {insurance}€ de seguro, totalizando {pricing + insurance}€</p>
                     </div>
                     <div className='value'>{getPriceRounded(pricing)}€</div>
                 </div>
@@ -157,8 +166,8 @@ function InitReservation(props) {
                 <SecundaryButton onClick={handleSearch} style={{ margin: "0px 0px 24px 16px" }}>pesquisar</SecundaryButton>
             </Row>
 
-            {hasSearch && data.map((car) => (
-                <CarSection key={car.id} info={car} />
+            {(hasSearch && insurances.length) && data.map((car) => (
+                <CarSection key={car.id} info={car} aInsurances={insurances} />
             ))}
         </Container>
     )
@@ -167,6 +176,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchCarCategorySelector: (filters) => dispatch(fetchCarCategorySelector(filters)),
         fetchPromotions: (car) => dispatch(fetchPromotions(car)),
+        fetchInsurances: () => dispatch(fetchInsurances()),
     };
 };
 
@@ -174,7 +184,8 @@ const mapStateToProps = (state) => {
     return {
         data: state.carCategory.selector,
         loading: state.carCategory.loading,
-        promotions: state.promotion.data
+        promotions: state.promotion.data,
+        insurances: state.insurance.data
     };
 };
 

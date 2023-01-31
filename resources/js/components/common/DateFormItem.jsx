@@ -220,7 +220,7 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                     format="DD-MM-YYYY"
                     placeholder={text[0]}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => !enableReservations || isDateDisabled(current, blockedDates, currentDates, 0, [maxDaysReservation, maxDateReservation], treshold)}
+                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates, currentDates, 0, [maxDaysReservation, maxDateReservation], treshold)}
                     onChange={(e) => handleDateChange(e, 0)}
                 />
             </Col>
@@ -256,7 +256,7 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                     placeholder={text[2]}
                     onChange={(e) => handleDateChange(e, 1)}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => !enableReservations || isDateDisabled(current, blockedDates, currentDates, 1, [maxDaysReservation, maxDateReservation], treshold)}
+                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates, currentDates, 1, [maxDaysReservation, maxDateReservation], treshold)}
                 />
             </Col>
             <Col xs={24} md={width}>

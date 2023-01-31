@@ -22,6 +22,7 @@ class CarCategoryResource extends JsonResource
                 'color' => $this->level->color,
                 'prices' => $this->level->prices
             ],
+            'available_cars' => $this->cars()->where('status', 1)->count(),
             'caution' => $this->level->min_caution,
             'charateristics' => $this->charateristics,
             'treshold' => $this->cars()->count(),

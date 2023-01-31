@@ -82,6 +82,13 @@ export function getCarPrice(prices, days, factors) {
     return carPrice;
 }
 
+export function getInsurancePrice(insurances, days) {
+    console.log(insurances.find((e) => { return e.name.pt == "Premium" }));
+    console.log(days);
+    return parseFloat(insurances.find((e) => { return e.name.pt == "Premium" }).price) * days;
+
+}
+
 export function isDateDisabled(current, blockedDates, currentDates, index, maximumValues, registration = true) {
     if (!registration) {
         return true;

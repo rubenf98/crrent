@@ -52,12 +52,12 @@ function TableContainer({ handleUpdateClick, handleCreateClick, loading, data, m
         {
             title: 'LEVANTAMENTO',
             dataIndex: 'pickup_date',
-            render: (pickup, row) => row.pickup_place + " " + moment(pickup).format("DD/MM/YYYY HH:mm") + "h",
+            render: (pickup, row) => moment(pickup).format("DD/MM/YYYY HH:mm") + "h, " + row.pickup_place,
         },
         {
             title: 'ENTREGA',
             dataIndex: 'return_date',
-            render: (return_date, row) => row.return_place + " " + moment(return_date).format("DD/MM/YYYY HH:mm") + "h",
+            render: (return_date, row) => moment(return_date).format("DD/MM/YYYY HH:mm") + "h, " + row.return_place,
         },
         {
             title: 'VEÍCULO',

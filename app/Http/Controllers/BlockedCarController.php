@@ -101,7 +101,10 @@ class BlockedCarController extends Controller
         $ids = [];
 
         foreach ($period as $date) {
-            $blockedDates = BlockDate::where('date', $date->format('Y-m-d'))->where('car_id', $car->id)->get();
+            $blockedDates = BlockDate::where('date', $date->format('Y-m-d'))
+                ->where('car_id', $car->id)
+                ->where('reservation_id', null)
+                ->get();
 
             foreach ($blockedDates as $blockedDate) {
                 array_push($ids, $blockedDate->id);
