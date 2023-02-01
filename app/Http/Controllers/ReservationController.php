@@ -22,13 +22,9 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateInterval;
 use DatePeriod;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ReservationController extends Controller
 {
@@ -39,7 +35,10 @@ class ReservationController extends Controller
      */
     public function index(ReservationFilters $filters)
     {
-        return ReservationResource::collection(Reservation::filterBy($filters)->with("car")->with("car.category")->with('client')->with('drivers')->with('extras')->paginate(5));
+        return ReservationResource::collection(
+            Reservation::with(["car", "car.category", 'client', 'drivers', 'extras'])
+                ->filterBy($filters)->paginate(5)
+        );
     }
 
     /**

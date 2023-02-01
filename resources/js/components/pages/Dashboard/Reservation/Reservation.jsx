@@ -44,12 +44,22 @@ function Reservation({ data, dataArchive,
         fetchReservationsArchive(1, archiveFilters);
     }, [archiveFilters])
 
-    const handleArchivePageChange = (pagination) => {
-        fetchReservationsArchive(pagination.current, archiveFilters);
+    const handleArchivePageChange = (pagination, _, sorter) => {
+        var sorterData = {};
+        if (sorter.field && sorter.order) {
+            sorterData[sorter.field.replace("_", "") + "Sorter"] = sorter.order == "ascend" ? "asc" : "desc";
+        }
+
+        fetchReservationsArchive(pagination.current, { ...archiveFilters, ...sorterData });
     }
 
-    const handlePageChange = (pagination) => {
-        fetchReservations(pagination.current, filters);
+    const handlePageChange = (pagination, _, sorter) => {
+        var sorterData = {};
+        if (sorter.field && sorter.order) {
+            sorterData[sorter.field.replace("_", "") + "Sorter"] = sorter.order == "ascend" ? "asc" : "desc";
+        }
+
+        fetchReservations(pagination.current, { ...filters, ...sorterData });
     }
 
     const handleRowClick = (row) => {

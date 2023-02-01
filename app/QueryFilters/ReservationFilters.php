@@ -2,6 +2,7 @@
 
 namespace App\QueryFilters;
 
+use App\Models\Client;
 use Carbon\Carbon;
 use Cerbero\QueryFilters\QueryFilters;
 
@@ -12,6 +13,31 @@ use Cerbero\QueryFilters\QueryFilters;
 class ReservationFilters extends QueryFilters
 {
 
+    public function clientSorter($string)
+    {
+        $this->query->orderBy(
+            Client::select('name')
+                ->whereColumn('clients.id', 'reservations.client_id'),
+            $string
+        );
+    }
+
+    public function pickupdateSorter($string)
+    {
+        $this->query->orderBy('pickup_date', $string);
+    }
+
+    public function returndateSorter($string)
+    {
+        $this->query->orderBy('return_date', $string);
+    }
+
+    public function idSorter($string)
+    {
+        $this->query->orderBy('id', $string);
+    }
+
+
     public function car($string)
     {
         $this->query->whereHas('car', function ($query) use ($string) {
@@ -21,6 +47,7 @@ class ReservationFilters extends QueryFilters
                 });
         });
     }
+
     public function dates($array)
     {
         // $startDate = Carbon::parse($array[0]);

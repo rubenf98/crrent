@@ -36,21 +36,25 @@ function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete
         {
             title: 'ID',
             dataIndex: 'id',
+            sorter: true,
             render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
             title: 'CLIENTE',
             dataIndex: 'client',
+            sorter: true,
             render: (client) => client?.name,
         },
         {
             title: 'LEVANTAMENTO',
             dataIndex: 'pickup_date',
+            sorter: true,
             render: (pickup, row) => moment(pickup).format("DD/MM/YYYY HH:mm") + "h, " + row.pickup_place,
         },
         {
             title: 'ENTREGA',
             dataIndex: 'return_date',
+            sorter: true,
             render: (return_date, row) => moment(return_date).format("DD/MM/YYYY HH:mm") + "h, " + row.return_place,
         },
         {
