@@ -71,6 +71,6 @@ class EmailNotification extends Command
             array_push($returnContent, "Não existem devoluções agendadas para amanhã");
         }
 
-        Mail::to('jrubenf98@gmail.com')->queue(new NotificationMail($pickupContent, $returnContent));
+        Mail::to('info@cr-rent.com')->queue(new NotificationMail($pickupContent, $returnContent));
     }
 }
