@@ -43,7 +43,7 @@ class ReservationEmail extends Mailable implements ShouldQueue
                 'as' => $this->token . '.pdf',
                 'mime' => 'application/pdf',
             ])->attach(storage_path("/app/invoice_" . $this->token . ".pdf"), [
-                'as' => 'invoice_' . $this->token . '.pdf',
+                'as' => 'reservation_details.pdf',
                 'mime' => 'application/pdf',
             ]);
     }
