@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme, keyframes, css } from "styled-components";
 import { Button, maxWidthStyle, SecundaryButton } from '../../styles';
-import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col, Alert, Tooltip } from 'antd';
+import { Checkbox, Input, DatePicker, InputNumber, Form, Row, Col, Alert, Tooltip, Spin } from 'antd';
 import TitleContainer from './Common/TitleContainer';
 import { dimensions, maxWidth } from '../../helper';
 import { connect } from "react-redux";
@@ -27,6 +27,10 @@ const stretch = keyframes`
 const Submit = styled(Button)`
     cursor: ${props => props.active ? "pointer" : "default"};
     opacity: ${props => props.active ? "1" : ".3"};
+
+    .ant-spin-dot-item {
+        background-color: white !important;
+    }
 `;
 
 const SubmitSecundary = styled(SecundaryButton)`
@@ -345,7 +349,7 @@ const rules = {
 };
 
 
-function Summary({ language, theme, currentErrors, currentCar, values, currentReservation, createReservation, setCurrentErrors }) {
+function Summary({ language, theme, currentErrors, currentCar, values, currentReservation, createReservation, setCurrentErrors, loading }) {
     let navigate = useNavigate();
     const [price, setPrice] = useState(0);
     const [days, setDays] = useState(1);
@@ -510,7 +514,7 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
                             <div className='button-container'>
 
                                 <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                                    {text.button[0]}
+                                    {loading ? <Spin /> : text.button[0]}
                                 </Submit>
 
                                 {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>

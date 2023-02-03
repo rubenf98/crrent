@@ -473,7 +473,7 @@ function GeneralInfo(props) {
                     </Form.Item>
                 </Col>
                 <Col xs={24} md={24}>
-                    <Form.Item name="flight" rules={rules.flight}>
+                    <Form.Item name="flight">
                         <StyledInput prefix={<FlightIcon />} size="large" placeholder={text.placeholder.flight} />
                     </Form.Item>
                 </Col>
