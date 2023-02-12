@@ -9,6 +9,9 @@ class Comission extends Model
 {
     use HasFactory;
     protected $fillable = ['intermediary', 'value', 'agency_id', 'paid'];
+    protected $casts = [
+        'paid' => 'integer',
+    ];
 
     public function agency()
     {
