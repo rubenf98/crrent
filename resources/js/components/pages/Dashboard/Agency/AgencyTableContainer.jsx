@@ -4,6 +4,7 @@ import Table from "../../../common/TableContainer";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
 import Tag from "antd/es/tag";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -41,17 +42,28 @@ function TableContainer({ theme, loading, handleUpdateClick, data, onDelete, set
             render: (id) => <Tag color="purple">#{id}</Tag>,
         },
         {
-            title: 'HOTEL / AGÊNCIA',
+            title: 'AGÊNCIA',
             dataIndex: 'name',
-        },
-        {
-            title: 'COMISSÃO',
-            dataIndex: 'comission',
         },
         {
             title: 'Nº RESERVAS',
             dataIndex: 'reservations',
             render: (reservations) => reservations.length,
+        },
+        {
+            title: 'COMISSÕES PAGAS',
+            dataIndex: 'comissions',
+            render: (comissions) => comissions.paid + "€",
+        },
+        {
+            title: 'COMISSÕES PENDENTES',
+            dataIndex: 'comissions',
+            render: (comissions) => comissions.pending + "€",
+        },
+        {
+            title: '',
+            dataIndex: 'id',
+            render: (id) => <Link to={"/painel/agencias/" + id}>ver detalhes</Link>
         },
         {
             title: 'AÇÕES',

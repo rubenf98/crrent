@@ -19,6 +19,13 @@ class UpdateReservationRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'paid' => $this->paid ? 1 : 0,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -40,15 +47,17 @@ class UpdateReservationRequest extends FormRequest
             'car_price_per_day' => 'required|numeric',
             'local_address' => 'required|string',
             'notes' => 'nullable|string',
+            'payment_method' => 'nullable|string',
 
             'kms_pickup' => 'nullable|string',
             'kms_return' => 'nullable|string',
             'gas_pickup' => 'nullable|string',
             'gas_return' => 'nullable|string',
 
-            'agency_name' => 'nullable|string',
-            'agency_intermediary' => 'required_with:agency_name|string',
-            'agency_comission' => 'required_with:agency_name|numeric',
+            'agency_id' => 'nullable|integer|exists:agencies,id',
+            'intermediary' => 'required_with:agency_id|string',
+            'value' => 'required_with:agency_id|numeric',
+            'paid' => 'required_with:agency_id|integer',
 
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',

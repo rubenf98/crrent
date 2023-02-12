@@ -25,6 +25,9 @@ import CarDetail from "./components/pages/Dashboard/CarDetail/CarDetail";
 import Client from "./components/pages/Dashboard/Client/Client";
 import ClientDetail from "./components/pages/Dashboard/ClientDetail/ClientDetail";
 import GlobalParameter from "./components/pages/Dashboard/GlobalParameter/GlobalParameter";
+import Error from "./components/pages/Checkout/Error";
+import Agency from "./components/pages/Dashboard/Agency/Agency";
+import AgencyDetail from "./components/pages/Dashboard/AgencyDetail/AgencyDetail";
 
 export const history = createBrowserHistory();
 
@@ -40,6 +43,8 @@ function Router() {
                         <DashboardLayout><Dashboard /></DashboardLayout>
                     }
                 />
+                <Route path="/painel/agencias" element={<DashboardLayout><Agency /></DashboardLayout>} />
+                <Route path="/painel/agencias/:id" element={<DashboardLayout><AgencyDetail /></DashboardLayout>} />
                 <Route path="/painel/configuracao" element={<DashboardLayout><GlobalParameter /></DashboardLayout>} />
                 <Route path="/painel/clientes" element={<DashboardLayout><Client /></DashboardLayout>} />
                 <Route path="/painel/clientes/:id" element={<DashboardLayout><ClientDetail /></DashboardLayout>} />
@@ -56,6 +61,7 @@ function Router() {
                 <Route exact path="/garage" element={<Layout><Garage /></Layout>} />
                 <Route exact path="/checkout" element={<Layout><Checkout /></Layout>} />
                 <Route exact path="/success" element={<Layout><Success /></Layout>} />
+                <Route exact path="/error" element={<Layout><Error /></Layout>} />
                 <Route exact path="/confirmation" element={<Layout><Confirmation /></Layout>} />
                 <Route exact path="/" element={<Layout><Homepage /></Layout>} />
 

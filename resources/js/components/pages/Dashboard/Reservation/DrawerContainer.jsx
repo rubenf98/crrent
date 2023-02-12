@@ -5,11 +5,24 @@ import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
 import { downloadContract, fetchReservation, downloadInvoice } from '../../../../redux/reservation/actions';
 import moment from "moment";
+import { SmallPrimaryButton, SmallSecundaryButton } from '../../../styles';
+import { Link } from 'react-router-dom';
 
-const Section = styled.h3`
+const Section = styled.div`
     margin-top: 30px;
-    font-size: 24px;
-    font-weight: bold;
+
+    h3 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 0px;
+    }
+    
+    .underline {
+        width: 60px;
+        height: 4px;
+        background-color: ${({ theme }) => theme.primary} ;
+        margin-bottom: 30px;
+    }
 `;
 
 const Field = styled.div`
@@ -36,48 +49,68 @@ const FieldsContainer = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 35px;
+    box-sizing: border-box;
 
     .field-width {
         width: ${props => props.width};
     }
 `;
 
-const Download = styled.button`
+const Download = styled.div`
     font-weight: bold;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
     gap: 5px;
-    cursor: pointer;
     align-items: center;
     font-size: 16px;
-    padding: 6px 12px;
     box-sizing: border-box;
 
     svg {
         width: 16px;
+        fill: ${props => props.primary ? "#fff" : "#7b2cbf"} ;
     }
 
     p {
         margin: 0px;
+        color: ${props => props.primary ? "#fff" : "#7b2cbf"} ;
+    }
+
+    &:hover {
+        p {
+            color: ${props => props.primary ? "#fff" : "#7b2cbf"} ;
+        }  
     }
 `;
 
-const levelDecoder = {
-    1: "A",
-    2: "B",
-    3: "C",
-    4: "D",
-}
+const ButtonContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    gap: 15px;
+    width: 100%;
+
+    
+`;
+
+const Url = styled(Link)`
+    img {
+        width: 15px;
+        height: 15px;
+    }
+    
+`;
 
 function DrawerContainer(props) {
     const { currentId, drawerState, data } = props;
 
     useEffect(() => {
-        if (currentId) {
+        if (currentId && drawerState) {
             props.fetchReservation(currentId);
         }
-    }, [currentId])
+    }, [currentId, drawerState])
 
 
     const FieldContainer = ({ name, value, width }) => (
@@ -95,10 +128,11 @@ function DrawerContainer(props) {
 
 
     return (
-        <Drawer closable={false} width={"60%"} open={drawerState} onClose={() => props.setDrawerState(0)}>
+        <Drawer destroyOnClose closable={false} width={"60%"} open={drawerState} onClose={() => props.setDrawerState(0)}>
             <Row type="flex" dire>
                 <Col xs={24}>
-                    <Section>Informação geral</Section>
+
+                    <Section><h3>Informação geral</h3> <div className='underline' /></Section>
                     <FieldsContainer width="25%">
                         <FieldContainer name="Data da reserva" value={moment(data.created_at).format('DD-MM-YYYY HH:mm')} />
                         <FieldContainer name="Levantamento" value={moment(data.pickup_date).format('DD-MM-YYYY HH:mm') + ", " + data.pickup_place} />
@@ -110,14 +144,21 @@ function DrawerContainer(props) {
                         <FieldContainer name="Combustível entrega" value={EmptyField(data.gas_pickup)} />
                         <FieldContainer name="Combustível devolução" value={EmptyField(data.gas_return)} />
 
-                        <FieldContainer name="Viatura" value={data.car?.category?.title + " (" + data.car?.registration + ")"} />
+                        <Field className='field-width' >
+                            <p>
+                                <span className='name'>Viatura:</span> <span className='value'>{data.car?.category?.title + " (" + data.car?.registration + ")"}</span> <Url to={"/painel/carros/" + data.car?.id}><img src='/icon/dashboard/link.svg' /></Url>
+                            </p>
+
+                        </Field>
+
+                        <FieldContainer name="Método de pagamento" value={EmptyField(data.payment_method)} />
 
                         <FieldContainer width="100%" name="Notas" value={EmptyField(data.notes)} />
 
                     </FieldsContainer>
                 </Col>
                 <Col xs={12}>
-                    <Section>Preçário</Section>
+                    <Section><h3>Preçário</h3> <div className='underline' /></Section>
                     <FieldsContainer width="50%">
                         <FieldContainer name="Valor aluguer" value={data.car_price + "€"} />
                         <FieldContainer name="Preço unitário" value={data.car_price_per_day + "€"} />
@@ -127,15 +168,16 @@ function DrawerContainer(props) {
                 </Col>
 
                 <Col xs={12}>
-                    <Section>Comissão</Section>
+                    <Section><h3>Comissão {data?.comission?.agency?.id && <Url to={"/painel/agencias/" + data?.comission?.agency?.id}><img src='/icon/dashboard/link.svg' /></Url>}</h3> <div className='underline' /></Section>
                     <FieldsContainer width="50%">
                         <FieldContainer name="Agência" value={EmptyField(data?.comission?.agency?.name)} />
                         <FieldContainer name="Reservado por" value={EmptyField(data?.comission?.intermediary)} />
-                        <FieldContainer name="Valor comissão" value={EmptyField(data?.comission?.value)} />
+                        <FieldContainer name="Comissão" value={data?.comission?.value ? data?.comission?.value + "€" : EmptyField(false)} />
+                        <FieldContainer name="Estado" value={data?.comission?.paid ? "Pago" : "Pendente"} />
                     </FieldsContainer>
                 </Col>
                 <Col xs={24}>
-                    <Section>Cliente</Section>
+                    <Section><h3>Cliente <Url to={"/painel/clientes/" + data.client?.id}><img src='/icon/dashboard/link.svg' /></Url></h3> <div className='underline' /></Section>
                     <FieldsContainer width="25%">
                         <FieldContainer name="Agência" value={EmptyField(data.client?.company)} />
                         <FieldContainer name="Nome" value={data.client?.name} />
@@ -154,7 +196,7 @@ function DrawerContainer(props) {
                 </Col>
 
                 <Col span={24}>
-                    <Section>Condutor(es)</Section>
+                    <Section><h3>Condutor(es)</h3> <div className='underline' /></Section>
                     <Row type="flex" dire>
 
                         {data.drivers && data.drivers.map((driver, index) => (
@@ -174,7 +216,7 @@ function DrawerContainer(props) {
                 </Col>
 
                 <Col style={{ marginBottom: "50px" }} span={24}>
-                    <Section>Extras e/ou taxas</Section>
+                    <Section><h3>Extras e/ou taxas</h3> <div className='underline' /></Section>
                     {data.extras && data.extras.length ?
                         <ul>
                             {data.extras.map((extra, index) => (
@@ -186,11 +228,16 @@ function DrawerContainer(props) {
                         : <p>N/A</p>
                     }
                 </Col>
-                <Download onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
-                <Download onClick={() => props.downloadInvoice(data.token)}><p>Resumo</p><DownloadIcon /></Download>
-
+                <ButtonContainer>
+                    <SmallSecundaryButton>
+                        <Download primary={false} onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
+                    </SmallSecundaryButton>
+                    <SmallPrimaryButton>
+                        <Download primary={true} onClick={() => props.downloadInvoice(data.token)}><p>Resumo</p><DownloadIcon /></Download>
+                    </SmallPrimaryButton>
+                </ButtonContainer>
             </Row>
-        </Drawer>
+        </Drawer >
     )
 }
 

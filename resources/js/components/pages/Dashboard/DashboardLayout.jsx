@@ -132,6 +132,11 @@ function DashboardLayout({ children, fetchGlobalParameters }) {
             icon: <img className='icon' src="/icon/dashboard/client.svg" />
         },
         {
+            label: <Link to="/painel/agencias">Agências</Link>,
+            key: 'agencias',
+            icon: <img className='icon' src="/icon/dashboard/agency.svg" />
+        },
+        {
             label: <Link to="/painel/configuracao">Configuração</Link>,
             key: 'configuracao',
             icon: <img className='icon' src="/icon/dashboard/config.svg" />

@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Form, Row } from 'antd';
 import React, { useEffect, useState } from 'react'
 import styled, { withTheme } from "styled-components";
 import { dimensions, maxWidth } from '../../helper';
@@ -16,6 +16,7 @@ import { fetchBlocksSelector } from "../../../redux/block/actions";
 import { fetchExtras } from '../../../redux/extra/actions';
 import { getCarPrice, getPriceRounded, getPromotions, getDaysDifference } from '../../functions';
 import AlertContainer from '../../common/AlertContainer';
+import TitleContainer from './Common/TitleContainer';
 
 
 const Container = styled.section`
@@ -99,6 +100,58 @@ const Price = styled.div`
     }
 `;
 
+const PaymentContainer = styled.section`
+    ${maxWidthStyle}
+    margin: 120px auto;
+    max-width: calc(${maxWidth} - 200px);
+
+    @media (max-width: ${dimensions.md}) {
+        padding: 0px;
+    }
+
+    .payment-flex {
+        display: flex;
+        gap: 30px; 
+        align-items: flex-start;
+    }
+`;
+
+
+const Payment = styled.div`
+    padding: 20px;
+    min-width: 150px;
+    box-sizing: border-box;
+    opacity: ${props => props.active ? 1 : .5};
+    border: 1px solid;
+    border-color: ${props => props.active ? props.border : "transparent"};
+    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: ${dimensions.lg}) {
+        width: 45%;
+    }
+
+    @media (max-width: ${dimensions.md}) {
+        width: 100%;
+    }
+
+    h3 {
+        font-size: 16px;
+        text-align: center;
+        flex: 1;
+        padding-right: 20px;
+        box-sizing: border-box;
+        margin: 0px;
+    }
+
+    img {
+        width: 40px;
+    } 
+
+`;
+
 function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCurrentErrors,
     currentCar, setCurrentReservation, setCurrentReservationValues, extrasData,
     fetchBlocksSelector, promotions, currentReservation, currentErrors }) {
@@ -116,6 +169,7 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
     const [localizationPrice, setLocalizationPrice] = useState([0, 0])
 
     const [activeInsurance, setActiveInsurance] = useState({})
+    const [activePayment, setActivePayment] = useState(1)
 
     const [price, setPrice] = useState(0)
 
@@ -170,7 +224,7 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
                         newLocalizationPrice[1] = currentLocalization.price;
                     }
                 })
-
+                setActivePayment(currentReservation.payment_method);
                 handleDate(moment(currentReservation.date[0]), moment(currentReservation.date[1]));
 
                 var difference = getDaysDifference(currentReservation.date[0], currentReservation.date[1]);
@@ -241,38 +295,40 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
 
 
     const onFinish = () => {
-        form.validateFields().then((values) => {
-            setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates, insurance_id: activeInsurance.id, localizations: localization });
+        if (dates[0] && dates[1]) {
+            form.validateFields().then((values) => {
+                setCurrentReservation({ ...values, extras: [...extras, ...tax], date: dates, payment_method: activePayment, insurance_id: activeInsurance.id, localizations: localization });
 
-            var extraArray = [], taxArray = [], localizationArray = [];
+                var extraArray = [], taxArray = [], localizationArray = [];
 
-            extrasData.map((extra) => {
-                if (extras.includes(extra.id)) {
-                    extraArray.push([extra.name[language], extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
+                extrasData.map((extra) => {
+                    if (extras.includes(extra.id)) {
+                        extraArray.push([extra.name[language], extra.price + "€", (extra.type == "uni" ? extra.price : (extra.price * days))])
+                    }
+
+                    if (tax.includes(extra.id)) {
+                        taxArray.push([extra.name[language], extra.price + "€", extra.price])
+                    }
+                });
+
+                if (localizationPrice[0]) {
+                    localizationArray.push(["Taxa de entrega", localizationPrice[0] + "€", localizationPrice[0]])
                 }
 
-                if (tax.includes(extra.id)) {
-                    taxArray.push([extra.name[language], extra.price + "€", extra.price])
+                if (localizationPrice[1]) {
+                    localizationArray.push(["Taxa de devolução", localizationPrice[1] + "€", localizationPrice[1]])
                 }
-            });
 
-            if (localizationPrice[0]) {
-                localizationArray.push(["Taxa de entrega", localizationPrice[0] + "€", localizationPrice[0]])
-            }
+                setCurrentReservationValues({
+                    car: [[currentCar.title, price]],
+                    insurance: [[language == "pt" ? "Seguro" : "Insurance", activeInsurance.price + "€", activeInsurance.price * days]],
+                    extras: extraArray,
+                    tax: [...taxArray, ...localizationArray],
+                });
 
-            if (localizationPrice[1]) {
-                localizationArray.push(["Taxa de devolução", localizationPrice[1] + "€", localizationPrice[1]])
-            }
-
-            setCurrentReservationValues({
-                car: [[currentCar.title, price]],
-                insurance: [[language == "pt" ? "Seguro" : "Insurance", activeInsurance.price + "€", activeInsurance.price * days]],
-                extras: extraArray,
-                tax: [...taxArray, ...localizationArray],
-            });
-
-            navigate("/summary");
-        })
+                navigate("/summary");
+            })
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -328,7 +384,17 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
                         <Driver text={text} drivers={extras.includes(2) ? 2 : 1} />
                     </>
                 }
-
+                <PaymentContainer>
+                    <TitleContainer title={text.titles[6]} />
+                    <div className="payment-flex">
+                        {text.payments.map((payment) => (
+                            <Payment key={payment.id} border={theme.primary} active={activePayment == payment.id} onClick={() => setActivePayment(payment.id)}>
+                                <h3>{payment.name}</h3>
+                                <img src={payment.image} alt="" />
+                            </Payment>
+                        ))}
+                    </div>
+                </PaymentContainer>
                 <ButtonContainer>
                     <Button background={theme.primary} type="primary"> {text.button} </Button>
                 </ButtonContainer>

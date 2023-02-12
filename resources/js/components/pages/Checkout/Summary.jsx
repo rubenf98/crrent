@@ -415,6 +415,27 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
 
     }
 
+    const handleSubmitPayment = () => {
+        form.validateFields().then((card_info) => {
+            var data = { ...currentReservation, ...card_info };
+            const dateFormat = "YYYY-MM-DD HH:mm";
+
+            data.date = [moment(data.date[0]).format(dateFormat), moment(data.date[1]).format(dateFormat)];
+
+            createReservation({ ...data, car_category_id: currentCar.id }).then((response) => {
+                if (response.action.payload.data.transactionStatus == "Success") {
+                    window.location.href = response.action.payload.data.redirectUrl;
+                } else {
+                    navigate("/error");
+                }
+            }).catch((errors) => {
+                setCurrentErrors(errors.response.data.errors);
+                navigate("/checkout?from=" + data.date[0] + "&to=" + data.date[1]);
+            });
+        })
+
+    }
+
     return (
         <Container>
 
@@ -475,55 +496,68 @@ function Summary({ language, theme, currentErrors, currentCar, values, currentRe
 
                 </PolicyContainer>
 
-                <TitleContainer title={text.title[1]} />
-                <PaymentContainer primary={theme.primary}>
-                    <div className='column'>
+                {currentReservation.payment_method == 1 ?
+                    <Tooltip title={text.disabled}>
+                        <div className='button-container'>
 
-                        <h3>{text.title[2]}</h3>
-                        <Form
-                            layout="vertical"
-                            requiredMark={false}
-                            form={form}
-                        >
-                            <Row>
-                                <Col xs={24} md={20}>
-                                    <Form.Item name="card_number" label={text.form.card_number} rules={rules.card_number}>
-                                        <StyledInput placeholder='XXXX XXXX XXXX XXXX' />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                            <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmitPayment} background={theme.primary}>
+                                {loading ? <Spin /> : text.button[0]}
+                            </Submit>
+                        </div>
+                    </Tooltip>
+                    :
+                    <>
+                        <TitleContainer title={text.title[1]} />
+                        <PaymentContainer primary={theme.primary}>
+                            <div className='column'>
 
-                            <Row type="flex" gutter={16}>
-                                <Col xs={24} md={10}>
-                                    <Form.Item name="card_validity" label={text.form.validity} rules={rules.validity}>
-                                        <MonthPicker placeholder='YYYY-MM' />
-                                    </Form.Item>
-                                </Col>
+                                <h3>{text.title[2]}</h3>
+                                <Form
+                                    layout="vertical"
+                                    requiredMark={false}
+                                    form={form}
+                                >
+                                    <Row>
+                                        <Col xs={24} md={20}>
+                                            <Form.Item name="card_number" label={text.form.card_number} rules={rules.card_number}>
+                                                <StyledInput placeholder='XXXX XXXX XXXX XXXX' />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
 
-                                <Col xs={24} md={10}>
-                                    <Form.Item name="card_cvv" label={text.form.cvv} rules={rules.cvv}>
-                                        <StyledInputNumber placeholder='XXX' />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </div>
-                    <div className='column right-side'>
-                        <p className='info'>{text.info}</p>
-                        <Tooltip title={text.disabled}>
-                            <div className='button-container'>
+                                    <Row type="flex" gutter={16}>
+                                        <Col xs={24} md={10}>
+                                            <Form.Item name="card_validity" label={text.form.validity} rules={rules.validity}>
+                                                <MonthPicker placeholder='YYYY-MM' />
+                                            </Form.Item>
+                                        </Col>
 
-                                <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
-                                    {loading ? <Spin /> : text.button[0]}
-                                </Submit>
+                                        <Col xs={24} md={10}>
+                                            <Form.Item name="card_cvv" label={text.form.cvv} rules={rules.cvv}>
+                                                <StyledInputNumber placeholder='XXX' />
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </div>
+                            <div className='column right-side'>
+                                <p className='info'>{text.info}</p>
+                                <Tooltip title={text.disabled}>
+                                    <div className='button-container'>
 
-                                {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                        <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
+                                            {loading ? <Spin /> : text.button[0]}
+                                        </Submit>
+
+                                        {/* <Submit disabled={!privacy || !conditions} active={privacy && conditions} onClick={handleSubmit} background={theme.primary}>
                                 {text.button[1]}
                             </Submit> */}
+                                    </div>
+                                </Tooltip>
                             </div>
-                        </Tooltip>
-                    </div>
-                </PaymentContainer>
+                        </PaymentContainer>
+                    </>}
+
 
                 <AlertContainer
                     currentErrors={currentErrors}

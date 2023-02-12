@@ -15,7 +15,7 @@ class AgencyController extends Controller
      */
     public function index()
     {
-        return AgencyResource::collection(Agency::all());
+        return AgencyResource::collection(Agency::with('reservations')->get());
     }
 
     /**
@@ -55,7 +55,13 @@ class AgencyController extends Controller
      */
     public function update(Request $request, Agency $agency)
     {
-        //
+        if ($request->has('name')) {
+            $agency->update([
+                'name' => $request->name
+            ]);
+        }
+
+        return new AgencyResource($agency);
     }
 
     /**

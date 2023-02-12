@@ -14,6 +14,11 @@ class AgencyResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'comissions' => $this->comissionStatus,
+            'reservations' => $this->reservations()->with('comission')->with('car.category')->with('client')->get(),
+        ];
     }
 }

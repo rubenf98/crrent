@@ -24,6 +24,7 @@ class GlobalParameterSeeder extends Seeder
             ['name' => 'Número máximo de dias para uma reserva', 'code' => 'max_days', 'value' => "31"],
 
             ['name' => 'Reservas na plataforma', 'code' => 'enable_reservations', 'value' => "1"],
+            ['name' => 'Notificações diárias', 'code' => 'enable_notifications', 'value' => "1"],
 
         ];
         foreach ($items as $item) {

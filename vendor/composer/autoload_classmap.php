@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\EmailNotification' => $baseDir . '/app/Console/Commands/EmailNotification.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AgencyController' => $baseDir . '/app/Http/Controllers/AgencyController.php',
@@ -24,6 +25,8 @@ return array(
     'App\\Http\\Controllers\\CreateExternalReservationController' => $baseDir . '/app/Http/Controllers/CreateExternalReservationController.php',
     'App\\Http\\Controllers\\DownloadContractController' => $baseDir . '/app/Http/Controllers/DownloadContractController.php',
     'App\\Http\\Controllers\\ExtraController' => $baseDir . '/app/Http/Controllers/ExtraController.php',
+    'App\\Http\\Controllers\\FetchAvailableDates' => $baseDir . '/app/Http/Controllers/FetchAvailableDates.php',
+    'App\\Http\\Controllers\\FetchInvoicePdf' => $baseDir . '/app/Http/Controllers/FetchInvoicePdf.php',
     'App\\Http\\Controllers\\GetCarAvailability' => $baseDir . '/app/Http/Controllers/GetCarAvailability.php',
     'App\\Http\\Controllers\\GetNextReservationsController' => $baseDir . '/app/Http/Controllers/GetNextReservationsController.php',
     'App\\Http\\Controllers\\GetReservationArchive' => $baseDir . '/app/Http/Controllers/GetReservationArchive.php',
@@ -80,6 +83,7 @@ return array(
     'App\\Http\\Resources\\ReservationResource' => $baseDir . '/app/Http/Resources/ReservationResource.php',
     'App\\Jobs\\HandleReservation' => $baseDir . '/app/Jobs/HandleReservation.php',
     'App\\Mail\\ConfirmationEmail' => $baseDir . '/app/Mail/ConfirmationEmail.php',
+    'App\\Mail\\NotificationMail' => $baseDir . '/app/Mail/NotificationMail.php',
     'App\\Mail\\ReservationEmail' => $baseDir . '/app/Mail/ReservationEmail.php',
     'App\\Models\\Agency' => $baseDir . '/app/Models/Agency.php',
     'App\\Models\\BlockDate' => $baseDir . '/app/Models/BlockDate.php',

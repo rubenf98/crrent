@@ -38,6 +38,7 @@ class ReservationRequest extends FormRequest
         $now = Carbon::parse($this->date[1]);
         $days = Reservation::getNumDays($from, $now);
         $car = $carCategory->getAvailableCar($from, $now);
+        
         // $out = new ConsoleOutput();
 
         $value = 0;
@@ -162,9 +163,11 @@ class ReservationRequest extends FormRequest
             'drivers.*.validity' => 'required|date|after:' . $this->return_date,
             'drivers.*.emission_place' => 'required|string',
 
-            'card_number' => ['required', new CardNumber],
-            'card_validity' => 'required|date|after:' . $this->return_date,
-            'card_cvv' => ['required', new CardCvc($this->card_number)],
+            'payment_method' => 'required|integer',
+
+            'card_number' => ['required_if:payment_method,2', new CardNumber],
+            'card_validity' => 'required_if:payment_method,2|date|after:' . $this->return_date,
+            'card_cvv' => ['required_if:payment_method,2', new CardCvc($this->card_number)],
         ];
     }
 

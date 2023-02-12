@@ -1,13 +1,23 @@
 import { Select } from 'antd';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
-import { fetchCars } from '../../../../redux/car/actions';
+import { fetchCarsSelector } from '../../../../redux/car/actions';
+import moment from "moment";
 
-function CarRemoteSelectContainer({ fetchCars, data, loading, value, onChange }) {
+function CarRemoteSelectContainer({ fetchCarsSelector, data, loading, value, onChange, dates }) {
+    const [filters, setFilters] = useState({})
     useEffect(() => {
-        fetchCars()
-    }, [])
+        fetchCarsSelector(filters)
+    }, [filters])
 
+    useEffect(() => {
+        if (dates) {
+            if (dates.pickup_date && dates.return_date) {
+                console.log(dates);
+                setFilters({ from: moment(dates.pickup_date).format('YYYY-MM-DD'), to: moment(dates.return_date).format('YYYY-MM-DD') })
+            }
+        }
+    }, [dates])
     return (
         <Select
             value={value}
@@ -26,13 +36,13 @@ function CarRemoteSelectContainer({ fetchCars, data, loading, value, onChange })
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCars: (filters) => dispatch(fetchCars(filters)),
+        fetchCarsSelector: (filters) => dispatch(fetchCarsSelector(filters)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
-        data: state.car.data,
+        data: state.car.selector,
         loading: state.car.loading,
     };
 };

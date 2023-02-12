@@ -7,6 +7,7 @@ import Checkbox from "antd/es/checkbox";
 import { createCar, updateCar } from "../../../../redux/car/actions";
 import LevelRemoteSelectContainer from "../Level/LevelRemoteSelectContainer";
 import { formWidth } from "../../../helper";
+import CarCategoryRemoteSelectContainer from "../CarCategory/CarCategoryRemoteSelectContainer";
 
 
 const ButtonContainer = styled(Row)`
@@ -109,7 +110,7 @@ function FormContainer({ loading, edit, handleClose, updateCar, visible, current
                             </Col>
                             <Col span={8}>
                                 <Form.Item rules={rules.level} label="Categoria" name="car_category_id">
-                                    <LevelRemoteSelectContainer />
+                                    <CarCategoryRemoteSelectContainer />
                                 </Form.Item>
                             </Col>
 

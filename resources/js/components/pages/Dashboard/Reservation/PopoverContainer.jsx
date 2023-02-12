@@ -52,8 +52,7 @@ function PopoverContainer({ key, item, children, handleCalendarViewMore }) {
                 <p className='value'>{data.id}</p>
 
                 <p className='title'>estado</p>
-                <p className='value'>{data.confirmed_at ? <Tag color="success">Confirmado</Tag>
-                    : moment().diff(moment(data.pickup_date)) > 0 ? <Tag color="error">Cancelado</Tag> : <Tag color="warning">Pendente</Tag>}</p>
+                <p className='value'> <Tag color={data.status == "pendente" ? "warning" : data.status == "confirmado" ? "success" : "error"}>{data.status}</Tag></p>
 
                 <p className='title'>data</p>
                 <p className='value'>{moment(data.created_at).format("DD-MM-YYYY HH:mm")}</p>

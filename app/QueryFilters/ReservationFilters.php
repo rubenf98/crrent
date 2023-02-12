@@ -82,7 +82,7 @@ class ReservationFilters extends QueryFilters
     {
         $date = Carbon::parse($string);
 
-        $this->query->where('pickup_date', '>=', $date);
+        $this->query->where([['pickup_date', '>=', $date]])->orWhere([['return_date', '>=', $date], ['status', 'confirmado']]);
     }
 
     public function before($string)

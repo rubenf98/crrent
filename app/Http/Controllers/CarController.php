@@ -62,8 +62,8 @@ class CarController extends Controller
 
         return CarResource::collection(
             Car::filterBy($filters)
-                ->whereNotIn('id', $blockedCars)->where('status', true)->with('level')
-                ->orderBy('level_id', 'asc')->groupBy('title')->get()
+                ->whereNotIn('id', $blockedCars)->where('status', true)->with('category')
+                ->get()
         );
     }
 

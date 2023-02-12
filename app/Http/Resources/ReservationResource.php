@@ -37,11 +37,13 @@ class ReservationResource extends JsonResource
             'extras' => $this->extras,
             'localizations' => $this->localizations,
             'comission' => $this->comission()->with('agency')->first(),
+            'status' => $this->status,
             'kms_pickup' => $this->kms_pickup,
             'kms_return' => $this->kms_return,
             'gas_pickup' => $this->gas_pickup,
             'gas_return' => $this->gas_return,
             'confirmed_at' => $this->confirmed_at,
+            'created_at' => (string) $this->created_at,
         ];
     }
 }

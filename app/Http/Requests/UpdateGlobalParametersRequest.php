@@ -24,6 +24,7 @@ class UpdateGlobalParametersRequest extends FormRequest
 
         $this->merge([
             'enable_reservations' => $this->enable_reservations ? 1 : 0,
+            'enable_notifications' => $this->enable_notifications ? 1 : 0,
         ]);
     }
 
@@ -42,6 +43,7 @@ class UpdateGlobalParametersRequest extends FormRequest
             'max_date' => 'required|date',
             'max_days' => 'required|integer',
             'enable_reservations' => 'required|integer',
+            'enable_notifications' => 'required|integer',
         ];
     }
 

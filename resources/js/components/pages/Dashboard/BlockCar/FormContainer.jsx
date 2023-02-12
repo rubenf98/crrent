@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Modal, Row, Form, DatePicker, Button, Col } from 'antd';
+import { Modal, Row, Form, DatePicker, Button, Col, Alert } from 'antd';
 import moment from 'moment';
 import { connect } from "react-redux";
 import { createBlockCar } from "../../../../redux/blockCar/actions"
 import CarRemoteSelectContainer from "../Car/CarRemoteSelectContainer";
 import TextArea from "antd/lib/input/TextArea";
+import { hasBlock } from "../../../../redux/block/actions";
 
 const { RangePicker } = DatePicker;
 
@@ -43,13 +44,21 @@ const rules = {
 
 
 
-function FormContainer({ loading, handleClose, createBlockCar, visible }) {
+function FormContainer({ blockedDates, loading, handleClose, createBlockCar, visible, hasBlock }) {
     const [form] = Form.useForm();
+    const [filters, setFilters] = useState({})
 
     const handleModalClose = () => {
         form.resetFields();
         handleClose();
     }
+
+    useEffect(() => {
+        if (filters.start && filters.end && filters.car_id) {
+            hasBlock(filters);
+        }
+    }, [filters])
+
 
 
     const onFinish = (values) => {
@@ -66,6 +75,8 @@ function FormContainer({ loading, handleClose, createBlockCar, visible }) {
         })
 
     };
+
+    console.log(blockedDates);
     return (
         <Container>
             <div>
@@ -96,6 +107,7 @@ function FormContainer({ loading, handleClose, createBlockCar, visible }) {
                                                 (currentDate < moment().startOf('day'))
                                             );
                                         }}
+                                        onChange={(e) => setFilters({ ...filters, start: e[0].format("YYYY-MM-DD"), end: e[1].format("YYYY-MM-DD") })}
                                         style={{ width: "100%" }}
                                     />
                                 </Form.Item>
@@ -106,7 +118,7 @@ function FormContainer({ loading, handleClose, createBlockCar, visible }) {
                                     rules={rules.car}
                                     label="Veículo"
                                 >
-                                    <CarRemoteSelectContainer />
+                                    <CarRemoteSelectContainer onChange={(e) => setFilters({ ...filters, car_id: e })} />
                                 </Form.Item>
                             </Col>
 
@@ -119,6 +131,18 @@ function FormContainer({ loading, handleClose, createBlockCar, visible }) {
                                 </Form.Item>
                             </Col>
                         </Row>
+
+                        {blockedDates.length ? <Alert
+                            showIcon
+                            message="Existem reservas com o veículo bloqueado para as datas selecionadas"
+                            description={blockedDates.map((record, index) => (
+                                <span key={index}>{record.date}, </span>
+                            ))}
+                            style={{ margin: "20px 0px" }}
+                            type="error"
+                            closable
+                        /> : <></>}
+
 
                         <ButtonContainer type="flex" justify="end">
                             <Button loading={loading} size="large" width="150px" type="primary" htmlType="submit">
@@ -136,12 +160,14 @@ function FormContainer({ loading, handleClose, createBlockCar, visible }) {
 const mapStateToProps = (state) => {
     return {
         loading: state.blockCar.loading,
+        blockedDates: state.block.hasBlock,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
         createBlockCar: (data) => dispatch(createBlockCar(data)),
+        hasBlock: (filters) => dispatch(hasBlock(filters)),
     };
 };
 

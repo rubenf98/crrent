@@ -61,18 +61,17 @@ function TodayTableContainer({ title, loading, data, meta, handlePageChange, han
         {
             title: 'LEVANTAMENTO',
             dataIndex: 'pickup_date',
-            render: (pickup, row) => row.pickup_place + " " + moment(pickup).format("HH:mm") + "h",
+            render: (pickup, row) => moment(pickup).format("DD/MM/YYYY HH:mm") + "h, " + row.pickup_place,
         },
         {
             title: 'ENTREGA',
             dataIndex: 'return_date',
-            render: (return_date, row) => row.return_place + " " + moment(return_date).format("HH:mm") + "h",
+            render: (return_date, row) => moment(return_date).format("DD/MM/YYYY HH:mm") + "h, " + row.return_place,
         },
         {
             title: 'ESTADO',
-            dataIndex: 'confirmed_at',
-            render: (confirmed_at) => confirmed_at ? <Tag color="success">Confirmado</Tag>
-                : <Tag color="warning">Pendente</Tag>,
+            dataIndex: 'status',
+            render: (status) => <Tag color={status == "pendente" ? "warning" : status == "confirmado" ? "success" : "error"}>{status}</Tag>,
         },
 
     ];

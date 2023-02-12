@@ -19,7 +19,7 @@ class GetReservationsPerMonthController extends Controller
     {
         return ReservationResource::collection(
             Reservation::filterBy($filters)
-                ->with("car")->with("car.category")->with('client')->with('drivers')->with('extras')
+                ->where('status', "!=", "cancelado")->with("car")->with("car.category")->with('client')->with('drivers')->with('extras')
                 ->get()
         );
     }

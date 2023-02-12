@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
-import { fetchAgencies, deleteAgency, setCurrentAgency } from "../../../../redux/price/actions";
+import { fetchAgencies, deleteAgency, setCurrentAgency } from "../../../../redux/agency/actions";
 import AgencyTableContainer from "./AgencyTableContainer";
 import { dimensions } from '../../../helper';
 import AgencyFormContainer from './AgencyFormContainer';

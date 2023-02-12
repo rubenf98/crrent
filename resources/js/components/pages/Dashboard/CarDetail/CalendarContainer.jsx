@@ -27,7 +27,7 @@ const Container = styled.section`
         opacity: 1;
     }
 
-    .empty, .full, .past {
+    .empty, .full, .past, .pending {
         color: white;
     }
 
@@ -41,6 +41,10 @@ const Container = styled.section`
 
     .full {
         background-color: red;
+    }
+
+    .pending {
+        background-color: orange;
     }
 
     h1 {
@@ -65,7 +69,10 @@ function CalendarContainer({ data, loading, handleFilters }) {
                 moment(reservation.return_date).endOf('day'),
                 'day', '[]'
             )) {
-                hasActivity = "full";
+                if (reservation.status == "confirmado") {
+                    hasActivity = "full";
+                } else hasActivity = "pending";
+
             }
 
             if (value.isBefore(moment().startOf('day'))) {

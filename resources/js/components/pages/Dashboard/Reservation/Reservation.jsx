@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { fetchReservations, deleteReservation, fetchReservationsArchive } from "../../../../redux/reservation/actions";
+import { fetchReservations, deleteReservation, fetchReservationsArchive, updateReservationStatus } from "../../../../redux/reservation/actions";
 import TableContainer from "./TableContainer";
 import ArchiveTableContainer from "./ArchiveTableContainer";
 import { dimensions } from '../../../helper';
@@ -14,7 +14,7 @@ const Container = styled.div`
     width: 100%;
 `;
 
-function Reservation({ data, dataArchive,
+function Reservation({ data, dataArchive, updateReservationStatus,
     metaArchive, loading, meta, fetchReservations, deleteReservation, fetchReservationsArchive }) {
     const [filters, setFilters] = useState({ after: moment().format('YYYY-MM-DD') });
     const [archiveFilters, setArchiveFilters] = useState({});
@@ -100,6 +100,7 @@ function Reservation({ data, dataArchive,
                 handleFilters={handleFilters}
                 handleUpdateClick={handleUpdateClick}
                 handleCreateClick={handleCreateClick}
+                handleStatusChange={(id, status) => (id && status) && updateReservationStatus(id, { status: status }).then(() => { location.reload(); })}
             />
 
             <ArchiveTableContainer
@@ -109,6 +110,7 @@ function Reservation({ data, dataArchive,
                 handleRowClick={handleRowClick}
                 handlePageChange={handleArchivePageChange}
                 handleFilters={handleArchiveFilters}
+                handleStatusChange={(id, status) => (id && status) && updateReservationStatus(id, { status: status }).then(() => { location.reload(); })}
             />
         </Container>
     )
@@ -119,6 +121,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchReservations: (page, filters) => dispatch(fetchReservations(page, filters)),
         fetchReservationsArchive: (page, filters) => dispatch(fetchReservationsArchive(page, filters)),
         deleteReservation: (id) => dispatch(deleteReservation(id)),
+        updateReservationStatus: (id, data) => dispatch(updateReservationStatus(id, data)),
     };
 };
 

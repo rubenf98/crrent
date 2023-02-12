@@ -19,7 +19,9 @@ export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.DELETE_RESERVATION}_PENDING`:
         case `${types.CONFIRM_RESERVATION}_PENDING`:
+        case `${types.ERROR_RESERVATION}_PENDING`:
         case `${types.UPDATE_RESERVATION}_PENDING`:
+        case `${types.UPDATE_RESERVATION_STATUS}_PENDING`:
         case `${types.CREATE_RESERVATION}_PENDING`:
         case `${types.CREATE_EXTERNAL_RESERVATION}_PENDING`:
         case `${types.FETCH_RESERVATIONS}_PENDING`:
@@ -34,10 +36,13 @@ export default (state = initialState, action = {}) => {
             };
 
         case `${types.UPDATE_RESERVATION}_REJECTED`:
+        case `${types.UPDATE_RESERVATION_STATUS}_REJECTED`:
         case `${types.DELETE_RESERVATION}_REJECTED`:
         case `${types.CREATE_RESERVATION}_REJECTED`:
         case `${types.CREATE_EXTERNAL_RESERVATION}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_REJECTED`:
+        case `${types.ERROR_RESERVATION}_REJECTED`:
+        case `${types.ERROR_RESERVATION}_FULFILLED`:
         case `${types.FETCH_RESERVATIONS_ARCHIVE}_REJECTED`:
         case `${types.CONFIRM_RESERVATION}_FULFILLED`:
             return {
@@ -72,6 +77,7 @@ export default (state = initialState, action = {}) => {
                 )
             };
 
+        case `${types.UPDATE_RESERVATION_STATUS}_FULFILLED`:
         case `${types.UPDATE_RESERVATION}_FULFILLED`:
             return {
                 ...state,
@@ -191,7 +197,7 @@ export default (state = initialState, action = {}) => {
                 ...state,
                 loadingDownload: true,
             };
-            
+
         case `${types.DOWNLOAD_INVOICE}_REJECTED`:
         case `${types.DOWNLOAD_INVOICE}_FULFILLED`:
         case `${types.DOWNLOAD_CONTRACT}_REJECTED`:

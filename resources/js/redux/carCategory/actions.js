@@ -16,6 +16,13 @@ export const fetchCarCategorySelector = (filters = {}) => ({
     })}`)
 })
 
+export const fetchCarCategoryRemoteSelector = (filters = {}) => ({
+    type: types.FETCH_CAR_CATEGORY_REMOTE_SELECTOR,
+    payload: axios.get(`${window.location.origin}/api/remoteselector/car-categories?${stringify(filters, {
+        arrayFormat: "index"
+    })}`)
+})
+
 export const fetchCarCategoriesAvailability = (filters = {}) => ({
     type: types.FETCH_CAR_CATEGORIES_AVAILABILITY,
     payload: axios.get(`${window.location.origin}/api/car-availability?${stringify(filters, {

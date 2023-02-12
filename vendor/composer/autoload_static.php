@@ -569,6 +569,7 @@ class ComposerStaticInit5ed6317408bfea97500d7fa017973660
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\EmailNotification' => __DIR__ . '/../..' . '/app/Console/Commands/EmailNotification.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\AgencyController' => __DIR__ . '/../..' . '/app/Http/Controllers/AgencyController.php',
@@ -587,6 +588,8 @@ class ComposerStaticInit5ed6317408bfea97500d7fa017973660
         'App\\Http\\Controllers\\CreateExternalReservationController' => __DIR__ . '/../..' . '/app/Http/Controllers/CreateExternalReservationController.php',
         'App\\Http\\Controllers\\DownloadContractController' => __DIR__ . '/../..' . '/app/Http/Controllers/DownloadContractController.php',
         'App\\Http\\Controllers\\ExtraController' => __DIR__ . '/../..' . '/app/Http/Controllers/ExtraController.php',
+        'App\\Http\\Controllers\\FetchAvailableDates' => __DIR__ . '/../..' . '/app/Http/Controllers/FetchAvailableDates.php',
+        'App\\Http\\Controllers\\FetchInvoicePdf' => __DIR__ . '/../..' . '/app/Http/Controllers/FetchInvoicePdf.php',
         'App\\Http\\Controllers\\GetCarAvailability' => __DIR__ . '/../..' . '/app/Http/Controllers/GetCarAvailability.php',
         'App\\Http\\Controllers\\GetNextReservationsController' => __DIR__ . '/../..' . '/app/Http/Controllers/GetNextReservationsController.php',
         'App\\Http\\Controllers\\GetReservationArchive' => __DIR__ . '/../..' . '/app/Http/Controllers/GetReservationArchive.php',
@@ -643,6 +646,7 @@ class ComposerStaticInit5ed6317408bfea97500d7fa017973660
         'App\\Http\\Resources\\ReservationResource' => __DIR__ . '/../..' . '/app/Http/Resources/ReservationResource.php',
         'App\\Jobs\\HandleReservation' => __DIR__ . '/../..' . '/app/Jobs/HandleReservation.php',
         'App\\Mail\\ConfirmationEmail' => __DIR__ . '/../..' . '/app/Mail/ConfirmationEmail.php',
+        'App\\Mail\\NotificationMail' => __DIR__ . '/../..' . '/app/Mail/NotificationMail.php',
         'App\\Mail\\ReservationEmail' => __DIR__ . '/../..' . '/app/Mail/ReservationEmail.php',
         'App\\Models\\Agency' => __DIR__ . '/../..' . '/app/Models/Agency.php',
         'App\\Models\\BlockDate' => __DIR__ . '/../..' . '/app/Models/BlockDate.php',

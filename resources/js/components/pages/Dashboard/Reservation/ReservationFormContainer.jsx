@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Modal, Row, Form, Button, Input, Col, DatePicker, InputNumber } from 'antd';
 import { connect } from "react-redux";
@@ -53,6 +53,7 @@ const rules = {
 
 function ReservationFormContainer(props) {
     const [form] = Form.useForm();
+    const [currentDates, setCurrentDates] = useState({})
     const { loading,
         visible,
         current, extras, edit, localizations } = props;
@@ -64,16 +65,17 @@ function ReservationFormContainer(props) {
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            console.log(values);
             edit ?
                 props.updateReservation(current.id, values)
                 : props.createExternalReservation(values);
             handleModalClose();
+            // location.reload();
         })
     };
 
     const handleDateChange = (value, field) => {
         var dates = form.getFieldsValue(['pickup_date', 'return_date']);
+        setCurrentDates(dates);
         dates[field] = value;
         var days = getDaysDifference(dates.pickup_date, dates.return_date);
         form.setFieldValue('days', days);
@@ -111,6 +113,7 @@ function ReservationFormContainer(props) {
                 insurance_id: current?.insurance.id,
                 price: current.price,
                 notes: current.notes,
+                payment_method: current.payment_method,
                 days: current.days,
                 car_id: current.car.id,
                 kms_pickup: current.kms_pickup,
@@ -125,6 +128,7 @@ function ReservationFormContainer(props) {
                 agency_id: current?.comission?.agency_id,
                 intermediary: current?.comission?.intermediary,
                 value: current?.comission?.value,
+                paid: current?.comission?.paid,
 
                 name: current?.client?.name,
                 cc: current?.client?.cc,
@@ -165,7 +169,22 @@ function ReservationFormContainer(props) {
                             </Col>
                             <Col span={12}>
                                 <Form.Item rules={rules.required} label="Data de devolução" name="return_date">
-                                    <DatePicker minuteStep={15} showTime format="DD-MM-YYYY HH:mm" onChange={(e) => handleDateChange(e, "return_date")} allowClear={false} style={{ width: "100%" }} />
+                                    <DatePicker
+                                        minuteStep={15}
+                                        showTime
+                                        format="DD-MM-YYYY HH:mm"
+                                        onChange={(e) => handleDateChange(e, "return_date")}
+                                        allowClear={false}
+                                        style={{ width: "100%" }}
+                                        disabledDate={(current) => {
+                                            var date = form.getFieldValue(['pickup_date']);
+
+                                            if (date) {
+                                                return current && current < date;
+                                            }
+                                            return false;
+                                        }}
+                                    />
                                 </Form.Item>
                             </Col>
 
@@ -235,7 +254,11 @@ function ReservationFormContainer(props) {
                             </>
                                 : <></>}
 
-
+                            <Col span={24}>
+                                <Form.Item rules={rules.required} label="Método de pagamento" name="payment_method">
+                                    <Input />
+                                </Form.Item>
+                            </Col>
                             <Col span={6}>
                                 <Form.Item label="Nº de voo" name="flight">
                                     <Input />
@@ -249,7 +272,7 @@ function ReservationFormContainer(props) {
 
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Veículo" name="car_id">
-                                    <CarRemoteSelectContainer />
+                                    <CarRemoteSelectContainer dates={currentDates} />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>

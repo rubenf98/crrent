@@ -50,7 +50,7 @@ class Car extends Model
                             $color = "red";
                         }
                         $hasReservation = [
-                            'color' => $color,
+                            'color' => $reservation->status == "pendente" ? $color : "red",
                             'type' => 'reservation',
                             'content' => $reservation
                         ];

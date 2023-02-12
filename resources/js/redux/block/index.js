@@ -5,6 +5,7 @@ export const initialState = {
     loading: false,
     current: [],
     selector: [],
+    hasBlock: [],
     meta: {}
 }
 
@@ -12,6 +13,7 @@ export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.FETCH_BLOCKS}_PENDING`:
         case `${types.FETCH_BLOCKS_SELECTOR}_PENDING`:
+        case `${types.HAS_BLOCK}_PENDING`:
         case `${types.CREATE_BLOCK}_PENDING`:
         case `${types.DELETE_BLOCK}_PENDING`:
             return {
@@ -19,8 +21,15 @@ export default (state = initialState, action = {}) => {
                 loading: true,
             };
 
+        case `${types.HAS_BLOCK}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                hasBlock: action.payload.data.data
+            };
 
         case `${types.CREATE_BLOCK}_REJECTED`:
+        case `${types.HAS_BLOCK}_REJECTED`:
             return {
                 ...state,
                 loading: false,

@@ -3,24 +3,33 @@ import { types } from "./types";
 export const initialState = {
     data: [],
     loading: false,
-    current: [],
+    current: {},
 }
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
         case `${types.FETCH_AGENCIES}_PENDING`:
         case `${types.CREATE_AGENCY}_PENDING`:
+        case `${types.FETCH_AGENCY}_PENDING`:
         case `${types.UPDATE_AGENCY}_PENDING`:
             return {
                 ...state,
                 loading: true,
             };
 
-        case `${types.CREATE_AGENCY}_PENDING`:
+        case `${types.FETCH_AGENCY}_REJECTED`:
+        case `${types.CREATE_AGENCY}_REJECTED`:
         case `${types.UPDATE_AGENCY}_REJECTED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.FETCH_AGENCY}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                current: action.payload.data.data,
             };
 
         case `${types.CREATE_AGENCY}_FULFILLED`:
@@ -47,7 +56,8 @@ export default (state = initialState, action = {}) => {
                         record.id === action.payload.data.data.id
                             ? action.payload.data.data
                             : record
-                )
+                ),
+                current: action.payload.data.data,
             };
 
 

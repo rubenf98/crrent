@@ -46,6 +46,11 @@ export const deleteReservation = id => ({
     meta: { id }
 });
 
+
+export const updateReservationStatus = (id, data) => ({
+    type: types.UPDATE_RESERVATION_STATUS,
+    payload: axios.put(`${window.location.origin}/api/update-reservation-status/${id}`, data),
+});
 export const updateReservation = (id, data) => ({
     type: types.UPDATE_RESERVATION,
     payload: axios.put(`${window.location.origin}/api/reservations/${id}`, data),
@@ -54,6 +59,11 @@ export const updateReservation = (id, data) => ({
 export const confirmReservation = (data) => ({
     type: types.CONFIRM_RESERVATION,
     payload: axios.put(`${window.location.origin}/api/confirm/reservation`, data),
+});
+
+export const errorReservation = (data) => ({
+    type: types.ERROR_RESERVATION,
+    payload: axios.put(`${window.location.origin}/api/error/reservation`, data),
 });
 
 export const createReservation = (data) => ({

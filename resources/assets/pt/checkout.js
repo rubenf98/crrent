@@ -1,5 +1,5 @@
 export const text = {
-    titles: ["Dados da sua reserva", "Seguro", "Extras", "Informação Do Cliente", "Condutor Principal", "Condutor Adicional"],
+    titles: ["Dados da sua reserva", "Seguro", "Extras", "Informação Do Cliente", "Condutor Principal", "Condutor Adicional", "Método de pagamento"],
     extras: {
         "Cobertura SCDW": "Cobertura SCDW",
         "Cobertura vidros e pneus": "Cobertura vidros e pneus",
@@ -70,5 +70,14 @@ export const text = {
     button: "reservar",
     notice: "Inclui IVA a 22%",
     error: "Ocorreu os seguintes erros com a reserva",
-
+    payments: [{
+        id: 1,
+        name: "Cartão de crédito",
+        image: "/icon/credit_card.svg"
+    },
+    {
+        id: 2,
+        name: "Pagar no levantamento",
+        image: "/icon/money.svg"
+    }]
 } 

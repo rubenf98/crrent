@@ -6,6 +6,7 @@ export const initialState = {
     current: {},
     loading: false,
     selector: [],
+    list: [],
     meta: {}
 }
 
@@ -19,6 +20,7 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_CAR_CATEGORY}_PENDING`:
         case `${types.SET_CAR_CATEGORY_STATUS}_PENDING`:
         case `${types.FETCH_CAR_CATEGORIES_AVAILABILITY}_PENDING`:
+        case `${types.FETCH_CAR_CATEGORY_REMOTE_SELECTOR}_PENDING`:
             return {
                 ...state,
                 loading: true,
@@ -29,9 +31,17 @@ export default (state = initialState, action = {}) => {
         case `${types.CREATE_CAR_CATEGORY}_REJECTED`:
         case `${types.SET_CAR_CATEGORY_STATUS}_REJECTED`:
         case `${types.FETCH_CAR_CATEGORIES_AVAILABILITY}_REJECTED`:
+        case `${types.FETCH_CAR_CATEGORY_REMOTE_SELECTOR}_REJECTED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.FETCH_CAR_CATEGORY_REMOTE_SELECTOR}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                list: action.payload.data.data,
             };
 
 

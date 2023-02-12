@@ -19,6 +19,14 @@ class ExternalReservationRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'localizations' => [$this->localizations_0, $this->localizations_1],
+            'paid' => $this->paid ? 1 : 0,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,6 +43,7 @@ class ExternalReservationRequest extends FormRequest
             'postal_code' => 'nullable|string',
             'email' => 'required|string',
             'phone' => 'required|string',
+            'payment_method' => 'nullable|string',
             'client_notes' => 'nullable|string',
 
             'local_address' => 'required|string',
@@ -53,9 +62,13 @@ class ExternalReservationRequest extends FormRequest
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',
 
+            'localizations' => 'required|array|size:2',
+            'localizations.*' => 'integer|exists:localizations,id',
+
             'agency_id' => 'nullable|exists:agencies,id',
             'intermediary' => 'required_with:agency_id|string',
-            'value' => 'required_with:agency_id|string',
+            'value' => 'required_with:agency_id|numeric',
+            'paid' => 'required_with:agency_id|integer',
 
             'drivers' => 'nullable|array',
             'drivers.*.name' => 'nullable|string',

@@ -42,6 +42,7 @@ class CreateReservationsTable extends Migration
             $table->unsignedBigInteger("car_pref_id")->nullable();
             $table->unsignedBigInteger("client_id")->nullable();
             $table->datetime('confirmed_at')->nullable();
+            $table->string('status')->default('pendente');
             $table->timestamps();
             $table->softDeletes();
 

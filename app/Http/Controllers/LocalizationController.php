@@ -82,6 +82,8 @@ class LocalizationController extends Controller
      */
     public function destroy(Localization $localization)
     {
-        //
+        $localization->delete();
+
+        return response()->json(null, 204);
     }
 }

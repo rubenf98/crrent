@@ -11,7 +11,9 @@ use App\Models\Card;
 use App\Models\Client;
 use App\Models\Comission;
 use App\Models\Driver;
+use App\Models\Localization;
 use App\Models\Reservation;
+use App\Models\ReservationHasLocalization;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -44,6 +46,7 @@ class CreateExternalReservationController extends Controller
                 "agency_id" => $validator['agency_id'],
                 "intermediary" => $validator['intermediary'],
                 "value" => $validator['value'],
+                "paid" => $validator['paid'],
             ]);
 
             $validator['comission_id'] = $comission->id;
@@ -61,6 +64,7 @@ class CreateExternalReservationController extends Controller
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
+            'payment_method' => Arr::get($validator, 'payment_method'),
             'car_pref_id' => $validator['car_id'],
             'car_id' => $validator['car_id'],
             'insurance_id' => $validator['insurance_id'],
@@ -80,6 +84,16 @@ class CreateExternalReservationController extends Controller
                 "reservation_id" => $reservation->id
             ]);
         }
+
+        foreach ($validator['localizations'] as $localization) {
+            $current = Localization::find($localization);
+            ReservationHasLocalization::create([
+                'reservation_id' => $reservation->id,
+                'localization_id' => $current->id,
+                'price' => $current->price,
+            ]);
+        }
+
         if ($request->has("extras")) {
             $reservation->extras()->attach($validator["extras"]);
         }
@@ -87,20 +101,24 @@ class CreateExternalReservationController extends Controller
         $drivers = [];
         if (Arr::get($validator, 'drivers')) {
             foreach ($validator['drivers'] as $driverData) {
-                $driver = Driver::create([
-                    'name' => Arr::get($driverData, 'name'),
-                    'birthday' => array_key_exists('birthday', $driverData)  ? Carbon::parse($driverData['birthday']) : null,
-                    'license' => Arr::get($driverData, 'license'),
-                    'emission' => array_key_exists('emission', $driverData)  ? Carbon::parse($driverData['emission']) : null,
-                    'validity' => array_key_exists('validity', $driverData)  ? Carbon::parse($driverData['validity']) : null,
-                    'emission_place' => Arr::get($driverData, 'emission_place'),
-                ]);
-                array_push($drivers, $driver->id);
+                if ($driverData) {
+                    $driver = Driver::create([
+                        'name' => Arr::get($driverData, 'name'),
+                        'birthday' => array_key_exists('birthday', $driverData)  ? Carbon::parse($driverData['birthday']) : null,
+                        'license' => Arr::get($driverData, 'license'),
+                        'emission' => array_key_exists('emission', $driverData)  ? Carbon::parse($driverData['emission']) : null,
+                        'validity' => array_key_exists('validity', $driverData)  ? Carbon::parse($driverData['validity']) : null,
+                        'emission_place' => Arr::get($driverData, 'emission_place'),
+                    ]);
+                    array_push($drivers, $driver->id);
+                }
             }
-            $reservation->drivers()->attach($drivers);
+            if (count($drivers)) {
+                $reservation->drivers()->attach($drivers);
+            }
         }
 
-
+        $reservation->generateInvoice();
         HandleReservation::dispatch($reservation);
         DB::commit();
 

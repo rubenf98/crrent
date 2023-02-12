@@ -63,7 +63,7 @@ function CarCategoryFormContainer({ loading, handleClose, updateCarCategory, vis
             form.setFieldsValue({
                 title: current.title,
                 descriptionpt: current?.description?.pt,
-                descriptionpen: current?.description?.en,
+                descriptionen: current?.description?.en,
                 level_id: current.level?.id,
                 gas: current.charateristics.find((e) => { return e.name == "gas" }).pivot?.value,
                 shift_mode: current.charateristics.find((e) => { return e.name == "shift_mode" }).pivot?.value,
@@ -109,7 +109,7 @@ function CarCategoryFormContainer({ loading, handleClose, updateCarCategory, vis
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item rules={rules.description} name="descriptionpen" label="Descrição do carro (EN)">
+                                <Form.Item rules={rules.description} name="descriptionen" label="Descrição do carro (EN)">
                                     <TextArea />
                                 </Form.Item>
                             </Col>

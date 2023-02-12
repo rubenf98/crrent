@@ -156,8 +156,7 @@
                         style="display: block; font-weight: bold; margin-bottom: 2px; font-size: 1.1em;">
                         Order Status
                     </span>
-                    <span style="font-weight: bold;" class="vrc-email-summ-values">{{$reservation->confirmed_at
-                        ? "Confirmado" : "Pendente"}}</span>
+                    <span style="font-weight: bold;" class="vrc-email-summ-values">{{$reservation->status}}</span>
                 </div>
                 <div class="boxstatusorder" style="width: 25%; padding:10px; box-sizing: border-box;">
                     <span class="vrc-email-summ-lbl"

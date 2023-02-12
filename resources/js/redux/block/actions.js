@@ -9,6 +9,12 @@ export const fetchBlocks = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 })
 
+export const hasBlock = (filters = {}) => ({
+    type: types.HAS_BLOCK,
+    payload: axios.get(`${window.location.origin}/api/hasblock?${stringify(filters, {
+        arrayFormat: "index"
+    })}`)
+})
 
 export const fetchBlocksSelector = (filters) => ({
     type: types.FETCH_BLOCKS_SELECTOR,

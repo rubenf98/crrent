@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Jobs\HandleReservation;
 use App\Mail\ConfirmationEmail;
+use App\Mail\ProofEmail;
 use App\Models\Agency;
 use App\Models\BlockDate;
 use App\Models\Car;
@@ -56,7 +57,12 @@ class ReservationController extends Controller
         // try {
         $client = Client::store($validator);
         $drivers = Driver::store($validator);
-        $card = Card::store($validator);
+        $hasCard = false;
+        if (array_key_exists('card_number', $validator)) {
+            $hasCard = true;
+            $card = Card::store($validator);
+        }
+
 
         $initDate = Carbon::parse($validator['pickup_date']);
         $endDate = Carbon::parse($validator['return_date']);
@@ -68,6 +74,7 @@ class ReservationController extends Controller
             'return_date' =>  $endDate,
             'pickup_place' => $validator['pickup_place'],
             'return_place' => $validator['return_place'],
+            'payment_method' => $validator['payment_method'] == 1 ? "Cartão de crédito" : "Pagamento no levantamento",
             'address' => $validator['local_address'],
             'flight' => array_key_exists('flight', $validator)  ? $validator['flight'] : null,
             'price' => $validator['price'],
@@ -77,7 +84,7 @@ class ReservationController extends Controller
             'car_pref_id' => $validator['car_id'],
             'car_id' => $validator['car_id'],
             'insurance_id' => $validator['insurance_id'],
-            'card_id' => $card->id,
+            'card_id' => $hasCard ? $card->id : null,
             'client_id' => $client->id,
         ]);
 
@@ -107,10 +114,29 @@ class ReservationController extends Controller
         $reservation->drivers()->attach($drivers);
         HandleReservation::dispatch($reservation);
         $reservation->generateInvoice();
-        Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
+        if ($validator['payment_method'] != 1) {
+            Mail::to($validator['email'])->queue(new ConfirmationEmail($reservation->token));
+        } else {
+            Mail::to($validator['email'])->queue(new ProofEmail($reservation->token));
+        }
         DB::commit();
 
-        return new ReservationResource($reservation);
+        if ($validator['payment_method'] == 1) {
+            $client = new \GuzzleHttp\Client();
+
+            $response = $client->request('POST', 'https://clientes.eupago.pt/api/v1.02/creditcard/create', [
+                'body' => '{"payment":{"amount":{"currency":"EUR","value":' . $reservation->price . '},"lang":"EN","successUrl":"https://crrent.ruben-freitas.pt/confirmation/?token=' . $reservation->token . '","failUrl":"https://crrent.ruben-freitas.pt/error/?token=' . $reservation->token . '","backUrl":"https://crrent.ruben-freitas.pt/error/?token=' . $reservation->token . '","identifier":"' . $reservation->token . '"},"customer":{"notify":true,"email":"joseruben98@hotmail.com"}}',
+                'headers' => [
+                    'Authorization' => 'ApiKey e50f-062e-e91a-118e-d72a',
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json',
+                ],
+            ]);
+            return json_decode($response->getBody(), true);
+        } else {
+            return new ReservationResource($reservation);
+        }
+
         // } catch (\Throwable $th) {
         //     DB::rollBack();
         //     return response()->json([
@@ -174,6 +200,7 @@ class ReservationController extends Controller
             'flight' => Arr::get($validator, "flight"),
             'address' => Arr::get($validator, "local_address"),
             'price' => $validator['price'],
+            'payment_method' => Arr::get($validator, 'payment_method'),
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],
             'days' => $validator['days'],
@@ -188,19 +215,21 @@ class ReservationController extends Controller
             'client_id' => $client->id,
         ]);
 
-        if (Arr::has($validator, ['agency_id', 'intermediary', 'comission'])) {
+        if (Arr::has($validator, ['agency_id', 'intermediary', 'value'])) {
             if ($reservation->comission_id) {
                 $comission = Comission::find($reservation->comission_id);
                 $comission->update([
                     'agency_id' => $validator['agency_id'],
                     'intermediary' => $validator['intermediary'],
                     'value' => $validator['value'],
+                    'paid' => $validator['paid'],
                 ]);
             } else {
-                $comission = Agency::create([
+                $comission = Comission::create([
                     'agency_id' => $validator['agency_id'],
                     'intermediary' => $validator['intermediary'],
                     'value' => $validator['value'],
+                    'paid' => $validator['paid'],
                 ]);
                 $reservation->comission_id = $comission->id;
                 $reservation->save();

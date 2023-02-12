@@ -13,6 +13,7 @@ export default (state = initialState, action = {}) => {
         case `${types.UPDATE_LOCALIZATION}_PENDING`:
         case `${types.FETCH_TAX_LOCALIZATIONS}_PENDING`:
         case `${types.CREATE_LOCALIZATION}_PENDING`:
+        case `${types.DELETE_LOCALIZATION}_PENDING`:
             return {
                 ...state,
                 loading: true,
@@ -21,9 +22,19 @@ export default (state = initialState, action = {}) => {
         case `${types.FETCH_TAX_LOCALIZATIONS}_REJECTED`:
         case `${types.UPDATE_LOCALIZATION}_REJECTED`:
         case `${types.CREATE_LOCALIZATION}_REJECTED`:
+        case `${types.DELETE_LOCALIZATION}_REJECTED`:
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.DELETE_LOCALIZATION}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                data: state.data.filter(
+                    record => record.id !== action.meta.id
+                )
             };
 
         case `${types.CREATE_LOCALIZATION}_FULFILLED`:

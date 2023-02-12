@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarCategoryRequest;
 use App\Http\Resources\CarCategoryResource;
 use App\Models\BlockDate;
 use App\Models\CarCategory;
@@ -22,6 +23,11 @@ class CarCategoryController extends Controller
     public function index(CarCategoryFilters $filters)
     {
         return CarCategoryResource::collection(CarCategory::filterBy($filters)->with('charateristics')->with('level')->with('cars')->paginate(10));
+    }
+
+    public function indexRemoteSelect(CarCategoryFilters $filters)
+    {
+        return CarCategoryResource::collection(CarCategory::filterBy($filters)->get());
     }
 
     /**
@@ -88,9 +94,13 @@ class CarCategoryController extends Controller
      * @param  \App\Models\CarCategory  $carCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CarCategory $carCategory)
+    public function update(CarCategoryRequest $request, CarCategory $carCategory)
     {
-        //
+        $validator = $request->validated();
+
+        $carCategory->update($validator);
+
+        return new CarCategoryResource($carCategory);
     }
 
     /**

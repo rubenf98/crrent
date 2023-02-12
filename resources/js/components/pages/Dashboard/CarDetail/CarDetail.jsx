@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
 import { deleteCar, setCurrent, setCarStatus, fetchCarsAvailability, fetchCar } from "../../../../redux/car/actions";
-import FormContainer from './FormContainer';
 import CardContainer from '../Common/CardContainer';
 import CalendarContainer from './CalendarContainer';
 import { useParams } from 'react-router-dom';
-import TableContainer from '../Reservation/TableContainer';
+import CarReservationTableContainer from './CarReservationTableContainer';
 import { fetchReservations, fetchReservationsPerMonth } from '../../../../redux/reservation/actions';
 import { Col, Row } from 'antd';
 import { dateFormat } from '../../../helper';
 import moment from "moment";
-import { AirIcon, DoorsIcon, GasIcon, PeopleIcon, ShiftIcon } from '../../../../icons';
+import DrawerContainer from '../Reservation/DrawerContainer';
 
 const Container = styled.div`
     width: 100%;
@@ -105,10 +104,18 @@ function CarDetail(props) {
                 moment().endOf('month').endOf('day').add(2, 'months').add(10, 'days').format(dateFormat)]
         }
     );
+    const [drawerState, setDrawerState] = useState(false);
     const [filters, setFilters] = useState({});
+    const [drawerContent, setDrawerContent] = useState(undefined);
 
     let { id } = useParams();
     const { car } = props;
+
+    const handleRowClick = (row) => {
+        setDrawerState(true);
+        setDrawerContent(row.id);
+    }
+
 
     const handleCalendarFilters = (aFilters) => {
         setCalendarFilters({ ...calendarFilters, ...aFilters });
@@ -154,6 +161,7 @@ function CarDetail(props) {
                                 {car.registration && <CalendarContainer handleFilters={handleCalendarFilters} />}
                             </Col>
                         </Row>
+                        <DrawerContainer currentId={drawerContent} drawerState={drawerState} setDrawerState={setDrawerState} />
                         <Row type="flex" align='flex-start' gutter={16}>
                             <Col span={24}>
                                 <Row style={{ marginBottom: "30px" }} type="flex" justify='space-between'>
@@ -200,13 +208,14 @@ function CarDetail(props) {
 
                     </CardContainer>
                     <br />
-                    <TableContainer
+                    <CarReservationTableContainer
                         data={props.reservations}
                         meta={props.meta}
                         loading={props.loadingReservations}
                         onDelete={props.deleteReservation}
                         handlePageChange={handlePageChange}
                         handleFilters={handleFilters}
+                        handleRowClick={handleRowClick}
                         aFilters={{ id: undefined, name: undefined, date: undefined, car: car.registration }}
                     />
                 </>
@@ -237,7 +246,7 @@ const mapStateToProps = (state) => {
 
         loadingReservations: state.car.loading,
         reservations: state.reservation.data,
-        meta: state.car.meta,
+        meta: state.reservation.meta,
     };
 };
 

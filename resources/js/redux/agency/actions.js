@@ -6,6 +6,11 @@ export const fetchAgencies = () => ({
     payload: axios.get(`${window.location.origin}/api/agencies`)
 })
 
+export const fetchAgency = (id) => ({
+    type: types.FETCH_AGENCY,
+    payload: axios.get(`${window.location.origin}/api/agencies/${id}`)
+})
+
 export const updateAgency = (id, data) => ({
     type: types.UPDATE_AGENCY,
     payload: axios.put(`${window.location.origin}/api/agencies/${id}`, data),

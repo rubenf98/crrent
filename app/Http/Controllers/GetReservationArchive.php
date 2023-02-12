@@ -18,7 +18,8 @@ class GetReservationArchive extends Controller
     public function __invoke(ReservationFilters $filters)
     {
         return ReservationResource::collection(Reservation::filterBy($filters)
-            ->where('pickup_date', '<', Carbon::now()->startOfDay())
+            ->where([['pickup_date', '<', Carbon::now()->startOfDay()], ['status', '!=', 'confirmado']])
+            ->orWhere([['return_date', '<', Carbon::now()->startOfDay()]])
             ->with("car.category")->with('client')->with('drivers')->with('extras')->paginate(5));
     }
 }

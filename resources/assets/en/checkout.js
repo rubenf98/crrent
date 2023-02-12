@@ -1,5 +1,5 @@
 export const text = {
-    titles: ["data on your reservation", "Insurance", "Addons", "Client Information", "Main Driver", "Additional Driver"],
+    titles: ["data on your reservation", "Insurance", "Addons", "Client Information", "Main Driver", "Additional Driver", "Payment method"],
     extras: {
         "Cobertura SCDW": "SCDW cover",
         "Cobertura vidros e pneus": "Windows and tyres coverage",
@@ -70,5 +70,14 @@ export const text = {
     button: "book",
     notice: "Includes 22% VAT",
     error: "The following errors during the reservation",
-
+    payments: [{
+        id: 1,
+        name: "Credit card",
+        image: "/icon/credit_card.svg"
+    },
+    {
+        id: 2,
+        name: "Pay at pickup",
+        image: "/icon/money.svg"
+    }]
 } 

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Row, Form, Button, Input, Col } from 'antd';
 import { connect } from "react-redux";
-import { updatePrice } from "../../../../redux/agency/actions"
+import { updateAgency } from "../../../../redux/agency/actions"
 
 
 const ButtonContainer = styled(Row)`
@@ -21,27 +21,15 @@ const Instruction = styled.h2`
 `;
 
 const rules = {
-    factor: [
-        {
-            required: true,
-            message: 'O preço é obrigatório',
-        },
-    ],
     min: [
         {
             required: true,
-            message: 'O valor de dias mínimo é obrigatório',
-        },
-    ],
-    factor: [
-        {
-            required: true,
-            message: 'O valor de dias máximo é obrigatório',
+            message: 'O campo é obrigatório',
         },
     ],
 };
 
-function AgencyFormContainer({ loading, handleClose, updatePrice, visible, current }) {
+function AgencyFormContainer({ loading, handleClose, updateAgency, visible, current }) {
     const [form] = Form.useForm();
 
     const handleModalClose = () => {
@@ -51,8 +39,7 @@ function AgencyFormContainer({ loading, handleClose, updatePrice, visible, curre
 
     const onFinish = () => {
         form.validateFields().then((values) => {
-            console.log(current.id)
-            updatePrice(current.id, values);
+            updateAgency(current.id, values);
             handleModalClose();
         })
     };
@@ -84,7 +71,11 @@ function AgencyFormContainer({ loading, handleClose, updatePrice, visible, curre
                     >
                         <Instruction>Detalhes da agência de comissão</Instruction>
 
-                        
+                        <Col span={24}>
+                            <Form.Item rules={rules.min} label="Nome do hotel / agência" name="name">
+                                <Input />
+                            </Form.Item>
+                        </Col>
 
 
                         <ButtonContainer type="flex" justify="end">
@@ -108,7 +99,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePrice: (id, data) => dispatch(updatePrice(id, data)),
+        updateAgency: (id, data) => dispatch(updateAgency(id, data)),
     };
 };
 

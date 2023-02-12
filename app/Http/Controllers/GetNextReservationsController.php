@@ -23,6 +23,7 @@ class GetNextReservationsController extends Controller
         return ReservationResource::collection(
             Reservation::with("car")->with("car.category")
                 ->with('client')->orderBy('pickup_date', 'asc')
+                ->where('status', "!=", "cancelado")
                 ->whereBetween('pickup_date', [$startDate, $endDate])
                 ->orWhereBetween('return_date', [$startDate, $endDate])->get()
         );

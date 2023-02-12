@@ -9,6 +9,28 @@ class Agency extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+    protected $appends = ['comissionStatus'];
+
+    public function getComissionStatusAttribute()
+    {
+        $comissions = $this->comissions;
+
+        $response = [
+            "paid" => 0,
+            "pending" => 0,
+        ];
+
+        foreach ($comissions as $comission) {
+            if ($comission->paid) {
+                $response["paid"] += $comission->value;
+            } else {
+                $response["pending"] += $comission->value;
+            }
+        }
+
+        return $response;
+    }
+
 
     public function reservations()
     {

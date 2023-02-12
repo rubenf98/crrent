@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ComissionResource;
 use App\Models\Comission;
 use Illuminate\Http\Request;
 
@@ -48,7 +49,12 @@ class ComissionController extends Controller
      */
     public function update(Request $request, Comission $comission)
     {
-        //
+        if ($request->has('status')) {
+            $comission->paid = $request->status;
+            $comission->save();
+        }
+
+        return new ComissionResource($comission);
     }
 
     /**

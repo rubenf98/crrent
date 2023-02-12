@@ -7,7 +7,7 @@ import { dimensions } from '../../../helper';
 import ClientFormContainer from '../Client/ClientFormContainer';
 import CardContainer from '../Common/CardContainer';
 import { Link, useParams } from 'react-router-dom';
-import TableContainer from '../Reservation/TableContainer';
+import ClientReservationTableContainer from './ClientReservationTableContainer';
 import { Breadcrumb, Col, Row } from 'antd';
 import { SmallSecundaryButton } from '../../../styles';
 import DrawerContainer from '../Reservation/DrawerContainer';
@@ -150,7 +150,7 @@ function ClientDetail(props) {
                 />
             </CardContainer>
             <br />
-            <TableContainer
+            <ClientReservationTableContainer
                 data={current.reservations}
                 loading={loading}
                 onDelete={props.deleteReservation}

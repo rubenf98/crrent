@@ -5,7 +5,7 @@ import moment from "moment";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
 import CardContainer from "../Common/CardContainer";
-import { Button, Col, DatePicker, Input, Row, Tag } from "antd";
+import { Button, Col, DatePicker, Input, Row, Select, Tag } from "antd";
 import { SearchIcon, UserIcon } from "../../../../icons";
 import { SmallSecundaryButton } from "../../../styles";
 
@@ -28,8 +28,17 @@ const FilterContainer = styled(Row)`
     }
 `;
 
+const Status = styled.div`
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    margin-right: 5px;
+    background-color: ${props => props.status == "confirmado" ? "green" : (props.status == "pendente" ? "orange" : "red")};
+`;
 
-function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
+
+
+function ArchiveTableContainer({ loading, handleStatusChange, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
     const [filters, setFilters] = useState({ id: undefined, name: undefined, date: undefined });
 
     const columns = [
@@ -64,9 +73,17 @@ function ArchiveTableContainer({ loading, data, meta, handlePageChange, onDelete
         },
         {
             title: 'ESTADO',
-            dataIndex: 'confirmed_at',
-            render: (confirmed_at, row) => confirmed_at ? <Tag color="success">Confirmado</Tag>
-                : moment().diff(moment(row.pickup_date)) > 0 ? <Tag color="error">Cancelado</Tag> : <Tag color="warning">Pendente</Tag>,
+            dataIndex: 'status',
+            render: (status, row) => <Row type="flex" align="middle">
+                <Status status={status} />
+                <StopPropagation>
+                    <Select onChange={(e) => handleStatusChange(row.id, e)} defaultValue={status}>
+                        <Option value="pendente">Pendente</Option>
+                        <Option value="confirmado">Confirmado</Option>
+                        <Option value="cancelado">Cancelado</Option>
+                    </Select>
+                </StopPropagation>
+            </Row>,
         },
         {
             title: 'AÇÕES',

@@ -9,9 +9,11 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ComissionController;
 use App\Http\Controllers\CreateExternalReservationController;
+use App\Http\Controllers\ErrorReservation;
 use App\Http\Controllers\ExtraController;
 use App\Http\Controllers\FetchInvoicePdf;
 use App\Http\Controllers\GlobalParameterController;
+use App\Http\Controllers\HasBlockDate;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LocalizationController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UpdateGlobalParametersController;
+use App\Http\Controllers\UpdateReservationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,12 +47,15 @@ Route::get('me', 'App\Http\Controllers\AuthController@me');
 
 Route::get('/selector/cars', 'App\Http\Controllers\CarController@selector');
 Route::get('/selector/car-categories', 'App\Http\Controllers\CarCategoryController@selector');
+Route::get('/remoteselector/car-categories', 'App\Http\Controllers\CarCategoryController@indexRemoteSelect');
 Route::get('/selector/blockPeriods', 'App\Http\Controllers\BlockPeriodController@selector');
 Route::get('/selector/blockedDates', 'App\Http\Controllers\BlockDateController@selector');
 
 Route::put('/confirm/reservation', 'App\Http\Controllers\ConfirmReservation');
+Route::put('/error/reservation', ErrorReservation::class);
 
 Route::post('external-reservation', CreateExternalReservationController::class);
+Route::put('update-reservation-status/{id}', UpdateReservationStatus::class);
 
 Route::get('/reservations-today', 'App\Http\Controllers\GetTodayReservationsController');
 Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsController');
@@ -61,6 +67,8 @@ Route::get('/car-availability', 'App\Http\Controllers\GetCarAvailability');
 
 Route::post('download/invoice', FetchInvoicePdf::class);
 Route::post('/download/contract', 'App\Http\Controllers\DownloadContractController');
+
+Route::get('hasblock', HasBlockDate::class);
 
 Route::put('globalParameters', UpdateGlobalParametersController::class);
 

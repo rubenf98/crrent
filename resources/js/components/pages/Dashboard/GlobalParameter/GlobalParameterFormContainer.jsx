@@ -52,7 +52,7 @@ function FormContainer({ loading, handleClose, updateGlobalParameter, data }) {
                 var newEntry = parameter.value;
                 if (parameter.code == "max_date") {
                     newEntry = moment(newEntry, "DD-MM-YYYY");
-                } else if (parameter.code == "enable_reservations") {
+                } else if (parameter.code == "enable_reservations" || parameter.code == "enable_notifications") {
                     newEntry = parseInt(parameter.value);
                 }
                 init[parameter.code] = newEntry;
@@ -73,8 +73,13 @@ function FormContainer({ loading, handleClose, updateGlobalParameter, data }) {
                     layout="vertical"
                 >
                     <Row gutter={16}>
-                        <Col span={24}>
+                        <Col span={12}>
                             <Form.Item valuePropName="checked" label={data.find((e) => { return e.code == "enable_reservations" }).name} name="enable_reservations">
+                                <Switch />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item valuePropName="checked" label={data.find((e) => { return e.code == "enable_notifications" }).name} name="enable_notifications">
                                 <Switch />
                             </Form.Item>
                         </Col>

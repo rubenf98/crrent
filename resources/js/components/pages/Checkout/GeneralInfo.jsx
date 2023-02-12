@@ -232,7 +232,7 @@ function GeneralInfo(props) {
     const [customPickupTax, setCustomPickupTax] = useState(undefined);
     const [customReturn, setCustomReturn] = useState(undefined);
     const [customReturnTax, setCustomReturnTax] = useState(undefined);
-    const [mandatory, setMandatory] = useState(true)
+    const [mandatory, setMandatory] = useState(false)
 
 
     const { text, theme, car, form, language, localization,
@@ -294,7 +294,7 @@ function GeneralInfo(props) {
     const handlePlaceSelection = (itemName, e) => {
         var index = returnIndex(itemName);
         if (itemName === "pickup_place") {
-            if (e === "Loja") {
+            if (e == 3) {
                 setMandatory(false);
             } else {
                 setMandatory(true);
@@ -303,7 +303,7 @@ function GeneralInfo(props) {
 
         updateState(e, index, itemName);
     }
-
+    console.log(mandatory);
     return (
         <Container>
 
@@ -442,8 +442,6 @@ function GeneralInfo(props) {
                             {localizations.map((localization) => (
                                 <Select.Option key={localization.id} value={localization.name.pt}>{localization.name[language]}</Select.Option>
                             ))}
-
-                            <Select.Option value="loja">{text.placeholder.pickup_place.options[1]}</Select.Option>
                         </StyledSelect>
                     </Form.Item>
                 </Col>
