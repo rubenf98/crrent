@@ -51,6 +51,12 @@ export const updateReservationStatus = (id, data) => ({
     type: types.UPDATE_RESERVATION_STATUS,
     payload: axios.put(`${window.location.origin}/api/update-reservation-status/${id}`, data),
 });
+
+export const updateReservationPayment = (id, data) => ({
+    type: types.UPDATE_RESERVATION_PAYMENT,
+    payload: axios.put(`${window.location.origin}/api/update-reservation-payment/${id}`, data),
+});
+
 export const updateReservation = (id, data) => ({
     type: types.UPDATE_RESERVATION,
     payload: axios.put(`${window.location.origin}/api/reservations/${id}`, data),

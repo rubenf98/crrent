@@ -21,6 +21,7 @@ use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UpdateGlobalParametersController;
+use App\Http\Controllers\UpdateReservationPayment;
 use App\Http\Controllers\UpdateReservationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,7 @@ Route::put('/error/reservation', ErrorReservation::class);
 
 Route::post('external-reservation', CreateExternalReservationController::class);
 Route::put('update-reservation-status/{id}', UpdateReservationStatus::class);
+Route::put('update-reservation-payment/{id}', UpdateReservationPayment::class);
 
 Route::get('/reservations-today', 'App\Http\Controllers\GetTodayReservationsController');
 Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsController');

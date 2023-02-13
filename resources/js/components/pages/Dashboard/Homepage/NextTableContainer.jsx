@@ -74,7 +74,11 @@ function NextTableContainer({ title, loading, data, meta, handlePageChange, hand
             dataIndex: 'status',
             render: (status) => <Tag color={status == "pendente" ? "warning" : status == "confirmado" ? "success" : "error"}>{status}</Tag>,
         },
-
+        {
+            title: 'PAGAMENTO',
+            dataIndex: 'payed_at',
+            render: (payed_at) => <Tag color={payed_at ? "success" : "warning"}>{payed_at ? "pago" : "pendente"}</Tag>,
+        },
     ];
 
     return (

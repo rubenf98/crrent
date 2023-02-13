@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { fetchReservations, deleteReservation, fetchReservationsArchive, updateReservationStatus } from "../../../../redux/reservation/actions";
+import { fetchReservations, deleteReservation, fetchReservationsArchive, updateReservationStatus, updateReservationPayment } from "../../../../redux/reservation/actions";
 import TableContainer from "./TableContainer";
 import ArchiveTableContainer from "./ArchiveTableContainer";
 import { dimensions } from '../../../helper';
@@ -14,7 +14,7 @@ const Container = styled.div`
     width: 100%;
 `;
 
-function Reservation({ data, dataArchive, updateReservationStatus,
+function Reservation({ data, dataArchive, updateReservationStatus, updateReservationPayment,
     metaArchive, loading, meta, fetchReservations, deleteReservation, fetchReservationsArchive }) {
     const [filters, setFilters] = useState({ after: moment().format('YYYY-MM-DD') });
     const [archiveFilters, setArchiveFilters] = useState({});
@@ -100,6 +100,7 @@ function Reservation({ data, dataArchive, updateReservationStatus,
                 handleFilters={handleFilters}
                 handleUpdateClick={handleUpdateClick}
                 handleCreateClick={handleCreateClick}
+                handlePaymentChange={(id, status) => (id && status) && updateReservationPayment(id, { status: status }).then(() => { location.reload(); })}
                 handleStatusChange={(id, status) => (id && status) && updateReservationStatus(id, { status: status }).then(() => { location.reload(); })}
             />
 
@@ -122,6 +123,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchReservationsArchive: (page, filters) => dispatch(fetchReservationsArchive(page, filters)),
         deleteReservation: (id) => dispatch(deleteReservation(id)),
         updateReservationStatus: (id, data) => dispatch(updateReservationStatus(id, data)),
+        updateReservationPayment: (id, data) => dispatch(updateReservationPayment(id, data)),
     };
 };
 

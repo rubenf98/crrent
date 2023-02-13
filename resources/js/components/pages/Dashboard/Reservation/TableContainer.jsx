@@ -38,7 +38,7 @@ const Status = styled.div`
 `;
 
 
-function TableContainer({ handleUpdateClick, handleStatusChange, handleCreateClick, loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters, aFilters = { id: undefined, name: undefined, date: undefined, car: undefined } }) {
+function TableContainer({ handleUpdateClick, handlePaymentChange, handleStatusChange, handleCreateClick, loading, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters, aFilters = { id: undefined, name: undefined, date: undefined, car: undefined } }) {
     const [filters, setFilters] = useState({});
 
     useEffect(() => {
@@ -87,6 +87,19 @@ function TableContainer({ handleUpdateClick, handleStatusChange, handleCreateCli
                         <Option value="pendente">Pendente</Option>
                         <Option value="confirmado">Confirmado</Option>
                         <Option value="cancelado">Cancelado</Option>
+                    </Select>
+                </StopPropagation>
+            </Row>,
+        },
+        {
+            title: 'PAGAMENTO',
+            dataIndex: 'payed_at',
+            render: (payed_at, row) => <Row type="flex" align="middle">
+                <Status status={payed_at ? "confirmado" : "pendente"} />
+                <StopPropagation>
+                    <Select onChange={(e) => handlePaymentChange(row.id, e)} defaultValue={payed_at ? "pago" : "pendente"}>
+                        <Option value="pago">Pago</Option>
+                        <Option value="pendente">Pendente</Option>u
                     </Select>
                 </StopPropagation>
             </Row>,

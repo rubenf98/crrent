@@ -43,6 +43,7 @@ class ReservationResource extends JsonResource
             'gas_pickup' => $this->gas_pickup,
             'gas_return' => $this->gas_return,
             'confirmed_at' => $this->confirmed_at,
+            'payed_at' => $this->payed_at,
             'created_at' => (string) $this->created_at,
         ];
     }

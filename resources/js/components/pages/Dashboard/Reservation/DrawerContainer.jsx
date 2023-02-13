@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { Col, Drawer, Row } from 'antd';
+import { Col, Drawer, Row, Tag } from 'antd';
 import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
 import { downloadContract, fetchReservation, downloadInvoice } from '../../../../redux/reservation/actions';
@@ -152,7 +152,7 @@ function DrawerContainer(props) {
                         </Field>
 
                         <FieldContainer name="Método de pagamento" value={EmptyField(data.payment_method)} />
-
+                        <FieldContainer name="Pagamento" value={<Tag color={data.payed_at ? "success" : "warning"}>{data.payed_at ? "Pago" : "Pendente"}</Tag>} />
                         <FieldContainer width="100%" name="Notas" value={EmptyField(data.notes)} />
 
                     </FieldsContainer>
@@ -162,7 +162,7 @@ function DrawerContainer(props) {
                     <FieldsContainer width="50%">
                         <FieldContainer name="Valor aluguer" value={data.car_price + "€"} />
                         <FieldContainer name="Preço unitário" value={data.car_price_per_day + "€"} />
-                        <FieldContainer name="Valor extras/seguro" value={data.price - data.car_price + "€"} />
+                        <FieldContainer name="Valor extras/seguro" value={(Math.round((data.price - data.car_price) * 100 + Number.EPSILON) / 100) + "€"} />
                         <FieldContainer name="Total" value={data.price + "€"} />
                     </FieldsContainer>
                 </Col>

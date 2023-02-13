@@ -22,6 +22,9 @@ class ConfirmReservation extends Controller
         // $reservation->generateDoc();
 
         if (!$reservation->confirmed_at) {
+            if ($reservation->payment_method == "Cartão de crédito") {
+                $reservation->payed_at = Carbon::now();
+            }
             $reservation->confirmed_at = Carbon::now();
             $reservation->status = "confirmado";
             $reservation->save();
