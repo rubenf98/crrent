@@ -70,7 +70,7 @@ function ReservationFormContainer(props) {
                 props.updateReservation(current.id, values)
                 : props.createExternalReservation(values);
             handleModalClose();
-            // location.reload();
+            location.reload();
         })
     };
 
