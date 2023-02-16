@@ -78,7 +78,7 @@ function ReservationFormContainer(props) {
         setCurrentDates(dates);
         dates[field] = value;
         var days = getDaysDifference(dates.pickup_date, dates.return_date);
-        form.setFieldValue('days', days);
+        form.setFieldsValue({ days: days, car_id: undefined });
     }
 
     useEffect(() => {
