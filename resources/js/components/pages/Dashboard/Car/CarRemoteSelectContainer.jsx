@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 import { fetchCarsSelector } from '../../../../redux/car/actions';
 import moment from "moment";
 
-function CarRemoteSelectContainer({ fetchCarsSelector, data, loading, value, onChange, dates }) {
+function CarRemoteSelectContainer({ fetchCarsSelector, visible, data, loading, value, onChange, dates }) {
     const [filters, setFilters] = useState({})
+
     useEffect(() => {
         fetchCarsSelector(filters)
     }, [filters])
@@ -14,9 +15,14 @@ function CarRemoteSelectContainer({ fetchCarsSelector, data, loading, value, onC
         if (dates) {
             if (dates.pickup_date && dates.return_date) {
                 setFilters({ from: moment(dates.pickup_date).format('YYYY-MM-DD'), to: moment(dates.return_date).format('YYYY-MM-DD') })
+            } else {
+                setFilters({})
             }
+        } else {
+            setFilters({})
         }
-    }, [dates])
+    }, [dates, visible])
+
     return (
         <Select
             value={value}

@@ -60,6 +60,7 @@ function ReservationFormContainer(props) {
 
     const handleModalClose = () => {
         form.resetFields();
+        setCurrentDates({});
         props.handleClose();
     }
 
@@ -272,7 +273,7 @@ function ReservationFormContainer(props) {
 
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Veículo" name="car_id">
-                                    <CarRemoteSelectContainer dates={currentDates} />
+                                    <CarRemoteSelectContainer dates={currentDates} visible={visible} />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>
