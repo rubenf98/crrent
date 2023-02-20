@@ -133,11 +133,19 @@ function DrawerContainer(props) {
                 <Col xs={24}>
 
                     <Section><h3>Informação geral</h3> <div className='underline' /></Section>
+
                     <FieldsContainer width="25%">
+                        <FieldContainer name="Identificador" value={"#" + data.id} />
+                        <FieldContainer name="Número de confirmação" value={data.token} />
+                        <FieldContainer width="50%" name="Estado" value={<Tag color={data.status == "confirmado" ? "success" : data.status == "pendente" ? "warning" : "error"}>{data.status}</Tag>} />
+                        
                         <FieldContainer name="Data da reserva" value={moment(data.created_at).format('DD-MM-YYYY HH:mm')} />
                         <FieldContainer name="Levantamento" value={moment(data.pickup_date).format('DD-MM-YYYY HH:mm') + ", " + data.pickup_place} />
                         <FieldContainer name="Entrega" value={moment(data.return_date).format('DD-MM-YYYY HH:mm') + ", " + data.return_place} />
                         <FieldContainer name="Número de dias" value={data.days} />
+
+                        <FieldContainer name="Check in" value={EmptyField(data.checkin)} />
+                        <FieldContainer name="Check out" value={EmptyField(data.checkout)} />
 
                         <FieldContainer name="KM entrega" value={EmptyField(data.kms_pickup)} />
                         <FieldContainer name="KM devolução" value={EmptyField(data.kms_return)} />
@@ -153,6 +161,7 @@ function DrawerContainer(props) {
 
                         <FieldContainer name="Método de pagamento" value={EmptyField(data.payment_method)} />
                         <FieldContainer name="Pagamento" value={<Tag color={data.payed_at ? "success" : "warning"}>{data.payed_at ? "Pago" : "Pendente"}</Tag>} />
+                        <FieldContainer name="Seguro" value={data?.insurance?.name?.pt} />
                         <FieldContainer width="100%" name="Notas" value={EmptyField(data.notes)} />
 
                     </FieldsContainer>

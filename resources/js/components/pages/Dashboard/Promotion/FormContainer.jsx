@@ -38,6 +38,13 @@ const rules = {
     ]
 };
 
+const classes = [
+    { id: 1, name: "Gama A" },
+    { id: 2, name: "Gama B" },
+    { id: 3, name: "Gama C" },
+    { id: 4, name: "Gama D" },
+];
+
 function FormContainer({ loading, handleClose, createPromotion, visible }) {
     const [form] = Form.useForm();
 
@@ -106,6 +113,20 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
                                 </Form.Item>
                             </Col>
                         </Row>
+
+                        <Form.List name="levels" >
+                            {() => (
+                                <Row>
+                                    {classes.map((item) => (
+                                        <Col xs={12} sm={6} key={item.id}>
+                                            <Form.Item initialValue={true} name={item.id} valuePropName="checked">
+                                                <Checkbox>{item.name}</Checkbox>
+                                            </Form.Item>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            )}
+                        </Form.List>
 
                         <ButtonContainer type="flex" justify="end">
                             <Button disabled={loading} loading={loading} size="large" width="150px" type="primary" htmlType="submit">

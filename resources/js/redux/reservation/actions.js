@@ -82,6 +82,24 @@ export const createExternalReservation = (data) => ({
     payload: axios.post(`${window.location.origin}/api/external-reservation`, data),
 });
 
+export const exportReservationCsv = (filters = {}) => ({
+    type: types.EXPORT_RESERVATION_CSV,
+    payload: axios({
+        url: `${window.location.origin}/api/export/reservations?${stringify(filters, {
+            arrayFormat: "index"
+        })}`,
+        method: "GET",
+        responseType: "blob",
+    }).then(
+        response => {
+            download(response, ' reservas.xlsx')
+        },
+        error => {
+            return error.data;
+        }
+    ),
+    meta: { globalError: true }
+});
 
 
 export const setCurrentReservation = (data) => ({

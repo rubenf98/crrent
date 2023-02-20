@@ -248,7 +248,6 @@ const dateFormat = "YYYY-MM-DD HH:mm";
 function Garage(props) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(1)
-    const [factors, setFactors] = useState([])
     var navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const { fetchExtras, theme, data, language, promotions } = props;
@@ -270,10 +269,7 @@ function Garage(props) {
         setDates([from, to]);
 
 
-        props.fetchPromotions().then((response) => {
-            var newFactors = getPromotions(response.action.payload.data.data, from, difference);
-            setFactors(newFactors);
-        });
+        props.fetchPromotions();
 
         fetchExtras();
 
@@ -286,10 +282,6 @@ function Garage(props) {
 
         setDays(difference);
         setDates([dates[0], dates[1]]);
-
-        var newFactors = getPromotions(promotions, dates[0], difference);
-        setFactors(newFactors);
-
     };
 
     function handleCarSelection(car) {
@@ -298,7 +290,8 @@ function Garage(props) {
     }
 
     const CarSection = ({ info }) => {
-        var pricing = getCarPrice(info.level.prices, days, factors);
+        var newFactors = getPromotions(promotions, dates[0], days, info.level.id);
+        var pricing = getCarPrice(info.level.prices, days, newFactors);
         return (
             <Car primary={theme.primary} background={info.level.color}>
                 <div className='image-container'>

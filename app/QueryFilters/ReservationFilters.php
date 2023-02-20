@@ -12,6 +12,20 @@ use Cerbero\QueryFilters\QueryFilters;
  */
 class ReservationFilters extends QueryFilters
 {
+    public function after($string)
+    {
+        $date = Carbon::parse($string);
+        $this->query->where(function ($q) use ($date) {
+            $q->where([['pickup_date', '>=', $date]])->orWhere([['return_date', '>=', $date], ['status', 'confirmado']]);
+        });
+    }
+
+    public function before($string)
+    {
+        $date = Carbon::parse($string);
+
+        $this->query->where('pickup_date', '<', $date);
+    }
 
     public function clientSorter($string)
     {
@@ -76,19 +90,5 @@ class ReservationFilters extends QueryFilters
         $dates = [Carbon::parse($string)->startOfDay(), Carbon::parse($string)->endOfDay()];
 
         $this->query->whereBetween('pickup_date', $dates)->orWhereBetween('return_date', $dates);
-    }
-
-    public function after($string)
-    {
-        $date = Carbon::parse($string);
-
-        $this->query->where([['pickup_date', '>=', $date]])->orWhere([['return_date', '>=', $date], ['status', 'confirmado']]);
-    }
-
-    public function before($string)
-    {
-        $date = Carbon::parse($string);
-
-        $this->query->where('pickup_date', '<', $date);
     }
 }

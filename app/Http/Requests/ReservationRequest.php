@@ -36,9 +36,10 @@ class ReservationRequest extends FormRequest
 
         $from = Carbon::parse($this->date[0]);
         $now = Carbon::parse($this->date[1]);
+        $out = new ConsoleOutput();
         $days = Reservation::getNumDays($from, $now);
         $car = $carCategory->getAvailableCar($from, $now);
-        
+        $out->writeln($days);
         // $out = new ConsoleOutput();
 
         $value = 0;
@@ -137,8 +138,8 @@ class ReservationRequest extends FormRequest
             'phone' => 'required|string',
             'local_address' => 'required|string',
 
-            'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day'),
-            'return_date' => 'required|date|after:' . Carbon::now()->add(3, 'day'),
+            'pickup_date' => 'required|date|after:' . Carbon::now()->add(1, 'day')->startOfDay(),
+            'return_date' => 'required|date|after:' . Carbon::now()->add(1, 'day')->startOfDay(),
             'pickup_place' => 'required|string',
             'return_place' => 'required|string',
             'flight' => 'nullable|string',

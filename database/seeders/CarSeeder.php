@@ -121,19 +121,19 @@ class CarSeeder extends Seeder
         }
 
         $prices = [
-            ['min' => 2, 'max' => 6, 'price' => 35, 'level_id' => 1],
+            ['min' => 1, 'max' => 6, 'price' => 35, 'level_id' => 1],
             ['min' => 7, 'max' => 14, 'price' => 31, 'level_id' => 1],
             ['min' => 15, 'max' => 10000, 'price' => 27.5, 'level_id' => 1],
 
-            ['min' => 2, 'max' => 6, 'price' => 40, 'level_id' => 2],
+            ['min' => 1, 'max' => 6, 'price' => 40, 'level_id' => 2],
             ['min' => 7, 'max' => 14, 'price' => 36, 'level_id' => 2],
             ['min' => 15, 'max' => 10000, 'price' => 32, 'level_id' => 2],
 
-            ['min' => 2, 'max' => 6, 'price' => 50, 'level_id' => 3],
+            ['min' => 1, 'max' => 6, 'price' => 50, 'level_id' => 3],
             ['min' => 7, 'max' => 14, 'price' => 46, 'level_id' => 3],
             ['min' => 15, 'max' => 10000, 'price' => 40, 'level_id' => 3],
 
-            ['min' => 2, 'max' => 6, 'price' => 55, 'level_id' => 4],
+            ['min' => 1, 'max' => 6, 'price' => 55, 'level_id' => 4],
             ['min' => 7, 'max' => 14, 'price' => 51, 'level_id' => 4],
             ['min' => 15, 'max' => 10000, 'price' => 45, 'level_id' => 4],
         ];

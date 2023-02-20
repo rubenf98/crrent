@@ -19,6 +19,7 @@ class CreateComissionsTable extends Migration
             $table->string('intermediary')->nullable();
             $table->double('value', 6, 2)->default(0);
             $table->boolean('paid')->default(false);
+            $table->boolean('cancelled')->default(false);
             $table->timestamps();
 
             $table->foreign("agency_id")->references("id")->on("agencies")->onDelete("cascade");

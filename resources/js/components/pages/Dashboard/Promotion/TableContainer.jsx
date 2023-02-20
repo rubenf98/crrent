@@ -30,12 +30,19 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
             dataIndex: 'end',
         },
         {
-            title: 'FATOR MULTIPLICAÇÃO',
+            title: 'FATOR',
             dataIndex: 'value',
         },
         {
             title: 'NÍVEL DE PRIORIDADE',
             dataIndex: 'priority',
+        },
+        {
+            title: 'GAMAS',
+            dataIndex: 'levels',
+            render: (levels) => levels.map((level) => (
+                <span key={level.id}>{level.code}, </span>
+            )),
         },
         {
             title: 'AÇÕES',

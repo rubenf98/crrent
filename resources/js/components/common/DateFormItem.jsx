@@ -4,7 +4,8 @@ import styled, { css } from "styled-components";
 import { dimensions } from '../helper';
 import moment from "moment";
 import { connect } from 'react-redux';
-import { isDateDisabled, isTimeDisabled } from '../functions';
+import { isDateDisabled } from '../functions';
+import { replace } from 'lodash';
 
 const styles = css`
     height: 100%;
@@ -110,7 +111,7 @@ const Container = styled(Row)`
 `;
 const timeOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
-function DateFormItem({ enableReservations, globalParameters, setDates, dates, text, blockedDates, width = 6, treshold = 1 }) {
+function DateFormItem({ enableReservations, globalParameters, setDates, dates, text, blockedDates, hours, width = 6, treshold = 1 }) {
     const [currentDates, setCurrentDates] = useState([undefined, undefined]);
     const [currentTimes, setCurrentTimes] = useState([undefined, undefined]);
     const [currentTimeValues, setCurrentTimeValues] = useState([undefined, undefined]);
@@ -176,8 +177,8 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
             setCurrentTimeValues([currentTimeValues[0], newTime.format("HH:mm")]);
         }
         else {
-            setCurrentTimes([newTime, currentTimes[1]]);
-            setCurrentTimeValues([newTime.format("HH:mm"), currentTimeValues[1]])
+            setCurrentTimes([newTime, undefined]);
+            setCurrentTimeValues([newTime.format("HH:mm"), undefined])
         }
     }
 
@@ -210,7 +211,24 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                 setCurrentDates([undefined, undefined]);
         }
     }
+    const isTimeDisabled = (aIndex) => {
+        if (currentDates[0] && currentDates[1]) {
+            if (currentDates[0].isSame(currentDates[1], 'day')) {
+                if (currentTimeValues[0]) {
+                    return parseFloat(aIndex.replace(':', '.')) - parseFloat(currentTimeValues[0].replace(':', '.')) < hours[0];
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
 
+        } else {
+            return false;
+        }
+
+
+    }
     return (
         <Container type="flex" gutter={16}>
             <Col xs={24} md={width}>
@@ -233,15 +251,20 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                                     <Select.Option value={(index < 10 && '0') + index + ":00"}>
                                         {(index < 10 && '0') + index + ":00"}
                                     </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":15"}>
-                                        {(index < 10 && '0') + index + ":15"}
-                                    </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":30"}>
-                                        {(index < 10 && '0') + index + ":30"}
-                                    </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":45"}>
-                                        {(index < 10 && '0') + index + ":45"}
-                                    </Select.Option>
+                                    {index < timeTreshold[1] &&
+                                        <>
+
+                                            <Select.Option value={(index < 10 && '0') + index + ":15"}>
+                                                {(index < 10 && '0') + index + ":15"}
+                                            </Select.Option>
+                                            <Select.Option value={(index < 10 && '0') + index + ":30"}>
+                                                {(index < 10 && '0') + index + ":30"}
+                                            </Select.Option>
+                                            <Select.Option value={(index < 10 && '0') + index + ":45"}>
+                                                {(index < 10 && '0') + index + ":45"}
+                                            </Select.Option>
+                                        </>
+                                    }
                                 </>
                             }
                         </>
@@ -263,21 +286,30 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                 <StyledTimePicker width={width} value={currentTimeValues[1]} placeholder={text[3]} onChange={(e) => handleTimeChange(e, 1)}>
                     {timeOptions.map((index) => (
                         <>
-                            {(index >= timeTreshold[0] && index <= timeTreshold[1]) &&
+                            {
+                                (index >= timeTreshold[0] && index <= timeTreshold[1]) &&
                                 <>
-                                    <Select.Option value={(index < 10 && '0') + index + ":00"}>
+                                    <Select.Option disabled={isTimeDisabled(index + ":00")} value={(index < 10 && '0') + index + ":00"}>
                                         {(index < 10 && '0') + index + ":00"}
                                     </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":15"}>
-                                        {(index < 10 && '0') + index + ":15"}
-                                    </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":30"}>
-                                        {(index < 10 && '0') + index + ":30"}
-                                    </Select.Option>
-                                    <Select.Option value={(index < 10 && '0') + index + ":45"}>
-                                        {(index < 10 && '0') + index + ":45"}
-                                    </Select.Option>
+
+                                    {index < timeTreshold[1] &&
+                                        <>
+
+                                            <Select.Option disabled={isTimeDisabled(index + ":15")} value={(index < 10 && '0') + index + ":15"}>
+                                                {(index < 10 && '0') + index + ":15"}
+                                            </Select.Option>
+                                            <Select.Option disabled={isTimeDisabled(index + ":30")} value={(index < 10 && '0') + index + ":30"}>
+                                                {(index < 10 && '0') + index + ":30"}
+                                            </Select.Option>
+                                            <Select.Option disabled={isTimeDisabled(index + ":45")} value={(index < 10 && '0') + index + ":45"}>
+                                                {(index < 10 && '0') + index + ":45"}
+                                            </Select.Option>
+                                        </>
+                                    }
                                 </>
+
+
                             }
                         </>
                     ))}
@@ -292,6 +324,7 @@ const mapStateToProps = (state) => {
     return {
         blockedDates: state.block.selector,
         globalParameters: state.globalParameter.data,
+        hours: state.globalParameter.hours,
         enableReservations: state.globalParameter.enableReservations
     };
 };

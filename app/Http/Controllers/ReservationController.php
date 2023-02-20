@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReservationExport;
 use App\Http\Requests\ReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
@@ -36,10 +37,17 @@ class ReservationController extends Controller
      */
     public function index(ReservationFilters $filters)
     {
+        // return (new ReservationExport())->download('reservas.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
         return ReservationResource::collection(
             Reservation::with(["car", "car.category", 'client', 'drivers', 'extras'])
                 ->filterBy($filters)->paginate(5)
         );
+    }
+
+    public function export()
+    {
+        return (new ReservationExport())->download('reservas.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
     /**
@@ -199,6 +207,8 @@ class ReservationController extends Controller
             'return_place' => $validator['return_place'],
             'flight' => Arr::get($validator, "flight"),
             'address' => Arr::get($validator, "local_address"),
+            'checkin' => Arr::get($validator, "checkin"),
+            'checkout' => Arr::get($validator, "checkout"),
             'price' => $validator['price'],
             'payment_method' => Arr::get($validator, 'payment_method'),
             'car_price' => $validator['car_price'],
@@ -281,7 +291,9 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         DB::beginTransaction();
-        $period = CarbonPeriod::create($reservation->pickup_date, $reservation->return_date)->toArray();
+        $comission = $reservation->comission;
+        $comission->cancelled = true;
+        $comission->save();
 
         $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 

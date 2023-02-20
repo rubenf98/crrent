@@ -13,10 +13,24 @@ export const initialState = {
     current: {},
     values: {},
     errors: [],
+    loadingExport: false,
 }
 
 export default (state = initialState, action = {}) => {
     switch (action.type) {
+        case `${types.EXPORT_RESERVATION_CSV}_PENDING`:
+            return {
+                ...state,
+                loadingExport: true
+            };
+
+        case `${types.EXPORT_RESERVATION_CSV}_REJECTED`:
+        case `${types.EXPORT_RESERVATION_CSV}_FULFILLED`:
+            return {
+                ...state,
+                loadingExport: false
+            };
+
         case `${types.DELETE_RESERVATION}_PENDING`:
         case `${types.CONFIRM_RESERVATION}_PENDING`:
         case `${types.ERROR_RESERVATION}_PENDING`:

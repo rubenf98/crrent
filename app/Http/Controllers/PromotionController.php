@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PromotionRequest;
 use App\Http\Resources\PromotionResource;
+use App\Models\Level;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,18 @@ class PromotionController extends Controller
             'factor' => $validator['factor'],
             'priority' =>  array_key_exists('priority', $validator) ?  $validator['priority'] : 1
         ]);
+
+        if ($request->has('levels')) {
+            $levels = $request->levels;
+            $levels_id = [];
+            foreach ($levels as $id => $level) {
+                if ($level) {
+                    array_push($levels_id, $id);
+                }
+            }
+
+            $record->levels()->attach($levels_id);
+        }
 
         return new PromotionResource($record);
     }

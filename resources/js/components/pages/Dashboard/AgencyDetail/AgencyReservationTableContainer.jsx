@@ -91,11 +91,20 @@ function AgencyReservationTableContainer({ handleUpdate, handleCreateClick, load
         },
         {
             title: 'ESTADO',
+            dataIndex: 'status',
+            render: (status) => <Tag color={status == "pendente" ? "warning" : status == "confirmado" ? "success" : "error"}>{status}</Tag>,
+        },
+        {
+            title: 'PAGAMENTO',
             dataIndex: 'comission',
             render: (comission, row) =>
-                <StopPropagation>
-                    <Action onClick={() => handleUpdate(comission.id, { status: comission.paid ? 0 : 1 })} active={comission.paid} >{comission.paid ? "Pago" : "Pendente"}</Action>
-                </StopPropagation>,
+                <>
+                    {row.status != "cancelado" &&
+                        <StopPropagation>
+                            <Action onClick={() => handleUpdate(comission.id, { status: comission.paid ? 0 : 1 })} active={comission.paid} >{comission.paid ? "Pago" : "Pendente"}</Action>
+                        </StopPropagation>
+                    }
+                </>,
         },
     ];
 

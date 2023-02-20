@@ -20,4 +20,9 @@ class Level extends Model
     {
         return $this->hasMany(Price::class);
     }
+
+    public function promotions()
+    {
+        return $this->belongsToMany(Promotion::class, 'promotion_has_levels');
+    }
 }

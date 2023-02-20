@@ -64,6 +64,8 @@ Route::get('/reservations-next', 'App\Http\Controllers\GetNextReservationsContro
 Route::get('/reservations-per-month', 'App\Http\Controllers\GetReservationsPerMonthController');
 Route::get('/reservations-archive', 'App\Http\Controllers\GetReservationArchive');
 
+Route::get('/export/reservations', 'App\Http\Controllers\ReservationController@export');
+
 Route::put('/car-status/{car}', 'App\Http\Controllers\CarStatusController');
 Route::get('/car-availability', 'App\Http\Controllers\GetCarAvailability');
 

@@ -60,6 +60,8 @@ class CreateExternalReservationController extends Controller
             'return_place' => $validator['return_place'],
             'address' => $validator['local_address'],
             'flight' => Arr::get($validator, 'flight'),
+            'checkin' => Arr::get($validator, "checkin"),
+            'checkout' => Arr::get($validator, "checkout"),
             'price' => $validator['price'],
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],

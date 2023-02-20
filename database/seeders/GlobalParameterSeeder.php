@@ -26,6 +26,9 @@ class GlobalParameterSeeder extends Seeder
             ['name' => 'Reservas na plataforma', 'code' => 'enable_reservations', 'value' => "1"],
             ['name' => 'Notificações diárias', 'code' => 'enable_notifications', 'value' => "1"],
 
+            ['name' => 'Diferença mínima em horas entre reservas', 'code' => 'min_hours', 'value' => "8"],
+            ['name' => 'Número mínimo de dias para uma reserva', 'code' => 'min_days', 'value' => "1"],
+
         ];
         foreach ($items as $item) {
             GlobalParameter::create($item);

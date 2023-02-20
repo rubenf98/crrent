@@ -16,7 +16,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class Reservation extends Model
 {
     protected $fillable = [
-        'kms_pickup', 'kms_return', 'gas_pickup', 'gas_return', 'payment_method',
+        'kms_pickup', 'kms_return', 'gas_pickup', 'gas_return', 'payment_method', 'checkin',
+        'checkout',
         'address', 'car_pref_id', 'card_id', 'car_price_per_day',  'car_id', 'client_id', 'insurance_id',
         'days', 'car_price', 'token', 'price',
         'pickup_date', 'return_date', 'pickup_place', 'return_place',
@@ -243,7 +244,7 @@ class Reservation extends Model
         $out = new ConsoleOutput();
         $factor = explode(".", strval($factor));
 
-        $out->writeln($factor);
+        // $out->writeln($factor);
         $baseInt = intval($factor[0]);
         if (count($factor) == 2) {
             $baseDecimal = round(floatval("0." . $factor[1]), 2);
@@ -257,6 +258,10 @@ class Reservation extends Model
             if ($differenceMin - ($differenceHour * 60) > 0) {
                 $baseInt++;
             }
+        }
+
+        if ($baseInt < 1) {
+            $baseInt = 1;
         }
 
         return $baseInt;

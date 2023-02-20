@@ -44,11 +44,6 @@ class Car extends Model
                     $reservation = Reservation::with('client')->with('car.category')->find($blockedDate->reservation_id);
                     if ($reservation) {
                         $color = "orange";
-                        $pickup = Carbon::parse($reservation->pickup_date)->startOfDay();
-                        $return = Carbon::parse($reservation->return_date)->startOfDay();
-                        if ($pickup->eq($startDate) || $return->eq($startDate)) {
-                            $color = "red";
-                        }
                         $hasReservation = [
                             'color' => $reservation->status == "pendente" ? $color : "red",
                             'type' => 'reservation',

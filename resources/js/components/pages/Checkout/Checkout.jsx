@@ -254,7 +254,7 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
     const handleDate = (from, to, initDate) => {
         var difference = getDaysDifference(from, to);
 
-        var factors = getPromotions(promotions, from, difference);
+        var factors = getPromotions(promotions, from, difference, currentCar.level.id);
 
         if (initDate) {
             setDates([from, to])

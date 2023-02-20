@@ -61,6 +61,11 @@ function TableContainer({ theme, loading, handleUpdateClick, data, onDelete, set
             render: (comissions) => comissions.pending + "€",
         },
         {
+            title: 'COMISSÕES CANCELADAS',
+            dataIndex: 'comissions',
+            render: (comissions) => comissions.cancelled,
+        },
+        {
             title: '',
             dataIndex: 'id',
             render: (id) => <Link to={"/painel/agencias/" + id}>ver detalhes</Link>

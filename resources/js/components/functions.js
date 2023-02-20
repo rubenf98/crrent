@@ -10,28 +10,33 @@ export function getPriceRounded(price) {
 
 
 export function getDaysDifference(from, to) {
-    var differenceHour = moment(to).diff(moment(from), 'hours');
+    if (from.isSame(to, 'day')) {
+        return 1;
+    } else {
+        var differenceHour = moment(to).diff(moment(from), 'hours');
 
-    var factor = differenceHour / 24;
-    factor = (factor + "").split(".");
+        var factor = differenceHour / 24;
+        factor = (factor + "").split(".");
 
-    var baseInt = parseInt(factor[0]);
-    var baseDecimal = parseFloat("0." + factor[1]).toFixed(5);
+        var baseInt = parseInt(factor[0]);
+        var baseDecimal = parseFloat("0." + factor[1]).toFixed(5);
 
-    if (baseDecimal > hourTreshold.toFixed(5)) {
-        baseInt++;
-    }
-    else if (baseDecimal == hourTreshold.toFixed(5)) {
-        var differenceMin = moment(to).diff(moment(from), 'minutes');
-        if (differenceMin - (differenceHour * 60) > 0) {
+        if (baseDecimal > hourTreshold.toFixed(5)) {
             baseInt++;
         }
+        else if (baseDecimal == hourTreshold.toFixed(5)) {
+            var differenceMin = moment(to).diff(moment(from), 'minutes');
+            if (differenceMin - (differenceHour * 60) > 0) {
+                baseInt++;
+            }
+        }
+
+        return baseInt;
     }
 
-    return baseInt;
 };
 
-export function getPromotions(promotions, start, days) {
+export function getPromotions(promotions, start, days, level) {
     var init = moment(start);
     var min = undefined;
     var max = undefined;
@@ -40,14 +45,25 @@ export function getPromotions(promotions, start, days) {
     while (index < factors.length) {
 
         promotions.map((promotion) => {
-            min = moment(promotion.start).startOf('day');
-            max = moment(promotion.end).endOf('day');
-
-            if (init.isBetween(min, max)) {
-                if (factors[index].priority <= promotion.priority) {
-                    factors[index] = { value: promotion.factor, priority: promotion.priority };
+            var hasLevel = true;
+            if (promotion.levels.length) {
+                var record = promotion.levels.find((e) => e.id == level);
+                if (!record) {
+                    hasLevel = false;
                 }
             }
+
+            if (hasLevel) {
+                min = moment(promotion.start).startOf('day');
+                max = moment(promotion.end).endOf('day');
+
+                if (init.isBetween(min, max)) {
+                    if (factors[index].priority <= promotion.priority) {
+                        factors[index] = { value: promotion.factor, priority: promotion.priority };
+                    }
+                }
+            }
+
         })
 
         init.add(1, 'days');
@@ -83,8 +99,6 @@ export function getCarPrice(prices, days, factors) {
 }
 
 export function getInsurancePrice(insurances, days) {
-    console.log(insurances.find((e) => { return e.name.pt == "Premium" }));
-    console.log(days);
     return parseFloat(insurances.find((e) => { return e.name.pt == "Premium" }).price) * days;
 
 }
@@ -113,8 +127,8 @@ export function isDateDisabled(current, blockedDates, currentDates, index, maxim
 
                 tooLate = condition ? current.diff(currentDates[0], 'days') > maximumValues[0] : current.isAfter(maximumValues[1], 'days');
                 tooEarly = condition ?
-                    moment(current).startOf('day').diff(moment(currentDates[0]).startOf('day'), 'days') < 2
-                    : moment(current).startOf('day').diff(moment().startOf('day'), 'days') < 2;
+                    moment(current).startOf('day').diff(moment(currentDates[0]).startOf('day'), 'days') < 0
+                    : moment(current).startOf('day').diff(moment().startOf('day'), 'days') < 1;
 
                 var nextBlockedDate = null;
                 if (condition) {

@@ -18,13 +18,18 @@ class Agency extends Model
         $response = [
             "paid" => 0,
             "pending" => 0,
+            "cancelled" => 0,
         ];
 
         foreach ($comissions as $comission) {
             if ($comission->paid) {
                 $response["paid"] += $comission->value;
             } else {
-                $response["pending"] += $comission->value;
+                if (!$comission->cancelled) {
+                    $response["pending"] += $comission->value;
+                } else {
+                    $response["cancelled"] += 1;
+                }
             }
         }
 

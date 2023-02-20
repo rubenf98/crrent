@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { dimensions } from "../../helper";
 import TodayTableContainer from "./Homepage/TodayTableContainer";
 import { connect } from "react-redux";
-import { fetchTodayReservations, fetchNextReservations } from "../../../redux/reservation/actions";
+import { fetchTodayReservations, fetchNextReservations, exportReservationCsv } from "../../../redux/reservation/actions";
 import NextTableContainer from "./Homepage/NextTableContainer";
 import InitReservation from "./Homepage/InitReservation";
 import DrawerContainer from "./Reservation/DrawerContainer";
+import { SmallPrimaryButton } from "../../styles";
+import { message } from 'antd';
 
 const Container = styled.div`
     h1 {
@@ -28,7 +30,7 @@ const TodayContainer = styled.section`
 
 
 
-function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, nextData }) {
+function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, nextData, exportReservationCsv, loadingExport }) {
     const [current, setCurrent] = useState(undefined);
     const [drawerState, setDrawerState] = useState(0);
 
@@ -46,6 +48,8 @@ function Dashboard({ fetchTodayReservations, fetchNextReservations, todayData, n
     return (
         <Container>
             <h1>Bem vindo de volta ao painel de controlo</h1>
+            {loadingExport ? message.loading("Descarregando ficheiros...", 5) : <></>}
+            <SmallPrimaryButton onClick={exportReservationCsv}>Descarregar reservas</SmallPrimaryButton>
             <DrawerContainer currentId={current} drawerState={drawerState} setDrawerState={setDrawerState} />
             <TodayContainer>
                 <TodayTableContainer handleRowClick={handleRowClick} title="Levantamentos Hoje" data={todayData.pickup} />
@@ -65,12 +69,14 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchTodayReservations: () => dispatch(fetchTodayReservations()),
         fetchNextReservations: () => dispatch(fetchNextReservations()),
+        exportReservationCsv: (filters) => dispatch(exportReservationCsv(filters)),
     };
 };
 
 const mapStateToProps = (state) => {
     return {
         loading: state.reservation.loading,
+        loadingExport: state.reservation.loadingExport,
         todayData: state.reservation.todayData,
         nextData: state.reservation.nextData
     };

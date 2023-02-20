@@ -39,6 +39,7 @@ class PromotionRequest extends FormRequest
             'factor' => 'required|numeric',
             'value' => 'required|string',
             'priority' => 'nullable|integer',
+            'levels' => 'nullable|array',
         ];
     }
 

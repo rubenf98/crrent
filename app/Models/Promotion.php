@@ -12,4 +12,9 @@ class Promotion extends Model
         'factor' => 'decimal:2',
         'priority' => 'integer',
     ];
+
+    public function levels()
+    {
+        return $this->belongsToMany(Level::class, 'promotion_has_levels');
+    }
 }

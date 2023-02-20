@@ -70,7 +70,7 @@ function ReservationFormContainer(props) {
                 props.updateReservation(current.id, values)
                 : props.createExternalReservation(values);
             handleModalClose();
-            location.reload();
+            // location.reload();
         })
     };
 
@@ -107,7 +107,6 @@ function ReservationFormContainer(props) {
                 return_date: moment(current.return_date),
                 pickup_place: current.pickup_place,
                 return_place: current.return_place,
-                car_price: current.car_price,
                 car_price_per_day: current.car_price_per_day,
                 flight: current.flight,
                 local_address: current.local_address,
@@ -125,6 +124,9 @@ function ReservationFormContainer(props) {
                 drivers: initDrivers,
                 localizations_0: current?.localizations[0]?.id,
                 localizations_1: current?.localizations[1]?.id,
+
+                checkin: current.checkin ? moment(current.checkin) : undefined,
+                checkout: current.checkout ? moment(current.checkout) : undefined,
 
                 agency_id: current?.comission?.agency_id,
                 intermediary: current?.comission?.intermediary,
@@ -181,7 +183,7 @@ function ReservationFormContainer(props) {
                                             var date = form.getFieldValue(['pickup_date']);
 
                                             if (date) {
-                                                return current && current < date;
+                                                return current <= moment(date).subtract(1, 'day');
                                             }
                                             return false;
                                         }}
@@ -210,26 +212,33 @@ function ReservationFormContainer(props) {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={6}>
+                            <Col span={8}>
                                 <Form.Item rules={rules.required} label="Nº de dias" name="days">
                                     <InputNumber disabled style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
-                            <Col span={6}>
-                                <Form.Item rules={rules.required} label="Valor aluguer" name="car_price">
-                                    <InputNumber addonAfter="€" style={{ width: "100%" }} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={6}>
+                            <Col span={8}>
                                 <Form.Item rules={rules.required} label="Preço unitário" name="car_price_per_day">
                                     <InputNumber addonAfter="€" style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
-                            <Col span={6}>
-                                <Form.Item rules={rules.required} label="Total" name="price">
-                                    <InputNumber addonAfter="€" style={{ width: "100%" }} />
+                            <Col span={8}>
+                                <Form.Item label="Total" name="price">
+                                    <InputNumber disabled addonAfter="€" style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
+
+                            <Col span={12}>
+                                <Form.Item label="Check in" name="checkin">
+                                    <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item label="Check out" name="checkout">
+                                    <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
+                                </Form.Item>
+                            </Col>
+
 
                             {edit ? <>
                                 <Col span={6}>

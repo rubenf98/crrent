@@ -103,10 +103,9 @@ function InitReservation(props) {
     const [dates, setDates] = useState([undefined, undefined]);
     const [days, setDays] = useState(0);
     const [hasSearch, setHasSearch] = useState(false);
-    const [factors, setFactors] = useState([])
 
 
-    const { data, insurances } = props;
+    const { data, insurances, promotions } = props;
 
     useEffect(() => {
         props.fetchInsurances()
@@ -118,10 +117,7 @@ function InitReservation(props) {
 
             setDays(difference);
 
-            props.fetchPromotions().then((response) => {
-                var newFactors = getPromotions(response.action.payload.data.data, dates[0], difference);
-                setFactors(newFactors);
-            });
+            props.fetchPromotions();
 
             props.fetchCarCategorySelector({ from: dates[0], to: dates[1] });
             setHasSearch(true);
@@ -131,9 +127,9 @@ function InitReservation(props) {
 
 
     const CarSection = ({ info, aInsurances }) => {
-        console.log(aInsurances);
-        var pricing = getCarPrice(info.level.prices, days, factors);
-        var insurance = getInsurancePrice(aInsurances, days); 
+        var newFactors = getPromotions(promotions, dates[0], days, info.level.id);
+        var pricing = getCarPrice(info.level.prices, days, newFactors);
+        var insurance = getInsurancePrice(aInsurances, days);
         return (
             <Car>
 

@@ -31,6 +31,8 @@ class ReservationResource extends JsonResource
             'car_price_per_day' => $this->car_price_per_day,
             'days' => $this->days,
             'notes' => $this->notes,
+            'checkin' => $this->checkin,
+            'checkout' => $this->checkout,
             'client' => $this->client,
             'car' => $this->car()->with('category')->first(),
             'drivers' => $this->drivers,
