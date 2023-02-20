@@ -278,6 +278,7 @@ class ReservationController extends Controller
             array_push($drivers, $driver->id);
         }
         $reservation->drivers()->sync($drivers);
+        $reservation->generateInvoice();
         DB::commit();
         return new ReservationResource($reservation);
     }
