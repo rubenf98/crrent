@@ -14,7 +14,7 @@ const Container = styled.div`
     width: 100%;
 `;
 
-function Reservation({ data, dataArchive, updateReservationStatus, updateReservationPayment,
+function Reservation({ data, change, dataArchive, updateReservationStatus, updateReservationPayment,
     metaArchive, loading, meta, fetchReservations, deleteReservation, fetchReservationsArchive }) {
     const [filters, setFilters] = useState({ after: moment().format('YYYY-MM-DD') });
     const [archiveFilters, setArchiveFilters] = useState({});
@@ -27,7 +27,6 @@ function Reservation({ data, dataArchive, updateReservationStatus, updateReserva
 
     const handleFilters = (aFilters) => {
         setFilters({ ...filters, ...aFilters });
-
     }
 
 
@@ -38,11 +37,11 @@ function Reservation({ data, dataArchive, updateReservationStatus, updateReserva
 
     useEffect(() => {
         fetchReservations(1, filters);
-    }, [filters])
+    }, [filters, change])
 
     useEffect(() => {
         fetchReservationsArchive(1, archiveFilters);
-    }, [archiveFilters])
+    }, [archiveFilters, change])
 
     const handleArchivePageChange = (pagination, _, sorter) => {
         var sorterData = {};
@@ -111,6 +110,7 @@ function Reservation({ data, dataArchive, updateReservationStatus, updateReserva
                 handleRowClick={handleRowClick}
                 handlePageChange={handleArchivePageChange}
                 handleFilters={handleArchiveFilters}
+                handleUpdateClick={handleUpdateClick}
                 handleStatusChange={(id, status) => (id && status) && updateReservationStatus(id, { status: status }).then(() => { location.reload(); })}
             />
         </Container>
@@ -133,7 +133,8 @@ const mapStateToProps = (state) => {
         data: state.reservation.data,
         meta: state.reservation.meta,
         dataArchive: state.reservation.dataArchive,
-        metaArchive: state.reservation.metaArchive
+        metaArchive: state.reservation.metaArchive,
+        change: state.reservation.change,
     };
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Modal, Row, Form, Button, Input, Col, DatePicker, InputNumber } from 'antd';
+import { Modal, Row, Form, Button, Input, Col, DatePicker, InputNumber, Select } from 'antd';
 import { connect } from "react-redux";
 import { createExternalReservation, updateReservation } from "../../../../redux/reservation/actions"
 import TextArea from "antd/lib/input/TextArea";
@@ -70,7 +70,7 @@ function ReservationFormContainer(props) {
                 props.updateReservation(current.id, values)
                 : props.createExternalReservation(values);
             handleModalClose();
-            location.reload();
+            // location.reload();
         })
     };
 
@@ -102,6 +102,7 @@ function ReservationFormContainer(props) {
                 });
 
             })
+
             form.setFieldsValue({
                 pickup_date: moment(current.pickup_date),
                 return_date: moment(current.return_date),
@@ -127,6 +128,7 @@ function ReservationFormContainer(props) {
 
                 checkin: current.checkin ? moment(current.checkin) : undefined,
                 checkout: current.checkout ? moment(current.checkout) : undefined,
+                current_status: current.current_status,
 
                 agency_id: current?.comission?.agency_id,
                 intermediary: current?.comission?.intermediary,
@@ -228,14 +230,24 @@ function ReservationFormContainer(props) {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={12}>
+                            <Col span={8}>
                                 <Form.Item label="Check in" name="checkin">
                                     <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
-                            <Col span={12}>
+                            <Col span={8}>
                                 <Form.Item label="Check out" name="checkout">
                                     <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
+                                </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                                <Form.Item rules={rules.required} label="Estado da reserva" name="current_status">
+                                    <Select>
+                                        <Select.Option value="Pendente de levantamento">Pendente de levantamento</Select.Option>
+                                        <Select.Option value="Alugado">Alugado</Select.Option>
+                                        <Select.Option value="Devolvido">Devolvido</Select.Option>
+                                        <Select.Option value="Não compareceu">Não compareceu</Select.Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
 
@@ -282,7 +294,7 @@ function ReservationFormContainer(props) {
 
                             <Col span={6}>
                                 <Form.Item rules={rules.required} label="Veículo" name="car_id">
-                                    <CarRemoteSelectContainer dates={currentDates} visible={visible} />
+                                    <CarRemoteSelectContainer exclude={current.id} dates={currentDates} visible={visible} />
                                 </Form.Item>
                             </Col>
                             <Col span={6}>

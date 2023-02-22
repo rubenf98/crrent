@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -29,8 +30,10 @@ class ReservationExport implements FromCollection, WithHeadings, WithMapping, Wi
             'ID',
             'Data da reserva',
             'Data entrega',
+            'Hora entrega',
             'Local entrega',
             'Data devolução',
+            'Hora devolução',
             'Local devolução',
             'Matrícula',
             'Viatura',
@@ -69,9 +72,11 @@ class ReservationExport implements FromCollection, WithHeadings, WithMapping, Wi
         return [
             $record->id,
             $record->created_at,
-            $record->pickup_date,
+            Carbon::parse($record->pickup_date)->format('d-m-Y'),
+            Carbon::parse($record->pickup_date)->format('H:i'),
             $record->pickup_place,
-            $record->return_date,
+            Carbon::parse($record->return_date)->format('d-m-Y'),
+            Carbon::parse($record->return_date)->format('H:i'),
             $record->return_place,
             $record->car->registration,
             $record->car->category->title,

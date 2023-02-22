@@ -34,6 +34,7 @@ class ReservationResource extends JsonResource
             'checkin' => $this->checkin,
             'checkout' => $this->checkout,
             'client' => $this->client,
+            'current_status' => $this->current_status,
             'car' => $this->car()->with('category')->first(),
             'drivers' => $this->drivers,
             'extras' => $this->extras,

@@ -78,31 +78,37 @@ function TableContainer({ handleUpdateClick, handlePaymentChange, handleStatusCh
             render: (car) => car.category.title + " (" + car.registration + ")",
         },
         {
-            title: 'ESTADO',
+            title: 'ESTADO RESERVA',
             dataIndex: 'status',
-            render: (status, row) => <Row type="flex" align="middle">
-                <Status status={status} />
-                <StopPropagation>
-                    <Select onChange={(e) => handleStatusChange(row.id, e)} defaultValue={status}>
-                        <Option value="pendente">Pendente</Option>
-                        <Option value="confirmado">Confirmado</Option>
-                        <Option value="cancelado">Cancelado</Option>
-                    </Select>
-                </StopPropagation>
-            </Row>,
+            render: (status, row) =>
+                <Row type="flex" align="middle" style={{ flexWrap: "nowrap" }}>
+                    <Status status={status} />
+                    <StopPropagation>
+                        <Select onChange={(e) => handleStatusChange(row.id, e)} defaultValue={status}>
+                            <Option value="pendente">Pendente</Option>
+                            <Option value="confirmado">Confirmado</Option>
+                            <Option value="cancelado">Cancelado</Option>
+                        </Select>
+                    </StopPropagation>
+                </Row>,
         },
         {
             title: 'PAGAMENTO',
             dataIndex: 'payed_at',
-            render: (payed_at, row) => <Row type="flex" align="middle">
-                <Status status={payed_at ? "confirmado" : "pendente"} />
-                <StopPropagation>
-                    <Select onChange={(e) => handlePaymentChange(row.id, e)} defaultValue={payed_at ? "pago" : "pendente"}>
-                        <Option value="pago">Pago</Option>
-                        <Option value="pendente">Pendente</Option>u
-                    </Select>
-                </StopPropagation>
-            </Row>,
+            render: (payed_at, row) =>
+                <Row type="flex" align="middle" style={{ flexWrap: "nowrap" }}>
+                    <Status status={payed_at ? "confirmado" : "pendente"} />
+                    <StopPropagation>
+                        <Select onChange={(e) => handlePaymentChange(row.id, e)} defaultValue={payed_at ? "pago" : "pendente"}>
+                            <Option value="pago">Pago</Option>
+                            <Option value="pendente">Pendente</Option>u
+                        </Select>
+                    </StopPropagation>
+                </Row>,
+        },
+        {
+            title: 'ESTADO ATUAL',
+            dataIndex: 'current_status',
         },
         {
             title: 'AÇÕES',

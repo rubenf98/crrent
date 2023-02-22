@@ -79,6 +79,11 @@ const Price = styled.div`
         font-size: 16px;
         opacity: .8;
     }
+
+    .small {
+        font-size: 12px;
+        margin-bottom: 0px;
+    }
     .price {
         text-transform: uppercase;
         font-weight: 700;
@@ -341,6 +346,10 @@ function Checkout({ language, fetchExtras, theme, localizations, timeTax, setCur
             <Price visible={price} background={theme.primary}>
                 <h3>total</h3>
                 <p>{text.notice}</p>
+                <p className='small'>{taxPrice > 0 && "Taxa de atividade fora de horário (" + taxPrice + "€) "}</p>
+                <p className='small'>{localizationPrice[0] > 0 && "Taxa de levantamento (" + localizationPrice[0] + "€) "}</p>
+                <p className='small'>{localizationPrice[1] > 0 && "Taxa de entrega (" + localizationPrice[1] + "€) "}</p>
+                <p className='small'>{activeInsurance.price > 0 && "Seguro (" + activeInsurance.price * days + "€) "}</p>
                 <div className='price'>
                     {getPriceRounded(price + extraPrice + taxPrice + localizationPrice[0] + localizationPrice[1] + (activeInsurance.price * days))}€
                 </div>

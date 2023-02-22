@@ -39,7 +39,7 @@ class CarController extends Controller
     {
         $blockedCars = [];
 
-
+        
         if ($request->from && $request->to) {
             $cars = Car::all();
             $begin = new DateTime($request->from);
@@ -47,10 +47,23 @@ class CarController extends Controller
 
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
+            $exclude = false;
+            
+            if ($request->exclude) {
+                $exclude = $request->exclude;
+            }
+
 
             foreach ($period as $dt) {
                 foreach ($cars as $car) {
-                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->count();
+                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id);
+
+                    if ($exclude != false) {
+                        $isFilled = $isFilled->where('reservation_id', "!=", $exclude)->count();
+                    } else {
+                        $isFilled = $isFilled->count();
+                    }
+
                     if ($isFilled && !in_array($car->id, $blockedCars)) {
                         array_push($blockedCars, $car->id);
                     }

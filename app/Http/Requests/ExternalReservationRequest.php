@@ -94,6 +94,8 @@ class ExternalReservationRequest extends FormRequest
             'checkin' => 'nullable|date',
             'checkout' => 'nullable|date',
 
+            'current_status' => 'required|string',
+
             'extras' => 'nullable|array',
             'extras.*' => 'integer|exists:extras,id',
 

@@ -4,11 +4,17 @@ import { connect } from "react-redux";
 import { fetchCarsSelector } from '../../../../redux/car/actions';
 import moment from "moment";
 
-function CarRemoteSelectContainer({ fetchCarsSelector, visible, data, loading, value, onChange, dates }) {
+function CarRemoteSelectContainer({ fetchCarsSelector, exclude, visible, data, loading, value, onChange, dates }) {
     const [filters, setFilters] = useState({})
 
     useEffect(() => {
-        fetchCarsSelector(filters)
+        var excludeFilter = {};
+
+        if (exclude) {
+            excludeFilter = { exclude: exclude };
+        }
+
+        fetchCarsSelector({ ...filters, ...excludeFilter })
     }, [filters])
 
     useEffect(() => {

@@ -137,7 +137,7 @@ function DrawerContainer(props) {
                     <FieldsContainer width="25%">
                         <FieldContainer name="Identificador" value={"#" + data.id} />
                         <FieldContainer name="Número de confirmação" value={data.token} />
-                        <FieldContainer width="50%" name="Estado" value={<Tag color={data.status == "confirmado" ? "success" : data.status == "pendente" ? "warning" : "error"}>{data.status}</Tag>} />
+                        <FieldContainer width="50%" name="Estado da reserva" value={<Tag color={data.status == "confirmado" ? "success" : data.status == "pendente" ? "warning" : "error"}>{data.status}</Tag>} />
                         
                         <FieldContainer name="Data da reserva" value={moment(data.created_at).format('DD-MM-YYYY HH:mm')} />
                         <FieldContainer name="Levantamento" value={moment(data.pickup_date).format('DD-MM-YYYY HH:mm') + ", " + data.pickup_place} />
@@ -146,6 +146,8 @@ function DrawerContainer(props) {
 
                         <FieldContainer name="Check in" value={EmptyField(data.checkin)} />
                         <FieldContainer name="Check out" value={EmptyField(data.checkout)} />
+                        <FieldContainer name="Estado atual" value={data.current_status} />
+                        <FieldContainer name="Método de pagamento" value={EmptyField(data.payment_method)} />
 
                         <FieldContainer name="KM entrega" value={EmptyField(data.kms_pickup)} />
                         <FieldContainer name="KM devolução" value={EmptyField(data.kms_return)} />
@@ -159,9 +161,10 @@ function DrawerContainer(props) {
 
                         </Field>
 
-                        <FieldContainer name="Método de pagamento" value={EmptyField(data.payment_method)} />
+                        
                         <FieldContainer name="Pagamento" value={<Tag color={data.payed_at ? "success" : "warning"}>{data.payed_at ? "Pago" : "Pendente"}</Tag>} />
                         <FieldContainer name="Seguro" value={data?.insurance?.name?.pt} />
+                        
                         <FieldContainer width="100%" name="Notas" value={EmptyField(data.notes)} />
 
                     </FieldsContainer>

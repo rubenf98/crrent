@@ -14,6 +14,7 @@ export const initialState = {
     values: {},
     errors: [],
     loadingExport: false,
+    change: 0,
 }
 
 export default (state = initialState, action = {}) => {
@@ -70,7 +71,8 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 loading: false,
-                data: [...state.data, action.payload.data.data]
+                data: [...state.data, action.payload.data.data],
+                change: state.change + 1
             };
 
         case `${types.CREATE_RESERVATION}_FULFILLED`:
@@ -104,7 +106,8 @@ export default (state = initialState, action = {}) => {
                         record.id === action.payload.data.data.id
                             ? action.payload.data.data
                             : record
-                )
+                ),
+                change: state.change + 1
             };
 
         case `${types.FETCH_RESERVATION}_REJECTED`:

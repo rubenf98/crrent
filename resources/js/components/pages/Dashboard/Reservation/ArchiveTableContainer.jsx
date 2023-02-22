@@ -38,7 +38,7 @@ const Status = styled.div`
 
 
 
-function ArchiveTableContainer({ loading, handleStatusChange, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
+function ArchiveTableContainer({ loading, handleUpdateClick, handleStatusChange, data, meta, handlePageChange, onDelete, handleRowClick, handleFilters }) {
     const [filters, setFilters] = useState({ id: undefined, name: undefined, date: undefined });
 
     const columns = [
@@ -92,6 +92,7 @@ function ArchiveTableContainer({ loading, handleStatusChange, data, meta, handle
                 <StopPropagation>
                     <RowOperation
                         onDeleteConfirm={() => onDelete(row.id)}
+                        onUpdateClick={() => handleUpdateClick(row)}
                     />
                 </StopPropagation>
             ),

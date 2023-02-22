@@ -210,6 +210,7 @@ class ReservationController extends Controller
             'checkin' => Arr::get($validator, "checkin"),
             'checkout' => Arr::get($validator, "checkout"),
             'price' => $validator['price'],
+            'current_status' => $validator['current_status'],
             'payment_method' => Arr::get($validator, 'payment_method'),
             'car_price' => $validator['car_price'],
             'car_price_per_day' => $validator['car_price_per_day'],

@@ -47,6 +47,7 @@ class CreateReservationsTable extends Migration
             $table->datetime('checkout')->nullable();
             $table->boolean('archive')->default(false);
             $table->string('status')->default('pendente');
+            $table->string('current_status')->default('Pendente de levantamento');
             $table->timestamps();
             $table->softDeletes();
 

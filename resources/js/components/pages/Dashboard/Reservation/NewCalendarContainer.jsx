@@ -1,4 +1,4 @@
-import { DatePicker, Row } from 'antd'
+import { Col, DatePicker, Row } from 'antd'
 import React, { useEffect, useState } from 'react'
 import moment from "moment"
 import styled from "styled-components";
@@ -42,6 +42,7 @@ const CalendarItem = styled.div`
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    color: white;
 
     h3, p {
         text-align: center;
@@ -63,7 +64,7 @@ const CalendarTitle = styled.div`
     padding: 5px;
     box-sizing: border-box;
 
-   span {
+    span {
         opacity: .7;
         font-size: 12px;   
         font-weight: bold;
@@ -87,7 +88,7 @@ function NewCalendarContainer(props) {
     const [calendar, setCalendar] = useState([])
     const [date, setDate] = useState(moment())
     const [filters, setFilters] = useState({})
-    const { data, loading } = props;
+    const { data, loading, reservations } = props;
 
     function handleDateChange(startDate, endDate) {
         setFilters({ ...filters, from: startDate.format('YYYY-MM-DD'), to: endDate.format('YYYY-MM-DD') });
@@ -110,7 +111,7 @@ function NewCalendarContainer(props) {
 
     useEffect(() => {
         props.fetchCarsAvailability(filters);
-    }, [filters])
+    }, [filters, reservations])
 
     return (
         <Container>
@@ -151,7 +152,7 @@ function NewCalendarContainer(props) {
                                         }
                                         handleCalendarViewMore={props.handleCalendarViewMore}
                                     >
-                                        <CalendarItem key={'availability-' + index} background={availability.color} />
+                                        <CalendarItem key={'availability-' + index} background={availability.color} >{availability.color == "black" && "*"}</CalendarItem>
                                     </PopoverContainer>
                                     : <CalendarItem key={'availability-' + index} background={availability.color} />
                             })}
@@ -173,6 +174,7 @@ const mapStateToProps = (state) => {
     return {
         loading: state.car.loading,
         data: state.car.availability,
+        reservations: state.reservation.data,
 
     };
 };
