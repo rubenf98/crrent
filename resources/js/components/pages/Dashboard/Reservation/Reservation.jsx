@@ -107,6 +107,7 @@ function Reservation({ data, change, dataArchive, updateReservationStatus, updat
                 data={dataArchive}
                 meta={metaArchive}
                 loading={loading}
+                onDelete={deleteReservation}
                 handleRowClick={handleRowClick}
                 handlePageChange={handleArchivePageChange}
                 handleFilters={handleArchiveFilters}

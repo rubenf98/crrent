@@ -92,7 +92,8 @@ export default (state = initialState, action = {}) => {
                 loading: false,
                 data: state.data.filter(
                     record => record.id !== action.meta.id
-                )
+                ),
+                change: state.change + 1
             };
 
         case `${types.UPDATE_RESERVATION_STATUS}_FULFILLED`:

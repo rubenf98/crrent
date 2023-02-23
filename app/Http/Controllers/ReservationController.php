@@ -294,8 +294,11 @@ class ReservationController extends Controller
     {
         DB::beginTransaction();
         $comission = $reservation->comission;
-        $comission->cancelled = true;
-        $comission->save();
+        if ($comission) {
+            $comission->cancelled = true;
+            $comission->save();
+        }
+        
 
         $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 
