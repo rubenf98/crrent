@@ -231,12 +231,12 @@ function ReservationFormContainer(props) {
                             </Col>
 
                             <Col span={8}>
-                                <Form.Item label="Check in" name="checkin">
+                                <Form.Item label="Pick-up" name="checkin">
                                     <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
                             <Col span={8}>
-                                <Form.Item label="Check out" name="checkout">
+                                <Form.Item label="Drop-off" name="checkout">
                                     <DatePicker showTime format="DD-MM-YYYY HH:mm" allowClear={false} style={{ width: "100%" }} />
                                 </Form.Item>
                             </Col>
@@ -254,25 +254,28 @@ function ReservationFormContainer(props) {
 
                             {edit ? <>
                                 <Col span={6}>
-                                    <Form.Item label="KM entrada" name="kms_pickup">
+                                    <Form.Item label="KM (SAÍDA) / KM (PICK-UP)" name="kms_return">
                                         <Input />
                                     </Form.Item>
                                 </Col>
                                 <Col span={6}>
-                                    <Form.Item label="KM saída" name="kms_return">
+                                    <Form.Item label="KM (ENTRADA) / KM (DROP-OFF)" name="kms_pickup">
                                         <Input />
                                     </Form.Item>
                                 </Col>
-                                <Col span={6}>
-                                    <Form.Item label="Combustível entrada" name="gas_pickup">
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
+
                                 <Col span={6}>
                                     <Form.Item label="Combustível saída" name="gas_return">
                                         <Input />
                                     </Form.Item>
                                 </Col>
+
+                                <Col span={6}>
+                                    <Form.Item label="Combustível entrada" name="gas_pickup">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+
                             </>
                                 : <></>}
 
