@@ -25,8 +25,11 @@ class UpdateReservationStatus extends Controller
             if (($reservation->status == "pendente" || $reservation->status == "confirmado") && $request->status == "cancelado") {
                 $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
                 $comission = $reservation->comission;
-                $comission->cancelled = true;
-                $comission->save();
+                if ($comission) {
+                    $comission->cancelled = true;
+                    $comission->save();
+                }
+
                 foreach ($blockedDates as $blockedDate) {
                     $blockedDate->delete();
                 }
@@ -48,8 +51,10 @@ class UpdateReservationStatus extends Controller
                 }
 
                 $comission = $reservation->comission;
-                $comission->cancelled = false;
-                $comission->save();
+                if ($comission) {
+                    $comission->cancelled = false;
+                    $comission->save();
+                }
             }
 
             $reservation->status = $request->status;

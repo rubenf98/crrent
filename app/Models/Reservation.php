@@ -204,10 +204,10 @@ class Reservation extends Model
         }
         $fpdi->Text(170, 168, $gas);
 
-        $fpdi->Text(48, 178, $this->kms_pickup);
-        $fpdi->Text(48, 183, $this->kms_return);
-        $fpdi->Text(170, 173, $this->gas_pickup);
-        $fpdi->Text(170, 178, $this->gas_return);
+        $fpdi->Text(48, 178, $this->kms_return);
+        $fpdi->Text(48, 183, $this->kms_pickup);
+        $fpdi->Text(170, 173, $this->gas_return);
+        $fpdi->Text(170, 178, $this->gas_pickup);
     }
 
 
