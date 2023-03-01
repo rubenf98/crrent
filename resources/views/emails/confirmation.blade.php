@@ -129,7 +129,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 36px 24px;">
-                            <a href="https://crrent.ruben-freitas.pt" target="_blank" style="display: inline-block;">
+                            <a href="https://cr-rent.com" target="_blank" style="display: inline-block;">
                                 <img src="https://cr-rent.com/image/logo.png" alt="Logo" border="0" width="48"
                                     style="display: block; width: 120px; max-width: 120px; min-width: 120px;">
                             </a>
@@ -202,7 +202,7 @@
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="center" bgcolor="#7B2CBF" style="border-radius: 6px;">
-                                                    <a href="https://crrent.ruben-freitas.pt/confirmation/?token={{$token}}"
+                                                    <a href="https://cr-rent.com/confirmation/?token={{$token}}"
                                                         target="_blank"
                                                         style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Confirm</a>
                                                 </td>
@@ -221,7 +221,7 @@
                             style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                             <p style="margin: 0;">If that doesn't work, copy and paste the following link in your
                                 browser:</p>
-                            <p style="margin: 0;"><a href=https://crrent.ruben-freitas.pt/confirmation/?token={{$token}}"
+                            <p style="margin: 0;"><a href=https://cr-rent.com/confirmation/?token={{$token}}"
                                     target="_blank">https://cr-rent.com/confirmation/?token={{$token}}</a></p>
                         </td>
                     </tr>

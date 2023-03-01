@@ -143,7 +143,7 @@ class ReservationController extends Controller
             $client = new \GuzzleHttp\Client();
 
             $response = $client->request('POST', 'https://clientes.eupago.pt/api/v1.02/creditcard/create', [
-                'body' => '{"payment":{"amount":{"currency":"EUR","value":' . $reservation->price . '},"lang":"EN","successUrl":"https://crrent.ruben-freitas.pt/confirmation/?token=' . $reservation->token . '","failUrl":"https://crrent.ruben-freitas.pt/error/?token=' . $reservation->token . '","backUrl":"https://crrent.ruben-freitas.pt/error/?token=' . $reservation->token . '","identifier":"' . $reservation->token . '"},"customer":{"notify":true,"email":"joseruben98@hotmail.com"}}',
+                'body' => '{"payment":{"amount":{"currency":"EUR","value":' . $reservation->price . '},"lang":"EN","successUrl":"https://cr-rent.com/confirmation/?token=' . $reservation->token . '","failUrl":"https://cr-rent.com/error/?token=' . $reservation->token . '","backUrl":"https://cr-rent.com/error/?token=' . $reservation->token . '","identifier":"' . $reservation->token . '"},"customer":{"notify":true,"email":"joseruben98@hotmail.com"}}',
                 'headers' => [
                     'Authorization' => 'ApiKey e50f-062e-e91a-118e-d72a',
                     'accept' => 'application/json',

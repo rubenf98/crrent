@@ -129,7 +129,7 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                     <tr>
                         <td align="center" valign="top" style="padding: 36px 24px;">
-                            <a href="https://crrent.ruben-freitas.pt" target="_blank" style="display: inline-block;">
+                            <a href="https://cr-rent.com" target="_blank" style="display: inline-block;">
                                 <img src="https://cr-rent.com/image/logo.png" alt="Logo" border="0" width="48"
                                     style="display: block; width: 120px; max-width: 120px; min-width: 120px;">
                             </a>
