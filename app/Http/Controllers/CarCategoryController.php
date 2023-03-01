@@ -124,10 +124,14 @@ class CarCategoryController extends Controller
     public function store(CarCategoryRequest $request)
     {
         $validator = $request->validated();
+        $imageName = time() . '.' . $request->image->extension();
 
-        $path = Storage::putFile('public/garage', $request->file('image'));
+        $request->file('image')->storeAs(
+            'public/garage',
+            $imageName
+        );
 
-        $validator['image'] =  $path;
+        $validator['image'] = '/storage/garage' . $imageName;
 
         $carCategory = CarCategory::create($validator);
         $array = ["gas", "people", "doors", "shift_mode", "air"];
