@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { Col, Drawer, Row, Tag } from 'antd';
+import { Col, Drawer, Input, Row, Tag } from 'antd';
 import { DownloadIcon } from '../../../../icons';
 import { connect } from 'react-redux';
-import { downloadContract, fetchReservation, downloadInvoice } from '../../../../redux/reservation/actions';
+import {
+    downloadContract, fetchReservation, downloadInvoice, fetchCard,
+    getCard, setCard
+} from '../../../../redux/reservation/actions';
 import moment from "moment";
 import { SmallPrimaryButton, SmallSecundaryButton } from '../../../styles';
 import { Link } from 'react-router-dom';
@@ -86,7 +89,7 @@ const Download = styled.div`
 
 const ButtonContainer = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-top: 10px;
     gap: 15px;
@@ -104,10 +107,13 @@ const Url = styled(Link)`
 `;
 
 function DrawerContainer(props) {
-    const { currentId, drawerState, data } = props;
+    const { currentId, drawerState, data, card } = props;
+    const [hasClickedCard, setHasClickedCard] = useState(false)
 
     useEffect(() => {
         if (currentId && drawerState) {
+            setHasClickedCard(false);
+            props.setCard({});
             props.fetchReservation(currentId);
         }
     }, [currentId, drawerState])
@@ -121,6 +127,13 @@ function DrawerContainer(props) {
 
         </Field>
     )
+
+    const handleGetCard = (id) => {
+        props.getCard(id);
+        setHasClickedCard(true);
+    }
+
+
 
     function EmptyField(field) {
         return field ? field : "N/A"
@@ -240,14 +253,36 @@ function DrawerContainer(props) {
                         : <p>N/A</p>
                     }
                 </Col>
+
+                {(hasClickedCard && card.number) &&
+                    <Col xs={24}>
+                        <Section>Cartão</Section>
+                        <FieldsContainer width="25%">
+                            <FieldContainer name="Nº cartão" value={card.number} />
+                            <FieldContainer name="Validade" value={card.validity} />
+                            <FieldContainer name="CVV" value={card.cvv} />
+                        </FieldsContainer>
+                    </Col>
+                }
+
                 <ButtonContainer>
-                    <SmallSecundaryButton>
-                        <Download primary={false} onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
-                    </SmallSecundaryButton>
-                    <SmallPrimaryButton>
-                        <Download primary={true} onClick={() => props.downloadInvoice(data.token)}><p>Resumo</p><DownloadIcon /></Download>
-                    </SmallPrimaryButton>
+
+                    {hasClickedCard ?
+                        <Input.Search size="large" style={{ maxWidth: "350px" }} onSearch={(e) => props.fetchCard(e)} placeholder="PIN" />
+                        : <SmallSecundaryButton><Download primary={false} onClick={() => handleGetCard(data.card_id)}><p>Obter dados do cartão</p></Download></SmallSecundaryButton>
+                    }
+
+                    <Row type="flex" justify='end' gutter={16}>
+                        <SmallSecundaryButton>
+                            <Download primary={false} onClick={() => props.downloadContract(data.token)}><p>Contrato</p><DownloadIcon /></Download>
+                        </SmallSecundaryButton>
+                        <SmallPrimaryButton>
+                            <Download primary={true} onClick={() => props.downloadInvoice(data.token)}><p>Resumo</p><DownloadIcon /></Download>
+                        </SmallPrimaryButton>
+                    </Row>
                 </ButtonContainer>
+
+
             </Row>
         </Drawer >
     )
@@ -258,6 +293,9 @@ const mapDispatchToProps = (dispatch) => {
         downloadInvoice: (token) => dispatch(downloadInvoice(token)),
         downloadContract: (token) => dispatch(downloadContract(token)),
         fetchReservation: (id) => dispatch(fetchReservation(id)),
+        fetchCard: (token) => dispatch(fetchCard(token)),
+        getCard: (id) => dispatch(getCard(id)),
+        setCard: (data) => dispatch(setCard(data)),
     };
 };
 
@@ -266,6 +304,7 @@ const mapStateToProps = (state) => {
         loadingDownload: state.reservation.loadingDownload,
         loading: state.reservation.loading,
         data: state.reservation.current,
+        card: state.reservation.card,
     };
 };
 

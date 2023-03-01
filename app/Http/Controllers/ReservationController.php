@@ -101,8 +101,18 @@ class ReservationController extends Controller
         $period = new DatePeriod($initDate->startOfDay(), $interval, $endDate->endOfDay());
 
         foreach ($period as $dt) {
+            $operator = null;
+
+            if (Carbon::parse($dt)->isSameDay($period->start)) {
+                $operator = ">";
+            } else if (Carbon::parse($dt)->isSameDay($period->end)) {
+                $operator = "<";
+            }
+
             BlockDate::create([
                 "date" => $dt,
+                "time" => $operator ? ($operator == ">" ? $validator['pickup_date'] : $validator['return_date']) : null,
+                "operator" => $operator,
                 "car_id" => $car->id,
                 "car_category_id" => $car->car_category_id,
                 "reservation_id" => $reservation->id
@@ -191,8 +201,18 @@ class ReservationController extends Controller
         $period = new DatePeriod($initDate->startOfDay(), $interval, $endDate->endOfDay());
 
         foreach ($period as $dt) {
+            $operator = null;
+
+            if (Carbon::parse($dt)->isSameDay($period->start)) {
+                $operator = ">";
+            } else if (Carbon::parse($dt)->isSameDay($period->end)) {
+                $operator = "<";
+            }
+
             BlockDate::create([
                 "date" => $dt,
+                "time" => $operator ? ($operator == ">" ? $validator['pickup_date'] : $validator['return_date']) : null,
+                "operator" => $operator,
                 "car_id" => $car->id,
                 "car_category_id" => $car->car_category_id,
                 "reservation_id" => $reservation->id
@@ -298,7 +318,7 @@ class ReservationController extends Controller
             $comission->cancelled = true;
             $comission->save();
         }
-        
+
 
         $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 

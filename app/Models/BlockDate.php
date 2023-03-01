@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlockDate extends Model
 {
-    protected $fillable = ['car_id', 'date', 'notes', 'reservation_id', 'car_category_id', 'level_id'];
+    protected $fillable = ['car_id', 'date', 'notes', 'reservation_id', 'car_category_id', 'level_id', 'time', 'operator'];
 
     use HasFactory;
 

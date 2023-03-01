@@ -29,6 +29,8 @@ class GlobalParameterSeeder extends Seeder
             ['name' => 'Diferença mínima em horas entre reservas', 'code' => 'min_hours', 'value' => "8"],
             ['name' => 'Número mínimo de dias para uma reserva', 'code' => 'min_days', 'value' => "1"],
 
+            ['name' => 'Intervalo entre reservas (minutos)', 'code' => 'reservation_difference', 'value' => "120"],
+
         ];
         foreach ($items as $item) {
             GlobalParameter::create($item);

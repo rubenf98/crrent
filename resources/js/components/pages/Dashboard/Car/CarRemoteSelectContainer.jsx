@@ -20,7 +20,7 @@ function CarRemoteSelectContainer({ fetchCarsSelector, exclude, visible, data, l
     useEffect(() => {
         if (dates) {
             if (dates.pickup_date && dates.return_date) {
-                setFilters({ from: moment(dates.pickup_date).format('YYYY-MM-DD'), to: moment(dates.return_date).format('YYYY-MM-DD') })
+                setFilters({ from: moment(dates.pickup_date).format('YYYY-MM-DD HH:mm'), to: moment(dates.return_date).format('YYYY-MM-DD HH:mm') })
             } else {
                 setFilters({})
             }

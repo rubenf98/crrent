@@ -76,6 +76,9 @@ Route::get('hasblock', HasBlockDate::class);
 
 Route::put('globalParameters', UpdateGlobalParametersController::class);
 
+Route::get('/card/{token}', 'App\Http\Controllers\CardController@show');
+Route::get('/card-email/{card}', 'App\Http\Controllers\CardController@sendEmail');
+
 Route::apiResource('cars', CarController::class);
 Route::apiResource('car-categories', CarCategoryController::class);
 Route::apiResource('levels', LevelController::class);

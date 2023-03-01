@@ -106,7 +106,7 @@ function FormContainer({ loading, handleClose, updateGlobalParameter, data }) {
                         </Col>
 
 
-                        <Col span={12}>
+                        <Col span={6}>
                             <Form.Item
                                 name="max_date"
                                 rules={rules.required}
@@ -119,9 +119,27 @@ function FormContainer({ loading, handleClose, updateGlobalParameter, data }) {
                             </Form.Item>
                         </Col>
 
-                        <Col span={12}>
+                        <Col span={6}>
                             <Form.Item rules={rules.required} label={data.find((e) => { return e.code == "max_days" }).name} name="max_days">
+                                <InputNumber style={{ width: "100%" }} min={1} />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item rules={rules.required} label={data.find((e) => { return e.code == "min_days" }).name} name="min_days">
+                                <InputNumber style={{ width: "100%" }} min={1} />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item rules={rules.required} label={data.find((e) => { return e.code == "reservation_difference" }).name} name="reservation_difference">
                                 <InputNumber style={{ width: "100%" }} min={0} />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={6}>
+                            <Form.Item rules={rules.required} label={data.find((e) => { return e.code == "min_hours" }).name} name="min_hours">
+                                <InputNumber style={{ width: "100%" }} min={1} />
                             </Form.Item>
                         </Col>
 

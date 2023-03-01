@@ -4,7 +4,10 @@ export const initialState = {
     data: [],
     loading: false,
     current: [],
-    selector: [],
+    selector: {
+        dates: [],
+        times: []
+    },
     hasBlock: [],
     meta: {}
 }
@@ -65,7 +68,10 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 loading: false,
-                selector: []
+                selector: {
+                    dates: [],
+                    times: []
+                },
             };
 
         case `${types.FETCH_BLOCKS_SELECTOR}_FULFILLED`:

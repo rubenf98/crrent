@@ -44,6 +44,9 @@ class UpdateGlobalParametersRequest extends FormRequest
             'max_days' => 'required|integer',
             'enable_reservations' => 'required|integer',
             'enable_notifications' => 'required|integer',
+            'min_hours' => 'required|integer',
+            'min_days' => 'required|integer',
+            'reservation_difference' => 'required|integer',
         ];
     }
 

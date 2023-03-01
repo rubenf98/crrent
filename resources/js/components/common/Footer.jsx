@@ -205,7 +205,7 @@ function Footer({ theme }) {
             </Content>
             <Logo loading='lazy' src="/image/logo_complete.png" alt="logo" />
             <Disclaimer>
-                © Designed by <a href="https://domdesign.pt/" target="_blank">domdesign</a> and developed by <a href="https://ruben-freitas.pt/" target="_blank">Rúben Freitas</a>
+                {/* © Designed by <a href="https://domdesign.pt/" target="_blank">domdesign</a> and developed by <a href="https://ruben-freitas.pt/" target="_blank">Rúben Freitas</a> */}
             </Disclaimer>
         </Container>
     )

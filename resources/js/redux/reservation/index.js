@@ -15,6 +15,7 @@ export const initialState = {
     errors: [],
     loadingExport: false,
     change: 0,
+    card: {},
 }
 
 export default (state = initialState, action = {}) => {
@@ -32,6 +33,9 @@ export default (state = initialState, action = {}) => {
                 loadingExport: false
             };
 
+
+        case `${types.FETCH_CARD}_PENDING`:
+        case `${types.GET_CARD}_PENDING`:
         case `${types.DELETE_RESERVATION}_PENDING`:
         case `${types.CONFIRM_RESERVATION}_PENDING`:
         case `${types.ERROR_RESERVATION}_PENDING`:
@@ -51,6 +55,9 @@ export default (state = initialState, action = {}) => {
                 loading: true,
             };
 
+        case `${types.FETCH_CARD}_REJECTED`:
+        case `${types.GET_CARD}_REJECTED`:
+        case `${types.GET_CARD}_FULFILLED`:
         case `${types.UPDATE_RESERVATION}_REJECTED`:
         case `${types.UPDATE_RESERVATION_STATUS}_REJECTED`:
         case `${types.UPDATE_RESERVATION_PAYMENT}_REJECTED`:
@@ -65,6 +72,13 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 loading: false,
+            };
+
+        case `${types.FETCH_CARD}_FULFILLED`:
+            return {
+                ...state,
+                loading: false,
+                card: action.payload.data.data,
             };
 
         case `${types.CREATE_EXTERNAL_RESERVATION}_FULFILLED`:
@@ -226,6 +240,11 @@ export default (state = initialState, action = {}) => {
             return {
                 ...state,
                 loadingDownload: false,
+            };
+        case `${types.SET_CARD}`:
+            return {
+                ...state,
+                card: action.payload,
             };
 
 

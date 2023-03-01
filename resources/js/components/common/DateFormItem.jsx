@@ -229,6 +229,30 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
 
 
     }
+
+    const isTimeAvailable = (currentDate, currentTime) => {
+        var returnValue = false;
+        if (blockedDates.dates.length) {
+            if (currentDate) {
+                blockedDates.times.forEach(time => {
+                    var formattedTime = moment(time.time);
+                    if (currentDate.isSame(formattedTime, 'day')) {
+                        var timeString = moment(currentDate).format("YYYY-MM-DD") + " " + currentTime;
+                        var myArray = [moment(timeString), time.operator, formattedTime];
+
+                        if (eval(myArray[0] + myArray[1] + myArray[2])) {
+                            returnValue = true;
+                        }
+                    }
+                });
+            }
+
+        }
+
+
+        return returnValue;
+
+    }
     return (
         <Container type="flex" gutter={16}>
             <Col xs={24} md={width}>
@@ -238,29 +262,42 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                     format="DD-MM-YYYY"
                     placeholder={text[0]}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates, currentDates, 0, [maxDaysReservation, maxDateReservation], treshold)}
+                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates.dates, currentDates, 0, [maxDaysReservation, maxDateReservation], treshold)}
                     onChange={(e) => handleDateChange(e, 0)}
                 />
             </Col>
+
             <Col xs={24} md={width}>
                 <StyledTimePicker width={width} value={currentTimeValues[0]} placeholder={text[1]} onChange={(e) => handleTimeChange(e, 0)}>
                     {timeOptions.map((index) => (
                         <>
                             {(index >= timeTreshold[0] && index <= timeTreshold[1]) &&
                                 <>
-                                    <Select.Option value={(index < 10 && '0') + index + ":00"}>
+                                    <Select.Option
+                                        disabled={isTimeAvailable(currentDates[0], (index < 10 && '0') + index + ":00")}
+                                        value={(index < 10 && '0') + index + ":00"}
+                                    >
                                         {(index < 10 && '0') + index + ":00"}
                                     </Select.Option>
+
                                     {index < timeTreshold[1] &&
                                         <>
-
-                                            <Select.Option value={(index < 10 && '0') + index + ":15"}>
+                                            <Select.Option
+                                                disabled={isTimeAvailable(currentDates[0], (index < 10 && '0') + index + ":15")}
+                                                value={(index < 10 && '0') + index + ":15"}
+                                            >
                                                 {(index < 10 && '0') + index + ":15"}
                                             </Select.Option>
-                                            <Select.Option value={(index < 10 && '0') + index + ":30"}>
+                                            <Select.Option
+                                                disabled={isTimeAvailable(currentDates[0], (index < 10 && '0') + index + ":30")}
+                                                value={(index < 10 && '0') + index + ":30"}
+                                            >
                                                 {(index < 10 && '0') + index + ":30"}
                                             </Select.Option>
-                                            <Select.Option value={(index < 10 && '0') + index + ":45"}>
+                                            <Select.Option
+                                                disabled={isTimeAvailable(currentDates[0], (index < 10 && '0') + index + ":45")}
+                                                value={(index < 10 && '0') + index + ":45"}
+                                            >
                                                 {(index < 10 && '0') + index + ":45"}
                                             </Select.Option>
                                         </>
@@ -271,6 +308,7 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                     ))}
                 </StyledTimePicker>
             </Col>
+
             <Col xs={24} md={width}>
                 <StyledDatePicker
                     width={width}
@@ -279,9 +317,10 @@ function DateFormItem({ enableReservations, globalParameters, setDates, dates, t
                     placeholder={text[2]}
                     onChange={(e) => handleDateChange(e, 1)}
                     suffixIcon={(<></>)}
-                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates, currentDates, 1, [maxDaysReservation, maxDateReservation], treshold)}
+                    disabledDate={(current) => (!enableReservations && treshold) || isDateDisabled(current, blockedDates.dates, currentDates, 1, [maxDaysReservation, maxDateReservation], treshold)}
                 />
             </Col>
+
             <Col xs={24} md={width}>
                 <StyledTimePicker width={width} value={currentTimeValues[1]} placeholder={text[3]} onChange={(e) => handleTimeChange(e, 1)}>
                     {timeOptions.map((index) => (
@@ -325,6 +364,7 @@ const mapStateToProps = (state) => {
         blockedDates: state.block.selector,
         globalParameters: state.globalParameter.data,
         hours: state.globalParameter.hours,
+        reservation_difference: state.globalParameter.reservation_difference,
         enableReservations: state.globalParameter.enableReservations
     };
 };

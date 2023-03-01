@@ -37,6 +37,7 @@ class ReservationResource extends JsonResource
             'current_status' => $this->current_status,
             'car' => $this->car()->with('category')->first(),
             'drivers' => $this->drivers,
+            'card_id' => $this->card_id,
             'extras' => $this->extras,
             'localizations' => $this->localizations,
             'comission' => $this->comission()->with('agency')->first(),

@@ -24,15 +24,33 @@ class CarCategory extends Model
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($begin, $interval, $end);
         $cars = $this->cars;
+        $reservation_difference = GlobalParameter::where('code', 'reservation_difference')->first();
 
         foreach ($cars as $car) {
             $isBlocked = false;
+            
             foreach ($period as $dt) {
-
-                $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->count();
+                $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->where('time', null)->count();
 
                 if ($isFilled) {
                     $isBlocked = true;
+                } else {
+                    $transactionDates = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->where('time', '!=', null)->get();
+
+                    foreach ($transactionDates as $transactionDate) {
+                        $fromDifference = Carbon::parse($transactionDate->time)->diffInMinutes($from, false);
+                        $toDifference = Carbon::parse($transactionDate->time)->diffInMinutes($to, false);
+
+                        if ($transactionDate->operator == "<") {
+                            if ($fromDifference < intval($reservation_difference->value)) {
+                                $isBlocked = true;
+                            }
+                        } else {
+                            if ($toDifference + intval($reservation_difference->value) > 0) {
+                                $isBlocked = true;
+                            }
+                        }
+                    }
                 }
             }
 

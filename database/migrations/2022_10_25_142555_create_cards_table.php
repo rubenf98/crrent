@@ -17,7 +17,8 @@ class CreateCardsTable extends Migration
             $table->id();
             $table->string('number');
             $table->string('validity');
-            $table->integer('cvv');
+            $table->string('cvv');
+            $table->string('token');
             $table->timestamps();
         });
     }

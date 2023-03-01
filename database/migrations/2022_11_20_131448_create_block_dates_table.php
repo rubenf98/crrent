@@ -20,6 +20,8 @@ class CreateBlockDatesTable extends Migration
             $table->unsignedBigInteger('reservation_id')->nullable();
             $table->unsignedBigInteger('level_id')->nullable();
             $table->date('date');
+            $table->dateTime('time')->nullable();
+            $table->string('operator')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
 

@@ -17,6 +17,7 @@ const Container = styled.div`
 function CarCategory({ setCurrentCarCategory, data, meta, loading, fetchCarCategories, deleteCarCategory, current }) {
     const [filters, setFilters] = useState({});
     const [visible, setVisible] = useState(false)
+    const [edit, setEdit] = useState(false);
 
     const handleFilters = (aFilters) => {
         setFilters({ ...filters, ...aFilters });
@@ -32,8 +33,17 @@ function CarCategory({ setCurrentCarCategory, data, meta, loading, fetchCarCateg
 
     const handleUpdateClick = (row) => {
         setVisible(true);
+        setEdit(true);
         setCurrentCarCategory(row);
     }
+
+    const handleCreateClick = () => {
+        setVisible(true);
+        setEdit(false);
+        setCurrentCarCategory({});
+        
+    }
+
 
     return (
 
@@ -47,6 +57,7 @@ function CarCategory({ setCurrentCarCategory, data, meta, loading, fetchCarCateg
                     setVisible={setVisible}
                     handlePageChange={handlePageChange}
                     handleUpdateClick={handleUpdateClick}
+                    handleCreateClick={handleCreateClick}
                     handleFilters={handleFilters}
                     meta={meta}
                 />
@@ -55,6 +66,7 @@ function CarCategory({ setCurrentCarCategory, data, meta, loading, fetchCarCateg
                     visible={visible}
                     handleClose={() => setVisible(false)}
                     current={current}
+                    edit={edit}
                 />
             </CardContainer>
         </Container>

@@ -26,6 +26,8 @@ return [
     */
 
     'secret' => env('JWT_SECRET'),
+    'ciphering' => env('CIPHERING'),
+    'decryption' => env('DECRYPTION'),
 
     /*
     |--------------------------------------------------------------------------

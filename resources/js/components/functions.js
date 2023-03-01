@@ -107,6 +107,7 @@ export function isDateDisabled(current, blockedDates, currentDates, index, maxim
     if (!registration) {
         return true;
     }
+
     let isBlocked = blockedDates.includes(current.format("YYYY-MM-DD"));
 
     if (isBlocked) {
@@ -158,29 +159,32 @@ export function isDateDisabled(current, blockedDates, currentDates, index, maxim
 }
 
 
-export function isTimeDisabled(dates, type) {
-    // console.log(dates);
-    // console.log(type);
-    // if (type == "end" && dates[0] && dates[1]) {
-    //     var tooEarly = moment(dates[0]).diff(dates[1], 'days') == 1;
-    //     console.log(moment(dates[0]).diff(dates[1], 'days'));
-    //     var hour = 0;
-    //     var blocked = [];
-    //     var initHour = dates[0].hour();
+export function isTimeAvailable(currentDate, currentTime, times) {
+    var returnValue = false;
+    if (currentDate) {
+        times.forEach(time => {
+            var formattedTime = moment(time.time);
+            if (currentDate.isSame(formattedTime, 'day')) {
+                var timeString = moment(currentDate).format("YYYY-MM-DD") + " " + currentTime;
+                console.log(timeString)
+                console.log(formattedTime.format("YYYY-MM-DD HH:mm"))
+                var myArray = [moment(timeString), time.operator, formattedTime];
 
-    //     if (tooEarly) {
-    //         while (hour < 24) {
-    //             if (hour < initHour) {
-    //                 blocked.push(hour);
-    //             }
-    //             hour++;
-    //         }
-    //     }
 
-    //     return blocked.concat([0, 1, 2, 3, 4, 5, 6, 23])
+                if (eval(myArray[0] + myArray[1] + myArray[2])) {
 
-    // }
+                    returnValue = true;
+                }
 
-    return [0, 1, 2, 3, 4, 5, 6, 23];
+
+
+            }
+        });
+
+
+    }
+    console.log(returnValue);
+    console.log("----------------")
+    return returnValue;
 
 }

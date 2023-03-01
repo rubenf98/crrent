@@ -4,10 +4,9 @@ import Table from "../../../common/TableContainer";
 import RowOperation from "../../../common/RowOperation";
 import StopPropagation from "../../../common/StopPropagation";
 import Tag from "antd/es/tag";
-import { Button, Col, Input, Row } from "antd";
-import { SearchIcon, UserIcon } from "../../../../icons";
-import { Link } from "react-router-dom";
-import { SmallSecundaryButton } from "../../../styles";
+import { Col, Input, Row } from "antd";
+import { SearchIcon } from "../../../../icons";
+import { SmallSecundaryButton, SmallPrimaryButton } from "../../../styles";
 
 const Container = styled.div`
     width: 100%;
@@ -30,7 +29,7 @@ const FilterContainer = styled(Row)`
 
 
 function CarCategoryTableContainer(props) {
-    const [filters, setFilters] = useState({ level: undefined, name: undefined});
+    const [filters, setFilters] = useState({ level: undefined, name: undefined });
     const { loading, data, meta } = props;
 
 
@@ -77,6 +76,14 @@ function CarCategoryTableContainer(props) {
                     <Input allowClear value={filters.level} onChange={(e) => setFilters({ ...filters, level: e.target.value })} placeholder="Título ou código da gama de veículos" suffix={<SearchIcon />} />
                 </Col>
                 <Col span={12}>
+                    <SmallPrimaryButton
+                        onClick={props.handleCreateClick}
+                        style={{ float: "right", marginLeft: "10px" }} type="primary"
+                        loading={loading}
+                    >
+                        Adicionar
+                    </SmallPrimaryButton>
+
                     <SmallSecundaryButton
                         onClick={() => props.handleFilters(filters)}
                         style={{ float: "right" }}

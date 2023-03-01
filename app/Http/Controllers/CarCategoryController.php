@@ -6,12 +6,16 @@ use App\Http\Requests\CarCategoryRequest;
 use App\Http\Resources\CarCategoryResource;
 use App\Models\BlockDate;
 use App\Models\CarCategory;
+use App\Models\CarCharateristic;
+use App\Models\CarHasCharateristic;
+use App\Models\GlobalParameter;
 use App\QueryFilters\CarCategoryFilters;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class CarCategoryController extends Controller
 {
@@ -38,6 +42,7 @@ class CarCategoryController extends Controller
     public function selector(Request $request)
     {
         $blockedCars = [];
+        $reservation_difference = GlobalParameter::where('code', 'reservation_difference')->first();
 
         if ($request->from && $request->to) {
             $carCategories = CarCategory::all();
@@ -46,14 +51,58 @@ class CarCategoryController extends Controller
 
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
-
+            $out = new ConsoleOutput();
             foreach ($period as $dt) {
+                $out->writeln($dt->format("Y-m-d"));
                 foreach ($carCategories as $carCategory) {
                     $treshold = $carCategory->cars()->where('status', 1)->count();
-                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_category_id', $carCategory->id)->count();
 
-                    if ($isFilled >= $treshold && !in_array($carCategory->id, $blockedCars)) {
-                        array_push($blockedCars, $carCategory->id);
+                    if (!(Carbon::parse($request->from)->isSameDay(Carbon::parse($dt)) || Carbon::parse($request->to)->isSameDay(Carbon::parse($dt)))) {
+                        $query = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_category_id', $carCategory->id)->groupBy('car_id')->get();
+
+                        $isFilled = count($query);
+
+                        if ($isFilled >= $treshold) {
+                            if (!in_array($carCategory->id, $blockedCars)) {
+                                $out->writeln($carCategory->id);
+                                $out->writeln($isFilled);
+                                $out->writeln($treshold);
+                                array_push($blockedCars, $carCategory->id);
+                            }
+                        }
+                    } else {
+                        $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_category_id', $carCategory->id)->where('time', '!=', null)->count();
+
+                        if ($isFilled >= $treshold) {
+                            if (!in_array($carCategory->id, $blockedCars)) {
+                                $out->writeln($carCategory->id);
+                                array_push($blockedCars, $carCategory->id);
+                            }
+                        } else {
+                            $transactionDates = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_category_id', $carCategory->id)->where('time', '!=', null)->get();
+
+                            foreach ($transactionDates as $transactionDate) {
+                                $fromDifference = Carbon::parse($transactionDate->time)->diffInMinutes($request->from, false);
+                                $toDifference = Carbon::parse($transactionDate->time)->diffInMinutes($request->to, false);
+
+                                if ($transactionDate->operator == "<") {
+
+                                    if ($fromDifference < intval($reservation_difference->value)) {
+                                        $isFilled++;
+                                    }
+                                } else {
+                                    if ($toDifference + intval($reservation_difference->value) > 0) {
+                                        $isFilled++;
+                                    }
+                                }
+                            }
+
+                            if ($isFilled >= $treshold) {
+                                if (!in_array($carCategory->id, $blockedCars)) {
+                                    array_push($blockedCars, $carCategory->id);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -71,9 +120,29 @@ class CarCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CarCategory $carCategory)
+    public function store(CarCategoryRequest $request)
     {
-        //
+        $validator = $request->validated();
+
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('image/garage'), $imageName);
+
+        $validator['image'] = '/image/garage' + $imageName;
+
+        $carCategory = CarCategory::create($validator);
+        $array = ["gas", "people", "doors", "shift_mode", "air"];
+
+        foreach ($array as $char) {
+            $charateristic = CarCharateristic::where('name', $char)->first();
+
+            CarHasCharateristic::create([
+                "car_category_id" => $carCategory->id,
+                "car_charateristic_id" => $charateristic->id,
+                "value" => $validator[$char]
+            ]);
+        }
+
+        return new CarCategoryResource($carCategory);
     }
 
     /**
@@ -98,7 +167,23 @@ class CarCategoryController extends Controller
     {
         $validator = $request->validated();
 
+        if ($request->has("image")) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('image/garage'), $imageName);
+
+            $validator['image'] = '/image/garage' + $imageName;
+        }
+
         $carCategory->update($validator);
+
+        $array = ["gas", "people", "doors", "shift_mode", "air"];
+
+        foreach ($array as $char) {
+            $charateristic = CarCharateristic::where('name', $char)->first();
+            $carhaschar = CarHasCharateristic::where('car_category_id', $carCategory->id)->where('car_charateristic_id', $charateristic->id)->first();
+            $carhaschar->value = $validator[$char];
+            $carhaschar->save();
+        }
 
         return new CarCategoryResource($carCategory);
     }
@@ -111,6 +196,8 @@ class CarCategoryController extends Controller
      */
     public function destroy(CarCategory $carCategory)
     {
-        //
+        $carCategory->delete();
+
+        return response()->json(null, 204);
     }
 }

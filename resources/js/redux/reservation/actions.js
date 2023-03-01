@@ -24,6 +24,16 @@ export const fetchReservationsArchive = (page = 1, filters = {}) => ({
     })}&page=${page}`)
 })
 
+export const fetchCard = (token) => ({
+    type: types.FETCH_CARD,
+    payload: axios.get(`${window.location.origin}/api/card/${token}`)
+})
+
+export const getCard = (id) => ({
+    type: types.GET_CARD,
+    payload: axios.get(`${window.location.origin}/api/card-email/${id}`)
+})
+
 export const fetchTodayReservations = () => ({
     type: types.FETCH_TODAY_RESERVATIONS,
     payload: axios.get(`${window.location.origin}/api/reservations-today`)
@@ -109,6 +119,11 @@ export const setCurrentReservation = (data) => ({
 
 export const setCurrentReservationValues = (data) => ({
     type: types.SET_CURRENT_RESERVATION_VALUES,
+    payload: data,
+});
+
+export const setCard = (data) => ({
+    type: types.SET_CARD,
     payload: data,
 });
 

@@ -9,6 +9,7 @@ use App\Models\BlockDate;
 use App\Models\BlockedCar;
 use App\Models\Car;
 use App\Models\CarCategory;
+use App\Models\GlobalParameter;
 use App\Models\Level;
 use App\QueryFilters\CarFilters;
 use Carbon\Carbon;
@@ -38,8 +39,8 @@ class CarController extends Controller
     public function selector(Request $request)
     {
         $blockedCars = [];
+        $reservation_difference = GlobalParameter::where('code', 'reservation_difference')->first();
 
-        
         if ($request->from && $request->to) {
             $cars = Car::all();
             $begin = new DateTime($request->from);
@@ -48,7 +49,7 @@ class CarController extends Controller
             $interval = DateInterval::createFromDateString('1 day');
             $period = new DatePeriod($begin, $interval, $end);
             $exclude = false;
-            
+
             if ($request->exclude) {
                 $exclude = $request->exclude;
             }
@@ -56,7 +57,7 @@ class CarController extends Controller
 
             foreach ($period as $dt) {
                 foreach ($cars as $car) {
-                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id);
+                    $isFilled = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->where('time', null);
 
                     if ($exclude != false) {
                         $isFilled = $isFilled->where('reservation_id', "!=", $exclude)->count();
@@ -64,8 +65,34 @@ class CarController extends Controller
                         $isFilled = $isFilled->count();
                     }
 
-                    if ($isFilled && !in_array($car->id, $blockedCars)) {
-                        array_push($blockedCars, $car->id);
+                    if ($isFilled) {
+                        if (!in_array($car->id, $blockedCars)) {
+                            array_push($blockedCars, $car->id);
+                        }
+                    } else {
+                        $transactionDates = BlockDate::where('date', $dt->format("Y-m-d"))->where('car_id', $car->id)->where('time', '!=', null);
+
+                        if ($exclude != false) {
+                            $transactionDates = $transactionDates->where('reservation_id', "!=", $exclude)->get();
+                        } else {
+                            $transactionDates = $transactionDates->get();
+                        }
+
+
+                        foreach ($transactionDates as $transactionDate) {
+                            $fromDifference = Carbon::parse($transactionDate->time)->diffInMinutes($request->from, false);
+                            $toDifference = Carbon::parse($transactionDate->time)->diffInMinutes($request->to, false);
+                            if ($transactionDate->operator == "<") {
+
+                                if ($fromDifference < intval($reservation_difference->value)) {
+                                    array_push($blockedCars, $car->id);
+                                }
+                            } else {
+                                if ($toDifference + intval($reservation_difference->value) > 0) {
+                                    array_push($blockedCars, $car->id);
+                                }
+                            }
+                        }
                     }
                 }
             }

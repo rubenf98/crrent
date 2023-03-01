@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cerbero\QueryFilters\FiltersRecords;
 use Illuminate\Database\Eloquent\Model;
-
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class Car extends Model
 {
@@ -31,18 +31,42 @@ class Car extends Model
         $endDate = Carbon::parse($to)->endOfDay();
 
         $response = [];
-        $blockedDates = BlockDate::whereBetween('date', [$startDate, $endDate])->where('car_id', $this->id)->get();
+
+        $blockedDates = BlockDate::whereBetween('date', [$startDate, $endDate])->where('car_id', $this->id)->where('reservation_id', "!=", null)->get();
+        $out = new ConsoleOutput();
+        $reservationDates = [];
+        foreach ($blockedDates as $blockedDate) {
+            if (!array_key_exists($blockedDate->date, $reservationDates)) {
+                $reservationDates[$blockedDate->date] = [$blockedDate->reservation_id];
+            } else {
+                if (!array_key_exists($blockedDate->reservation_id, $reservationDates[$blockedDate->date])) {
+                    array_push($reservationDates[$blockedDate->date], $blockedDate->reservation_id);
+                }
+            }
+        }
+
+        $out->writeln(json_encode($reservationDates));
+
 
         while ($startDate <= $endDate) {
             $hasReservation = [
                 'color' => 'green',
                 'type' => 'clear',
             ];
+            // $out->writeln($startDate);
 
+            $blockedDates = BlockDate::where('date', $startDate->format('Y-m-d'))->where('car_id', $this->id)->get();
             foreach ($blockedDates as $blockedDate) {
-                if ($startDate->eq($blockedDate->date)) {
-                    $reservation = Reservation::with('client')->with('car.category')->find($blockedDate->reservation_id);
-                    if ($reservation) {
+                if (array_key_exists($blockedDate->date, $reservationDates) && $blockedDate->reservation_id) {
+                    // $out->writeln("--");
+                    // $out->writeln($blockedDate->date);
+                    $reservations = Reservation::with('client')->with('car.category')->whereIn('id', $reservationDates[$blockedDate->date])->get();
+
+                    $colors = [];
+                    $types = [];
+
+                    foreach ($reservations as $reservation) {
+                        // $out->writeln($reservation->id);
                         $color = $reservation->status == "pendente" ? "orange" : "red";
 
                         $pickup = Carbon::parse($reservation->pickup_date)->startOfDay();
@@ -51,53 +75,34 @@ class Car extends Model
                             $color = "black";
                         }
 
-                        $hasReservation = [
-                            'color' =>  $color,
-                            'type' => 'reservation',
-                            'content' => $reservation
-                        ];
-                    } else {
-                        $hasReservation = [
-                            'color' => 'red',
-                            'type' => 'other',
-                            'content' => $blockedDate->notes
-                        ];
+                        array_push($colors, $color);
+                        array_push($types, 'reservation');
                     }
+
+                    $hasReservation = [
+                        'color' => $colors,
+                        'type' => 'reservation',
+                        'content' => $reservations
+                    ];
+                } else if ($startDate->isSameDay($blockedDate->date)) {
+                    $out->writeln($blockedDate->date);
+                    $hasReservation = [
+                        'color' => 'red',
+                        'type' => 'other',
+                        'content' => $blockedDate->notes
+                    ];
                 }
             }
+
+
 
             array_push($response, $hasReservation);
             $startDate->addDay();
         }
 
+        $out->writeln("-------------------------------");
+        // return $reservationDates;
         return $response;
-        // $reservations = Reservation::where('car_id', $this->id)
-        //     ->where(function ($query) use ($startDate, $endDate) {
-        //         $query->whereBetween('pickup_date', [$startDate, $endDate])
-        //             ->orWhereBetween('return_date', [$startDate, $endDate]);
-        //     })
-        //     ->get();
-
-        // while ($startDate <= $endDate) {
-        //     $hasReservation = 0;
-        //     foreach ($reservations as $reservation) {
-        //         $min = Carbon::parse($reservation->pickup_date)->startOfDay();
-        //         $max = Carbon::parse($reservation->return_date)->endOfDay();
-        //         if ($startDate->between($min, $max)) {
-        //             $hasReservation = [
-        //                 'color' => 'red',
-        //                 'type' => 'reservation',
-        //                 'reservation' => $reservation->client()->first()
-        //             ];
-        //         }
-        //     }
-
-        //     array_push($response, $hasReservation);
-
-        //     $startDate->addDay();
-        // }
-
-        // return $response;
     }
 
     public function blockedDates()

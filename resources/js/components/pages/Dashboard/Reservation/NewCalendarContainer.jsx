@@ -33,7 +33,7 @@ const Calendar = styled.div`
 `;
 
 const CalendarItem = styled.div`
-    width: 43px;
+    width: ${props => props.division ? (43 / props.division + "px") : "43px"};
     height: 40px;
     background-color: ${props => props.background};
     border: 1px solid #ffffff;
@@ -140,20 +140,40 @@ function NewCalendarContainer(props) {
                             </CalendarTitle>
                             {car.availability.map((availability, index) => {
                                 return availability.content ?
-                                    <PopoverContainer
-                                        key={index}
-                                        item={{
-                                            ...availability,
-                                            car: {
-                                                registration: car.registration,
-                                                category: { title: car.title }
+                                    (typeof availability.content == "object" ?
+                                        availability.content.map((_, j) => (
+                                            <PopoverContainer
+                                                key={index + "-" + j}
+                                                item={{
+                                                    ...availability.content[j],
+                                                    type: availability.type,
+                                                    car: {
+                                                        registration: car.registration,
+                                                        category: { title: car.title }
+                                                    }
+                                                }
+                                                }
+                                                handleCalendarViewMore={props.handleCalendarViewMore}
+                                            >
+                                                <CalendarItem division={availability.content.length} key={'availability-' + index + "-" + j} background={availability.color[j]} >{availability.color[j] == "black" && "*"}</CalendarItem>
+                                            </PopoverContainer>
+                                        )) :
+                                        <PopoverContainer
+                                            key={index}
+                                            item={{
+                                                content: availability.content,
+                                                type: availability.type,
+                                                car: {
+                                                    registration: car.registration,
+                                                    category: { title: car.title }
+                                                }
                                             }
-                                        }
-                                        }
-                                        handleCalendarViewMore={props.handleCalendarViewMore}
-                                    >
-                                        <CalendarItem key={'availability-' + index} background={availability.color} >{availability.color == "black" && "*"}</CalendarItem>
-                                    </PopoverContainer>
+                                            }
+                                            handleCalendarViewMore={props.handleCalendarViewMore}
+                                        >
+                                            <CalendarItem division={1} key={'availability-' + index} background={availability.color} >{availability.color == "black" && "*"}</CalendarItem>
+                                        </PopoverContainer>
+                                    )
                                     : <CalendarItem key={'availability-' + index} background={availability.color} />
                             })}
                         </div>

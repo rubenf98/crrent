@@ -88,13 +88,17 @@ function PopoverContainer({ key, item, children, handleCalendarViewMore }) {
         <Container>
             <Col span={24}>
                 <p className='title'>data bloqueadas pelo administrador</p>
-                <p className='value'>{data ? data : "N/A"}</p>
+                <p className='value'>{data.content ? data.content : "N/A"}</p>
             </Col>
         </Container>
     );
-    console.log(item.id);
+
     return (
-        <Popover style={{ padding: "0px" }} key={key} content={item.type == "other" ? () => noteContent(item.content) : () => content(item.content)}>
+        <Popover
+            style={{ padding: "0px" }}
+            key={key}
+            content={item.type == "other" ? () => noteContent(item) : () => content(item)}
+        >
             {children}
         </Popover>
     )

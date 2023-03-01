@@ -10,9 +10,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
 
 
-    <meta name="keywords" content="crrent, cr, coerência, coerencia, razão, razao, car, rent, rental, madeira, island">
+    <meta name="keywords"
+        content="crrent, cr, coerência, coerencia, razão, razao, car, rent, rental, madeira, island, car, used car, price, cheap, quality, adventurous, budget rental cars, airport rental cars, rental cars europe, portugal, coerencia, funchal, rentalcar ">
     <meta name="author" content="Rúben Freitas">
-    <meta name="description" content="Crrent">
+    <meta name="description"
+        content="CRRent found in car rental a way to contribute to the support and development of tourism on the island of Madeira. Having customer satisfaction as its main objective, CR Rent offers personalized human support, a recent fleet, with attractive and competitive prices">
 
 
 

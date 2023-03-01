@@ -15,8 +15,6 @@ function LevelRemoteSelectContainer({ fetchLevels, data, loading, value, onChang
             loading={loading}
             showSearch
             placeholder="Grupo / Gama de viaturas"
-            optionFilterProp="name"
-            filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
         >
             {data.map((element) => (
                 <Select.Option key={element.id} value={element.id}>{element.name} ({element.code})</Select.Option>

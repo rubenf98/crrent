@@ -40,6 +40,7 @@ class CarCategoryRequest extends FormRequest
         return [
             'title' => 'required|string',
             'level_id' => 'required|integer|exists:levels,id',
+            'image' => 'nullable|image|mimes:png',
             'description' => 'nullable|array',
             'description.en' => 'nullable|string',
             'description.pt' => 'nullable|string',

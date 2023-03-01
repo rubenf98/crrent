@@ -228,9 +228,8 @@ function Header({ theme, text, fetchBlockPeriodSelector }) {
                         <a href="https://www.facebook.com/profile.php?id=100087592815470" target="_blank">
                             <FacebookIcon />
                         </a>
-
-
                     </LinksContainer>
+
                     <DateFormItem text={text.placeholder} dates={dates} setDates={setDates} />
                     <Search onClick={handleSearch} background={theme.primary} type='submit'>{text.button}</Search>
                 </RangePickerContainer>

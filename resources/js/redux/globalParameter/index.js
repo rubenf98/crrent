@@ -8,6 +8,7 @@ export const initialState = {
     timeTax: [],
     dates: [],
     hours: [],
+    reservation_difference: undefined,
     enableReservations: undefined,
 }
 
@@ -53,6 +54,7 @@ export default (state = initialState, action = {}) => {
                     parseInt(action.payload.data.data.find((e) => { return e.code === 'min_hours' }).value),
                     parseInt(action.payload.data.data.find((e) => { return e.code === 'min_days' }).value),
                 ],
+                reservation_difference: parseInt(action.payload.data.data.find((e) => { return e.code === 'reservation_difference' }).value),
                 enableReservations: action.payload.data.data.find((e) => { return e.code === 'enable_reservations' }).value,
             };
 
@@ -93,6 +95,7 @@ export default (state = initialState, action = {}) => {
                     parseInt(action.payload.data.data.find((e) => { return e.code === 'min_hours' }).value),
                     parseInt(action.payload.data.data.find((e) => { return e.code === 'min_days' }).value),
                 ],
+                reservation_difference: parseInt(action.payload.data.data.find((e) => { return e.code === 'reservation_difference' }).value),
                 enableReservations: parseInt(action.payload.data.data.find((e) => { return e.code === 'enable_reservations' }).value),
             };
 

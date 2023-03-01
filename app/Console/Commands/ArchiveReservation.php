@@ -40,17 +40,18 @@ class ArchiveReservation extends Command
      */
     public function handle()
     {
-        $reservations = Reservation::where('pickup_date', '<', Carbon::now())
-            ->where("status", "pendente")->get();
+        $reservations = Reservation::where("status", "pendente")->get();
 
         foreach ($reservations as  $reservation) {
-            $reservation->status = "cancelado";
-            $reservation->save();
+            if (Carbon::now()->isAfter(Carbon::parse($reservation->created_at)->addHour())) {
+                $reservation->status = "cancelado";
+                $reservation->save();
 
-            $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
+                $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 
-            foreach ($blockedDates as $blockedDate) {
-                $blockedDate->delete();
+                foreach ($blockedDates as $blockedDate) {
+                    $blockedDate->delete();
+                }
             }
         }
 
