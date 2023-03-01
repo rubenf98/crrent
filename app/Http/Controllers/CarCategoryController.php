@@ -131,7 +131,7 @@ class CarCategoryController extends Controller
             $imageName
         );
 
-        $validator['image'] = '/storage/garage' . $imageName;
+        $validator['image'] = '/storage/garage/' . $imageName;
 
         $carCategory = CarCategory::create($validator);
         $array = ["gas", "people", "doors", "shift_mode", "air"];
@@ -173,9 +173,14 @@ class CarCategoryController extends Controller
 
         if ($request->has("image")) {
 
-            $path = Storage::putFile('public/garage', $request->file('image'));
+            $imageName = time() . '.' . $request->image->extension();
 
-            $validator['image'] =  $path;
+            $request->file('image')->storeAs(
+                'public/garage',
+                $imageName
+            );
+
+            $validator['image'] = '/storage/garage/' . $imageName;
         }
 
         $carCategory->update($validator);
