@@ -15,6 +15,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class CarCategoryController extends Controller
@@ -125,9 +126,10 @@ class CarCategoryController extends Controller
         $validator = $request->validated();
 
         $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('image/garage'), $imageName);
+        $file = $request->file('image');
+        Storage::disk('public')->put($imageName, $file);
 
-        $validator['image'] = '/image/garage' + $imageName;
+        $validator['image'] = '/storage/' + $imageName;
 
         $carCategory = CarCategory::create($validator);
         $array = ["gas", "people", "doors", "shift_mode", "air"];
@@ -169,9 +171,10 @@ class CarCategoryController extends Controller
 
         if ($request->has("image")) {
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('image/garage'), $imageName);
+            $file = $request->file('image');
+            Storage::disk('public')->put($imageName, $file);
 
-            $validator['image'] = '/image/garage' + $imageName;
+            $validator['image'] = '/storage/' + $imageName;
         }
 
         $carCategory->update($validator);
