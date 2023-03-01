@@ -28,4 +28,17 @@ class ClientController extends Controller
 
         return new ClientResource($client);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Client  $car
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Client $client)
+    {
+        $client->delete();
+
+        return response()->json(null, 204);
+    }
 }
