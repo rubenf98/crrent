@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CarResource;
 use App\Models\Car;
+use App\Models\LogRecord;
 use Illuminate\Http\Request;
 
 class CarStatusController extends Controller
@@ -21,6 +22,11 @@ class CarStatusController extends Controller
         }
 
         $car->save();
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou o estado do veículo " . $car->id
+        ]);
 
         return new CarResource($car);
     }

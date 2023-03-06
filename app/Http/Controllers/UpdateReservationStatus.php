@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ReservationResource;
 use App\Models\BlockDate;
+use App\Models\LogRecord;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use DateInterval;
@@ -21,6 +22,11 @@ class UpdateReservationStatus extends Controller
     public function __invoke($id, Request $request)
     {
         $reservation = Reservation::find($id);
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou o estado da reserva " . $reservation->id
+        ]);
         if ($reservation->status != $request->status) {
             if (($reservation->status == "pendente" || $reservation->status == "confirmado") && $request->status == "cancelado") {
                 $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LevelRequest;
 use App\Http\Resources\LevelResource;
 use App\Models\Level;
+use App\Models\LogRecord;
 use App\Models\Price;
 use App\QueryFilters\LevelFilters;
 use Illuminate\Http\Request;
@@ -34,6 +35,11 @@ class LevelController extends Controller
         $validator = $request->validated();
         DB::beginTransaction();
         $record = Level::create($validator);
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou a gama de veículos " . $record->id
+        ]);
 
         foreach ($validator['prices'] as $price) {
             Price::create([
@@ -72,6 +78,10 @@ class LevelController extends Controller
         $validator = $request->validated();
 
         $level->update($validator);
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou a gama de veículos " . $level->id
+        ]);
 
         return new LevelResource($level);
     }
@@ -84,6 +94,11 @@ class LevelController extends Controller
      */
     public function destroy(Level $level)
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou a gama de veículos " . $level->id
+        ]);
+
         $level->delete();
 
         return response()->json(null, 204);

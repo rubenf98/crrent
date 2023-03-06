@@ -17,6 +17,7 @@ use App\Http\Controllers\HasBlockDate;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\LogRecordController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ReservationController;
@@ -79,6 +80,8 @@ Route::put('globalParameters', UpdateGlobalParametersController::class);
 Route::get('/card/{token}', 'App\Http\Controllers\CardController@show');
 Route::get('/card-email/{card}', 'App\Http\Controllers\CardController@sendEmail');
 
+
+Route::apiResource('logRecord', LogRecordController::class);
 Route::apiResource('cars', CarController::class);
 Route::apiResource('car-categories', CarCategoryController::class);
 Route::apiResource('levels', LevelController::class);

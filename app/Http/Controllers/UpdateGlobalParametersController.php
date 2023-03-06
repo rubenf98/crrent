@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateGlobalParametersRequest;
 use App\Http\Resources\GlobalParameterResource;
 use App\Models\GlobalParameter;
+use App\Models\LogRecord;
 
 class UpdateGlobalParametersController extends Controller
 {
@@ -18,6 +19,11 @@ class UpdateGlobalParametersController extends Controller
     {
         $validator = $request->validated();
         $globalParameters = GlobalParameter::all();
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou os parâmetros de configuração"
+        ]);
 
         foreach ($globalParameters as $globalParameter) {
             $globalParameter->update([

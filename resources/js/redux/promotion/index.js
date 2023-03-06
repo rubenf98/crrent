@@ -3,7 +3,7 @@ import { types } from "./types";
 export const initialState = {
     data: [],
     loading: false,
-    current: [],
+    current: {},
 }
 
 export default (state = initialState, action = {}) => {
@@ -82,7 +82,7 @@ export default (state = initialState, action = {}) => {
                 data: action.payload.data.data,
             };
 
-        case `${types.SET_CURRENT_PROMOTION}_FULFILLED`:
+        case `${types.SET_CURRENT_PROMOTION}`:
             return {
                 ...state,
                 loading: false,

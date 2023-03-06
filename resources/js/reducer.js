@@ -20,6 +20,8 @@ import comission from './redux/comission'
 import localization from './redux/localization'
 import insurance from './redux/insurance'
 
+import logRecord from './redux/logRecord'
+
 const reducer = combineReducers({
     auth,
     application,
@@ -38,7 +40,8 @@ const reducer = combineReducers({
     agency,
     comission,
     localization,
-    insurance
+    insurance,
+    logRecord
 })
 
 export default reducer

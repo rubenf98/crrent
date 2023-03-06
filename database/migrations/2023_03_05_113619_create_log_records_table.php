@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePromotionsTable extends Migration
+class CreateLogRecordsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePromotionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('promotions', function (Blueprint $table) {
+        Schema::create('log_records', function (Blueprint $table) {
             $table->id();
-            $table->date('start');
-            $table->date('end');
-            $table->string('value');
-            $table->double('factor', 4, 2);
-            $table->integer('priority')->default(1);
+            $table->unsignedBigInteger("user_id");
+            $table->string('description');
             $table->timestamps();
+
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
         });
     }
 
@@ -31,6 +30,6 @@ class CreatePromotionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('promotions');
+        Schema::dropIfExists('log_records');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ExtraRequest;
 use App\Http\Resources\ExtraResource;
 use App\Models\Extra;
+use App\Models\LogRecord;
 use Illuminate\Http\Request;
 
 class ExtraController extends Controller
@@ -17,16 +18,6 @@ class ExtraController extends Controller
     public function index()
     {
         return ExtraResource::collection(Extra::all());
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -45,6 +36,11 @@ class ExtraController extends Controller
             ],
             'price' => $validator['price'],
             'type' => $validator['type'],
+        ]);
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou o extra " . $extra->id
         ]);
 
         return new ExtraResource($extra);
@@ -74,6 +70,11 @@ class ExtraController extends Controller
 
         $extra->update($validator);
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou o extra " . $extra->id
+        ]);
+
         return new ExtraResource($extra);
     }
 
@@ -85,6 +86,11 @@ class ExtraController extends Controller
      */
     public function destroy(Extra $extra)
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou o extra " . $extra->id
+        ]);
+
         $extra->delete();
 
         return response()->json(null, 204);

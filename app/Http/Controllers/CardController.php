@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CardResource;
 use App\Mail\CardTokenMail;
 use App\Models\Card;
+use App\Models\LogRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -16,6 +17,11 @@ class CardController extends Controller
         if ($card) {
             $card->token = Card::getToken();
             $card->save();
+
+            LogRecord::create([
+                'user_id' => auth()->user()->id,
+                'description' => "consultou os dados do cartão " . $card->id
+            ]);
 
             return new CardResource($card);
         } else {

@@ -9,6 +9,7 @@ use App\Models\CarCategory;
 use App\Models\CarCharateristic;
 use App\Models\CarHasCharateristic;
 use App\Models\GlobalParameter;
+use App\Models\LogRecord;
 use App\QueryFilters\CarCategoryFilters;
 use Carbon\Carbon;
 use DateInterval;
@@ -145,7 +146,10 @@ class CarCategoryController extends Controller
                 "value" => $validator[$char]
             ]);
         }
-
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou a categoria de veículos " . $carCategory->id
+        ]);
         return new CarCategoryResource($carCategory);
     }
 
@@ -193,7 +197,10 @@ class CarCategoryController extends Controller
             $carhaschar->value = $validator[$char];
             $carhaschar->save();
         }
-
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou a categoria de veículos " . $carCategory->id
+        ]);
         return new CarCategoryResource($carCategory);
     }
 
@@ -205,6 +212,11 @@ class CarCategoryController extends Controller
      */
     public function destroy(CarCategory $carCategory)
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou a categoria de veículos " . $carCategory->id
+        ]);
+
         $carCategory->delete();
 
         return response()->json(null, 204);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
-import { fetchPromotions, deletePromotion } from "../../../../redux/promotion/actions";
+import { fetchPromotions, deletePromotion, setCurrentPromotion } from "../../../../redux/promotion/actions";
 import TableContainer from "./TableContainer";
 import { dimensions } from '../../../helper';
 import FormContainer from './FormContainer';
@@ -14,9 +14,10 @@ const Container = styled.div`
 `;
 
 
-function Promotion({ theme, data, loading, fetchPromotions, deletePromotion, meta }) {
+function Promotion({ setCurrentPromotion, data, loading, current, fetchPromotions, deletePromotion, meta }) {
     const [filters, setFilters] = useState({});
-    const [visible, setVisible] = useState(false)
+    const [visible, setVisible] = useState(false);
+    const [edit, setEdit] = useState(false);
 
     const handleFilters = (aFilters) => {
         setFilters({ ...filters, ...aFilters });
@@ -32,6 +33,19 @@ function Promotion({ theme, data, loading, fetchPromotions, deletePromotion, met
         fetchPromotions(pagination.current, filters);
     }
 
+    const handleUpdateClick = (row) => {
+        setVisible(true);
+        setCurrentPromotion(row);
+        setEdit(true);
+    }
+
+    const handleCreateClick = () => {
+        setVisible(true);
+        setEdit(false);
+        setCurrentPromotion({});
+
+    }
+
     return (
 
         <Container>
@@ -41,12 +55,15 @@ function Promotion({ theme, data, loading, fetchPromotions, deletePromotion, met
                     loading={loading}
                     onDelete={deletePromotion}
                     meta={meta}
-                    setVisible={setVisible}
+                    handleCreateClick={handleCreateClick}
                     handlePageChange={handlePageChange}
+                    handleUpdateClick={handleUpdateClick}
                 />
                 <FormContainer
                     visible={visible}
                     handleClose={() => setVisible(false)}
+                    current={current}
+                    edit={edit}
                 />
             </CardContainer>
         </Container>
@@ -59,6 +76,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchPromotions: (page, filters) => dispatch(fetchPromotions(page, filters)),
         deletePromotion: (id) => dispatch(deletePromotion(id)),
+        setCurrentPromotion: (row) => dispatch(setCurrentPromotion(row)),
     };
 };
 
@@ -67,6 +85,7 @@ const mapStateToProps = (state) => {
         loading: state.promotion.loading,
         data: state.promotion.data,
         meta: state.promotion.meta,
+        current: state.promotion.current,
     };
 };
 

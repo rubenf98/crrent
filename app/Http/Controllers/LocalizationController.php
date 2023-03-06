@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LocalizationRequest;
 use App\Http\Resources\LocalizationResource;
 use App\Models\Localization;
+use App\Models\LogRecord;
 use App\QueryFilters\LocalizationFilters;
 use Illuminate\Http\Request;
 
@@ -38,6 +39,11 @@ class LocalizationController extends Controller
             'visible' => $validator['visible'],
         ]);
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou a localização de entrega/devoluções " . $record->id
+        ]);
+
         return new LocalizationResource($record);
     }
 
@@ -69,6 +75,10 @@ class LocalizationController extends Controller
             ],
             'price' => $validator['price'],
             'visible' => $validator['visible'],
+        ]);
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou a localização de entrega/devoluções " . $localization->id
         ]);
 
         return new LocalizationResource($localization);

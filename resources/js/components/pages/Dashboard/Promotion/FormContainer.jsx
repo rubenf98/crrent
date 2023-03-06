@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Row, Form, DatePicker, Button, Input, Checkbox, Col, InputNumber } from 'antd';
 import moment from 'moment';
 import { connect } from "react-redux";
-import { createPromotion } from "../../../../redux/promotion/actions"
+import { createPromotion, updatePromotion } from "../../../../redux/promotion/actions"
 
 const { RangePicker } = DatePicker;
 
@@ -45,7 +45,7 @@ const classes = [
     { id: 4, name: "Gama D" },
 ];
 
-function FormContainer({ loading, handleClose, createPromotion, visible }) {
+function FormContainer({ loading, handleClose, edit, current, createPromotion, visible, updatePromotion }) {
     const [form] = Form.useForm();
 
     const handleModalClose = () => {
@@ -63,10 +63,34 @@ function FormContainer({ loading, handleClose, createPromotion, visible }) {
 
             values = { ...values, dates };
 
-            createPromotion(values);
+            if (edit) {
+                updatePromotion(current.id, values);
+            } else {
+                createPromotion(values);
+            }
             handleModalClose();
         })
     };
+
+    useEffect(() => {
+        if (visible) {
+            console.log(current);
+            if (edit) {
+                form.setFieldsValue({
+                    dates: [moment(current.start), moment(current.end)],
+                    priority: current.priority,
+                    value: current.value.replace('%', ''),
+                    levels: {   
+                        0: null,
+                        1: current.levels.find((record) => record.id == 1),
+                        2: current.levels.find((record) => record.id == 2),
+                        3: current.levels.find((record) => record.id == 3),
+                        4: current.levels.find((record) => record.id == 4),
+                    }
+                })
+            }
+        }
+    }, [visible])
 
     return (
         <Container>
@@ -150,6 +174,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         createPromotion: (data) => dispatch(createPromotion(data)),
+        updatePromotion: (id, data) => dispatch(updatePromotion(id, data)),
     };
 };
 

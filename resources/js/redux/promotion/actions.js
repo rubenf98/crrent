@@ -6,8 +6,12 @@ export const fetchPromotions = () => ({
     payload: axios.get(`${window.location.origin}/api/promotions`)
 })
 
+export const updatePromotion = (id, data) => ({
+    type: types.UPDATE_PROMOTION,
+    payload: axios.put(`${window.location.origin}/api/promotions/${id}`, data),
+})
 
-export const setCurrentPromotion = (data = []) => ({
+export const setCurrentPromotion = (data = {}) => ({
     type: types.SET_CURRENT_PROMOTION,
     payload: data,
 });

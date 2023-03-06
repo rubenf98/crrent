@@ -6,6 +6,7 @@ use App\Http\Resources\BlockedCarResource;
 use App\Models\BlockDate;
 use App\Models\BlockedCar;
 use App\Models\Car;
+use App\Models\LogRecord;
 use App\QueryFilters\BlockedCarFilters;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -40,6 +41,11 @@ class BlockedCarController extends Controller
             'to' => $request->dates[1],
             'car_id' => $request->car_id,
             'notes' => $notes ? $notes : null
+        ]);
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "bloqueou o veículo " . $request->car_id . " datas entre " . $request->dates[0] . " e " . $request->dates[1]
         ]);
 
         foreach ($period as $date) {
@@ -110,7 +116,10 @@ class BlockedCarController extends Controller
                 array_push($ids, $blockedDate->id);
             }
         }
-
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "desbloqueou o veículo " . $car->id . " datas entre " . $blockedCar->from . " e " . $blockedCar->to
+        ]);
 
         BlockDate::destroy($ids);
 

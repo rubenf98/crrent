@@ -12,6 +12,7 @@ use App\Models\Client;
 use App\Models\Comission;
 use App\Models\Driver;
 use App\Models\Localization;
+use App\Models\LogRecord;
 use App\Models\Reservation;
 use App\Models\ReservationHasLocalization;
 use Carbon\Carbon;
@@ -133,6 +134,11 @@ class CreateExternalReservationController extends Controller
         }
 
         $reservation->generateInvoice();
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou a reserva externa " . $reservation->id
+        ]);
         HandleReservation::dispatch($reservation);
         DB::commit();
 

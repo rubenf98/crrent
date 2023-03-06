@@ -17,6 +17,7 @@ use App\Models\Client;
 use App\Models\Comission;
 use App\Models\Driver;
 use App\Models\Localization;
+use App\Models\LogRecord;
 use App\Models\Reservation;
 use App\Models\ReservationHasLocalization;
 use App\QueryFilters\ReservationFilters;
@@ -37,8 +38,6 @@ class ReservationController extends Controller
      */
     public function index(ReservationFilters $filters)
     {
-        // return (new ReservationExport())->download('reservas.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-
         return ReservationResource::collection(
             Reservation::with(["car", "car.category", 'client', 'drivers', 'extras'])
                 ->filterBy($filters)->paginate(5)
@@ -47,6 +46,11 @@ class ReservationController extends Controller
 
     public function export()
     {
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "descarregou ficheiro de reservas"
+        ]);
         return (new ReservationExport())->download('reservas.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
@@ -300,6 +304,12 @@ class ReservationController extends Controller
         }
         $reservation->drivers()->sync($drivers);
         $reservation->generateInvoice();
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou a reserva " . $reservation->id
+        ]);
+
         DB::commit();
         return new ReservationResource($reservation);
     }
@@ -319,14 +329,20 @@ class ReservationController extends Controller
             $comission->save();
         }
 
-
         $blockedDates = BlockDate::where('reservation_id', $reservation->id)->get();
 
         foreach ($blockedDates as $blockedDate) {
             $blockedDate->delete();
         }
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou a reserva " . $reservation->id
+        ]);
+
         $reservation->delete();
+
+
         DB::commit();
 
         return response()->json(null, 204);

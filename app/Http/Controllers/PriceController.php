@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PriceRequest;
 use App\Http\Resources\PriceResource;
+use App\Models\LogRecord;
 use App\Models\Price;
 use Illuminate\Http\Request;
 
@@ -56,6 +57,11 @@ class PriceController extends Controller
             'min' => $validator['min'],
             'max' => $validator['max'],
             'price' => $validator['price'],
+        ]);
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou a entrada de preços base " . $price->id
         ]);
 
         return new PriceResource($price);

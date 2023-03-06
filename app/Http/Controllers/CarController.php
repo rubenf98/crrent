@@ -11,6 +11,7 @@ use App\Models\Car;
 use App\Models\CarCategory;
 use App\Models\GlobalParameter;
 use App\Models\Level;
+use App\Models\LogRecord;
 use App\QueryFilters\CarFilters;
 use Carbon\Carbon;
 use DateInterval;
@@ -119,6 +120,11 @@ class CarController extends Controller
 
         $record = Car::create($validator);
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "criou o veículo " . $record->id
+        ]);
+
         return new CarResource($record);
     }
 
@@ -146,6 +152,11 @@ class CarController extends Controller
 
         $car->update($validator);
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou o veículo " . $car->id
+        ]);
+
         return new CarResource($car);
     }
 
@@ -157,6 +168,10 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou o veículo " . $car->id
+        ]);
         $car->delete();
 
         return response()->json(null, 204);

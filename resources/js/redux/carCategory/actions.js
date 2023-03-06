@@ -48,7 +48,7 @@ export const updateCarCategory = (id, data) => ({
 
 export const createCarCategory = (data) => ({
     type: types.CREATE_CAR_CATEGORY,
-    payload: axios.post(`${window.location.origin}/api/car-categories/`, data),
+    payload: axios.post(`${window.location.origin}/api/car-categories`, data),
 });
 
 

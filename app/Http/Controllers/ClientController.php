@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use App\Models\LogRecord;
 use App\QueryFilters\ClientFilters;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,10 @@ class ClientController extends Controller
         $validator = $request->validated();
 
         $client->update($validator);
-
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "atualizou o cliente " . $client->id
+        ]);
         return new ClientResource($client);
     }
 
@@ -37,6 +41,10 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou o cliente " . $client->id
+        ]);
         $client->delete();
 
         return response()->json(null, 204);

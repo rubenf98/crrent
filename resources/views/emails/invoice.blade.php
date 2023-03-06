@@ -223,19 +223,22 @@
                             $reservation->days : 1)}} EUR</span>
                     </div>
                     @endforeach
-                    <div style="font-size: 14px;">
+                    <br />
+                    <div style="font-size: 14px">
                         <span>Vehicle</span>
                         <div style="float: right">{{$reservation->car_price}} EUR</div>
                     </div>
-
+                    <br />
                     <div style="font-size: 14px;">
                         <span>Insurance</span>
                         <div style="float: right">{{$reservation->insurance->price * $reservation->days}} EUR</div>
                     </div>
+                    <br />
                     <div style="font-size: 14px;">
                         <span>Pickup</span>
                         <div style="float: right">{{$reservation->localizations[0]->price}} EUR</div>
                     </div>
+                    <br />
                     <div style="font-size: 14px;">
                         <span>Return</span>
                         <div style="float: right">{{$reservation->localizations[1]->price}} EUR</div>

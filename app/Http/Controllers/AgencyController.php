@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AgencyResource;
 use App\Models\Agency;
+use App\Models\LogRecord;
 use Illuminate\Http\Request;
 
 class AgencyController extends Controller
@@ -27,8 +28,15 @@ class AgencyController extends Controller
     public function store(Request $request)
     {
         if ($request->has('name')) {
+
+
             $agency = Agency::create([
                 'name' => $request->name
+            ]);
+
+            LogRecord::create([
+                'user_id' => auth()->user()->id,
+                'description' => "criou a agência " . $agency->id
             ]);
         }
 
@@ -59,6 +67,11 @@ class AgencyController extends Controller
             $agency->update([
                 'name' => $request->name
             ]);
+
+            LogRecord::create([
+                'user_id' => auth()->user()->id,
+                'description' => "atualizou a agência " . $agency->id
+            ]);
         }
 
         return new AgencyResource($agency);
@@ -72,6 +85,11 @@ class AgencyController extends Controller
      */
     public function destroy(Agency $agency)
     {
+
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "apagou a agência " . $agency->id
+        ]);
         $agency->delete();
 
         return response()->json(null, 204);

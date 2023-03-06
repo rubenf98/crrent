@@ -8,6 +8,7 @@ use App\Models\BlockDate;
 use App\Models\BlockPeriod;
 use App\Models\Car;
 use App\Models\Level;
+use App\Models\LogRecord;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateInterval;
@@ -82,6 +83,11 @@ class BlockPeriodController extends Controller
             'notes' => $notes ? $notes : null
         ]);
 
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "bloqueou datas entre  " . $request->dates[0] . " e " . $request->dates[1]
+        ]);
+
         $blockPeriod->levels()->attach($levels_id);
 
         return new BlockPeriodResource($blockPeriod);
@@ -133,7 +139,10 @@ class BlockPeriodController extends Controller
                 }
             }
         }
-
+        LogRecord::create([
+            'user_id' => auth()->user()->id,
+            'description' => "desbloqueou datas entre  " . $blockPeriod->from . " e " . $blockPeriod->to
+        ]);
         BlockDate::destroy($ids);
 
         $blockPeriod->delete();

@@ -13,7 +13,7 @@ const Container = styled.div`
 
 
 
-function TableContainer({ theme, loading, meta, data, onDelete, setVisible, handlePageChange }) {
+function TableContainer({ theme, loading, handleUpdateClick, meta, data, onDelete, handleCreateClick, handlePageChange }) {
 
     const columns = [
         {
@@ -50,7 +50,7 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
             render: (text, row) => (
                 <StopPropagation>
                     <RowOperation
-                        onDeleteConfirm={() => onDelete(row.id)}
+                        onDeleteConfirm={() => onDelete(row.id)} onUpdateClick={() => handleUpdateClick(row)}
                     />
                 </StopPropagation>
             ),
@@ -59,7 +59,7 @@ function TableContainer({ theme, loading, meta, data, onDelete, setVisible, hand
 
     return (
         <Container>
-            <ActionButton onClick={() => setVisible(true)} background={theme.primary}>
+            <ActionButton onClick={handleCreateClick} background={theme.primary}>
 
                 <img src="/icon/add_white.svg" alt="add" />
 

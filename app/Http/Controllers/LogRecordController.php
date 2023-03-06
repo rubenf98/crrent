@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ComissionResource;
-use App\Models\Comission;
+use App\Http\Resources\LogRecordResource;
 use App\Models\LogRecord;
 use Illuminate\Http\Request;
 
-class ComissionController extends Controller
+class LogRecordController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class ComissionController extends Controller
      */
     public function index()
     {
-        //
+        return LogRecordResource::collection(LogRecord::latest()->take(100)->with('user')->get());
     }
 
     /**
@@ -33,10 +32,10 @@ class ComissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\LogRecord  $logRecord
      * @return \Illuminate\Http\Response
      */
-    public function show(Comission $comission)
+    public function show(LogRecord $logRecord)
     {
         //
     }
@@ -45,29 +44,21 @@ class ComissionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\LogRecord  $logRecord
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comission $comission)
+    public function update(Request $request, LogRecord $logRecord)
     {
-        if ($request->has('status')) {
-            $comission->paid = $request->status;
-            $comission->save();
-        }
-        LogRecord::create([
-            'user_id' => auth()->user()->id,
-            'description' => "atualizou o estado da comissão " . $comission->id
-        ]);
-        return new ComissionResource($comission);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\LogRecord  $logRecord
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comission $comission)
+    public function destroy(LogRecord $logRecord)
     {
         //
     }

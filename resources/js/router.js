@@ -28,6 +28,7 @@ import GlobalParameter from "./components/pages/Dashboard/GlobalParameter/Global
 import Error from "./components/pages/Checkout/Error";
 import Agency from "./components/pages/Dashboard/Agency/Agency";
 import AgencyDetail from "./components/pages/Dashboard/AgencyDetail/AgencyDetail";
+import LogRecord from "./components/pages/Dashboard/LogRecord/LogRecord";
 
 export const history = createBrowserHistory();
 
@@ -54,6 +55,7 @@ function Router() {
                 <Route path="/painel/carros" element={<DashboardLayout><Car /></DashboardLayout>} />
                 <Route path="/painel/carros/:id" element={<DashboardLayout><CarDetail /></DashboardLayout>} />
                 <Route path="/painel/precos" element={<DashboardLayout><Value /></DashboardLayout>} />
+                <Route path="/painel/logs" element={<DashboardLayout><LogRecord /></DashboardLayout>} />
                 <Route path="/login" element={<Login />} />
                 <Route exact path="/privacy" element={<Layout><Privacy /></Layout>} />
                 <Route exact path="/conditions" element={<Layout><Conditions /></Layout>} />
